@@ -34,6 +34,8 @@ for (const file of [...htmlFiles, ...files.filter((name) => name.endsWith('.js')
 
 const index = read('index.html');
 const serum = read('serum.html');
+const campaign = read('campaign.html');
+const campaignScript = read('js/campaign.js');
 const configSource = read('js/config.js');
 const cart = read('js/cart.js');
 const views = read('js/serum-views.js');
@@ -48,6 +50,10 @@ assert.ok((config.delivery?.zones || []).length > 0, 'Delivery zones must be con
 assert.ok(config.delivery.zones.every((zone) => Number(zone.fee) === 0), 'All configured delivery zones must have zero fees');
 
 assert.match(index, /خصم 10%/u, 'Homepage must display the approved 10% discount');
+assert.match(campaign, /خصم 10%/u, 'Campaign page must display the approved 10% discount');
+assert.match(campaign, /التوصيل مجاني إلى جميع المحافظات ولكل طرق الدفع/u, 'Campaign page must state free delivery for all payment methods');
+assert.doesNotMatch(campaign, /لا تشمل التوصيل|رسوم التوصيل|بلا عطر/u, 'Campaign page must not imply a delivery fee or scent-free base product');
+assert.ok(campaignScript.includes('product.image && product.image.src'), 'Campaign cards must display the configured product image');
 assert.doesNotMatch(index, /خصم 15%|15%[^<]{0,40}شام كاش/u, 'Homepage must not advertise a 15% Sham Cash discount');
 assert.match(serum, /تحتوي المزيجات الحالية على زيوت وعطر/u, 'Serum page must disclose oils and fragrance');
 assert.match(serum, /نؤكد توفّره وسعره قبل الاعتماد/u, 'Customization must be confirmed before acceptance');
@@ -74,6 +80,12 @@ function assertLocalAsset(fromFile, raw) {
   const target = resolveLocal(fromFile, raw);
   if (target) assert.ok(fs.existsSync(target), fromFile + ' references missing local asset: ' + raw);
 }
+config.products.forEach((product) => {
+  assert.ok(product.image?.src, product.id + ' must define a campaign image');
+  assert.ok(product.image?.alt, product.id + ' must define accurate campaign image alt text');
+  assertLocalAsset('campaign.html', product.image.src);
+});
+
 for (const file of htmlFiles) {
   const html = read(file);
   for (const tag of html.matchAll(/<(script|img|source|video|audio|iframe|link)\b[^>]*>/gi)) {
