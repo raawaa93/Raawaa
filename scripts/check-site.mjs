@@ -15,6 +15,12 @@ const cssFiles = files.filter((file) => file.endsWith('.css'));
 
 // Mobile and accessibility baseline: every page must declare its viewport and
 // preserve the Arabic RTL document semantics used throughout the storefront.
+config.products.forEach((product) => {
+  assert.ok(product.image?.src, product.id + ' must define a campaign image');
+  assert.ok(product.image?.alt, product.id + ' must define accurate campaign image alt text');
+  assertLocalAsset('campaign.html', product.image.src);
+});
+
 for (const file of htmlFiles) {
   const html = read(file);
   const htmlTag = html.match(/<html\b[^>]*>/i)?.[0] || '';
