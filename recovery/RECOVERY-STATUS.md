@@ -6,7 +6,8 @@
 - Latest inspected preview: `10b8ef21-037c-43a9-adf8-37ac7874dcdd` at 2026-11-14T05:32:31.762155Z; branch `pr-208`; commit `fa6df14c1a58efee3e93ab106e5cfc0ccc821529`; 200 deployed files.
 - Both deployment records say `uses_functions: false`. Pages serves a static site; the published inventory includes HTML, CSS, JavaScript modules, images, fonts, videos, PWA files, and owner-panel files.
 - The deployment inventory is preserved in `cloudflare-deployment-manifest.json`.
-- Recovered and committed the published HTML for `/`, `/serum`, `/hama`, and `/privacy` into this recovery branch. These are deployed copies, not the original pre-build source files.
+- Recovered and committed **197 of 199 production files** into this recovery branch directly from their public Cloudflare Pages URLs: all 60 text assets (10 HTML pages, 12 CSS, 15 JS, 5 MJS, 10 SVG, JSON/XML/text/webmanifest/VTT) and all 136 non-video binary assets (images, icons, fonts), plus `.nojekyll`.
+- The only two production files not yet restored are the Hama MP4 videos: `assets/img/hama/reel-50ml.mp4` and `assets/img/hama/reel-hama.mp4` (about 3.76 MB and 4.03 MB respectively).
 
 ## Arena provenance
 The production deployment commit message includes `ARENA-ORDER-BACKEND-001 (6717979189)`, showing Arena-associated work in the recorded project history. The connected tools in this ChatGPT workspace do not expose an Arena execution/session connector. The original GitHub repository `ghith93/Raawaa-store` currently returns HTTP 403: “Sorry. Your account was suspended”, so its issues, PRs, and Arena task comments cannot currently be inspected here.
@@ -27,10 +28,11 @@ The production deployment commit message includes `ARENA-ORDER-BACKEND-001 (6717
 - Production and preview manifests are kept separate.
 - Do not infer source code, backend behavior, secrets, or database state from static deployment metadata.
 - The original repository remains the preferred recovery source if GitHub restores account access or an authorized Arena/local export is obtained.
-- If reconstructing from the deployed site, verify downloaded file bytes against the recorded hashes before committing them.
+- The recovered files are copies of the deployed production artifacts, not the original pre-build source repository or its Git history. The deployment manifest records Cloudflare content hashes; byte-for-byte hash verification is still a final validation task.
 
 ## Next actions
-1. Retrieve remaining deployed assets (CSS, JS, JSON, SVG, fonts, images, media, and owner-panel files) from their public Pages URLs and compare bytes with the recorded hashes.
-2. Reconstruct the original repository structure and dependencies from the recovered files; inspect Arena provenance for any source export or task artifacts if available.
-3. Validate the frontend against the two Supabase projects and verify customer/owner workflows without changing production.
-4. Deploy only to an isolated preview after tests pass.
+1. Retrieve the two remaining MP4 assets; the Cloudflare Browser Rendering response limit/rate limit has made the large payload transfer less reliable than the other assets.
+2. Verify every restored file against Cloudflare's recorded asset hash and run link/reference checks.
+3. Inspect the Arena task/export for original source files and compare with the deployed copies.
+4. Validate customer and owner workflows against the Supabase staging projects, without changing production.
+5. Deploy only to an isolated preview after tests pass.
