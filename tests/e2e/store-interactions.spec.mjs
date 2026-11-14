@@ -10,6 +10,9 @@ test('Serum selection, cart quantity, and payment estimate stay synchronized', a
   await page.locator('input[name="rawaa-size"][value="rosemary-caffeine-100"]').check();
   await expect(page.locator('[data-add-current]')).toHaveAttribute('data-add-to-cart', 'rosemary-caffeine-100');
 
+  // The estimate breakdown is intentionally inside a collapsed disclosure.
+  await page.locator('.serum-estimate-details > summary').click();
+
   // COD must remove the Sham Cash discount from the one-item estimator.
   await page.locator('[data-estimate-method]').selectOption('cod');
   await expect(page.locator('[data-estimate-discount]')).toHaveText('لا يوجد');
