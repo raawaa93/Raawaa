@@ -16,10 +16,33 @@ for (const route of routes) {
       expect(response.status(), `HTTP status for ${route}`).toBe(200);
       await expect(page.locator('body')).toBeVisible();
 
-      const dimensions = await page.evaluate(() => ({
-        viewport: document.documentElement.clientWidth,
-        document: document.documentElement.scrollWidth,
-      }));
+      const dimensions = await page.evaluate(() => {
+        const viewport = document.documentElement.clientWidth;
+        const offenders = Array.from(document.querySelectorAll('body *'))
+          .map((element) => {
+            const rect = element.getBoundingClientRect();
+            const style = getComputedStyle(element);
+            return {
+              tag: element.tagName.toLowerCase(),
+              id: element.id || '',
+              className: typeof element.className === 'string' ? element.className.slice(0, 100) : '',
+              left: Math.round(rect.left),
+              right: Math.round(rect.right),
+              width: Math.round(rect.width),
+              position: style.position,
+              overflowX: style.overflowX,
+            };
+          })
+          .filter((item) => item.right > viewport + 2 && item.width > 0)
+          .sort((a, b) => b.right - a.right)
+          .slice(0, 8);
+        return {
+          viewport,
+          document: document.documentElement.scrollWidth,
+          body: document.body.scrollWidth,
+          offenders,
+        };
+      });
 
       expect(
         dimensions.document,
