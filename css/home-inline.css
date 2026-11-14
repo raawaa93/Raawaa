@@ -53,3 +53,16 @@
     footer{padding:3.8rem 0 2rem;border-top:1px solid var(--border)}.footer-grid{display:grid;gap:2.3rem}@media(min-width:768px){.footer-grid{grid-template-columns:1.5fr 1fr 1fr}}.footer-bottom{padding-top:1.6rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;font-size:.74rem;color:var(--text-muted)}
 /* قفل تمرير الصفحة عند فتح قائمة الجوال — صنف لا نمط سطري (CSP). */
 body.is-locked { overflow: hidden; }
+
+
+/* Shared RAWAA header lockup: vector mark + locally rendered bilingual wordmark. */
+.brand-lockup{align-items:center;gap:10px;flex:0 0 auto}
+.brand-mark{display:block;width:38px;height:38px;flex:0 0 38px;object-fit:contain}
+.brand-wordmark{display:flex;flex-direction:column;align-items:flex-start;gap:4px;line-height:1}
+.brand-lockup .brand-latin{font-size:1.12rem;letter-spacing:.24em}
+.brand-lockup .brand-arabic{font-size:.82rem;color:var(--olive)}
+
+.brand-lockup,.footer-brand-lockup{color:var(--ink);text-decoration:none}
+.brand-lockup .brand-latin,.footer-brand-lockup .brand-latin{color:var(--ink)}
+
+.products-offer-note{max-width:760px;margin:0 auto 1.5rem;text-align:center;font-size:.9rem;line-height:1.7;color:var(--text-muted)}
