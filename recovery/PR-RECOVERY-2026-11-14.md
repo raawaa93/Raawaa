@@ -96,6 +96,40 @@ Each committed file was read back from GitHub and compared byte-for-byte with th
 ## Commercial configuration divergence — do not consolidate automatically
 The recovered PR #188 `js/config.js` sets Sham Cash discount to **10%**. The recovered PR #205 `js/config.js` sets it to **15%**. Both contain the same displayed SYP product price ladder (2,000/2,400/2,800 for Rosemary-Caffeine and 1,800/2,200/2,600 for the other two formulas), but the discount changed between checkpoints. The PR #205 homepage copy also says 15%. This is a real version difference, not merely the stale comment already identified in the pricing policy. Preserve both snapshots and do not select a final commercial policy without reconciling the intended approved change.
 
+## Additional preview source recovery
+Further page and source snapshots were preserved after the first recovery pass:
+
+### PR #204
+- `recovery/snapshots/pr-204/index.html`
+- `recovery/snapshots/pr-204/serum`
+This preserves the separate PR #204 page variant without replacing the PR #205 checkpoint.
+
+### PR #205
+- `recovery/snapshots/pr-205/campaign`
+- `recovery/snapshots/pr-205/hama-route.html`
+- `recovery/snapshots/pr-205/js/campaign.js`
+- `recovery/snapshots/pr-205/css/campaign.css`
+- `recovery/snapshots/pr-205/css/hama.css`
+- `recovery/snapshots/pr-205/css/serum.css`
+- `recovery/snapshots/pr-205/css/styles.css` (51,419 characters; complete)
+- `recovery/snapshots/pr-205/js/cart.js` (88,132 characters; complete)
+
+### PR #188
+- `recovery/snapshots/pr-188/css/rawaa-design-system.css`
+- `recovery/snapshots/pr-188/css/campaign.css`
+- `recovery/snapshots/pr-188/css/home-inline.css`
+- `recovery/snapshots/pr-188/css/serum.css`
+- `recovery/snapshots/pr-188/css/styles.css` (51,419 characters; complete)
+- `recovery/snapshots/pr-188/js/marketing.js`
+- `recovery/snapshots/pr-188/js/offers.js`
+- `recovery/snapshots/pr-188/js/pricing-policy.js`
+- `recovery/snapshots/pr-188/js/campaign.js`
+- `recovery/snapshots/pr-188/js/serum-views.js`
+- `recovery/snapshots/pr-188/js/cart.js` (72,000 of 90,326 characters recovered; incomplete and must not be used as a production file)
+
+## Current recovery blocker
+Cloudflare Browser Rendering returned HTTP 429 for the content endpoint with a server-directed retry delay of 52,984 seconds. No further Browser Rendering content requests should be made until that cooldown expires. This rate limit blocks the remaining PR #188 cart.js tail and additional preview-source retrieval for now. GitHub reads/writes and Cloudflare Pages metadata operations remain available. Do not label the PR #188 cart snapshot complete, and do not promote any partial snapshot to the root production tree.
+
 ## Access limitation
 - The connected GitHub identity for `ghith93` currently receives HTTP 403 with GitHub's message that the account is suspended.
 - The connected `raawaa93` identity can access `raawaa93/Raawaa`, but the original `ghith93/Raawaa-store` repository returns 404 from that identity.
