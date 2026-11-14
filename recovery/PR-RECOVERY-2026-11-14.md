@@ -135,6 +135,10 @@ The PR #196 preview's homepage, Serum page, and privacy page were retrieved thro
 
 This is a distinct campaign/editorial checkpoint, not a replacement for PR #205. Its preview manifest excludes Hama assets and several production files; keep it isolated during reconciliation.
 
+## PR #205 additional page and PR #206 failure verification
+- PR #205's only added manifest path versus production is `/elyra/index.html`. Its preview page was retrieved and saved at `recovery/snapshots/pr-205/elyra/index.html`. Keep this microsite isolated until its intended relationship to the RAWAA Store is confirmed.
+- The unique Cloudflare deployment URL for the failed PR #206 deployment (`https://e5d54a1a.raawaa-store.pages.dev/`) was checked through the crawl endpoint and returned a page error. The deployment manifest remains available, but the failed preview cannot currently serve its page source.
+
 ## Current recovery blocker
 Cloudflare Browser Rendering returned HTTP 429 for the content endpoint with a server-directed retry delay of 52,984 seconds. No further Browser Rendering content requests should be made until that cooldown expires. This rate limit blocks the remaining PR #188 cart.js tail and additional preview-source retrieval for now. GitHub reads/writes and Cloudflare Pages metadata operations remain available. Do not label the PR #188 cart snapshot complete, and do not promote any partial snapshot to the root production tree.
 
