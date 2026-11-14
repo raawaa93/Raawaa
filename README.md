@@ -6,6 +6,7 @@ This branch contains a recovery copy of the **published RAWAA Store site**, reco
 
 - PR and preview reconciliation: [`recovery/PR-RECOVERY-2026-11-14.md`](recovery/PR-RECOVERY-2026-11-14.md) — records the original Store PR checkpoints, Cloudflare preview evidence, current access limits, and domain hold.
 - Isolated preview snapshots recovered from PR #188, #197, #204, and #205 are under `recovery/snapshots/`. PR #205 includes complete cart and stylesheet sources; PR #188 cart source is explicitly incomplete. These snapshots are evidence/recovery material, not a production-ready merged release.
+- Snapshot index: [`recovery/snapshots/README.md`](recovery/snapshots/README.md). PR #196 HTML checkpoints are also preserved.
 
 - Cloudflare Pages project: `raawaa-store`
 - Production URL: https://raawaa-store.pages.dev
