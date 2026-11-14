@@ -1,6 +1,6 @@
 import { defineConfig, devices } from '@playwright/test';
 
-const baseURL = 'http://127.0.0.1:4173';
+const baseURL = 'https://127.0.0.1:4173';
 
 export default defineConfig({
   testDir: './tests/e2e',
@@ -10,6 +10,7 @@ export default defineConfig({
   reporter: process.env.CI ? 'github' : 'list',
   use: {
     baseURL,
+    ignoreHTTPSErrors: true,
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
   },
@@ -28,7 +29,7 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'python3 -m http.server 4173 --bind 127.0.0.1',
+    command: 'python3 tests/e2e/https-server.py',
     url: baseURL,
     reuseExistingServer: !process.env.CI,
     timeout: 30_000,
