@@ -104,3 +104,28 @@ The Supabase connector failed to retrieve Edge Function source code during this 
 - Do not delete `restore/integrated-store-2026-11-14` or `recovery/cloudflare-manifest-2026-11-14` before proving all unique commits and assets are preserved.
 - Retire merged/failed work branches only when a supported branch-delete action is available and their commits are already reachable from `main` or a backup.
 - Keep old Hama video assets and routes out of the active deployment payload; their archival presence does not make them part of the current Store.
+
+
+## Git branch inventory and safe retirement (2026-11-14)
+
+Current `main` head: `2a70977ba1f8852b87c9731040fafaa89f9d62a0`. No pull requests remain open. PRs #1, #2, #3, #4, #5, #7, #8, #9, and #10 are merged. PR #6 is closed unmerged and explicitly superseded by PR #7.
+
+| Branch | Classification | Action |
+|---|---|---|
+| `main` | Canonical current source | Keep |
+| `backup/site-2026-11-14-restored-main` | Recovery checkpoint | Keep immutable |
+| `backup/site-2026-11-14-post-mobile-audit` | Recovery checkpoint | Keep immutable |
+| `deploy/10-percent-2026-11-14` | Deployment manifest candidate | Keep until latest preview/release is verified |
+| `deploy/10-percent-site-only` | Static-site-only payload candidate | Keep until latest preview/release is verified |
+| `recovery/cloudflare-manifest-2026-11-14` | Recovery source checkpoint | Keep until all assets and provenance are reconciled |
+| `restore/integrated-store-2026-11-14` | Divergent recovery/history branch (174 commits ahead, 5 behind at last comparison) | Do not delete; inspect unique history/assets before any retirement |
+| `work/mobile-ux-audit-2026-11-14` | PR #3 merged | Safe to retire after final backup verification |
+| `maintenance/canonical-source-of-truth-2026-11-14` | PR #4 merged | Safe to retire |
+| `maintenance/policy-regression-guard-2026-11-14` | PR #5 merged | Safe to retire |
+| `feature/campaign-nitro-offer-2026-11-14-v2` | PR #7 merged | Safe to retire |
+| `feature/campaign-nitro-offer-2026-11-14` | PR #6 closed unmerged; superseded by PR #7 | Safe to retire |
+| `fix/owner-currency-syp-2026-11-14` | PR #9 merged | Safe to retire |
+| `docs/release-readiness-backend-audit-2026-11-14` | PR #8 merged | Safe to retire |
+| `docs/owner-currency-alignment-2026-11-14` | PR #10 merged | Safe to retire |
+
+No branch was deleted. The connected GitHub toolset exposes branch reads and PR merges but no branch-delete action; the historical/recovery branches also require preservation until their unique commits/assets are verified. Merged/closed feature branches are inactive and are not Cloudflare deployment sources. They can be deleted later through an authorized GitHub branch-management path after final backup verification. Do not delete the backup, recovery, restore, or deploy branches as part of routine cleanup.
