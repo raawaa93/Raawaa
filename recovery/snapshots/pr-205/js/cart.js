@@ -1868,4 +1868,403 @@
       var fallbackProduct = CONFIG.products[1] || CONFIG.products[0];
       selectedSize = typeof data.size === 'string' && getProduct(data.size)
         ? data.size : (fallbackProduct && fallbackProduct.id) || null;
-      var defaultZone = (CONFIG.delivery && CONFIG.delivery.defaultZone) || (zones[0] &
+      var defaultZone = (CONFIG.delivery && CONFIG.delivery.defaultZone) || (zones[0] && zones[0].id) || null;
+      selectedZoneId = zones.some(function (z) { return z.id === data.zone; }) ? data.zone : defaultZone;
+      var validMethod = availableMethods.some(function (m) { return m.id === data.method; });
+      selectedMethodId = validMethod ? data.method : (availableMethods[0] && availableMethods[0].id) || null;
+      var cfg = CONFIG.customization || {};
+      custom.scent = (cfg.scentOptions || []).some(function (o) { return o.id === data.scent; }) ? data.scent : '';
+      custom.oil = (cfg.oilAdditions || []).some(function (o) { return o.id === data.oil; }) ? data.oil : '';
+      return validMethod;
+    } catch { return false; }
+  }
+
+  function saveCart() {
+    try {
+      var plain = {};
+      Object.keys(cart).forEach(function (k) { plain[k] = cart[k]; });
+      window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify(plain));
+      return true;
+    } catch { return false; /* التخزين محجوب؛ تبقى السلة في ذاكرة الصفحة */ }
+  }
+
+  function restoreCart(replace) {
+    try {
+      var raw = window.sessionStorage.getItem(STORAGE_KEY);
+      if (!raw) return false;
+      var data = JSON.parse(raw);
+      if (!data || typeof data !== 'object' || Array.isArray(data)) return false;
+      if (replace) Object.keys(cart).forEach(function (id) { delete cart[id]; });
+      Object.keys(data).forEach(function (id) {
+        var qty = parseInt(data[id], 10);
+        if (getProduct(id) && qty > 0) cart[id] = clampQty(qty);
+      });
+      return true;
+    } catch { return false; }
+  }
+
+  /**
+   * رابط سلة قابل للمشاركة: ?cart=serum-30x1,serum-50x2
+   * يفيد الزبونة التي تريد إرسال طلبها لصديقة، أو نشره في مجموعة.
+   * يُقرأ بأمان: أي معرّف غير معروف يُتجاهل.
+   */
+  function loadCartFromUrl(restoredCart) {
+    var params;
+    try { params = new URLSearchParams(window.location.search); } catch { return; }
+    var raw = params.get('cart');
+    if (!raw) return;
+    var shared = Object.create(null);
+    raw.split(',').forEach(function (chunk) {
+      var parts = chunk.split('x');
+      if (parts.length !== 2) return;
+      var id = parts[0].trim();
+      var qty = parseInt(parts[1], 10);
+      if (getProduct(id) && qty > 0) shared[id] = clampQty(qty);
+    });
+    var ids = Object.keys(shared);
+    if (!ids.length) return;
+    if (el.cartSharedNotice) el.cartSharedNotice.hidden = false;
+    try {
+      if (restoredCart && window.history.state && window.history.state.rawaaAppliedCart === raw) return;
+    } catch { /* يبقى رابط السلة قابلًا للاستخدام دون تعديل السجل */ }
+    // لا نستبدل كمية موجودة مسبقًا؛ نضيف الأحجام الجديدة فقط ونوضح ذلك للزائرة.
+    ids.forEach(function (id) { if (!cart[id]) cart[id] = shared[id]; });
+    // لا نعلّم الرابط كمطبّق إن منع المتصفح الحفظ، كي يظل صالحًا عند التحديث.
+    if (!saveCart()) return;
+    try {
+      var state = window.history.state;
+      if (state === null || (typeof state === 'object' && !Array.isArray(state))) {
+        var updated = Object.assign({}, state || {});
+        updated.rawaaAppliedCart = raw;
+        window.history.replaceState(updated, '');
+      }
+    } catch { /* قد يمنع المتصفح تعديل السجل */ }
+  }
+
+  /** يبني رابط مشاركة للسلة الحالية. */
+  function cartShareLink() {
+    var entries = cartEntries();
+    if (!entries.length) return '';
+    var payload = entries.map(function (e) { return e.product.id + 'x' + e.qty; }).join(',');
+    var base = window.location.href.split('?')[0].split('#')[0];
+    return base + '?cart=' + encodeURIComponent(payload) + '#products';
+  }
+
+  function init() {
+    el.toastRegion = document.querySelector('[data-toast-region]');
+    el.count = document.querySelector('[data-cart-count]');
+    el.dialog = document.getElementById('cart-dialog');
+    el.items = document.querySelector('[data-cart-items]');
+    el.cartCustomSummary = document.querySelector('[data-cart-custom-summary]');
+    el.cartSharedNotice = document.querySelector('[data-cart-shared-notice]');
+    el.cartScroller = el.dialog && el.dialog.querySelector('.cart-inner');
+    el.cartHead = el.dialog && el.dialog.querySelector('.cart-head');
+    el.empty = document.querySelector('[data-cart-empty]');
+    el.foot = document.querySelector('[data-cart-foot]');
+    el.orderOptions = document.querySelector('[data-cart-order-options]');
+    el.cartContext = document.querySelector('[data-cart-context]');
+    el.total = document.querySelector('[data-cart-total]');
+    el.checkout = document.querySelector('[data-cart-checkout]');
+    el.closeBtn = document.querySelector('[data-cart-close]');
+    el.fallback = document.querySelector('[data-cart-fallback]');
+    el.fallbackLink = document.querySelector('[data-cart-fallback-link]');
+    el.copyBtn = document.querySelector('[data-cart-copy-number]');
+    el.copyText = document.querySelector('[data-cart-copy-text]');
+    el.copyStatus = document.querySelector('[data-cart-copy-status]');
+    el.copyManual = document.querySelector('[data-cart-copy-manual]');
+    el.payment = document.querySelector('[data-payment-methods]');
+    el.subtotal = document.querySelector('[data-cart-subtotal]');
+    el.subtotalRow = document.querySelector('[data-row-subtotal]');
+    el.discountRow = document.querySelector('[data-row-discount]');
+    el.discountValue = document.querySelector('[data-cart-discount]');
+    el.discountLabel = document.querySelector('[data-discount-label]');
+    el.offerRow = document.querySelector('[data-row-offer]');
+    el.offerValue = document.querySelector('[data-cart-offer]');
+    el.offerLabel = document.querySelector('[data-offer-label]');
+    el.deliveryRow = document.querySelector('[data-row-delivery]');
+    el.deliveryValue = document.querySelector('[data-cart-delivery]');
+    el.totalNote = document.querySelector('[data-cart-total-note]');
+    el.shareBtn = document.querySelector('[data-cart-share]');
+    el.zones = document.querySelector('[data-delivery-zones]');
+    el.zoneLabel = document.querySelector('[data-zone-label]');
+    el.marginNote = document.querySelector('[data-margin-note]');
+    el.stickyBar = document.querySelector('[data-sticky-bar]');
+    el.stickyCount = document.querySelector('[data-sticky-count]');
+    el.stickyTotal = document.querySelector('[data-sticky-total]');
+    el.cartTriggers = Array.prototype.slice.call(document.querySelectorAll('[data-cart-open]'));
+    if (window.ResizeObserver && el.cartScroller && el.cartHead && el.foot) {
+      var cartLayoutObserver = new window.ResizeObserver(fitCartFooter);
+      cartLayoutObserver.observe(el.cartScroller);
+      cartLayoutObserver.observe(el.cartHead);
+      cartLayoutObserver.observe(el.foot);
+    }
+    window.addEventListener('resize', fitCartFooter, { passive: true });
+    el.navToggle = document.querySelector('[data-nav-toggle]');
+    el.navPanel = document.getElementById('mobile-nav');
+
+    /**
+     * الحرس القديم كان: إن غابت شبكة المنتجات القديمة، اخرج من init بالكامل.
+     * بعد إعادة تصميم قسم المنتج (بطاقة واحدة بدل ثلاث) اختفت الشبكة، فصار
+     * init يخرج قبل تشغيل نصف الواجهة — بلا أي رسالة خطأ.
+     * الحرس الجديد: نخرج فقط إن غاب **الإعداد**، وهو الشرط الوحيد الحقيقي.
+     */
+    if (!CONFIG) return;
+
+    var restoredMethod = restoreChoices();
+    applyOfferFromUrl(restoredMethod);
+    var restoredCart = restoreCart();
+    loadCartFromUrl(restoredCart);
+    renderFormulaPicker();
+    renderSizePicker();
+    renderRoutines();
+    renderCustomPickers();
+    renderCraft();
+    renderPaymentCards();
+    renderTrust();
+    renderCalculator();
+    initOrderEstimate();
+    initProductShortcuts();
+
+    // شريط الشراء المبكّر يتبع التمرير
+    if (!window.__rawaaShopBarScroll) {
+      window.__rawaaShopBarScroll = true;
+      window.addEventListener('scroll', function () {
+        updateShopBar(cartIsEmpty());
+      }, { passive: true });
+    }
+    renderCart();
+
+    // سجل السنة الحالية
+    Array.prototype.forEach.call(document.querySelectorAll('[data-current-year]'), function (node) {
+      node.textContent = String(new Date().getFullYear());
+    });
+
+    // أحداث موزّعة (Delegation) على الصفحة
+    document.addEventListener('click', function (event) {
+      var target = event.target.closest('button, a');
+      if (!target) return;
+
+      if (target.hasAttribute('data-add-to-cart')) {
+        event.preventDefault();
+        var productId = target.getAttribute('data-add-to-cart');
+        addToCart(productId, target);
+        if (target.hasAttribute('data-open-cart-after-add') && cart[productId]) openCart(target);
+        return;
+      }
+      if (target.hasAttribute('data-cart-open')) {
+        event.preventDefault();
+        openCart(target);
+        return;
+      }
+      if (target.hasAttribute('data-cart-close')) {
+        event.preventDefault();
+        closeCart();
+        return;
+      }
+      if (target.hasAttribute('data-cart-checkout')) {
+        event.preventDefault();
+        checkout();
+        return;
+      }
+      if (target.hasAttribute('data-cart-share')) {
+        event.preventDefault();
+        shareCart(target);
+        return;
+      }
+      if (target.hasAttribute('data-cart-copy-number')) {
+        event.preventDefault();
+        copyNumber(target);
+        return;
+      }
+      if (target.hasAttribute('data-cart-copy-order')) {
+        event.preventDefault();
+        copyOrder();
+        return;
+      }
+      if (target.hasAttribute('data-qty-increase')) {
+        event.preventDefault();
+        changeQty(target.getAttribute('data-qty-increase'), +1);
+        return;
+      }
+      if (target.hasAttribute('data-qty-decrease')) {
+        event.preventDefault();
+        changeQty(target.getAttribute('data-qty-decrease'), -1);
+        return;
+      }
+      if (target.hasAttribute('data-remove-item')) {
+        event.preventDefault();
+        removeItem(target.getAttribute('data-remove-item'));
+        return;
+      }
+      if (target.hasAttribute('data-nav-toggle')) {
+        event.preventDefault();
+        setNav(el.navPanel.hidden);
+        return;
+      }
+      if (el.navPanel && !el.navPanel.hidden && target.closest('#mobile-nav')) {
+        setNav(false);
+      }
+    });
+
+    // طريقة الدفع: تغيير عبر حدث change على مستوى المستند
+    document.addEventListener('change', function (event) {
+      var zoneInput = event.target.closest && event.target.closest('[data-zone-select]');
+      if (zoneInput) { setZone(zoneInput.getAttribute('data-zone-select')); return; }
+
+      var input = event.target.closest && event.target.closest('[data-pay-select]');
+      if (!input) return;
+      setMethod(input.getAttribute('data-pay-select'));
+    });
+
+    // روابط التنقل تغلق القائمة على الهاتف
+    if (el.navPanel) {
+      el.navPanel.addEventListener('click', function (event) {
+        if (event.target.closest('a')) setNav(false);
+      });
+    }
+
+    // لوحة المفاتيح: احتجاز التركيز داخل السلة + Escape لقائمة الهاتف
+    document.addEventListener('keydown', function (event) {
+      trapFocus(event);
+      if (event.key === 'Escape' && el.navPanel && !el.navPanel.hidden) {
+        setNav(false);
+        if (el.navToggle) el.navToggle.focus();
+      }
+    });
+
+    // إعادة التركيز بعد الإغلاق بأي وسيلة (ESC أو النقر على الخلفية)
+    if (el.dialog) {
+      el.dialog.addEventListener('close', afterClose);
+      el.dialog.addEventListener('click', function (event) {
+        // نقر على الخلفية خارج الصندوق
+        if (event.target === el.dialog) closeCart();
+      });
+    }
+
+    // إغلاق قائمة الهاتف عند تكبير الشاشة
+    var mq = window.matchMedia('(min-width: 900px)');
+    var onMq = function (event) { if (event.matches) setNav(false); };
+    if (typeof mq.addEventListener === 'function') mq.addEventListener('change', onMq);
+
+    // ظهور هادئ (مع احترام تقليل الحركة)
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var revealTargets = Array.prototype.slice.call(
+      document.querySelectorAll('.section-head, .story-figure, .story-copy, .steps li, .order-cta-inner')
+    );
+
+    if (!reduce && 'IntersectionObserver' in window && revealTargets.length) {
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { rootMargin: '0px 0px 240px 0px', threshold: 0 });
+
+      revealTargets.forEach(function (node) {
+        /**
+         * تبقى النصوص واضحة حتى أثناء الحركة: CSS تحرّك الموضع فقط ولا تخفض
+         * الشفافية، كي لا يضعف التباين أو يُحجب المحتوى. ونترك ما يظهر داخل
+         * الشاشة دون إزاحة منذ البداية حتى لا يتأخر رسم المحتوى الأول.
+         */
+        var rect = node.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) return;
+        node.classList.add('reveal');
+        observer.observe(node);
+      });
+
+      // شبكة أمان: لا يبقى أي محتوى مخفيًا إن فشل المراقب لأي سبب
+      window.setTimeout(function () {
+        revealTargets.forEach(function (node) { node.classList.add('is-visible'); });
+      }, 2500);
+    }
+  }
+
+  /**
+   * ⚠ درس مُكلِّف (2026-10-28): كان init() يُستدعى عاريًا. أي عنصر مفقود
+   * داخل init (مثل شبكة منتجات أُعيد تصميمها) كان يرمي استثناءً فيتوقّف
+   * **كل** ما بعده: مبدّل الحجم، مخصّص العطر، قسم الصنعة، حاسبة التوصيل —
+   * بلا أي رسالة في الكونسول لأن الخطأ داخل مستمع DOMContentLoaded.
+   * الآن: init محمي، والخطأ يُبلَّغ عنه باسمه، وبقية الميزات لا تتوقف.
+   */
+  function boot() {
+    try {
+      init();
+    } catch (err) {
+      if (window.console && console.error) console.error('[RAWAA] تعذّر تهيئة الواجهة:', err);
+      // إعادة المحاولة محصورة في الميزات المستقلة عن العنصر المفقود
+      [renderSizePicker, renderRoutines, renderCustomPickers, renderCraft, renderPaymentCards,
+       renderTrust, renderCalculator, initOrderEstimate].forEach(function (fn) {
+        try { fn(); } catch { /* ميزة واحدة معطّلة لا تُسقط الباقي */ }
+      });
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
+
+  window.addEventListener('pageshow', function (event) {
+    if (!event.persisted || !CONFIG) return;
+    restoreChoices();
+    restoreCart(true);
+    syncSizeUI();
+    syncCustomChips();
+    renderCustomSummary();
+    if (el.items) renderCart();
+  });
+
+  // واجهة اختبارية داخلية (تُستخدم في scripts/check-site.mjs فقط، لا تُستخدم في الواجهة)
+  window.__RAWAA_TEST__ = {
+    buildOrderMessage: buildOrderMessage,
+    money: money,
+    addToCart: addToCart,
+    changeQty: changeQty,
+    removeItem: removeItem,
+    totals: totals,
+    pricing: pricing,
+    setMethod: setMethod,
+    offerLink: offerLink,
+    cartShareLink: cartShareLink,
+    loadCartFromUrl: loadCartFromUrl,
+    saveCart: saveCart,
+    restoreCart: restoreCart,
+    applyOfferFromUrl: applyOfferFromUrl,
+    getMethod: function (id) { return getMethod(id); },
+    methods: availableMethods,
+    zones: zones,
+    setZone: setZone,
+    selectedZone: function () { return selectedZoneId; },
+    deliveryFeeFor: deliveryFeeFor,
+    selectedMethod: function () { return selectedMethodId; },
+    cart: cart,
+    MAX_QTY: MAX_QTY
+  };
+})();
+
+/* ── زر واتساب العائم: يظهر بعد تجاوز قسم الأحجام ──────────────────
+   الغرض التجاري: من يصل من إعلان فيسبوك يجب أن يجد طريق الطلب أينما كان.
+   يختفي في أعلى الصفحة حتى لا يزاحم زر «اختاري حجمك». */
+(function floatingWhatsApp() {
+  'use strict';
+  var btn = document.querySelector('[data-wa-float]');
+  var anchor = document.querySelector('#products [data-add-to-cart]');
+  if (!btn || !anchor || !('IntersectionObserver' in window)) return;
+
+  var seen = false;
+  new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      // نُظهر الزر بعد أن يمرّ الزائر بقسم الأحجام
+      if (entry.boundingClientRect.top < 0) seen = true;
+      btn.classList.toggle('is-visible', seen);
+    });
+  }, { threshold: 0 }).observe(anchor);
+
+  // إن وصل الزائر بتمرير سريع، لا يبقى الزر مخفيًا
+  window.addEventListener('scroll', function () {
+    if (!seen && window.scrollY > 1400) { seen = true; btn.classList.add('is-visible'); }
+  }, { passive: true });
+})();
