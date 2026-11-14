@@ -32,6 +32,7 @@ export default defineConfig({
     command: 'python3 tests/e2e/https-server.py',
     url: baseURL,
     reuseExistingServer: !process.env.CI,
+    ignoreHTTPSErrors: true,
     timeout: 30_000,
   },
 });
