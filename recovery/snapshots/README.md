@@ -25,3 +25,7 @@ These are isolated source/page snapshots recovered from Cloudflare Pages preview
 ## Detailed evidence
 
 See [PR and recovery reconciliation](../PR-RECOVERY-2026-11-14.md) for deployment IDs, commit SHAs, manifest comparisons, access limitations and the Browser Rendering rate-limit hold.
+
+
+## Snapshot inventory
+The current recovery PR contains 45 files under the PR-specific snapshot directories, plus this index: PR #188 (15), PR #196 (3), PR #197 (2), PR #204 (2), and PR #205 (23). The PR #188 cart file is counted as a preserved partial artifact, not a complete source file.
