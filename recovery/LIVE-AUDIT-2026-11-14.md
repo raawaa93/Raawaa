@@ -28,6 +28,7 @@ Scope: read-only inspection of Cloudflare Pages, DNS, the recovered GitHub branc
 - The separate Hama campaign page advertises USD prices and delivery within Hama. These may be distinct campaigns, but the current public copy does not make the distinction sufficiently clear. Resolve the intended commercial policy before publishing changes.
 - `js/pricing-policy.js` has a stale comment saying Sham Cash is 10%, while `js/config.js` currently sets 15%. The calculation reads the configuration; update the stale comment when the pricing source of truth is finalized.
 - The privacy page describes the public WhatsApp flow as not creating an online order record. The Supabase owner/staging backend exists separately; the owner UI labels direct intake as not enabled, and `rawaa_store.orders` currently has zero rows.
+- Supabase logs for the last 24 hours show three successful HTTP 200 invocations of `rawaa-outbox` and six runtime log events for that function (all log-level, including normal `EarlyDrop` events). No other Edge Function request appeared in the returned edge-log window; this does not establish that the other endpoints are safe to expose.
 
 ## Supabase read-only security review
 - Project `oyoyozdugicmnkfhjovo` is `ACTIVE_HEALTHY` on Postgres 17.11.
