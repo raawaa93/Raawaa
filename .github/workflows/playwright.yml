@@ -36,5 +36,11 @@ jobs:
         run: npm install
       - name: Install Chromium and WebKit
         run: npx playwright install --with-deps chromium webkit
+      - name: Generate ephemeral HTTPS certificate
+        run: |
+          openssl req -x509 -newkey rsa:2048 -keyout /tmp/rawaa-e2e.key -out /tmp/rawaa-e2e.crt -days 1 -nodes -subj "/CN=127.0.0.1"
       - name: Run browser checks
+        env:
+          TLS_CERT: /tmp/rawaa-e2e.crt
+          TLS_KEY: /tmp/rawaa-e2e.key
         run: npm run test:e2e
