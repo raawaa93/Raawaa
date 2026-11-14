@@ -20,8 +20,7 @@ for (const route of routes) {
 
       const dimensions = await page.evaluate(() => {
         const viewport = document.documentElement.clientWidth;
-        const all = Array.from(document.querySelectorAll('html, body, body *'));
-        const overflowing = all.map((element) => {
+        const overflowing = Array.from(document.querySelectorAll('body *')).map((element) => {
           const rect = element.getBoundingClientRect();
           const style = getComputedStyle(element);
           return {
@@ -36,16 +35,29 @@ for (const route of routes) {
             position: style.position,
             overflowX: style.overflowX,
           };
-        }).filter((item) =>
-          item.scrollWidth > item.clientWidth + 2 ||
-          item.right > viewport + 2
-        ).sort((a, b) => (b.scrollWidth - b.clientWidth) - (a.scrollWidth - a.clientWidth))
-          .slice(0, 12);
+        }).filter((item) => item.scrollWidth > item.clientWidth + 2 || item.right > viewport + 2)
+          .sort((a, b) => (b.scrollWidth - b.clientWidth) - (a.scrollWidth - a.clientWidth))
+          .slice(0, 24);
+        const images = Array.from(document.images).map((img) => {
+          const rect = img.getBoundingClientRect();
+          const style = getComputedStyle(img);
+          return {
+            src: img.currentSrc.split('/').pop(),
+            naturalWidth: img.naturalWidth,
+            renderedWidth: Math.round(rect.width),
+            renderedRight: Math.round(rect.right),
+            cssWidth: style.width,
+            maxWidth: style.maxWidth,
+            parent: img.parentElement?.className || img.parentElement?.tagName,
+            grandparent: img.parentElement?.parentElement?.className || img.parentElement?.parentElement?.tagName,
+          };
+        });
         return {
           viewport,
           document: document.documentElement.scrollWidth,
           body: document.body.scrollWidth,
           overflowing,
+          images: images.filter((img) => img.renderedRight > viewport + 2 || img.renderedWidth > viewport + 2),
         };
       });
 
