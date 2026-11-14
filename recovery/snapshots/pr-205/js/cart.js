@@ -599,4 +599,389 @@
     };
   }
 
-  /** حاسبة منتج وا
+  /** حاسبة منتج واحد؛ خياراتها هي خيارات السلة نفسها وليست طلبًا مؤكدًا. */
+  function initOrderEstimate() {
+    var box = document.querySelector('[data-order-estimate]');
+    if (!box || !zones.length || !availableMethods.length || !selectedProduct() || !activeZone() || !activeMethod()) return;
+    if (box.getAttribute('data-ready') === 'true') { refreshOrderEstimate(); return; }
+    var zoneSelect = box.querySelector('[data-estimate-zone]');
+    var methodSelect = box.querySelector('[data-estimate-method]');
+    var controls = box.querySelector('[data-estimate-interface]');
+    var fallback = box.querySelector('[data-estimate-fallback]');
+    if (!zoneSelect || !methodSelect || !controls || !fallback) return;
+    zones.forEach(function (zone) {
+      var opt = document.createElement('option');
+      opt.value = zone.id;
+      opt.textContent = zone.label;
+      zoneSelect.appendChild(opt);
+    });
+    availableMethods.forEach(function (method) {
+      var opt = document.createElement('option');
+      opt.value = method.id;
+      opt.textContent = method.short || method.label;
+      methodSelect.appendChild(opt);
+    });
+    zoneSelect.addEventListener('change', function () { setZone(zoneSelect.value, true); });
+    methodSelect.addEventListener('change', function () { setMethod(methodSelect.value, true); });
+    box.setAttribute('data-ready', 'true');
+    refreshOrderEstimate();
+    fallback.hidden = true;
+    controls.hidden = false;
+  }
+
+  function refreshOrderEstimate() {
+    var box = document.querySelector('[data-order-estimate]');
+    if (!box || box.getAttribute('data-ready') !== 'true') return;
+    var product = selectedProduct();
+    var zone = activeZone();
+    var method = activeMethod();
+    if (!product || !zone || !method) return;
+    var amounts = calculateAmounts(unitOffer(product).cents + toCents(scentFee()), unitOffer(product).cents, 1, method, zone);
+    box.querySelector('[data-estimate-zone]').value = zone.id;
+    box.querySelector('[data-estimate-method]').value = method.id;
+    box.querySelector('[data-estimate-context]').textContent = product.sizeLabel + ' · ' + zone.label + ' · ' + (method.short || method.label);
+    box.querySelector('[data-estimate-total]').textContent = money(amounts.totalCents / 100);
+    box.querySelector('[data-estimate-subtotal]').textContent = money(amounts.subtotalCents / 100);
+    box.querySelector('[data-estimate-discount]').textContent = amounts.discountCents > 0 ? '− ' + money(amounts.discountCents / 100) : 'لا يوجد';
+    box.querySelector('[data-estimate-delivery]').textContent = amounts.deliveryCents > 0 ? money(amounts.deliveryCents / 100) : 'مجاني';
+    var oilNote = box.querySelector('[data-estimate-oil-note]');
+    if (oilNote) oilNote.hidden = !custom.oil;
+  }
+
+  function clampQty(qty) {
+    return Math.max(MIN_QTY, Math.min(MAX_QTY, Math.floor(qty) || MIN_QTY));
+  }
+
+  function renderCart() {
+    var summary = totals();
+    var focus = document.activeElement;
+    var focusKey = null;
+    var focusValue = null;
+    if (el.dialog && el.dialog.open && focus && el.dialog.contains(focus)) {
+      ['data-zone-select', 'data-pay-select', 'data-qty-increase', 'data-qty-decrease', 'data-remove-item']
+        .some(function (key) {
+          if (!focus.hasAttribute(key)) return false;
+          focusKey = key;
+          focusValue = focus.getAttribute(key);
+          return true;
+        });
+    }
+
+    // الشارة
+    if (el.count) {
+      if (summary.count > 0) {
+        el.count.hidden = false;
+        el.count.textContent = String(summary.count);
+      } else {
+        el.count.hidden = true;
+        el.count.textContent = '0';
+      }
+      var countButton = el.count.closest('[data-cart-open]');
+      if (countButton) countButton.setAttribute('aria-label', summary.count > 0
+        ? 'فتح سلة المشتريات، ' + summary.count + ' في السلة'
+        : 'فتح سلة المشتريات، السلة فارغة');
+    }
+
+    // عناصر السلة
+    el.items.textContent = '';
+    summary.entries.forEach(function (entry) {
+      el.items.appendChild(buildCartItem(entry.product, entry.qty));
+    });
+
+    var isEmpty = summary.count === 0;
+    el.empty.hidden = !isEmpty;
+    el.foot.hidden = isEmpty;
+    if (el.orderOptions) el.orderOptions.hidden = isEmpty;
+
+    if (!isEmpty) {
+      renderZones();
+      renderPaymentMethods();
+      renderSummary(summary);
+    }
+    renderCartCustomSummary(isEmpty);
+
+    // زر «مشاركة السلة»
+    if (el.shareBtn) {
+      var shareUrl = summary.count > 0 ? cartShareLink() : '';
+      el.shareBtn.hidden = !shareUrl;
+      if (shareUrl) el.shareBtn.setAttribute('data-share-url', shareUrl);
+    }
+
+    // شريط السلة اللاصق على الهاتف — يُحسب أولًا، لأن شريط الشراء المبكّر
+    // يعتمد عليه في تحديد موضعه (كانا يتراكبان على الشاشات الصغيرة).
+    if (el.stickyBar) {
+      if (!isEmpty && !(el.dialog && el.dialog.open)) {
+        el.stickyBar.hidden = false;
+        document.body.classList.add('has-sticky-bar');
+        if (el.stickyCount) el.stickyCount.textContent = String(summary.count);
+        if (el.stickyTotal) el.stickyTotal.textContent = money(summary.amount);
+      } else {
+        el.stickyBar.hidden = true;
+        document.body.classList.remove('has-sticky-bar');
+      }
+    }
+
+    // شريط الشراء المبكّر (قبل وجود أي منتج)
+    updateShopBar(isEmpty);
+
+    // إعادة بناء رابط واتساب وزر النسخ
+    if (el.fallbackLink && !isEmpty) {
+      el.fallbackLink.setAttribute('href', waLink(buildOrderMessage()));
+    }
+    if (el.copyText) el.copyText.value = isEmpty ? '' : withSourceTag(buildOrderMessage());
+    if (el.copyStatus) el.copyStatus.textContent = '';
+    if (isEmpty && el.copyManual) el.copyManual.hidden = true;
+    refreshOrderEstimate();
+    fitCartFooter();
+
+    // إعادة بناء خيارات السلة لا يجب أن تُخرج مستخدمة لوحة المفاتيح من الحوار.
+    if (focusKey && el.dialog && el.dialog.open) {
+      var findFocus = function (key) {
+        return Array.prototype.filter.call(el.dialog.querySelectorAll('[' + key + ']'), function (node) {
+          return node.getAttribute(key) === focusValue && !node.disabled;
+        })[0];
+      };
+      var replacement = findFocus(focusKey);
+      if (!replacement && focusKey === 'data-qty-increase') replacement = findFocus('data-qty-decrease');
+      if (!replacement && focusKey === 'data-qty-decrease') replacement = findFocus('data-qty-increase');
+      if (!replacement && focusKey === 'data-remove-item') replacement = el.closeBtn;
+      if (replacement) {
+        try { replacement.focus({ preventScroll: true }); } catch { replacement.focus(); }
+      }
+    }
+  }
+
+  /** اختيارات العطر والإضافة استفسار للطلب كله، لا حجز أو ضمان توفر. */
+  function renderCartCustomSummary(isEmpty) {
+    if (!el.cartCustomSummary) return;
+    var cfg = CONFIG.customization || {};
+    var scent = (cfg.scentOptions || []).filter(function (o) { return o.id === custom.scent; })[0];
+    var oil = (cfg.oilAdditions || []).filter(function (o) { return o.id === custom.oil; })[0];
+    var parts = [];
+    if (scent) parts.push('العطر: ' + scent.label);
+    if (oil) parts.push('إضافة زيت: ' + oil.label + ' (السعر يؤكد في واتساب وغير مشمول بالإجمالي)');
+    el.cartCustomSummary.hidden = isEmpty || !parts.length;
+    el.cartCustomSummary.textContent = parts.length
+      ? 'للاستفسار عن الطلب ككل: ' + parts.join(' · ') + '؛ نؤكد التوفّر في واتساب.'
+      : '';
+  }
+
+  /** صفوف الملخّص: قيمة المنتجات، الخصم، التوصيل، الإجمالي المرجعي. */
+  function renderSummary(summary) {
+    var method = summary.method;
+
+    if (el.subtotal) el.subtotal.textContent = money(summary.subtotal);
+    if (el.subtotalRow) el.subtotalRow.hidden = false;
+
+    // صف العرض: يظهر فقط حين يعمل عرض فعلي، ويشرح الفرق بين السعر المعلن والمدفوع.
+    if (el.offerRow) {
+      if (summary.offer > 0 && summary.appliedOffers.length) {
+        el.offerRow.hidden = false;
+        if (el.offerValue) el.offerValue.textContent = '− ' + money(summary.offer);
+        if (el.offerLabel) {
+          var labels = [];
+          summary.appliedOffers.forEach(function (o) {
+            if (labels.indexOf(o.slot.label) === -1) labels.push(o.slot.label);
+          });
+          el.offerLabel.textContent = 'عرض: ' + labels.join(' · ');
+        }
+      } else {
+        el.offerRow.hidden = true;
+      }
+    }
+
+    if (el.discountRow) {
+      if (summary.discount > 0) {
+        el.discountRow.hidden = false;
+        if (el.discountValue) {
+          el.discountValue.textContent = '− ' + money(summary.discount);
+        }
+        if (el.discountLabel && method) {
+          el.discountLabel.textContent = 'خصم ' + method.short + ' (' + (method.discountPercent || 0) + '%)';
+        }
+      } else {
+        el.discountRow.hidden = true;
+      }
+    }
+
+    if (el.zoneLabel && summary.zone) {
+      el.zoneLabel.textContent = 'منطقة التوصيل: ' + summary.zone.label;
+    }
+
+    if (el.deliveryRow) {
+      if (summary.freeDelivery) {
+        el.deliveryRow.hidden = false;
+        if (el.deliveryValue) el.deliveryValue.textContent = 'مجاني';
+      } else if (summary.delivery > 0) {
+        el.deliveryRow.hidden = false;
+        if (el.deliveryValue) el.deliveryValue.textContent = money(summary.delivery);
+      } else {
+        el.deliveryRow.hidden = true;
+      }
+    }
+
+    if (el.total) el.total.textContent = money(summary.amount);
+    if (el.cartContext) {
+      el.cartContext.textContent = [summary.zone && summary.zone.label, method && (method.short || method.label)]
+        .filter(Boolean).join(' · ');
+    }
+
+    // ملاحظة هامش داخلية: تعمل فقط عند توفر تقديرات التكلفة (تشغيل من المصدر).
+    // نسخة النشر تُنظَّف من `costing`، فلا تُحسب ملاحظة بهامش مفترض صفر.
+    if (el.marginNote && CONFIG.costing && summary.count > 0 && summary.zone && summary.method) {
+      var c = CONFIG.costing;
+      // التكلفة ثابتة لكل عبوة بغضّ النظر عن الحجم (من المالك) — نأخذ الحد الأعلى
+      var costOfUnit = function () {
+        return c ? (c.unitCostMax || c.unitCostMin || 0) : 0;
+      };
+      // التوصيل مجاني على الزبونة، لكنه ليس مجانيًا على المالك:
+      // costing.shippingCostPerOrder هو ما يدفعه هو عن الطلب.
+      var shippingCost = Number(c.shippingCostPerOrder) || 0;
+      var worst = null;
+      summary.entries.forEach(function (e) {
+        var net = unitOffer(e.product).cents / 100 * (1 - (summary.method.discountPercent || 0) / 100);
+        var profit = net - summary.delivery - costOfUnit() - shippingCost;
+        if (profit <= 0 && (!worst || profit < worst.profit)) {
+          worst = { size: e.product.sizeLabel, profit: profit };
+        }
+      });
+      if (worst) {
+        el.marginNote.hidden = false;
+        el.marginNote.textContent =
+          'ملاحظة: الحجم ' + worst.size + ' في هذه المنطقة لا يغطي تكلفته مع هذه الطريقة. ' +
+          'يمكن اختيار «الدفع عند الاستلام»، أو طلب حجم أكبر، أو إضافة حجم آخر — ' +
+          'وسنؤكد لك السعر النهائي في المحادثة.';
+      } else {
+        el.marginNote.hidden = true;
+      }
+    } else if (el.marginNote) {
+      el.marginNote.hidden = true;
+    }
+
+    if (el.totalNote) {
+      el.totalNote.textContent = method
+        ? 'الإجمالي المرجعي بطريقة «' + method.label + '». الأسعار تُؤكَّد في المحادثة قبل الشحن.'
+        : 'الأسعار تُؤكَّد في المحادثة قبل الشحن.';
+    }
+  }
+
+
+
+
+
+  /** هل السلة فارغة الآن؟ */
+  function cartIsEmpty() {
+    return !cart || Object.keys(cart).length === 0;
+  }
+
+  /**
+   * شريط الشراء المبكّر — يظهر حين: (١) الشاشة هاتف، (٢) السلة فارغة،
+   * (٣) تجاوزت الزائرة قسم الأحجام. الغرض: مسار شراء دائم الظهور بلا تمرير طويل.
+   * يُخفى فور وجود أي منتج في السلة (يحلّ محلّه الشريط اللاصق الكامل).
+   */
+  function updateShopBar(isEmpty) {
+    var bar = document.querySelector('[data-shop-bar]');
+    if (!bar) return;
+    var productsSection = document.getElementById('products');
+    if (!productsSection) { bar.hidden = true; return; }
+
+    var isPhone = window.matchMedia('(max-width: 899px)').matches;
+    var passed = productsSection.getBoundingClientRect().bottom < 0;
+    var show = isPhone && isEmpty && passed;
+
+    bar.hidden = !show;
+    document.body.classList.toggle('has-shop-bar', show);
+    // الحالة تُعاد لكل شاشة عرض: تغيير الحجم بين هاتف وسطح مكتب كان يترك
+    // حالة قديمة على <body> فتبقى مساحة محجوزة أسفل الصفحة بلا سبب.
+    document.body.classList.toggle('has-sticky-bar', !isEmpty);
+  }
+
+  /**
+   * حاسبة التوصيل — تعرض الإجمالي النهائي لحجم 50 مل بحسب المحافظة وطريقة الدفع.
+   * تستخدم نفس دوال التسعير المستخدمة في السلة، فلا يمكن أن يختلف الرقمان.
+   */
+  function renderCalculator() {
+    var box = document.querySelector('[data-calc]');
+    if (!box) return;
+
+    var govSel = box.querySelector('[data-calc-gov]');
+    var paySel = box.querySelector('[data-calc-pay]');
+    var outSub = box.querySelector('[data-calc-sub]');
+    var outDisc = box.querySelector('[data-calc-disc]');
+    var outDeliv = box.querySelector('[data-calc-deliv]');
+    var outTotal = box.querySelector('[data-calc-total]');
+    var outNote = box.querySelector('[data-calc-note]');
+    if (!govSel || !paySel) return;
+
+    var sample = CONFIG.products[1] || CONFIG.products[0];
+    if (!sample) return;
+
+    // املأ المحافظات من الإعدادات
+    if (govSel.options.length <= 2 && CONFIG.delivery && CONFIG.delivery.governorates) {
+      govSel.innerHTML = '';
+      CONFIG.delivery.governorates.forEach(function (name) {
+        var opt = document.createElement('option');
+        var isHama = name === 'حماة';
+        opt.value = isHama ? 'hama' : 'other';
+        opt.textContent = name;
+        if (isHama) opt.selected = true;
+        govSel.appendChild(opt);
+      });
+    }
+
+    function update() {
+      var zoneId = govSel.value;
+      var methodId = paySel.value;
+      var method = CONFIG.payment.methods.filter(function (m) { return m.id === methodId; })[0];
+      var zone = CONFIG.delivery.zones.filter(function (z) { return z.id === zoneId; })[0];
+      if (!method || !zone) return;
+
+      var sampleUnit = unitOffer(sample);
+      var amounts = calculateAmounts(sampleUnit.cents + toCents(scentFee()), sampleUnit.cents, 1, method, zone);
+
+      outSub.textContent = money(sampleUnit.cents / 100) + (sampleUnit.cutCents > 0 ? ' (بدل ' + money(sample.price) + ')' : '');
+      outDisc.textContent = amounts.discountCents > 0
+        ? '− ' + money(amounts.discountCents / 100) + ' (' + method.discountPercent + '%)'
+        : 'لا يوجد';
+      outDeliv.textContent = amounts.deliveryCents > 0 ? money(amounts.deliveryCents / 100) : 'مجاني';
+      outTotal.textContent = money(amounts.totalCents / 100);
+
+      // النسبة من الإعدادات لا مكتوبة هنا: كان النص يقول «10%» حرفيًا بينما
+      // الرقم الفعلي في js/config.js. تغييره هناك كان سيترك النص يكذب.
+      var note = '';
+      var percent = Number(method.discountPercent) || 0;
+      if (percent > 0) {
+        note = 'مع ' + method.short + ': خصم ' + percent + '% على قيمة المنتجات' +
+          (amounts.deliveryCents === 0 ? '، والتوصيل مجاني — أفضل سعر متاح.' : '.');
+      } else {
+        note = method.label + ': بلا خصم' +
+          (amounts.deliveryCents === 0 ? '، والتوصيل مجاني.' : '.') +
+          ' المبلغ يُدفع كاملًا للمندوب.';
+      }
+      if (sampleUnit.cutCents > 0) {
+        note = 'عرض «' + sampleUnit.slot.label + '»: ' + money(sample.price) + ' ← ' +
+          money(sampleUnit.cents / 100) + '. ' + note;
+      }
+      outNote.textContent = note;
+    }
+
+    govSel.addEventListener('change', update);
+    paySel.addEventListener('change', update);
+    update();
+  }
+
+  /**
+   * قسم «ما لا نقدّمه» — يُبنى من CONFIG.trust فقط.
+   * الغرض: نفي الادعاءات قبل أن يسأل الزبون، وهو أقوى وسيلة ثقة لمنتج جديد.
+   */
+  function renderTrust() {
+    var host = document.querySelector('[data-trust]');
+    if (!host || !CONFIG.trust || !CONFIG.trust.items) return;
+    if (host.querySelector('.trust-item')) return;   // لا تكرّر البناء
+
+    CONFIG.trust.items.forEach(function (text) {
+      var item = document.createElement('p');
+      item.className = 'trust-item';
+      var mark = document.createElement('span');
+      mark.className = 'trust-mark';
+    
