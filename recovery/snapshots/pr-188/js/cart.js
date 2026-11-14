@@ -205,4 +205,384 @@
     document.dispatchEvent(new CustomEvent('rawaa:formula-change', { detail: { familyId: selectedFamily } }));
   }
   function renderFormulaPicker() {
-    var requested = new
+    var requested = new URLSearchParams(window.location.search).get('product');
+    var restored = selectedSize && getProduct(selectedSize);
+    if (CONFIG.formulas.some(function (f) { return f.id === requested; })) {
+      selectedFamily = requested;
+      selectedSize = familyProducts()[1].id;
+    } else if (restored && restored.familyId) selectedFamily = restored.familyId;
+    var host = document.querySelector('[data-formula-options]');
+    if (!host) return;
+    host.textContent = '';
+    CONFIG.formulas.forEach(function (formula) {
+      var button = document.createElement('button');
+      button.type = 'button'; button.className = 'btn btn-outline';
+      button.textContent = formula.name; button.setAttribute('data-formula-select', formula.id);
+      button.addEventListener('click', function () {
+        var previous = selectedProduct(); var size = previous && previous.sizeMl;
+        selectedFamily = formula.id;
+        selectedSize = (familyProducts().filter(function (p) { return p.sizeMl === size; })[0] || familyProducts()[1]).id;
+        renderSizePicker(); syncFormula(); saveChoices();
+      });
+      host.appendChild(button);
+    });
+    syncFormula();
+  }
+
+  function selectedProduct() {
+    var choices = familyProducts();
+    var id = selectedSize || (choices[1] && choices[1].id);
+    return getProduct(id) || CONFIG.products[0];
+  }
+
+  /** رابط السؤال يتبع الاختيار دون فتح واتساب أو إرسال رسالة. */
+  function updateSelectedInquiry(product) {
+    var links = document.querySelectorAll('[data-wa-selected]');
+    if (!links.length || !product) return;
+    var deliveryNote = CONFIG.delivery && CONFIG.delivery.policy &&
+      CONFIG.delivery.policy.alwaysFree === true
+      ? ' والتوصيل مجاني لجميع المحافظات ولكل طرق الدفع.'
+      : ' قبل احتساب رسوم التوصيل.';
+    var lines = [
+      'مرحبًا رواء، أود الاستفسار عن ' + product.name + ' بحجم ' + product.sizeLabel + '.',
+      'سعر العبوة المعتمد: ' + money(unitOffer(product).cents / 100 + scentFee()) +
+        (unitOffer(product).cutCents > 0 ? ' بعد عرض «' + unitOffer(product).slot.label + '» (' + money(product.price) + ' قبل العرض)' : '') +
+        ' قبل الخصم.' + deliveryNote
+    ];
+    var cfg = CONFIG.customization || {};
+    var scent = (cfg.scentOptions || []).filter(function (o) { return o.id === custom.scent; })[0];
+    var oil = (cfg.oilAdditions || []).filter(function (o) { return o.id === custom.oil; })[0];
+    if (scent) lines.push('العطر الذي أستفسر عنه: ' + scent.label + '.');
+    if (oil) lines.push('إضافة الزيت المطلوب الاستفسار عنها: ' + oil.label + '.');
+    lines.push('هل يمكن تأكيد التوفّر والسعر النهائي وموعد تجهيز العبوة والتوصيل؟');
+    var href = waLink(lines.join('\n'));
+    Array.prototype.forEach.call(links, function (link) { link.setAttribute('href', href); });
+  }
+
+  /** تُفتح الإجابة عند الوصول إليها بالاختصار، والرابط يعمل أيضًا دون نص برمجي. */
+  function initProductShortcuts() {
+    Array.prototype.forEach.call(document.querySelectorAll('[data-expand-target]'), function (link) {
+      link.addEventListener('click', function () {
+        var id = (link.getAttribute('href') || '').replace(/^#/, '');
+        var target = document.getElementById(id);
+        if (target && target.tagName === 'DETAILS') target.open = true;
+      });
+    });
+  }
+
+  function renderSizePicker() {
+    var host = document.querySelector('[data-size-options]');
+    if (!host || !CONFIG.products.length) return;
+    host.textContent = '';
+
+    familyProducts().forEach(function (product, index) {
+      var isDefault = index === 1 || familyProducts().length === 1;
+      if (selectedSize === null && isDefault) selectedSize = product.id;
+
+      var label = document.createElement('label');
+      label.className = 'size-option' + (product.badge ? ' size-option--featured' : '');
+      label.setAttribute('data-size-for', product.id);
+
+      var radio = document.createElement('input');
+      radio.type = 'radio';
+      radio.name = 'rawaa-size';
+      radio.value = product.id;
+      radio.className = 'size-option-input';
+      radio.checked = product.id === selectedSize;
+      radio.addEventListener('change', function () {
+        if (radio.checked) selectSize(product.id);
+      });
+
+      var body = document.createElement('span');
+      body.className = 'size-option-body';
+
+      var size = document.createElement('span');
+      size.className = 'size-option-size';
+      size.textContent = product.sizeLabel;
+
+      var unit = unitOffer(product);
+      var price = document.createElement('span');
+      price.className = 'size-option-price';
+      if (unit.cutCents > 0) {
+        var was = document.createElement('s');
+        was.className = 'size-option-was';
+        was.textContent = money(product.price);
+        var now = document.createElement('bdi');
+        now.className = 'size-option-now';
+        now.textContent = money(unit.cents / 100);
+        price.appendChild(was);
+        price.appendChild(document.createTextNode(' '));
+        price.appendChild(now);
+      } else {
+        price.textContent = money(product.price);
+      }
+
+      body.appendChild(size);
+      body.appendChild(price);
+
+      if (unit.cutCents > 0) {
+        var offerFlag = document.createElement('span');
+        offerFlag.className = 'size-option-flag size-option-flag--offer';
+        offerFlag.setAttribute('data-offer-flag', unit.slot.id || unit.slot.label);
+        offerFlag.textContent = offerBadge(unit.slot) + ' · ' + unit.slot.label;
+        body.appendChild(offerFlag);
+      }
+
+      // عرض العبوة: يظهر نصه على بطاقة الحجم كي تعرف الزبونة أن الكمية تغيّر السعر.
+      var bundlesHere = bundleOffers(product, unit.cents);
+      if (bundlesHere.length) {
+        var bundleFlag = document.createElement('span');
+        bundleFlag.className = 'size-option-flag size-option-flag--bundle';
+        bundleFlag.setAttribute('data-bundle-flag', product.id);
+        bundleFlag.textContent = bundleText(bundlesHere[0]);
+        body.appendChild(bundleFlag);
+      }
+
+      if (product.badge) {
+        var flag = document.createElement('span');
+        flag.className = 'size-option-flag';
+        flag.setAttribute('data-size-badge', product.id);
+        flag.textContent = product.badge;
+        body.appendChild(flag);
+      }
+
+      label.appendChild(radio);
+      label.appendChild(body);
+      host.appendChild(label);
+    });
+
+    syncSizeUI();
+  }
+
+  function selectSize(id) {
+    if (!getProduct(id)) return;
+    selectedSize = id;
+    selectedFamily = getProduct(id).familyId;
+    syncFormula();
+    saveChoices();
+    syncSizeUI();
+  }
+
+  function syncSizeUI() {
+    if (!selectedSize) return;
+    var product = selectedProduct();
+    if (!product) return;
+
+    Array.prototype.forEach.call(document.querySelectorAll('.size-option'), function (node) {
+      var on = node.getAttribute('data-size-for') === selectedSize;
+      node.classList.toggle('is-selected', on);
+      var input = node.querySelector('input');
+      if (input) input.checked = on;
+    });
+
+    var unit = unitOffer(product);
+    var effectivePrice = unit.cents / 100;
+    var priceNode = document.querySelector('[data-price-live]');
+    if (priceNode) {
+      if (unit.cutCents > 0) {
+        priceNode.setAttribute('aria-label', 'سعر ' + product.sizeLabel + ': ' + money(effectivePrice) +
+          ' بعد عرض «' + unit.slot.label + '» بدل ' + money(product.price) + '.');
+      } else {
+        priceNode.removeAttribute('aria-label');
+      }
+      priceNode.innerHTML = unit.cutCents > 0
+        ? '<s>' + money(product.price) + '</s> <bdi>' + money(effectivePrice) + '</bdi> <span>' + product.sizeLabel + '</span>'
+        : '<bdi>' + money(product.price) + '</bdi> <span>' + product.sizeLabel + '</span>';
+    }
+
+    var unitNode = document.querySelector('[data-unit-live]');
+    if (unitNode && product.sizeMl && product.price) {
+      // The label says pre-discount; effectivePrice may already include an active offer.
+      var per = product.price / product.sizeMl;
+      var unitDeliveryNote = CONFIG.delivery && CONFIG.delivery.policy && CONFIG.delivery.policy.alwaysFree === true
+        ? ' تقريبًا لكل مل، قبل خصم الدفع؛ والتوصيل مجاني.'
+        : ' تقريبًا لكل مل، قبل خصم الدفع والتوصيل.';
+      unitNode.innerHTML = '<bdi>' + CONFIG.currency.symbol + (per >= 0.1 ? per.toFixed(2) : per.toFixed(3)) + '</bdi>' + unitDeliveryNote;
+    }
+
+    // صورة البطاقة تتبع الحجم المختار — ترى الزائنة العبوة التي تختارها فعلًا
+    var img = document.querySelector('[data-size-img]');
+    var srcAvif = document.querySelector('[data-size-avif]');
+    var srcWebp = document.querySelector('[data-size-webp]');
+    var base = product.image && product.image.base;
+    if (img && base) {
+      var widths = (product.image.widths || [480, 720, 900]);
+      var setOf = function (ext) {
+        var files = product.image[ext] || [];
+        return widths.map(function (w, i) {
+          return 'assets/img/products/' + files[i] + ' ' + w + 'w';
+        }).join(', ');
+      };
+      if (srcAvif) srcAvif.setAttribute('srcset', setOf('avif'));
+      if (srcWebp) srcWebp.setAttribute('srcset', setOf('webp'));
+      img.setAttribute('src', product.image.src);
+      img.setAttribute('alt', product.image.alt || ('تصوّر تصميمي لعبوة سيروم رواء ' + product.sizeLabel));
+    }
+
+    // زر الإضافة يتبع الحجم المختار — الـ id لا يُكتب في HTML
+    Array.prototype.forEach.call(document.querySelectorAll('[data-add-current]'), function (btn) {
+      btn.setAttribute('data-add-to-cart', selectedSize);
+      if (btn.hasAttribute('data-requires-js')) btn.disabled = false;
+    });
+    updateSelectedInquiry(product);
+    refreshOrderEstimate();
+  }
+
+
+  /* ---------------------------- التخصيص ------------------------------
+     العطر والزيوت المضافة — تُحفظ في الذاكرة وتُرسل في رسالة واتساب.
+     هذا هو التخصيص الذي نملكه فعلًا: القاعدة ثابتة، والاختيار حسّي. */
+  var custom = { scent: '', oil: '', request: '' };
+
+  function scentFee() {
+    return custom.scent && custom.scent !== 'unscented' ? (CONFIG.customization.scentPrice || 0) : 0;
+  }
+
+  function setCustomRequest(value) {
+    custom.request = typeof value === 'string' ? value.replace(/\u0000/g, '').slice(0, 500) : '';
+    saveChoices();
+    renderCustomSummary();
+  }
+
+  function setCustom(field, value) {
+    if (field !== 'scent' && field !== 'oil') return;
+    var cfg = CONFIG.customization || {};
+    var options = field === 'scent' ? (cfg.scentOptions || []) : (cfg.oilAdditions || []);
+    if (value && !options.some(function (o) { return o.id === value; })) return;
+    custom[field] = value || '';
+    saveChoices();
+    syncCustomChips();
+    renderCustomSummary();
+    updateSelectedInquiry(selectedProduct());
+    refreshOrderEstimate();
+    if (el.items) renderCart();
+  }
+
+  function syncCustomChips() {
+    ['scent', 'oil'].forEach(function (field) {
+      Array.prototype.forEach.call(document.querySelectorAll('[data-custom-' + field + ']'), function (chip) {
+        var selected = chip.getAttribute('data-custom-' + field) === custom[field];
+        chip.classList.toggle('is-selected', selected);
+        chip.setAttribute('aria-pressed', selected ? 'true' : 'false');
+      });
+    });
+  }
+
+  function renderCustomSummary() {
+    var requestInput = document.querySelector('[data-custom-request]');
+    if (requestInput && document.activeElement !== requestInput && requestInput.value !== custom.request) {
+      requestInput.value = custom.request || '';
+    }
+    var requestSummary = document.querySelector('[data-custom-request-summary]');
+    if (requestSummary) {
+      requestSummary.textContent = custom.request
+        ? 'ملاحظة التخصيص: ' + custom.request + ' — بانتظار تأكيد التوفّر والسعر.'
+        : '';
+    }
+    var host = document.querySelector('[data-custom-summary]');
+    if (!host) return;
+    var parts = [];
+    var cfg = CONFIG.customization || {};
+    var chosenScent = null;
+    if (custom.scent) {
+      chosenScent = (cfg.scentOptions || []).filter(function (o) { return o.id === custom.scent; })[0];
+      if (chosenScent) parts.push('العطر: ' + chosenScent.label);
+    }
+    if (custom.oil) {
+      var ol = (cfg.oilAdditions || []).filter(function (o) { return o.id === custom.oil; })[0];
+      if (ol) parts.push('إضافة: ' + ol.label + (ol.note ? ' — ' + ol.note : ''));
+    }
+    var note = chosenScent && chosenScent.note ? chosenScent.note : '';
+    host.textContent = parts.length
+      ? parts.join(' · ') + (note ? ' · ' + note : '')
+      : 'العطر والإضافة اختياريان — نؤكد الخيارات المتاحة في واتساب.';
+  }
+
+  /* ------------------------------ السلة ------------------------------ */
+
+  function cartEntries() {
+    return Object.keys(cart)
+      .map(function (id) {
+        var product = getProduct(id);
+        return product ? { product: product, qty: cart[id] } : null;
+      })
+      .filter(Boolean);
+  }
+
+  function getMethod(id) {
+    return availableMethods.filter(function (m) { return m.id === id; })[0] || availableMethods[0] || null;
+  }
+
+  function activeMethod() { return getMethod(selectedMethodId); }
+
+  /**
+   * حساب مشترك للسلة وتقدير العبوة الواحدة؛ الأرقام كلها بالسنتات.
+   * `discountBaseCents` يساوي إجمالي الطلب المؤهل بعد العروض، بما فيه الإضافات المسعّرة؛
+   * لا يدخل التوصيل في أساس الخصم.
+   * النص المعلن في CONFIG.payment يحدد خصمًا على إجمالي الطلب المؤهل.
+   */
+  function calculateAmounts(subtotalCents, discountBaseCents, count, method, zone) {
+    var api = requirePolicy();
+    var discountCents = api ? api.discountCentsFor(method, discountBaseCents) : 0;
+    var deliveryCents = (method && count > 0) ? toCents(deliveryFeeFor(method, zone)) : 0;
+    return {
+      subtotalCents: subtotalCents,
+      discountCents: discountCents,
+      deliveryCents: deliveryCents,
+      totalCents: subtotalCents - discountCents + deliveryCents
+    };
+  }
+
+  /**
+   * محرّك الحساب: قيمة المنتجات ← الخصم ← رسوم التوصيل ← الإجمالي التقديري.
+   * كل الأرقام بالسنتات لتفادي أخطاء الفواصل العشرية.
+   * الخصم والرسوم تأتيان من CONFIG.payment — لا قيمة مكتوبة يدويًا هنا.
+   */
+  function pricing() {
+    var entries = cartEntries();
+    var listCents = 0;      // قيمة المنتجات بأسعارها المعلنة
+    var productCents = 0;   // بعد عروض الأحجام
+    var scentTotalCents = 0;
+    var offerCents = 0;
+    var appliedOffers = [];
+    var count = 0;
+    var scentUnitCents = toCents(scentFee());
+
+    entries.forEach(function (entry) {
+      var unit = unitOffer(entry.product);
+      // عرض العبوة يعمل على كمية الحجم نفسه: 2 أو 3 بسعر واحد، والباقي بسعره.
+      var plan = planFor(entry.product, entry.qty, unit.cents);
+      listCents += toCents(entry.product.price) * entry.qty;
+      productCents += plan.totalCents;
+      scentTotalCents += scentUnitCents * entry.qty;
+      var cut = unit.cutCents * entry.qty + plan.cutCents;
+      if (cut > 0) {
+        offerCents += cut;
+        if (unit.cutCents > 0) appliedOffers.push({ slot: unit.slot, cents: unit.cutCents * entry.qty });
+        plan.sets.forEach(function (set) {
+          // وفّر فرق سعر المجموعة عن سعر وحداتها المفردة، مضروبًا بعدد المجموعات.
+          var perSet = Math.round(Number(set.slot.qty) * unit.cents) - toCents(set.slot.value);
+          appliedOffers.push({ slot: set.slot, cents: perSet * set.count, count: set.count });
+        });
+      }
+      count += entry.qty;
+    });
+
+    // العرض العام يُطبَّق على قيمة المنتجات وحدها — لا على إضافة العطر ولا التوصيل.
+    var generalSlot = orderOffer();
+    if (generalSlot && productCents > 0) {
+      var generalCut = offersEngine().orderCut(generalSlot, productCents);
+      if (generalCut > 0) {
+        productCents -= generalCut;
+        offerCents += generalCut;
+        appliedOffers.push({ slot: generalSlot, cents: generalCut });
+      }
+    }
+
+    var method = activeMethod();
+    var zone = activeZone();
+    // العرض أولًا، ثم خصم شام كاش على إجمالي المنتجات والتخصيصات المسعّرة.
+    var eligibleTotalCents = productCents + scentTotalCents;
+    var amounts = calculateAmounts(eligibleTotalCents, eligibleTotalCents, count, method, zone);
+
+  
