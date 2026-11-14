@@ -77,7 +77,7 @@ The Supabase connector failed to retrieve Edge Function source code during this 
 - Ten unused indexes were reported (INFO). Do not remove them during storefront recovery.
 - The owner portal uses a publishable key in the browser and JWT-authenticated Edge Function endpoints; no service-role key was found in the public owner settings.
 - The owner page explicitly says direct website order intake is not activated. The public site still confirms orders through WhatsApp. The owner panel must not be described as a live automated order-management system until a real end-to-end order is tested.
-- The `commerce` schema is a newer multi-store order spine with cost/RTO fields but currently has no orders and is not connected to the owner dashboard. Keep it isolated until the intended order-system architecture is selected and reviewed.
+- The `commerce` schema is a newer multi-store order spine with cost/RTO fields but currently has no orders and is not connected to the owner dashboard. Its current `commerce.orders` defaults to USD, accepts COD/Sham Cash/Syriatel Cash/MTN Cash, sets unit cost to 0, courier cost to 200 cents, and refusal cost to 100 cents. This does not yet match the Store's current SYP price presentation and confirmed payment policy. Keep it isolated until currency handling, product-cost inputs, payment methods, and the intended order-system architecture are reconciled. Do not populate its cost defaults by guesswork.
 
 ## Domain status — HOLD
 
