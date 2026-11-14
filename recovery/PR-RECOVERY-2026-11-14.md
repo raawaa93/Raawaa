@@ -127,6 +127,14 @@ This preserves the separate PR #204 page variant without replacing the PR #205 c
 - `recovery/snapshots/pr-188/js/serum-views.js`
 - `recovery/snapshots/pr-188/js/cart.js` (72,000 of 90,326 characters recovered; incomplete and must not be used as a production file)
 
+## PR #196 page checkpoint recovered
+The PR #196 preview's homepage, Serum page, and privacy page were retrieved through the Browser Rendering crawl endpoint and preserved separately:
+- `recovery/snapshots/pr-196/index.html`
+- `recovery/snapshots/pr-196/serum`
+- `recovery/snapshots/pr-196/privacy`
+
+This is a distinct campaign/editorial checkpoint, not a replacement for PR #205. Its preview manifest excludes Hama assets and several production files; keep it isolated during reconciliation.
+
 ## Current recovery blocker
 Cloudflare Browser Rendering returned HTTP 429 for the content endpoint with a server-directed retry delay of 52,984 seconds. No further Browser Rendering content requests should be made until that cooldown expires. This rate limit blocks the remaining PR #188 cart.js tail and additional preview-source retrieval for now. GitHub reads/writes and Cloudflare Pages metadata operations remain available. Do not label the PR #188 cart snapshot complete, and do not promote any partial snapshot to the root production tree.
 
