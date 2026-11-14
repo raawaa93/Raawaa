@@ -54,11 +54,7 @@ jobs:
             echo "::notice::CLOUDFLARE_API_TOKEN is not configured; no Cloudflare deployment was attempted."
             exit 0
           fi
-          npx --yes wrangler@4 pages deploy "$RUNNER_TEMP/raawaa-pages" \\
-            --project-name=raawaa-store \\
-            --branch="$DEPLOY_BRANCH" \\
-            --commit-hash="$SOURCE_SHA" \\
-            --commit-message="Isolated preview of canonical main $SOURCE_SHA"
+          npx --yes wrangler@4 pages deploy "$RUNNER_TEMP/raawaa-pages" --project-name=raawaa-store --branch="$DEPLOY_BRANCH" --commit-hash="$SOURCE_SHA" --commit-message="Isolated preview of canonical main $SOURCE_SHA"
           echo "deployment=created" >> "$GITHUB_OUTPUT"
           echo "Preview branch: $DEPLOY_BRANCH"
           echo "Source SHA: $SOURCE_SHA"
