@@ -29,7 +29,7 @@ assert.match(globalStyles, /env\(safe-area-inset-bottom\)/i, 'Cart footer must r
 // Guard every active storefront page and browser script against stale promotion copy.
 // Recovery snapshots are deliberately excluded: they are historical evidence only.
 for (const file of [...htmlFiles, ...files.filter((name) => name.endsWith('.js'))]) {
-  assert.doesNotMatch(read(file), /15\\s*%/u, file + ' must not contain the superseded 15% promotion');
+  assert.doesNotMatch(read(file), /15\s*%/u, file + ' must not contain the superseded 15% promotion');
 }
 
 const index = read('index.html');
