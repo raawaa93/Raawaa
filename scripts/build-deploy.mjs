@@ -55,7 +55,8 @@ assert.ok(!paths.some((path) => path.startsWith('recovery/') || path.startsWith(
 const textFiles = files.filter((path) => ['.html', '.js', '.mjs'].some((ext) => path.toLowerCase().endsWith(ext)));
 for (const path of textFiles) {
   const content = readFileSync(path, 'utf8');
-  assert.ok(!content.includes('15%') && !content.includes('15 %'), relative(out, path) + ' contains the superseded 15% offer');
+  const compact = [32, 9, 10, 13, 160].reduce((value, code) => value.split(String.fromCharCode(code)).join(''), content);
+  assert.ok(!compact.includes('15%'), relative(out, path) + ' contains the superseded 15% offer');
 }
 const read = (path) => readFileSync(join(out, path), 'utf8');
 assert.ok(read('sitemap.xml').includes('/campaign'), 'Campaign page must be present in sitemap');
