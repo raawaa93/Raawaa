@@ -42,8 +42,8 @@ Date: 2026-11-14 (UTC)
 - The full 88,132-character cart implementation from PR #205 is retained; the partial PR #188 cart was excluded.
 
 ### Public production checkpoint
-- The last inspected production deployment predates this source restoration and was observed advertising 15% Sham Cash.
-- Therefore live production and the recovered source currently encode different discount values (15% live vs. 10% in GitHub main). The recovered source deliberately follows the PR #188 policy. Confirm the canonical commercial decision before any deployment.
+- The older 2026-11-08 production deployment was observed advertising 15% Sham Cash. This is a historical production state, not the active offer.
+- Owner decision on 2026-11-14: **10% Sham Cash-only discount is canonical**. GitHub `main` encodes 10%; the live site remains on the older deployment until a controlled Direct Upload release is prepared and validated. No reconfirmation is needed.
 - The Hama campaign's SYP/USD messaging and campaign context should be reviewed as part of the next content pass; no prices were changed in this recovery.
 
 ## Supabase/backend boundary
@@ -57,7 +57,7 @@ Date: 2026-11-14 (UTC)
 ## Next safe work
 
 1. Run a functional mobile Safari/iPhone pass on an isolated preview: product selection, pricing, cart, WhatsApp message composition, privacy, and owner login.
-2. Resolve the 10% vs. 15% discount difference before release; preserve free delivery unless the owner changes it.
+2. Verify that the isolated release preview consistently displays and calculates the canonical 10% Sham Cash-only discount; do not restore the superseded 15% offer.
 3. Review Hama campaign prices and content against the intended current offer.
 4. Verify asset bytes against Cloudflare hashes where practical.
 5. Resolve the `rawaa.eu.org` parent delegation only after confirming it is the intended customer-facing domain.
@@ -67,3 +67,7 @@ Date: 2026-11-14 (UTC)
 ## Safety record
 
 No production deployment, DNS mutation, database write, migration, secret rotation, or destructive action was performed during source restoration.
+
+## Policy decision update (2026-11-14)
+
+The discount discrepancy is resolved by the owner's explicit decision: 10% on eligible Sham Cash payments only. The 15% production banner is historical and superseded. Preserve the old deployment and snapshots as evidence, but exclude their content from any new release. Free delivery to every Syrian governorate for every payment method remains active.

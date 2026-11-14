@@ -16,7 +16,7 @@
 - No production deployment was performed as part of this reconciliation.
 
 ## Prior development and preview evidence
-The following evidence comes from the user's prior work context and the Cloudflare Pages deployment records. Preview success is not equivalent to a production release or a merged PR.
+The following evidence comes from the user's prior work context and the Cloudflare Pages deployment records. Preview success is not equivalent to a production release or a merged PR. Historical checkpoints are archival evidence, not current policy.
 
 | Store PR / branch | Evidence | Current interpretation |
 |---|---|---|
@@ -93,8 +93,8 @@ Using Cloudflare Browser Rendering, actual HTML and text assets were retrieved f
 
 Each committed file was read back from GitHub and compared byte-for-byte with the retrieved content. Binary media/fonts/images are not yet restored into these snapshot directories.
 
-## Commercial configuration divergence — do not consolidate automatically
-The recovered PR #188 `js/config.js` sets Sham Cash discount to **10%**. The recovered PR #205 `js/config.js` sets it to **15%**. Both contain the same displayed SYP product price ladder (2,000/2,400/2,800 for Rosemary-Caffeine and 1,800/2,200/2,600 for the other two formulas), but the discount changed between checkpoints. The PR #205 homepage copy also says 15%. This is a real version difference, not merely the stale comment already identified in the pricing policy. Preserve both snapshots and do not select a final commercial policy without reconciling the intended approved change.
+## Commercial configuration divergence — decision resolved 2026-11-14
+The recovered PR #188 `js/config.js` sets Sham Cash discount to **10%**. The recovered PR #205 `js/config.js` sets it to **15%**. Both contain the same displayed SYP product price ladder (2,000/2,400/2,800 for Rosemary-Caffeine and 1,800/2,200/2,600 for the other two formulas), but the discount changed between checkpoints. The PR #205 homepage copy also says 15%. The owner has now explicitly selected **10%** as the sole current policy. PR #205's 15% value and copy are retained as historical evidence only and must never be copied into active pages or deployment payloads. Free delivery remains active for all Syrian governorates and all payment methods.
 
 ## Additional preview source recovery
 Further page and source snapshots were preserved after the first recovery pass:
@@ -163,3 +163,10 @@ Cloudflare Browser Rendering returned HTTP 429 for the content endpoint with a s
 - Retrieved detailed metadata and logs for the failed #206 preview and successful #196/#204/#188 preview checkpoints.
 - Confirmed the failed #206 publish error and current pending custom-domain state.
 - No production deployment, DNS change, Pages domain mutation, database mutation, or merge was performed.
+
+
+## Current owner decision override (2026-11-14)
+
+- The 10% Sham Cash-only discount is confirmed. The earlier open decision in this historical reconciliation is closed.
+- The 15% value in PR #205 and the older production deployment is superseded. Keep the evidence for audit, but never reuse it in current customer-facing content.
+- `main` is the sole canonical source; preview snapshots and divergent PR artifacts remain read-only.
