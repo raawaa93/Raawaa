@@ -1,0 +1,258 @@
+/* RAWAA shared visual layer — 2026-11-12
+   Adds a consistent warm-ivory system to the homepage and serum page.
+   No product, pricing, discount, checkout, or policy logic is changed. */
+:root {
+  --rawaa-ivory: #FBF8F3;
+  --rawaa-paper: #FFFDFA;
+  --rawaa-cream: #F4EEE4;
+  --rawaa-sand: #E9DECE;
+  --rawaa-ink: #2E2A26;
+  --rawaa-muted: #6E6053;
+  --rawaa-copper: #7A5835;
+  --rawaa-olive: #556047;
+  --rawaa-line: rgba(46, 42, 38, .14);
+  --rawaa-radius: 14px;
+  --rawaa-shadow: 0 12px 34px -26px rgba(46, 42, 38, .38);
+
+  /* Canonical tokens shared with the existing product-page stylesheet. */
+  --ivory: var(--rawaa-ivory);
+  --white: var(--rawaa-paper);
+  --cream: var(--rawaa-cream);
+  --sand: var(--rawaa-sand);
+  --ink: var(--rawaa-ink);
+  --ink-soft: #554C43;
+  --taupe: var(--rawaa-muted);
+  --brown: #6B5544;
+  --olive: var(--rawaa-olive);
+  --font-body: 'Plex Arabic', 'Segoe UI', system-ui, sans-serif;
+  --font-latin: 'Cormorant Garamond', 'Times New Roman', serif;
+
+  /* Bridge legacy homepage tokens to the same palette used by product pages. */
+  --bg: var(--rawaa-ivory);
+  --bg-elevated: var(--rawaa-paper);
+  --text: var(--rawaa-ink);
+  --text-muted: var(--rawaa-muted);
+  --gold: var(--rawaa-copper);
+  --gold-light: #B58B5A;
+  --border: var(--rawaa-line);
+  --radius: var(--rawaa-radius);
+  --font-ar: 'Plex Arabic', 'Segoe UI', system-ui, sans-serif;
+  --font-display: 'Plex Arabic', 'Segoe UI', system-ui, sans-serif;
+}
+
+html { scroll-padding-top: 5.5rem; }
+:focus-visible {
+  outline: 3px solid var(--rawaa-olive);
+  outline-offset: 3px;
+}
+button, a { -webkit-tap-highlight-color: transparent; }
+
+/* Homepage: replace the former black-and-gold palette with the shared brand system. */
+body:not(.serum-page) {
+  background: var(--rawaa-ivory);
+  color: var(--rawaa-ink);
+  font-family: 'Plex Arabic', 'Segoe UI', system-ui, sans-serif;
+}
+body:not(.serum-page) h1,
+body:not(.serum-page) h2,
+body:not(.serum-page) h3 {
+  font-family: 'Plex Arabic', 'Segoe UI', system-ui, sans-serif;
+  color: var(--rawaa-ink);
+  letter-spacing: 0;
+}
+body:not(.serum-page) .eyebrow {
+  color: var(--rawaa-olive);
+  letter-spacing: .04em;
+  font-weight: 700;
+}
+body:not(.serum-page) .offer-bar {
+  color: var(--rawaa-ink);
+  background: var(--rawaa-cream);
+  border-bottom: 1px solid var(--rawaa-line);
+}
+body:not(.serum-page) .offer-bar strong { color: var(--rawaa-copper); }
+body:not(.serum-page) .site-header {
+  background: rgba(251, 248, 243, .94);
+  border-bottom: 1px solid var(--rawaa-line);
+  backdrop-filter: blur(12px);
+}
+body:not(.serum-page) .nav-desktop a { color: var(--rawaa-muted); }
+body:not(.serum-page) .nav-desktop a:hover { color: var(--rawaa-ink); }
+body:not(.serum-page) .nav-toggle {
+  color: var(--rawaa-ink);
+  border-color: var(--rawaa-line);
+}
+body:not(.serum-page) .mobile-nav {
+  background: var(--rawaa-ivory);
+  color: var(--rawaa-ink);
+}
+body:not(.serum-page) .mobile-nav a { color: var(--rawaa-ink); border-color: var(--rawaa-line); }
+body:not(.serum-page) .hero { background: var(--rawaa-ivory); }
+body:not(.serum-page) .hero h1 { line-height: 1.28; font-weight: 700; }
+body:not(.serum-page) .hero h1 em { color: var(--rawaa-olive); font-style: normal; }
+body:not(.serum-page) .hero-lead,
+body:not(.serum-page) .hero-meta { color: var(--rawaa-muted); }
+body:not(.serum-page) .hero-meta strong { color: var(--rawaa-copper); }
+body:not(.serum-page) .visual-panel {
+  background: var(--rawaa-cream);
+  border: 1px solid var(--rawaa-line);
+  border-radius: var(--rawaa-radius);
+}
+body:not(.serum-page) .btn { border-radius: 999px; min-height: 44px; }
+body:not(.serum-page) .btn-gold {
+  background: var(--rawaa-ink);
+  color: #fffdf9;
+}
+body:not(.serum-page) .btn-gold:hover {
+  background: #494139;
+  color: #fffdf9;
+  transform: translateY(-1px);
+}
+body:not(.serum-page) .btn-outline {
+  color: var(--rawaa-ink);
+  border: 1px solid rgba(46, 42, 38, .32);
+}
+body:not(.serum-page) .btn-outline:hover {
+  color: var(--rawaa-ink);
+  border-color: var(--rawaa-copper);
+}
+body:not(.serum-page) .product-card {
+  background: var(--rawaa-paper);
+  color: var(--rawaa-ink);
+  border: 1px solid var(--rawaa-line);
+  border-radius: var(--rawaa-radius);
+  box-shadow: var(--rawaa-shadow);
+}
+body:not(.serum-page) .product-visual { background: var(--rawaa-cream); }
+body:not(.serum-page) .product-visual .tag {
+  background: var(--rawaa-ink);
+  color: var(--rawaa-paper);
+  border-radius: 999px;
+}
+body:not(.serum-page) .product-info h3 { color: var(--rawaa-ink); }
+body:not(.serum-page) .product-info .desc { color: var(--rawaa-muted); }
+body:not(.serum-page) .price { color: var(--rawaa-copper); }
+body:not(.serum-page) .why { background: var(--rawaa-cream); }
+body:not(.serum-page) .why-card {
+  background: var(--rawaa-paper);
+  border: 1px solid var(--rawaa-line);
+  border-radius: var(--rawaa-radius);
+}
+body:not(.serum-page) .why-card .num,
+body:not(.serum-page) .process-list .step { color: var(--rawaa-copper); }
+body:not(.serum-page) .cta {
+  color: var(--rawaa-paper);
+  background: var(--rawaa-ink);
+  border-color: var(--rawaa-line);
+}
+body:not(.serum-page) .cta h2 { color: var(--rawaa-paper); }
+body:not(.serum-page) .cta .u-lead { color: #D8CABB; }
+body:not(.serum-page) footer {
+  color: var(--rawaa-ink);
+  background: var(--rawaa-ivory);
+  border-color: var(--rawaa-line);
+}
+body:not(.serum-page) .footer-bottom { border-color: var(--rawaa-line); }
+
+/* Shared reduced-motion and anchor behavior. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+@media (max-width: 480px) {
+  body:not(.serum-page) .shell { padding-inline: 1rem; }
+  body:not(.serum-page) .hero { min-height: auto; padding-top: calc(var(--header-h) + 2rem); }
+  body:not(.serum-page) .hero-actions .btn { flex: 1 1 100%; }
+  body:not(.serum-page) .hero-meta { gap: .75rem 1rem; }
+  body:not(.serum-page) .product-info { padding: 1.2rem 1rem; }
+}
+
+
+/* Clear disclosure adjacent to conceptual product imagery. */
+.image-disclosure {
+  margin: .45rem 0 0;
+  color: var(--rawaa-muted);
+  font-size: .68rem;
+  line-height: 1.5;
+  text-align: center;
+}
+body:not(.serum-page) .product-info > .image-disclosure {
+  margin: 0 0 .6rem;
+  text-align: start;
+}
+
+
+/* Final mobile overrides are loaded after serum.css and three-formulas.css. */
+@media (max-width: 360px) {
+  body.serum-page .serum-card { padding: .7rem !important; }
+  body.serum-page .serum-overview {
+    grid-template-columns: minmax(0, 1fr) minmax(92px, .7fr) !important;
+    gap: .4rem !important;
+  }
+  body.serum-page .serum-available { display: none !important; }
+  body.serum-page .serum-view-rail--small {
+    display: block !important;
+    margin-top: .3rem !important;
+  }
+  body.serum-page .serum-purchase { margin-top: .1rem !important; }
+  body.serum-page .serum-heading .eyebrow { margin-bottom: .25rem !important; }
+  body.serum-page .serum-heading h1 {
+    font-size: 1.1rem !important;
+    margin-bottom: .25rem !important;
+  }
+  body.serum-page .serum-heading .formula-emblem {
+    width: 38px !important;
+    height: 38px !important;
+    margin-bottom: 3px !important;
+  }
+  body.serum-page .serum-purchase .serum-intro {
+    font-size: .7rem !important;
+    line-height: 1.25 !important;
+    margin-bottom: .1rem !important;
+  }
+  body.serum-page .serum-actions { margin-top: .25rem !important; }
+  body.serum-page .serum-photo figcaption {
+    font-size: .58rem !important;
+    line-height: 1.2 !important;
+    margin-top: .2rem !important;
+  }
+}
+
+
+/* ---------- ضبط الروابط: لا تبدو أزرار الدعوة للتواصل كروابط نصية افتراضية ---------- */
+/* Keep underlines for inline editorial links; remove them from navigation and action surfaces. */
+.site-header a,
+.mobile-nav a,
+a.btn,
+a.button,
+.product-card a,
+.product-price a,
+.hero-actions a,
+.header-cta a,
+.brand {
+  text-decoration: none;
+}
+main p a:not(.btn):not(.button),
+footer p a:not(.btn):not(.button) {
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: .22em;
+  text-decoration-color: rgba(122, 88, 53, .38);
+}
+a.btn:focus-visible,
+a.button:focus-visible {
+  outline: 3px solid var(--rawaa-olive, #556047);
+  outline-offset: 3px;
+}
+
+/* Final 320px CTA viewport correction.
+   This file loads after serum.css and owns the !important mobile card padding;
+   keep the correction here so the earlier component rule cannot be overridden. */
+@media (max-width: 360px) {
+  body.serum-page .serum-card { padding-block: .2rem !important; }
+}

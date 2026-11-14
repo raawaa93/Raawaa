@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" role="img" aria-labelledby="title"><title id="title">ملصق رواء — زيت الزيتون والبانثينول</title>
+ <rect width="600" height="800" fill="#f6f1e6"/>
+ <rect x="23" y="23" width="554" height="754" rx="2" fill="none" stroke="#b5a17b" stroke-width="1"/>
+ <path d="M37 96V37h59M504 37h59v59M37 704v59h59M504 763h59v-59" fill="none" stroke="#b5a17b" stroke-width="2"/>
+ <text x="306" y="166" text-anchor="middle" fill="#28352c" font-family="Georgia,serif" font-size="61" letter-spacing="11">RAWAA</text>
+ <text x="300" y="230" text-anchor="middle" fill="#28352c" font-family="Tahoma,serif" font-size="45" lang="ar">رواء</text>
+ <path d="M265 273h70" stroke="#b5a17b" stroke-width="1"/>
+ <g transform="translate(191 310) scale(1.7)"><g fill="none" stroke="#697246" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round"><path d="M34 112Q81 72 84 24"/><path d="M48 96Q23 91 22 73Q43 74 48 96ZM62 78Q38 70 42 51Q63 57 62 78ZM74 59Q56 43 65 27Q82 39 74 59ZM54 89Q70 66 92 72Q81 91 54 89ZM69 67Q86 47 104 52Q94 69 69 67Z"/><ellipse cx="79" cy="99" rx="8" ry="12" transform="rotate(25 79 99)"/><ellipse cx="96" cy="84" rx="7" ry="11" transform="rotate(25 96 84)"/></g></g>
+ <text x="300" y="599" text-anchor="middle" fill="#697246" font-family="Georgia,serif" font-size="23" letter-spacing="1.4">OLIVE + PANTHENOL</text>
+ <text x="300" y="645" text-anchor="middle" fill="#697246" font-family="Tahoma,sans-serif" font-size="23" lang="ar">زيت الزيتون والبانثينول</text>
+ <path d="M260 692h80" stroke="#b5a17b" stroke-width="1"/>
+ <text x="300" y="728" text-anchor="middle" fill="#636757" font-family="Tahoma,sans-serif" font-size="17" lang="ar">عناية بالشعر</text>
+ <path d="M130 777h340" stroke="#697246" stroke-width="3"/>
+ </svg>

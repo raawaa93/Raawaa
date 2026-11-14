@@ -1,0 +1,211 @@
+/**
+ * RAWAA | رواء — طبقة القياس التسويقي.
+ *
+ * نستطيع قياس التفاعل مع الموقع وفتح رابط واتساب فقط، لا استلام الرسالة
+ * ولا الطلب المكتمل. يُحفَظ مصدر الحملة مؤقتًا داخل الجلسة ويمكن إرفاقه
+ * برسالة واتساب لتقرأه صاحبة المتجر. لا بيانات تُرسل إلى خادم المتجر.
+ * البكسل اختياري وغير مفعّل بدون معرّف، ولا يُحمَّل قبل موافقة صريحة.
+ */
+(function () {
+  'use strict';
+
+  var STORE_KEY = 'rawaa_src';
+  var CONSENT_KEY = 'rawaa_tracking_consent';
+  var PIXEL_ID = (window.RAWAA_CONFIG && window.RAWAA_CONFIG.marketing && window.RAWAA_CONFIG.marketing.facebookPixelId) || '';
+
+  /* ── ١) تقليل البيانات في رموز الحملات قبل الحفظ أو المشاركة ─── */
+  var SOURCE_FIELDS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content'];
+
+  /** ترشيح احتياطي: لا يكتشف كل البيانات الشخصية ولا ينظّف الرابط الأصلي. */
+  function cleanCampaignLabel(value, limit) {
+    if (typeof value !== 'string' || value.length > 512) return '';
+    var label = value.replace(/[\u0000-\u001f\u007f-\u009f\u200b-\u200f\u202a-\u202e\u2060\u2066-\u2069\ufeff]/g, ' ').trim();
+    if (!label || /@|＠|%40/i.test(label)) return '';
+    if (/(?:access[_-]?token|token|api[_-]?key|password|secret)\s*[:=]/i.test(label)) return '';
+    var numbers = label.match(/[0-9\u0660-\u0669\u06f0-\u06f9][0-9\u0660-\u0669\u06f0-\u06f9\s().+/-]{7,}[0-9\u0660-\u0669\u06f0-\u06f9]/g) || [];
+    if (numbers.some(function (chunk) {
+      return (chunk.match(/[0-9\u0660-\u0669\u06f0-\u06f9]/g) || []).length >= 9;
+    })) return '';
+    return label.slice(0, limit);
+  }
+
+  function cleanSource(raw) {
+    var result = {};
+    SOURCE_FIELDS.forEach(function (key) {
+      var value = cleanCampaignLabel(raw && raw[key], key === 'utm_campaign' ? 120 : 80);
+      if (value) result[key] = value;
+    });
+    return result;
+  }
+
+  /** تُنظّف أيضًا بقايا جلسة قديمة قبل عرضها أو استخدامها في الأحداث. */
+  function cleanStoredEvents() {
+    try {
+      var raw = sessionStorage.getItem('rawaa_events');
+      if (!raw) return;
+      var entries = JSON.parse(raw);
+      if (!Array.isArray(entries)) { sessionStorage.removeItem('rawaa_events'); return; }
+      var safe = entries.slice(-40).map(function (entry) {
+        if (!entry || typeof entry !== 'object') return null;
+        var name = cleanCampaignLabel(entry.e, 64);
+        if (!name) return null;
+        return { e: name, t: Number.isFinite(entry.t) ? entry.t : null,
+          src: cleanCampaignLabel(entry.src, 120) || null };
+      }).filter(Boolean);
+      sessionStorage.setItem('rawaa_events', JSON.stringify(safe));
+    } catch {
+      try { sessionStorage.removeItem('rawaa_events'); } catch { /* التخزين اختياري */ }
+    }
+  }
+
+  function readSource() {
+    var q = new URLSearchParams(location.search);
+    var raw = {};
+    SOURCE_FIELDS.forEach(function (key) { raw[key] = q.get(key); });
+    var has = SOURCE_FIELDS.some(function (key) { return raw[key]; });
+    try {
+      if (!has) raw = JSON.parse(sessionStorage.getItem(STORE_KEY) || 'null') || {};
+      var safe = cleanSource(raw);
+      if (Object.keys(safe).length) sessionStorage.setItem(STORE_KEY, JSON.stringify(safe));
+      else sessionStorage.removeItem(STORE_KEY);
+      return safe;
+    } catch {
+      // حتى عندما يمنع المتصفح التخزين لا تُستخدم القيم الخام.
+      try { sessionStorage.removeItem(STORE_KEY); } catch { /* التخزين اختياري */ }
+      return cleanSource(raw);
+    }
+  }
+
+  cleanStoredEvents();
+  var source = readSource();
+
+  /* ── ٢) موافقة التتبّع — البكسل لا يُحمَّل بلا إذن ──────────── */
+  function consent() {
+    try { return localStorage.getItem(CONSENT_KEY); } catch { return null; }
+  }
+
+  window.rawaaConsent = function (granted) {
+    try { localStorage.setItem(CONSENT_KEY, granted ? 'yes' : 'no'); } catch { /* تجاهل: لا شيء نفعله بالخطأ */ }
+    if (granted) loadPixel();
+    var bar = document.querySelector('[data-consent-bar]');
+    if (bar) bar.hidden = true;
+    // بعد سحب الموافقة، إعادة التحميل توقف مكتبة Meta التي حُمّلت مسبقًا.
+    if (!granted && window.fbq) location.reload();
+  };
+
+  /*
+   * أزرار شريط الإذن: مستمع واحد على الحاوية بدل onclick="" في serum.html.
+   *
+   * النمط السطري يحتاج script-src 'unsafe-inline' — أي أن زرَّي «موافقة/بلا شكرًا»
+   * كانا يفرضان تساهلًا أمنيًا على الموقع كله. التفويض يحقق السلوك نفسه بلا ذلك.
+   */
+  document.addEventListener('click', function (event) {
+    var button = event.target.closest && event.target.closest('[data-consent-choice]');
+    if (!button) return;
+    window.rawaaConsent(button.getAttribute('data-consent-choice') === 'yes');
+  });
+
+  function loadPixel() {
+    if (!PIXEL_ID || window.fbq) return;
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+    document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    window.fbq('init', PIXEL_ID);
+    window.fbq('track', 'PageView');
+  }
+
+  if (consent() === 'yes') loadPixel();
+
+  /* ── ٣) إرسال الأحداث إلى فيسبوك ────────────────────────────── */
+  function track(event, params) {
+    var data = Object.assign({}, params || {});
+    if (source.utm_campaign) data.campaign = source.utm_campaign;
+    if (source.utm_source) data.source = source.utm_source;
+    if (window.fbq && consent() === 'yes') window.fbq('track', event, data);
+    // سجل محلي يساعد في تشخيص المسار دون أي خدمة خارجية
+    try {
+      var log = JSON.parse(sessionStorage.getItem('rawaa_events') || '[]');
+      log.push({ e: event, t: Date.now(), src: source.utm_campaign || null });
+      sessionStorage.setItem('rawaa_events', JSON.stringify(log.slice(-40)));
+    } catch { /* تجاهل: لا شيء نفعله بالخطأ */ }
+  }
+  window.rawaaTrack = track;
+
+  /* ── ٤) الأحداث التي تهمّ متجرًا يعتمد واتساب ───────────────── */
+  var ONCE = {};
+  function once(name, event, params) {
+    if (ONCE[name]) return;
+    ONCE[name] = true;
+    track(event, params);
+  }
+
+  /* مشاهدة المنتج: ظهور أول بطاقة سعر في الشاشة */
+  if ('IntersectionObserver' in window) {
+    var card = document.querySelector('[data-add-to-cart]');
+    if (card) {
+      new IntersectionObserver(function (entries, obs) {
+        entries.forEach(function (en) {
+          if (en.isIntersecting) { once('view', 'ViewContent', { content_type: 'product' }); obs.disconnect(); }
+        });
+      }, { threshold: 0.4 }).observe(card);
+    }
+  }
+
+  // تُسجَّل الإضافة من السلة بعد نجاحها، لا من النقرة التي قد يرفضها حد الكمية.
+
+  /* فتح السلة ليس تواصلًا. الحدث هنا نقرٌ للانتقال، لا رسالة مستلمة. */
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest) return;
+    if (e.target.closest('[data-cart-checkout]')) {
+      once('checkout', 'InitiateCheckout', { content_type: 'product' });
+      track('Contact', { method: 'whatsapp' });
+    } else if (e.target.closest('a[href*="wa.me"]')) {
+      track('Contact', { method: 'whatsapp' });
+    }
+  }, true);
+
+  /* ── ٥) مصدر مختصر وآمن في رسالة واتساب ───────────────────── */
+  function sourceTag() {
+    return cleanCampaignLabel(source.utm_campaign || source.utm_source, 120);
+  }
+  function sourceNote() {
+    var lines = [];
+    var campaign = sourceTag();
+    var channel = cleanCampaignLabel(source.utm_source, 80);
+    var creative = cleanCampaignLabel(source.utm_content, 80);
+    if (campaign) lines.push('— المصدر: ' + campaign);
+    if (channel && channel !== campaign) lines.push('— القناة: ' + channel);
+    if (creative) lines.push('— نسخة المحتوى: ' + creative);
+    return lines.join('\n');
+  }
+  window.rawaaSrcTag = sourceTag;
+  window.rawaaSourceNote = sourceNote;
+
+  function decorateDirectLinks() {
+    var note = sourceNote();
+    if (!note) return;
+    // رابط الحجم المختار يبنيه cart.js مع المصدر؛ لا نضيفه إليه مرتين.
+    document.querySelectorAll('a[href^="https://wa.me/"]:not([data-cart-fallback-link]):not([data-wa-selected])')
+      .forEach(function (link) {
+        var url = new URL(link.href);
+        var text = url.searchParams.get('text') || 'مرحبًا رواء، أرغب بالاستفسار عن المزيجات.';
+        url.searchParams.set('text', text + '\n\n' + note);
+        link.href = url.href;
+      });
+  }
+
+  /* ── ٦) إظهار الموافقة وإتاحة تغييرها فقط عند تهيئة البكسل ──── */
+  document.addEventListener('DOMContentLoaded', function () {
+    decorateDirectLinks();
+    if (!PIXEL_ID) return;
+    var bar = document.querySelector('[data-consent-bar]');
+    var settings = document.querySelector('[data-consent-settings]');
+    if (settings) {
+      settings.hidden = false;
+      settings.addEventListener('click', function () { if (bar) bar.hidden = false; });
+    }
+    if (consent() === null && bar) bar.hidden = false;
+  });
+})();

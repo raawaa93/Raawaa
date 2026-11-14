@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" role="img" aria-labelledby="title"><title id="title">ملصق رواء — روزماري وكافيين</title>
+ <rect width="600" height="800" fill="#f6f1e6"/>
+ <rect x="23" y="23" width="554" height="754" rx="2" fill="none" stroke="#b5a17b" stroke-width="1"/>
+ <path d="M37 96V37h59M504 37h59v59M37 704v59h59M504 763h59v-59" fill="none" stroke="#b5a17b" stroke-width="2"/>
+ <text x="306" y="166" text-anchor="middle" fill="#28352c" font-family="Georgia,serif" font-size="61" letter-spacing="11">RAWAA</text>
+ <text x="300" y="230" text-anchor="middle" fill="#28352c" font-family="Tahoma,serif" font-size="45" lang="ar">رواء</text>
+ <path d="M265 273h70" stroke="#b5a17b" stroke-width="1"/>
+ <g transform="translate(191 310) scale(1.7)"><g fill="none" stroke="#274838" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round"><path d="M78 113Q52 83 64 26"/><path d="M65 94Q40 92 38 75Q58 75 65 94ZM61 80Q37 72 40 56Q58 63 61 80ZM60 65Q43 50 48 36Q62 48 60 65ZM61 48Q51 30 59 19Q67 33 61 48ZM65 96Q83 80 95 83Q90 99 65 96ZM61 80Q76 61 87 63Q84 79 61 80ZM61 62Q73 44 82 45Q81 60 61 62ZM63 43Q71 26 77 26Q79 39 63 43Z"/></g></g>
+ <text x="300" y="599" text-anchor="middle" fill="#274838" font-family="Georgia,serif" font-size="23" letter-spacing="1.4">ROSEMARY + CAFFEINE</text>
+ <text x="300" y="645" text-anchor="middle" fill="#274838" font-family="Tahoma,sans-serif" font-size="23" lang="ar">روزماري وكافيين</text>
+ <path d="M260 692h80" stroke="#b5a17b" stroke-width="1"/>
+ <text x="300" y="728" text-anchor="middle" fill="#636757" font-family="Tahoma,sans-serif" font-size="17" lang="ar">عناية بالشعر</text>
+ <path d="M130 777h340" stroke="#274838" stroke-width="3"/>
+ </svg>
