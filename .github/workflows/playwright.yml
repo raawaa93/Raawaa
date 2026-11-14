@@ -1,0 +1,41 @@
+name: Playwright browser checks
+
+on:
+  pull_request:
+    paths:
+      - '**.html'
+      - 'css/**'
+      - 'js/**'
+      - 'assets/**'
+      - 'tests/e2e/**'
+      - 'playwright.config.mjs'
+      - 'package.json'
+      - '.github/workflows/playwright.yml'
+  push:
+    branches: [main]
+    paths:
+      - '**.html'
+      - 'css/**'
+      - 'js/**'
+      - 'assets/**'
+      - 'tests/e2e/**'
+      - 'playwright.config.mjs'
+      - 'package.json'
+      - '.github/workflows/playwright.yml'
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm install
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Run browser checks
+        run: npm run test:e2e
