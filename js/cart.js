@@ -241,7 +241,7 @@
     if (!links.length || !product) return;
     var lines = [
       'مرحبًا رواء، أود الاستفسار عن ' + product.name + ' بحجم ' + product.sizeLabel + '.',
-      'سعر العبوة المرجعي: ' + money(unitOffer(product).cents / 100 + scentFee()) +
+      'سعر العبوة المعروض: ' + money(unitOffer(product).cents / 100 + scentFee()) +
         (unitOffer(product).cutCents > 0 ? ' بعد عرض «' + unitOffer(product).slot.label + '» (' + money(product.price) + ' قبل العرض)' : '') +
         ' قبل الخصم والتوصيل.'
     ];
