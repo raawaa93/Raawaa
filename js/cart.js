@@ -415,6 +415,20 @@
     Array.prototype.forEach.call(document.querySelectorAll('[data-add-current]'), function (btn) {
       btn.setAttribute('data-add-to-cart', selectedSize);
       if (btn.hasAttribute('data-requires-js')) btn.disabled = false;
+
+      // Bind the primary product action directly as well as keeping the shared
+      // delegated handler for other add-to-cart surfaces. This protects the
+      // primary CTA if an unrelated page widget interrupts init() later.
+      if (!btn.hasAttribute('data-cart-direct-bound')) {
+        btn.setAttribute('data-cart-direct-bound', '');
+        btn.addEventListener('click', function (event) {
+          event.preventDefault();
+          event.stopPropagation();
+          var productId = btn.getAttribute('data-add-to-cart');
+          addToCart(productId, btn);
+          if (btn.hasAttribute('data-open-cart-after-add') && cart[productId]) openCart(btn);
+        });
+      }
     });
     updateSelectedInquiry(product);
     refreshOrderEstimate();
@@ -603,26 +617,35 @@
   function initOrderEstimate() {
     var box = document.querySelector('[data-order-estimate]');
     if (!box || !zones.length || !availableMethods.length || !selectedProduct() || !activeZone() || !activeMethod()) return;
-    if (box.getAttribute('data-ready') === 'true') { refreshOrderEstimate(); return; }
     var zoneSelect = box.querySelector('[data-estimate-zone]');
     var methodSelect = box.querySelector('[data-estimate-method]');
     var controls = box.querySelector('[data-estimate-interface]');
     var fallback = box.querySelector('[data-estimate-fallback]');
     if (!zoneSelect || !methodSelect || !controls || !fallback) return;
-    zones.forEach(function (zone) {
-      var opt = document.createElement('option');
-      opt.value = zone.id;
-      opt.textContent = zone.label;
-      zoneSelect.appendChild(opt);
-    });
-    availableMethods.forEach(function (method) {
-      var opt = document.createElement('option');
-      opt.value = method.id;
-      opt.textContent = method.short || method.label;
-      methodSelect.appendChild(opt);
-    });
-    zoneSelect.addEventListener('change', function () { setZone(zoneSelect.value, true); });
-    methodSelect.addEventListener('change', function () { setMethod(methodSelect.value, true); });
+
+    // The HTML may ship with data-ready=true and pre-rendered options.
+    // Readiness must not be confused with event-listener registration.
+    if (!zoneSelect.options.length) {
+      zones.forEach(function (zone) {
+        var opt = document.createElement('option');
+        opt.value = zone.id;
+        opt.textContent = zone.label;
+        zoneSelect.appendChild(opt);
+      });
+    }
+    if (!methodSelect.options.length) {
+      availableMethods.forEach(function (method) {
+        var opt = document.createElement('option');
+        opt.value = method.id;
+        opt.textContent = method.short || method.label;
+        methodSelect.appendChild(opt);
+      });
+    }
+    if (box.getAttribute('data-events-bound') !== 'true') {
+      zoneSelect.addEventListener('change', function () { setZone(zoneSelect.value, true); });
+      methodSelect.addEventListener('change', function () { setMethod(methodSelect.value, true); });
+      box.setAttribute('data-events-bound', 'true');
+    }
     box.setAttribute('data-ready', 'true');
     refreshOrderEstimate();
     fallback.hidden = true;
@@ -1205,6 +1228,8 @@
     selectedMethodId = id;
     saveChoices();
     renderCart();
+    // Keep the single-product estimator in sync with the shared payment policy.
+    refreshOrderEstimate();
     var method = activeMethod();
     if (!silent && method) announce('طريقة الدفع: ' + method.label + '. الإجمالي المرجعي الآن ' + money(totals().amount) + '.');
   }
