@@ -17,6 +17,7 @@ Updated: 2026-11-14
 - PR #5: regression guard against the superseded 15% promotion in active HTML/JS assets.
 - PR #7: approved Nitro campaign direction, 10% + free-delivery banner, corrected delivery/scent copy, product visuals beside campaign details, and regression checks.
 - PR #9: aligned owner pricing labels and fallback formatting to SYP; owner order totals now respect an explicit order currency and default to the Store's configured SYP currency. No database or Edge Function changes were made.
+- PR #12: archived and removed the legacy Hama, setup, and diagnostic pages from the active source root; removed Hama from sitemap/service-worker cache; added a clean 174-file Pages payload builder and a preview-only Wrangler workflow.
 - PR #6 was closed unmerged as a superseded failed iteration; PR #7 contains the corrected version.
 - GitHub Actions for PR #7 completed successfully.
 - These merges changed GitHub source only; they did not deploy to Cloudflare production.
@@ -26,8 +27,8 @@ Updated: 2026-11-14
 - Project: `raawaa-store`, Direct Upload, `uses_functions=false`, production branch label `main` (but no Git source is configured).
 - Production deployment: `10b28454-da98-4bb7-9172-ee947a93a9e3`, created 2026-11-08. The live site was smoke-tested and works, but still displays the superseded 15% promotion.
 - Latest known preview: `pr-208`, deployment `10b8ef21-037c-43a9-adf8-37ac7874dcdd`, created 2026-11-14. It also displays 15% on the homepage and Serum page, so it is not an acceptable release candidate.
-- No deployment of the current GitHub `main` has been created. Do not claim that PR merges have updated the live website.
-- Cloudflare Pages asset upload token can be retrieved, but the available connector's asset check endpoint returns 403 because its request interface cannot attach the required upload-token Authorization header. No deployment was created as part of this attempt. Resolve the upload path using an authorized supported method before creating a preview.
+- No deployment of the current GitHub `main` has been created. The preview workflow successfully built and validated a 174-file payload from source SHA `af0f6f54873aaea169214a21b5c42be47e9e0d9a`, but skipped the upload because the GitHub repository secret `CLOUDFLARE_API_TOKEN` is not configured. Do not claim that PR merges have updated the live website.
+- The supported preview path is now a GitHub Actions workflow using Wrangler. It is hard-limited to the Cloudflare branch `raawaa-recovery-preview` and never targets production. To activate it, add a GitHub repository Actions secret named `CLOUDFLARE_API_TOKEN` with Account → Cloudflare Pages → Edit permission scoped to the Raawaa Cloudflare account. Do not grant DNS permissions. The existing `preview-deploy/2026-11-14` trigger branch can be updated to rerun the preview after the secret is added.
 
 ## PR #208 preview reconciliation
 
@@ -36,8 +37,9 @@ The read-only browser audit of `https://pr-208.raawaa-store.pages.dev/` found:
 - Homepage and Serum pages advertise 15%, conflicting with the owner's 10% decision.
 - Product price ladder is unchanged: Rosemary + Caffeine 2,000 / 2,400 / 2,800 SYP; Olive + Panthenol 1,800 / 2,200 / 2,600 SYP; Castor Blend 1,800 / 2,200 / 2,600 SYP.
 - Delivery is free across all provinces and payment methods.
-- `/hama` is a divergent city page with USD prices ($13 / $16 / $25), a legacy `H12-HAMA` WhatsApp code, and two short videos. Exclude it from the canonical source; do not reintroduce its USD pricing or old route-specific checkout.
+- `hama.html` was moved to `recovery/snapshots/legacy-pages-2026-11-14/` and removed from the active source root. It was a divergent city page with USD prices ($13 / $16 / $25), a legacy `H12-HAMA` WhatsApp code, and two short videos. Its page-specific CSS/JS were archived and removed from the active root; `assets/img/hama/` remains historical but is excluded from deployment.
 - `/privacy` exists but is explicitly marked as a draft pending legal review. Preserve the draft disclosure and do not represent it as legally finalized.
+- `setup.html` and `check.html` were also archived and removed from the active root; the old setup page linked to the suspended GitHub repository. Their CSS/JS were archived. They are not part of the deployment payload.
 - The Serum page has detailed prefilled WhatsApp messages and the cart is a side drawer. These functions are already present in the recovered source and must be retained.
 - The preview's images look photographic, but the page itself says they are proposed packaging designs, not final printed product photographs. Treat them as conceptual imagery until supplier/product provenance is verified. The current campaign cards disclose this clearly.
 - No public owner login link was found. The owner route exists separately at `/owner/` and is marked as not yet receiving direct website orders.
@@ -129,3 +131,12 @@ Current `main` head: `2a70977ba1f8852b87c9731040fafaa89f9d62a0`. No pull request
 | `docs/owner-currency-alignment-2026-11-14` | PR #10 merged | Safe to retire |
 
 No branch was deleted. The connected GitHub toolset exposes branch reads and PR merges but no branch-delete action; the historical/recovery branches also require preservation until their unique commits/assets are verified. Merged/closed feature branches are inactive and are not Cloudflare deployment sources. They can be deleted later through an authorized GitHub branch-management path after final backup verification. Do not delete the backup, recovery, restore, or deploy branches as part of routine cleanup.
+
+
+## Preview gate status (2026-11-14)
+
+- PR #12 is merged. The clean payload builder passed GitHub Actions and produced 174 files; it excludes recovery docs, Hama media, setup/diagnostic pages, and development tooling.
+- The service worker cache version was bumped so clients discard the old cached Hama route; the sitemap now includes `/campaign` and excludes `/hama`.
+- A preview-only GitHub Actions workflow is installed. The first run completed the build successfully but skipped deployment because `CLOUDFLARE_API_TOKEN` is absent from repository secrets. No Cloudflare deployment was attempted by that workflow.
+- Required one-time action: add `CLOUDFLARE_API_TOKEN` as a GitHub Actions repository secret, with only Account → Cloudflare Pages → Edit permission for the correct Cloudflare account. Do not paste the token into ChatGPT. After it is added, update the existing `preview-deploy/2026-11-14` trigger file to start the isolated preview.
+- Expected preview hostname after a successful deployment: `raawaa-recovery-preview.raawaa-store.pages.dev`. This hostname does not exist until the workflow reports a created deployment.
