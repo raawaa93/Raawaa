@@ -11,6 +11,15 @@ Recovered, editable source for the RAWAA Store static website.
 - PR #188's partial cart was not used.
 - Automated checks pass for all root HTML/CSS local asset references, store policies, product disclosures, structured data, complete cart presence, and JavaScript syntax.
 
+## Canonical store policy (owner-confirmed 2026-11-14)
+
+This is the only active commercial policy for the recovered source. Historical snapshots are evidence only and must never be copied into production.
+
+- Sham Cash discount: **10% only** on eligible orders paid with Sham Cash.
+- Delivery: **free across all Syrian governorates for every payment method**.
+- Cash on delivery receives no Sham Cash discount.
+- Keep all prices and policy values centralized in `js/config.js`; calculations belong in `js/pricing-policy.js`. Do not duplicate discount or delivery calculations in page scripts.
+
 ## Store policy currently encoded
 
 - 10% discount on eligible orders paid with Sham Cash only.
@@ -27,7 +36,7 @@ Recovered, editable source for the RAWAA Store static website.
 - Front-end code: `js/`, `css/`, `owner/`.
 - Static assets: `assets/` (product and campaign images, brand assets, icons, fonts and captions).
 - Service worker and metadata: `sw.js`, `manifest.webmanifest`, `robots.txt`, `sitemap.xml`.
-- Historical preview snapshots and recovery evidence: `recovery/`.
+- Historical preview snapshots and recovery evidence: `recovery/` (archive only; never a deployment source).
 
 ## Development checks
 
@@ -53,3 +62,12 @@ GitHub Actions runs these checks on pushes and pull requests. Make future edits 
 - [Detailed recovery and preview reconciliation](recovery/PR-RECOVERY-2026-11-14.md)
 - [Snapshot index and completeness notes](recovery/snapshots/README.md)
 - [Current recovery status](recovery/RECOVERY-STATUS.md)
+
+
+## Source-of-truth and cleanup rules
+
+- `main` is the sole canonical website source. All new work starts from `main` on a named feature branch and returns through a reviewed pull request.
+- `backup/*` branches are immutable rollback checkpoints. Never deploy from them.
+- `recovery/snapshots/` and old PR snapshots are read-only historical evidence. They may contain superseded content (including old promotion text); that content is not active policy and must not be copied into the live site.
+- Do not bulk-delete historical files, branches, or recovery evidence. Retire a specific item only after its replacement is verified and a separate inventory proves it is unused.
+- Cloudflare Pages is Direct Upload. A GitHub merge is not a deployment. Test an isolated preview and verify its full asset set before any production promotion.
