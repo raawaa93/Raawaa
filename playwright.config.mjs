@@ -18,6 +18,14 @@ export default defineConfig({
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
+    {
+      name: 'webkit-desktop',
+      use: { ...devices['Desktop Safari'] },
+    },
+    {
+      name: 'webkit-iphone',
+      use: { ...devices['iPhone 13'] },
+    },
   ],
   webServer: {
     command: 'python3 -m http.server 4173 --bind 127.0.0.1',
