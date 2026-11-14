@@ -40,6 +40,9 @@ const ownerPricing = read('owner/pricing.html');
 const ownerSettings = read('owner/settings.mjs');
 const ownerApp = read('owner/app.mjs');
 const ownerPricingTool = read('owner/pricing-tool.mjs');
+const sitemap = read('sitemap.xml');
+const robots = read('robots.txt');
+const serviceWorker = read('sw.js');
 const configSource = read('js/config.js');
 const cart = read('js/cart.js');
 const views = read('js/serum-views.js');
@@ -63,6 +66,13 @@ assert.match(ownerPricingTool, /let currencySymbol = 'ل\.س '/u, 'Owner pricing
 assert.match(campaign, /التوصيل مجاني إلى جميع المحافظات ولكل طرق الدفع/u, 'Campaign page must state free delivery for all payment methods');
 assert.doesNotMatch(campaign, /لا تشمل التوصيل|رسوم التوصيل|بلا عطر/u, 'Campaign page must not imply a delivery fee or scent-free base product');
 assert.ok(campaignScript.includes('product.image && product.image.src'), 'Campaign cards must display the configured product image');
+assert.ok(sitemap.includes('/campaign'), 'Campaign page must be present in sitemap');
+assert.ok(!sitemap.includes('/hama'), 'Legacy Hama route must be removed from sitemap');
+assert.ok(!serviceWorker.toLowerCase().includes('hama'), 'Service worker must not cache the retired Hama route');
+assert.ok(robots.includes('Disallow: /hama'), 'Robots must disallow the retired Hama route');
+for (const legacy of ['hama.html', 'setup.html', 'check.html', 'css/hama.css', 'css/setup.css', 'css/check.css', 'js/setup-inline.js', 'js/check-inline.js']) {
+  assert.ok(!fs.existsSync(path.join(root, legacy)), legacy + ' must be retired from the active source root');
+}
 assert.doesNotMatch(index, /خصم 15%|15%[^<]{0,40}شام كاش/u, 'Homepage must not advertise a 15% Sham Cash discount');
 assert.match(serum, /تحتوي المزيجات الحالية على زيوت وعطر/u, 'Serum page must disclose oils and fragrance');
 assert.match(serum, /نؤكد توفّره وسعره قبل الاعتماد/u, 'Customization must be confirmed before acceptance');
