@@ -7,7 +7,7 @@
 - Both deployment records say `uses_functions: false`. Pages serves a static site; the published inventory includes HTML, CSS, JavaScript modules, images, fonts, videos, PWA files, and owner-panel files.
 - The deployment inventory is preserved in `cloudflare-deployment-manifest.json`.
 - Recovered and committed **197 of 199 production files** into this recovery branch directly from their public Cloudflare Pages URLs: all 60 text assets (10 HTML pages, 12 CSS, 15 JS, 5 MJS, 10 SVG, JSON/XML/text/webmanifest/VTT) and all 136 non-video binary assets (images, icons, fonts), plus `.nojekyll`.
-- The only two production files not yet restored are the Hama MP4 videos: `assets/img/hama/reel-50ml.mp4` and `assets/img/hama/reel-hama.mp4` (about 3.76 MB and 4.03 MB respectively).
+- The only two production files not yet copied into this repository are the Hama MP4 videos: `assets/img/hama/reel-50ml.mp4` and `assets/img/hama/reel-hama.mp4` (about 3.76 MB and 4.03 MB respectively). `hama.html` now references their original public Cloudflare URLs as a temporary working fallback; Arabic captions are local.
 
 ## Arena provenance
 The production deployment commit message includes `ARENA-ORDER-BACKEND-001 (6717979189)`, showing Arena-associated work in the recorded project history. The connected tools in this ChatGPT workspace do not expose an Arena execution/session connector. The original GitHub repository `ghith93/Raawaa-store` currently returns HTTP 403: “Sorry. Your account was suspended”, so its issues, PRs, and Arena task comments cannot currently be inspected here.
@@ -35,4 +35,5 @@ The production deployment commit message includes `ARENA-ORDER-BACKEND-001 (6717
 2. Verify every restored file against Cloudflare's recorded asset hash and run link/reference checks.
 3. Inspect the Arena task/export for original source files and compare with the deployed copies.
 4. Validate customer and owner workflows against the Supabase staging projects, without changing production.
-5. Deploy only to an isolated preview after tests pass.
+5. Draft recovery PR #1 is open at `https://github.com/raawaa93/Raawaa/pull/1`; keep it unmerged until the remaining media and functional checks are complete.
+6. Deploy only to an isolated preview after tests pass.
