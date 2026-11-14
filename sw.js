@@ -14,7 +14,7 @@
  * وإلا سيبقى الزائر يرى النسخة القديمة من الذاكرة.
  */
 
-const CACHE_VERSION = 'v1794118718';
+const CACHE_VERSION = 'v20261114-clean-pages-10pct';
 // استبدال الذاكرة القديمة يمسح مفاتيحها التي ربما احتوت استعلامات روابط.
 const RUNTIME = 'rawaa-runtime-v7';
 
@@ -24,7 +24,6 @@ const CORE = [
   './',
   './serum',
   './campaign',
-  './hama',
   // Pages canonicalizes .html paths; cache the clean privacy route so offline aliases resolve.
   './privacy',
   './404.html',
@@ -36,7 +35,6 @@ const CORE = [
   // المخزّنة عارية بلا تنسيق في وضع عدم الاتصال.
   './css/home-inline.css',
   './css/utilities.css',
-  './css/hama.css',
   // أنماط اختيار المنتج الثلاثي وجدول الأسعار التسعة (2026-11-08).
   // بلا هذا الملف تُخدَم الرئيسية وصفحة المنتج من الذاكرة بلا تنسيق الجدول.
   './css/three-formulas.css',
