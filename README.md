@@ -71,3 +71,8 @@ GitHub Actions runs these checks on pushes and pull requests. Make future edits 
 - `recovery/snapshots/` and old PR snapshots are read-only historical evidence. They may contain superseded content (including old promotion text); that content is not active policy and must not be copied into the live site.
 - Do not bulk-delete historical files, branches, or recovery evidence. Retire a specific item only after its replacement is verified and a separate inventory proves it is unused.
 - Cloudflare Pages is Direct Upload. A GitHub merge is not a deployment. Test an isolated preview and verify its full asset set before any production promotion.
+
+
+## Current release status
+
+See [`recovery/RELEASE-READINESS-2026-11-14.md`](recovery/RELEASE-READINESS-2026-11-14.md) for the verified Cloudflare, PR #208, owner portal, Supabase backend, and remaining release gates. GitHub merges do not deploy this Direct Upload Pages project.
