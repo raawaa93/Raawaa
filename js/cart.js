@@ -1205,6 +1205,8 @@
     selectedMethodId = id;
     saveChoices();
     renderCart();
+    // Keep the single-product estimator in sync with the shared payment policy.
+    refreshOrderEstimate();
     var method = activeMethod();
     if (!silent && method) announce('طريقة الدفع: ' + method.label + '. الإجمالي المرجعي الآن ' + money(totals().amount) + '.');
   }
