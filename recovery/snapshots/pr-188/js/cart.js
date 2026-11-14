@@ -976,4 +976,455 @@
       // الرقم الفعلي في js/config.js. تغييره هناك كان سيترك النص يكذب.
       var note = '';
       var percent = Number(method.discountPercent) || 0;
-      if (percent > 
+      if (percent > 0) {
+        note = 'مع ' + method.short + ': خصم ' + percent + '% على إجمالي الطلب المؤهل' +
+          (amounts.deliveryCents === 0 ? '، والتوصيل مجاني — أفضل سعر متاح.' : '.');
+      } else {
+        note = method.label + ': لا يشمل خصم شام كاش' +
+          (amounts.deliveryCents === 0 ? '، والتوصيل مجاني.' : '.') +
+          ' المبلغ يُدفع كاملًا للمندوب.';
+      }
+      if (sampleUnit.cutCents > 0) {
+        note = 'عرض «' + sampleUnit.slot.label + '»: ' + money(sample.price) + ' ← ' +
+          money(sampleUnit.cents / 100) + '. ' + note;
+      }
+      outNote.textContent = note;
+    }
+
+    govSel.addEventListener('change', update);
+    paySel.addEventListener('change', update);
+    update();
+  }
+
+  /**
+   * قسم «ما لا نقدّمه» — يُبنى من CONFIG.trust فقط.
+   * الغرض: نفي الادعاءات قبل أن يسأل الزبون، وهو أقوى وسيلة ثقة لمنتج جديد.
+   */
+  function renderTrust() {
+    var host = document.querySelector('[data-trust]');
+    if (!host || !CONFIG.trust || !CONFIG.trust.items) return;
+    if (host.querySelector('.trust-item')) return;   // لا تكرّر البناء
+
+    CONFIG.trust.items.forEach(function (text) {
+      var item = document.createElement('p');
+      item.className = 'trust-item';
+      var mark = document.createElement('span');
+      mark.className = 'trust-mark';
+      mark.setAttribute('aria-hidden', 'true');
+      mark.textContent = '—';
+      var body = document.createElement('span');
+      body.textContent = text;
+      item.appendChild(mark);
+      item.appendChild(body);
+      host.appendChild(item);
+    });
+  }
+
+  /**
+   * بطاقات شرح طرق الدفع في قسم الصفحة — تُبنى من CONFIG.payment فقط.
+   * الأمثلة تُحسب من سعر الحجم الوسط، فلا يوجد أي رقم مكتوب يدويًا في HTML.
+   */
+  function renderPaymentCards() {
+    var host = document.querySelector('[data-pay-cards]');
+    if (!host) return;
+
+    var sample = CONFIG.products[1] || CONFIG.products[0];
+    if (!sample) return;
+
+    availableMethods.forEach(function (method) {
+      var isBest = (method.discountPercent || 0) > 0;
+
+      var card = document.createElement('article');
+      card.className = 'pay-card' + (isBest ? ' pay-card-featured' : '');
+
+      if (isBest) {
+        var badge = document.createElement('p');
+        badge.className = 'pay-badge';
+        badge.textContent = 'وفّر ' + method.discountPercent + '%';
+        card.appendChild(badge);
+      }
+
+      var title = document.createElement('h3');
+      title.textContent = method.label;
+      card.appendChild(title);
+
+      var list = document.createElement('ul');
+      list.className = 'pay-points';
+
+      var points = [];
+      if ((method.discountPercent || 0) > 0) {
+        points.push('خصم <strong>' + method.discountPercent + '%</strong> على إجمالي الطلب المؤهل');
+      } else {
+        points.push('لا يشمل خصم شام كاش');
+      }
+      var z = activeZone();
+      points.push(isFreeDelivery(method, z)
+        ? 'توصيل <strong>مجاني</strong> داخل ' + (z ? z.label : 'حماة')
+        : 'رسوم توصيل <strong>' + money(deliveryFeeFor(method, z)) + '</strong> (' +
+          (z ? z.label : '') + ') تُضاف إلى الإجمالي');
+      points.push(method.requiresReceipt
+        ? 'إرسال إشعار التحويل على واتساب لتأكيد الدفع'
+        : 'تدفعين المبلغ كاملًا عند استلام الطلب');
+
+      points.forEach(function (html) {
+        var li = document.createElement('li');
+        li.innerHTML = html; // محتوى من الإعدادات المحلية فقط، لا مدخلات مستخدم
+        list.appendChild(li);
+      });
+
+      card.appendChild(list);
+
+      // مثال محسوب من نفس معادلة السلة
+      var priced = unitOffer(sample);
+      var unitCents = priced.cents + toCents(scentFee());
+      // الخصم على إجمالي الطلب المؤهل، بما فيه تكلفة التخصيص المسعّر.
+      var discountCents = requirePolicy().discountCentsFor(method, unitCents);
+      var deliveryCents = toCents(deliveryFeeFor(method, activeZone()));
+      var finalCents = unitCents - discountCents + deliveryCents;
+
+      var example = document.createElement('p');
+      example.className = 'pay-example';
+      example.innerHTML = 'مثال: ' + sample.name + ' · ' + sample.sizeLabel + ' بسعر ' +
+        (priced.cutCents > 0
+          ? '<s>' + money(sample.price) + '</s> ' + money(priced.cents / 100)
+          : money(sample.price)) +
+        ' ← تدفعين <strong>' + money(finalCents / 100) + '</strong>' +
+        (isFreeDelivery(method, activeZone()) ? ' مع توصيل مجاني.' : ' شامل التوصيل.');
+      card.appendChild(example);
+
+      // رابط مشاركة العرض نفسه (للمنشورات والإعلانات)
+      var share = document.createElement('a');
+      share.className = 'pay-share';
+      share.href = offerLink(method.id);
+      share.textContent = 'رابط هذا العرض';
+      share.setAttribute('aria-label', 'رابط مباشر لطريقة ' + method.label);
+      card.appendChild(share);
+
+      host.appendChild(card);
+    });
+  }
+
+  /** أزرار اختيار منطقة التوصيل — تُبنى من CONFIG.delivery.zones. */
+  function renderZones() {
+    if (!el.zones) return;
+    el.zones.textContent = '';
+
+    var legend = document.createElement('legend');
+    legend.className = 'pay-legend';
+    legend.textContent = 'منطقة التوصيل';
+    el.zones.appendChild(legend);
+
+    zones.forEach(function (zone) {
+      var label = document.createElement('label');
+      label.className = 'zone-option';
+
+      var input = document.createElement('input');
+      input.type = 'radio';
+      input.name = 'delivery-zone';
+      input.value = zone.id;
+      input.checked = zone.id === selectedZoneId;
+      input.dataset.zoneSelect = zone.id;
+
+      var txt = document.createElement('span');
+      txt.className = 'zone-text';
+      var name = document.createElement('span');
+      name.className = 'zone-name';
+      name.textContent = zone.label;
+      var fee = document.createElement('span');
+      fee.className = 'zone-fee';
+      var amount = deliveryFeeFor(activeMethod(), zone);
+      if (amount > 0) {
+        fee.appendChild(document.createTextNode('توصيل '));
+        var bdi = document.createElement('bdi');
+        bdi.textContent = money(amount);
+        fee.appendChild(bdi);
+      } else {
+        fee.textContent = 'توصيل مجاني';
+      }
+      txt.appendChild(name);
+      txt.appendChild(fee);
+
+      label.appendChild(input);
+      label.appendChild(txt);
+      el.zones.appendChild(label);
+    });
+  }
+
+  function setZone(id, silent) {
+    if (!zones.some(function (z) { return z.id === id; })) return;
+    selectedZoneId = id;
+    saveChoices();
+    renderCart();
+    var z = activeZone();
+    if (!silent && z) announce('منطقة التوصيل: ' + z.label + '. الإجمالي التقديري الآن ' + money(totals().amount) + '.');
+  }
+
+  /** أزرار اختيار طريقة الدفع — تُبنى حرفيًا من CONFIG.payment.methods. */
+  /**
+   * وصف طريقة الدفع بحسب المنطقة المختارة فعليًا.
+   * النص الثابت في config.js يذكر المنطقتين معًا؛ هذا السطر يقول للعميل
+   * ما سيدفعه هو بالتحديد، فيقلّل المفاجأة عند التأكيد.
+   */
+  function methodDescription(method) {
+    var z = activeZone();
+    var zoneName = z ? z.label : 'حماة';
+
+    if ((method.discountPercent || 0) > 0) {
+      return isFreeDelivery(method, z)
+        ? 'خصم ' + method.discountPercent + '% على إجمالي الطلب المؤهل + توصيل مجاني إلى ' + zoneName + '.'
+        : 'خصم ' + method.discountPercent + '% على إجمالي الطلب المؤهل + توصيل ' +
+          money(deliveryFeeFor(method, z)) + ' إلى ' + zoneName + '.';
+    }
+    return isFreeDelivery(method, z)
+      ? 'لا يشمل خصم شام كاش، والتوصيل مجاني إلى ' + zoneName + '.'
+      : 'لا يشمل خصم شام كاش، وتُضاف رسوم التوصيل: ' + money(deliveryFeeFor(method, z)) +
+        ' إلى ' + zoneName + '.';
+  }
+
+  function renderPaymentMethods() {
+    if (!el.payment) return;
+    el.payment.textContent = '';
+
+    var legend = document.createElement('legend');
+    legend.className = 'pay-legend';
+    legend.textContent = (CONFIG.payment && CONFIG.payment.title) || 'طريقة الدفع';
+    el.payment.appendChild(legend);
+
+    availableMethods.forEach(function (method) {
+      var label = document.createElement('label');
+      label.className = 'pay-option';
+      label.dataset.payOption = method.id;
+
+      var input = document.createElement('input');
+      input.type = 'radio';
+      input.name = 'payment-method';
+      input.value = method.id;
+      input.checked = method.id === selectedMethodId;
+      input.dataset.paySelect = method.id;
+
+      var body = document.createElement('span');
+      body.className = 'pay-body';
+
+      var title = document.createElement('span');
+      title.className = 'pay-title';
+      title.textContent = method.label;
+
+      var desc = document.createElement('span');
+      desc.className = 'pay-desc';
+      desc.textContent = methodDescription(method);
+
+      body.appendChild(title);
+      body.appendChild(desc);
+      label.appendChild(input);
+      label.appendChild(body);
+      el.payment.appendChild(label);
+    });
+
+    var note = document.createElement('p');
+    note.className = 'pay-note';
+    note.textContent = (CONFIG.payment && CONFIG.payment.freeDeliveryNote) || '';
+    el.payment.appendChild(note);
+  }
+
+  function setMethod(id, silent) {
+    if (!availableMethods.some(function (m) { return m.id === id; })) return;
+    selectedMethodId = id;
+    saveChoices();
+    renderCart();
+    var method = activeMethod();
+    if (!silent && method) announce('طريقة الدفع: ' + method.label + '. الإجمالي التقديري الآن ' + money(totals().amount) + '.');
+  }
+
+  function buildCartItem(product, qty) {
+    var li = document.createElement('li');
+    li.className = 'cart-item';
+    li.dataset.cartItem = product.id;
+
+    var img = document.createElement('img');
+    img.src = product.image.src;
+    img.width = 64;
+    img.height = 64;
+    img.loading = 'lazy';
+    img.decoding = 'async';
+    img.alt = '';
+    // لا نمط سطري هنا: `.cart-item img { object-fit: cover; }` في css/styles.css
+    // يفعل الشيء نفسه. النمط السطري كان يمنع تفعيل CSP صارم على style-src بلا
+    // 'unsafe-inline'، ويخلق مصدرَي حقيقة لنفس القاعدة.
+
+    var main = document.createElement('div');
+    main.className = 'cart-item-main';
+
+    var head = document.createElement('div');
+    head.className = 'cart-item-head';
+
+    var name = document.createElement('p');
+    name.className = 'cart-item-name';
+    name.textContent = product.name;
+
+    var size = document.createElement('p');
+    size.className = 'cart-item-size';
+    size.textContent = (product.name + ' · ' + product.sizeLabel);
+
+    head.appendChild(name);
+    head.appendChild(size);
+
+    var priced = unitOffer(product);
+    var plan = planFor(product, qty, priced.cents);
+    var scentCents = toCents(scentFee());
+    var unitCents = plan.totalCents / qty + scentCents;
+
+    var notes = [];
+    if (priced.cutCents > 0) notes.push('عرض «' + priced.slot.label + '» بدل ' + money(product.price));
+    plan.sets.forEach(function (set) {
+      notes.push(bundleText(set.slot) + (set.count > 1 ? ' ×' + set.count : ''));
+    });
+
+    var unit = document.createElement('p');
+    unit.className = 'cart-item-unit';
+    unit.textContent = 'متوسط تكلفة القطعة بعد العروض: ' + money(unitCents / 100) +
+      (notes.length ? ' · ' + notes.join(' · ') : '');
+
+    var line = document.createElement('p');
+    line.className = 'cart-item-line';
+    line.textContent = 'مجموع البند: ' + money(plan.totalCents / 100 + (scentCents * qty) / 100);
+
+    var controls = document.createElement('div');
+    controls.className = 'cart-item-controls';
+
+    var qtyWrap = document.createElement('div');
+    qtyWrap.className = 'qty';
+    qtyWrap.setAttribute('role', 'group');
+    qtyWrap.setAttribute('aria-label', 'الكمية للحجم ' + (product.name + ' · ' + product.sizeLabel));
+
+    var minus = document.createElement('button');
+    minus.type = 'button';
+    minus.dataset.qtyDecrease = product.id;
+    minus.textContent = '−';
+    minus.setAttribute('aria-label', 'تقليل الكمية للحجم ' + (product.name + ' · ' + product.sizeLabel));
+    if (qty <= MIN_QTY) minus.disabled = true;
+
+    var value = document.createElement('span');
+    value.dataset.qtyValue = '';
+    value.textContent = String(qty);
+    value.setAttribute('aria-live', 'polite');
+    value.setAttribute('aria-label', 'الكمية الحالية ' + qty);
+
+    var plus = document.createElement('button');
+    plus.type = 'button';
+    plus.dataset.qtyIncrease = product.id;
+    plus.textContent = '+';
+    plus.setAttribute('aria-label', 'زيادة الكمية للحجم ' + (product.name + ' · ' + product.sizeLabel));
+    if (qty >= MAX_QTY) plus.disabled = true;
+
+    qtyWrap.appendChild(minus);
+    qtyWrap.appendChild(value);
+    qtyWrap.appendChild(plus);
+
+    var remove = document.createElement('button');
+    remove.type = 'button';
+    remove.className = 'cart-remove';
+    remove.dataset.removeItem = product.id;
+    remove.textContent = 'إزالة';
+    remove.setAttribute('aria-label', 'إزالة الحجم ' + (product.name + ' · ' + product.sizeLabel) + ' من السلة');
+
+    controls.appendChild(qtyWrap);
+    controls.appendChild(remove);
+
+    main.appendChild(head);
+    main.appendChild(unit);
+    main.appendChild(line);
+    main.appendChild(controls);
+
+    li.appendChild(img);
+    li.appendChild(main);
+    return li;
+  }
+
+  function addToCart(id, button) {
+    var product = getProduct(id);
+    if (!product) return;
+
+    var current = cart[id] || 0;
+    if (current >= MAX_QTY) {
+      announce('الحد الأقصى ' + MAX_QTY + ' وحدات للحجم الواحد. يمكنك تعديل الكمية من السلة.');
+      if (button) updateButtonFeedback(button, 'الحد الأقصى ' + MAX_QTY, true);
+      return;
+    }
+
+    cart[id] = clampQty(current + 1);
+    saveCart();
+    renderCart();
+
+    // القياس اختياري ولا يجب أن يمنع الإضافة إن غاب أو فشل.
+    // نبلّغ عن معرّف الحجم الفعلي فقط بعد نجاح الإضافة بواسطة الزائرة.
+    if (button && typeof window.rawaaTrack === 'function') {
+      try { window.rawaaTrack('AddToCart', { content_ids: [product.id], content_type: 'product' }); }
+      catch { /* السلة تبقى عاملة دون القياس */ }
+    }
+
+    if (button) {
+      updateButtonFeedback(button, 'أُضيف إلى السلة ✓', false);
+      button.classList.add('is-added');
+      window.setTimeout(function () {
+        button.classList.remove('is-added');
+      }, 1600);
+    }
+
+    announce('تمت إضافة ' + (product.name + ' · ' + product.sizeLabel) + ' إلى السلة. المجموع التقديري الآن ' + money(totals().amount) + '.');
+  }
+
+  function updateButtonFeedback(button, text, isError) {
+    var holderId = button.getAttribute('aria-describedby');
+    var feedback = holderId ? document.getElementById(holderId) : null;
+    if (feedback) {
+      feedback.textContent = text;
+      // الصنف لا النمط السطري — يبقي style-src 'self' كافيًا.
+      feedback.classList.toggle('is-error', !!isError);
+    }
+    var original = button.dataset.originalLabel || button.textContent;
+    button.dataset.originalLabel = original;
+    button.textContent = text;
+    window.clearTimeout(button._feedbackTimer);
+    button._feedbackTimer = window.setTimeout(function () {
+      button.textContent = button.dataset.originalLabel;
+      if (feedback) { feedback.textContent = ''; feedback.classList.remove('is-error'); }
+    }, 2200);
+  }
+
+  function changeQty(id, delta) {
+    if (!cart[id]) return;
+    var next = clampQty(cart[id] + delta);
+    if (next === cart[id]) return;
+    cart[id] = next;
+    saveCart();
+    renderCart();
+
+    var product = getProduct(id);
+    if (product) {
+      announce('الكمية للحجم ' + product.sizeLabel + ' أصبحت ' + next + '.');
+    }
+  }
+
+  function removeItem(id) {
+    var product = getProduct(id);
+    if (!cart[id]) return;
+    delete cart[id];
+    saveCart();
+    renderCart();
+    if (product) announce('تمت إزالة الحجم ' + product.sizeLabel + ' من السلة.');
+    var trigger = el.items.querySelector('[data-remove-item="' + id + '"]');
+    if (trigger) trigger.focus();
+    else if (el.closeBtn) el.closeBtn.focus();
+  }
+
+  /* ------------------------------ رسالة واتساب ------------------------------ */
+
+  function buildOrderMessage() {
+    var p = pricing();
+    var lines = [];
+
+    lines.push(CONFIG.order.greeting);
+    lines.push(CONFIG.order.intro);
+    lines.push('');
+
+  
