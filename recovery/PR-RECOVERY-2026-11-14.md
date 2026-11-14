@@ -29,6 +29,28 @@ The following evidence comes from the user's prior work context and the Cloudfla
 | #206 / `pr-206` | Cloudflare recorded commit `037a01bffeb8514e5c39d0d3075056fdc22693d6`; latest deployment failed. Earlier commit `4b11860c8752ee032c3db66f07fdd47262a779cd` remained active without a stable alias | Latest preview failure is at Pages publish stage: `Failed to publish your Function. Got error: Unknown internal error occurred.`. This is not evidence that the source code itself is invalid. Retry/diagnose in isolation before considering merge |
 | #208 / recovery preview | Preview succeeded at `fa6df14c1a58efee3e93ab106e5cfc0ccc821529`; alias `https://pr-208.raawaa-store.pages.dev` | This is the recovery-copy preview, not the original PR development head |
 
+## Per-file manifest comparison against the 2026-11-08 production snapshot
+Cloudflare deployment manifests were compared by path and asset hash. These are deployment inventories, not a substitute for source diffs, but they establish which previews contain distinct deployed files.
+
+| Preview checkpoint | Files | Added vs production | Removed vs production | Changed vs production |
+|---|---:|---:|---:|---:|
+| PR #188 | 201 | 2 | 0 | 29 |
+| PR #196 | 177 | 8 | 30 | 26 |
+| PR #197 | 200 | 1 | 0 | 5 |
+| PR #204 | 179 | 1 | 21 | 4 |
+| PR #205 | 200 | 1 | 0 | 1 |
+| PR #206 latest failed deployment | 200 | 1 | 0 | 1 |
+
+Key findings:
+- PR #205 is the closest successful preview to production by manifest: it adds only `/elyra/index.html` and changes `/sw.js`.
+- PR #206 has the same file paths as PR #205 and differs from it only in `/sw.js`. Its latest deployment fails at the Pages publish stage, so PR #205 is the closest successful checkpoint for this small change set.
+- PR #197 differs from PR #205 in `/index.html`, `/js/config.js`, `/serum.html`, `/sitemap.xml`, and `/sw.js`.
+- PR #188 is a much broader design/content checkpoint: it adds `/css/rawaa-design-system.css` and `/elyra/index.html`, and changes 29 deployed files compared with production.
+- PR #196 is a divergent campaign/editorial variant: it adds real-bottle product images and serum editorial assets, but removes 30 production files including Hama campaign media.
+- PR #204 is another divergent variant: it removes 21 production files, including `/hama.html`, `/css/hama.css`, Hama imagery, captions, and both Hama MP4 files.
+- PR #188, #197, #205, and #206 manifests contain both Hama MP4 files. PR #196 and #204 do not.
+- These branches are not one simple linear upgrade chain. Do not combine them by blindly choosing the highest PR number or copying one deployment over another; reconcile the product/campaign intent and source diffs first.
+
 ## Recovery findings
 - The 2026-11-08 production snapshot is older than several successful previews created on 2026-11-13.
 - Therefore the production snapshot alone is not an acceptable basis for claiming that the latest Store work has been recovered.
