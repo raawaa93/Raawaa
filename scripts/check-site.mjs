@@ -74,8 +74,10 @@ for (const legacy of ['hama.html', 'setup.html', 'check.html', 'css/hama.css', '
   assert.ok(!fs.existsSync(path.join(root, legacy)), legacy + ' must be retired from the active source root');
 }
 assert.doesNotMatch(index, /خصم 15%|15%[^<]{0,40}شام كاش/u, 'Homepage must not advertise a 15% Sham Cash discount');
-assert.match(serum, /تحتوي المزيجات الحالية على زيوت وعطر/u, 'Serum page must disclose oils and fragrance');
-assert.match(serum, /نؤكد توفّره وسعره قبل الاعتماد/u, 'Customization must be confirmed before acceptance');
+assert.match(serum, /اختاري المزيج والحجم والعدد، وراجعي الإجمالي التقديري/u, 'Serum page must explain the configured estimate flow');
+assert.doesNotMatch(serum, /تحتوي المزيجات الحالية على زيوت وعطر|سعر الزيت المختار غير مشمول/u, 'Serum page must not claim unconfigured customizations or exclusions');
+assert.equal(config.customization?.scentOptions?.length || 0, 0, 'No unapproved fragrance options may be published');
+assert.equal(config.customization?.oilAdditions?.length || 0, 0, 'No unapproved oil additions may be published');
 assert.match(serum, /تصوّر تصميمي/u, 'Serum imagery must be identified as conceptual');
 assert.ok(cart.length > 85000, 'Cart source must be the complete recovered version, not the truncated PR #188 snapshot');
 assert.match(views, /showView\('bottle'\);/, 'Serum image selector must default to the bottle view');
