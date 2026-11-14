@@ -1,0 +1,190 @@
+/**
+ * RAWAA | رواء — Service Worker
+ *
+ * الهدف: أن يعمل الموقع بالكامل بلا إنترنت بعد أول زيارة، وأن يفتح فورًا
+ * من الشاشة الرئيسية على الآيفون. لا تتبّع، لا إحصاءات، لا إرسال أي بيانات.
+ *
+ * الاستراتيجية:
+ *  - التثبيت: تخزين الصفحات والأصول الأساسية (app shell) مسبقًا.
+ *  - الصور: Cache First (لا تتغيّر) — مع تحديث صامت في الخلفية.
+ *  - الصفحات: Network First مع رجوع إلى النسخة المخزّنة عند انقطاع الشبكة.
+ *  - أي طلب لا يخصّ نفس النطاق (مثل wa.me) يمرّ كما هو دون تخزين.
+ *
+ * عند تغيير أي ملف من الموقع: ارفع رقم الإصدار CACHE_VERSION
+ * وإلا سيبقى الزائر يرى النسخة القديمة من الذاكرة.
+ */
+
+const CACHE_VERSION = 'v1794118718';
+// استبدال الذاكرة القديمة يمسح مفاتيحها التي ربما احتوت استعلامات روابط.
+const RUNTIME = 'rawaa-runtime-v7';
+
+/** الأصول التي يجب أن تعمل بلا إنترنت */
+const CORE = [
+  // Pages redirects /index.html to /; cache the canonical route for offline reload.
+  './',
+  './serum',
+  './campaign',
+  './hama',
+  // Pages canonicalizes .html paths; cache the clean privacy route so offline aliases resolve.
+  './privacy',
+  './404.html',
+  './manifest.webmanifest',
+  './css/styles.css',
+  './css/serum.css',
+  './css/campaign.css',
+  // أنماط الصفحات المستخرجة من <style> المضمّن (CSP). بلاها تُخدَم الصفحة
+  // المخزّنة عارية بلا تنسيق في وضع عدم الاتصال.
+  './css/home-inline.css',
+  './css/utilities.css',
+  './css/hama.css',
+  // أنماط اختيار المنتج الثلاثي وجدول الأسعار التسعة (2026-11-08).
+  // بلا هذا الملف تُخدَم الرئيسية وصفحة المنتج من الذاكرة بلا تنسيق الجدول.
+  './css/three-formulas.css',
+  './js/config.js',
+  './js/marketing.js',
+  './js/offers.js',
+  // سياسة التوصيل والخصم: بلا هذا الملف يفقد الحساب كله مرجعه (fail-closed)،
+  // والرفض الآلي لا يظهر لأن عامل الخدمة يعمل تحت HTTPS فعلًا.
+  './js/pricing-policy.js',
+  './js/cart.js',
+  // سكربتات الصفحات المستخرجة من onclick والكتل المضمّنة (CSP).
+  './js/index-inline.js',
+  './js/serum-inline.js',
+  './js/privacy-inline.js',
+  './js/campaign.js',
+  './js/serum-views.js',
+  // يكتب «من …» في بطاقات الرئيسية من js/config.js؛ بلا تخزينه تبقى البطاقات
+  // بلا سعر في وضع عدم الاتصال.
+  './js/formula-cards.js',
+  './js/pwa-install.js',
+  './assets/icons/icon-192.png',
+  './assets/icons/icon-512.png',
+  './assets/icons/apple-touch-icon.png',
+  './assets/icons/favicon-64.png',
+  './assets/favicon.svg',
+  './assets/brand/logo-primary-v2-dark.svg',
+  // الخطوط — مولَّدة من ملفات حقيقية؛ لا أسماء ميتة (عطل 2026-10-28)
+  './assets/fonts/cormorant-500-latin.subset.woff2',
+  './assets/fonts/plexar-400.subset.woff2',
+  './assets/fonts/plexar-700.subset.woff2',
+  './assets/fonts/plexar-bold-latin.subset.woff2',
+  './assets/fonts/plexar-latin.subset.woff2',
+  // الصور الصغيرة تكفي للعمل دون اتصال؛ الطلبات الأكبر ترجع إليها عند انقطاع الشبكة.
+  './assets/img/products/trio-v6-480.avif',
+  './assets/img/products/trio-v6-480.webp',
+  './assets/img/products/trio-v6-480.jpg',
+  './assets/img/products/size-30-v6-480.avif',
+  './assets/img/products/size-30-v6-480.webp',
+  './assets/img/products/size-30-v6-480.jpg',
+  './assets/img/products/size-50-v6-480.avif',
+  './assets/img/products/size-50-v6-480.webp',
+  './assets/img/products/size-50-v6-480.jpg',
+  './assets/img/products/size-100-v6-480.avif',
+  './assets/img/products/size-100-v6-480.webp',
+  './assets/img/products/size-100-v6-480.jpg',
+  // مشهد رواء: نسخة صغيرة لكل صيغة، تكفي كبديل عند انقطاع الشبكة.
+  './assets/img/products/ritual-v5-480.avif',
+  './assets/img/products/ritual-v5-480.webp',
+  './assets/img/products/ritual-v5-720.jpg'
+];
+
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open(CACHE_VERSION).then((cache) =>
+      // addAll تفشل كلها إن فشل ملف واحد — نضيف كلاً على حدة حتى لا ينهار التثبيت
+      Promise.all(CORE.map((url) => cache.add(url).catch(() => null)))
+    ).then(() => self.skipWaiting())
+  );
+});
+
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((keys) =>
+      Promise.all(
+        keys.filter((k) => k !== CACHE_VERSION && k !== RUNTIME).map((k) => caches.delete(k))
+      )
+    ).then(() => self.clients.claim())
+  );
+});
+
+self.addEventListener('fetch', (event) => {
+  const req = event.request;
+
+  // لا نتدخّل إلا في طلبات GET من نفس النطاق
+  if (req.method !== 'GET') return;
+  const url = new URL(req.url);
+  if (url.origin !== self.location.origin) return;
+  // اللوحة ومسارات API لا تُخزَّن أو تُعرض من الذاكرة، بما فيها مسارات الطلب المستقبلية.
+  if (url.pathname === '/owner' || url.pathname.startsWith('/owner/') ||
+      url.pathname === '/api' || url.pathname.startsWith('/api/')) return;
+
+  // الصور والخطوط والأيقونات: من الذاكرة للعرض الفوري، **مع تحديث في الخلفية**
+  // سابقًا كانت Cache-First بلا تحديث، فبقي الزائر يرى صورًا استُبدلت منذ أسابيع.
+  // الآن: stale-while-revalidate — عرض فوري + تحديث صامت + النسخة الجديدة في الزيارة التالية.
+  if (/\.(avif|webp|jpe?g|png|svg|woff2?)$/i.test(url.pathname)) {
+    event.respondWith(
+      caches.open(RUNTIME).then((cache) =>
+        cache.match(req).then((hit) => hit || caches.match(req)).then((hit) => {
+          const network = fetch(req)
+            .then((res) => {
+              if (res && res.ok && !url.search) cache.put(req, res.clone());
+              return res;
+            })
+            .catch(() => {
+              if (hit) return hit;
+              // إن طلبت شاشة عالية الكثافة نسخة أكبر دون إنترنت، أعطها المشهد
+              // الصغير المحفوظ للصيغة نفسها بدل صورة مكسورة.
+              const visual = url.pathname.match(/\/(ritual-v5|trio-v6|size-(?:30|50|100)-v6)-\d+\.(avif|webp|jpg)$/i);
+              if (visual) {
+                const kind = visual[1].toLowerCase();
+                const ext = visual[2].toLowerCase();
+                // نسخة JPG الوحيدة لمشهد الروتين 720؛ بقية الصور لها نسخة 480 أصغر.
+                const width = ext === 'jpg' && kind === 'ritual-v5' ? '720' : '480';
+                return caches.match('./assets/img/products/' + kind + '-' + width + '.' + ext);
+              }
+              return hit;
+            });
+          return hit || network;
+        })
+      )
+    );
+    return;
+  }
+
+  // الصفحات وCSS/JS: الشبكة أولًا ثم الذاكرة (حتى لا يرى الزائر نسخة قديمة)
+  event.respondWith(
+    fetch(req)
+      .then((res) => {
+        // لا نحفظ مفاتيح تحتوي استعلامات قد تتضمن بيانات خاصة أو رموز حملات.
+        if (res && res.ok && !url.search) {
+          const copy = res.clone();
+          caches.open(CACHE_VERSION).then((c) => c.put(req, copy));
+        }
+        return res;
+      })
+      .catch(() =>
+        // ⚠ لا تُرجع index.html مكان صورة أو سكربت: هذا يجعل الزائر يرى
+        // "صورة لا تفتح" بدل خطأ واضح، ويخفي السبب. الرجوع للصفحة للتنقل فقط.
+        caches.match(req).then((hit) => {
+          if (hit) return hit;
+          if (req.mode === 'navigate') {
+            // Pages redirects /index.html to /; use the canonical cached root for that route.
+            const clean = new URL(url.pathname, url.origin).href;
+            const canonicalPath = url.pathname === '/index.html'
+              ? '/'
+              : url.pathname.replace(/\.html$/, '');
+            const canonical = new URL(canonicalPath, url.origin).href;
+            return caches.match(clean).then((page) => {
+              if (page) return page;
+              return caches.match(canonical).then((canonicalPage) => {
+                if (canonicalPage) return canonicalPage;
+                const home = url.pathname === '/index.html' ? './' : './index.html';
+                return caches.match(home).then((fallback) => fallback || caches.match('./'));
+              });
+            });
+          }
+          return Response.error();
+        })
+      )
+  );
+});
