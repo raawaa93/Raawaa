@@ -4,6 +4,8 @@ This branch contains a recovery copy of the **published RAWAA Store site**, reco
 
 ## Recovery status
 
+- PR and preview reconciliation: [`recovery/PR-RECOVERY-2026-11-14.md`](recovery/PR-RECOVERY-2026-11-14.md) — records the original Store PR checkpoints, Cloudflare preview evidence, current access limits, and domain hold.
+
 - Cloudflare Pages project: `raawaa-store`
 - Production URL: https://raawaa-store.pages.dev
 - Production deployment: `10b28454-da98-4bb7-9172-ee947a93a9e3` (2026-11-08)
