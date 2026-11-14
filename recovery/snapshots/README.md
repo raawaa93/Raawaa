@@ -1,0 +1,27 @@
+# Raawaa Store preview snapshots
+
+These are isolated source/page snapshots recovered from Cloudflare Pages previews. They are retained separately because the PRs are divergent checkpoints, not a single proven linear history.
+
+## Snapshot map
+
+| Preview | Preserved material | Completeness |
+|---|---|---|
+| PR #188 | Homepage, Serum route, config, design-system/campaign/home/Serum/global CSS, marketing/offers/pricing/campaign/Serum scripts, cart script | Cart script is incomplete: 72,000 / 90,326 characters |
+| PR #196 | Homepage, Serum route, privacy page | HTML checkpoint only |
+| PR #197 | Homepage, config | HTML/config checkpoint |
+| PR #204 | Homepage, Serum route | HTML checkpoint |
+| PR #205 | Homepage, Serum, privacy, campaign, Hama route; config, marketing, offers, pricing policy, cart, Serum views, campaign, PWA and page scripts; global/home/Serum/campaign/Hama/utilities/formula CSS | Recovered text sources are complete and read-back verified |
+
+## Important rules
+
+- Do not copy one snapshot wholesale over another or over the root site.
+- PR #205 is the closest successful preview to the production manifest; it is a strong reconstruction baseline, not proof that every intended feature is approved.
+- PR #188 carries a separate design and pricing variant, including a 10% Sham Cash discount versus 15% in PR #205.
+- PR #196 and PR #204 remove or omit different production assets; preserve them as alternate checkpoints.
+- Binary images, fonts and videos are not all duplicated into these snapshot folders. The recovery branch's root production copy retains most production assets.
+- PR #188 `js/cart.js` is partial and must never be treated as a complete deployable file.
+- No snapshot has been promoted to the root production tree. No merge or production deployment has been performed.
+
+## Detailed evidence
+
+See [PR and recovery reconciliation](../PR-RECOVERY-2026-11-14.md) for deployment IDs, commit SHAs, manifest comparisons, access limitations and the Browser Rendering rate-limit hold.
