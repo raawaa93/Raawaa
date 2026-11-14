@@ -1,46 +1,69 @@
-# RAWAA Store — live recovery audit
+# RAWAA Store — live audit and source restoration reconciliation
 Date: 2026-11-14 (UTC)
-Scope: read-only inspection of Cloudflare Pages, DNS, the recovered GitHub branch, and the linked Supabase project. No production deployment, DNS mutation, database write, migration, secret change, or destructive action was performed.
 
-## Current public site
-- `https://raawaa-store.pages.dev/` returned HTTP 200. Its canonical URL points to the same Pages hostname; no `X-Robots-Tag: noindex` header was present on the public alias.
-- A Cloudflare crawl completed with 7 discovered URLs: the home page, `/serum`, `/hama`, and `/privacy` returned HTTP 200. WhatsApp destinations were skipped as external links. The two MP4 URLs returned crawler outcome `unsupported_content_type` (HTTP 415 from the crawler), which is not evidence that the video files are missing or broken.
-- Additional direct path checks returned HTTP 200 for `/campaign`, `/check`, and `/setup`.
-- `/owner/` and `/owner/pricing` are disallowed by `robots.txt`. The owner page itself declares `noindex,nofollow`, contains a password-login form, and explicitly states that direct website order intake is not enabled yet. Robots exclusion is not an access-control mechanism; the app's authentication is the relevant control.
+## Current source-recovery result
+
+- The full recoverable website source is now merged into `raawaa93/Raawaa:main`.
+- PR #2 integrated the PR #188 10% Sham Cash checkpoint with matching CSS/JS and the complete cart from PR #205. PR #1 merged the full recovered website and historical snapshots into `main`.
+- Root website inventory: 199 files. Compared with the 199-file production manifest, the only missing paths are `assets/img/hama/reel-50ml.mp4` and `assets/img/hama/reel-hama.mp4`; the user confirmed these videos are not important and they are intentionally omitted.
+- The two extra root paths compared with production are `README.md` and `css/rawaa-design-system.css`.
+- Full site regression and JavaScript syntax checks passed in GitHub Actions on the restored source and again after the README update.
+- Latest main documentation commit: `130930024121a8f0849d824bfb66413ba8e447b7`.
+- This is a reconstruction from deployed and preview artifacts, not the original Git history or unpublished source.
+
+## Public production website
+
+- `https://raawaa-store.pages.dev/` was previously observed returning HTTP 200.
+- The earlier crawl found HTTP 200 for the home page, `/serum`, `/hama`, `/privacy`, `/campaign`, `/check`, and `/setup`.
+- WhatsApp destinations were skipped as external links. The crawler returned `unsupported_content_type` for MP4 URLs; that was not proof of missing videos.
+- `/owner/` and `/owner/pricing` are disallowed by `robots.txt`. The owner page declares `noindex,nofollow`, contains a password-login form, and says direct website order intake is not enabled. Robots exclusion is not access control; the app's authentication is the relevant control.
+- No production deployment has been made during the source restoration. The live site remains on its previously inspected Cloudflare deployment.
 
 ## Cloudflare Pages and DNS
-- Pages project `raawaa-store` remains present. Its canonical production deployment is `10b28454-da98-4bb7-9172-ee947a93a9e3` (2026-11-08; 199 files). The newest inspected preview is `10b8ef21-037c-43a9-adf8-37ac7874dcdd` from `pr-208` (2026-11-14; deploy stage succeeded; 200 files).
-- Deployment metadata shows ad-hoc uploads with clone/build stages idle and no Git source configuration in the Pages project response. This appears to be a Direct Upload project. The newest preview URL also returned HTTP 200; its `noindex, nofollow, noarchive` response header is expected for a preview, and its canonical URL correctly points to the production Pages hostname.
-- **Do not convert this existing project to Git integration.** Cloudflare documents both transitions as one-way: a Direct Upload project cannot later be switched to Git integration, and a Git-integrated project cannot later be switched to Direct Upload. Connecting GitHub natively would therefore require a separate Pages project, not a safe in-place switch. Preserve `raawaa-store` and, if repository-based automation is later needed, deploy from GitHub Actions using Wrangler into the existing Direct Upload project.
-- Custom domain `rawaa.eu.org` is still `pending`. Cloudflare's zone status is `pending` with activation failure `unresolvable`; the Pages custom-domain verification says `CNAME record not set`. The exact DNS record is already present: `rawaa.eu.org CNAME raawaa-store.pages.dev` (proxied). Do not keep changing this record. Because `rawaa.eu.org` is the apex of the Cloudflare zone, Pages activation requires the parent delegation to point at Cloudflare's assigned nameservers; the CNAME alone cannot activate an unresolvable zone.
-- Nameservers assigned to the zone: `carl.ns.cloudflare.com` and `irma.ns.cloudflare.com`. The remaining domain fix is at the parent/registrar delegation layer: publish the exact assigned nameservers for `rawaa.eu.org` and check for stale DNSSEC/DS data. Editing the CNAME again inside the inactive zone will not fix the delegation.
 
-## GitHub recovery repository
-- Repository: `raawaa93/Raawaa`.
-- Recovery branch: `recovery/cloudflare-manifest-2026-11-14`; PR #1 remains open and unmerged.
-- The branch contains 197 of 199 production deployment files. The two files not copied into Git are `assets/img/hama/reel-50ml.mp4` and `assets/img/hama/reel-hama.mp4`; the recovered Hama page currently uses the original public Pages URLs as a temporary fallback.
-- This is a copy of deployed static artifacts, not the original source repository or its Git history. The old `ghith93/Raawaa-store` repository remains inaccessible through the suspended original GitHub account.
-- Keep PR #1 unmerged until the missing media is recovered (or explicitly accepted as external references), asset hashes are checked, and customer/owner workflows are tested.
+- Pages project: `raawaa-store`.
+- Last inspected production deployment: `10b28454-da98-4bb7-9172-ee947a93a9e3` (2026-11-08; 199 files).
+- Latest inspected preview at the time of the audit: `10b8ef21-037c-43a9-adf8-37ac7874dcdd` from `pr-208` (2026-11-14; 200 files).
+- Deployment metadata reports ad-hoc uploads, idle clone/build stages, no Git source configuration, and `uses_functions: false`. The current project is Direct Upload. A GitHub merge does not deploy it.
+- Keep the existing `raawaa-store` project on Direct Upload. If repository-based automation is needed, use a controlled Wrangler workflow and an isolated preview; do not convert the production project to Git integration.
+- Custom domain `rawaa.eu.org` remains `pending`. Cloudflare reports the zone as `pending` with activation failure `unresolvable`, and Pages reports `CNAME record not set`.
+- The CNAME `rawaa.eu.org -> raawaa-store.pages.dev` exists inside the inactive zone. The remaining issue is at parent delegation: Cloudflare assigned `carl.ns.cloudflare.com` and `irma.ns.cloudflare.com`. Verify the intended domain and any stale DNSSEC/DS record before changing delegation. No DNS changes were made.
 
-## Store behavior and pricing consistency
-- The public storefront is currently a static WhatsApp inquiry flow; it does not expose an online payment or customer order form. The owner dashboard says direct website intake is not enabled.
-- The home/configuration path currently advertises Sham Cash discount 15% and free delivery across all governorates, with product prices in SYP.
-- The separate Hama campaign page advertises USD prices and delivery within Hama. These may be distinct campaigns, but the current public copy does not make the distinction sufficiently clear. Resolve the intended commercial policy before publishing changes.
-- `js/pricing-policy.js` has a stale comment saying Sham Cash is 10%, while `js/config.js` currently sets 15%. The calculation reads the configuration; update the stale comment when the pricing source of truth is finalized.
-- The privacy page describes the public WhatsApp flow as not creating an online order record. The Supabase owner/staging backend exists separately; the owner UI labels direct intake as not enabled, and `rawaa_store.orders` currently has zero rows.
-- Supabase logs for the last 24 hours show three successful HTTP 200 invocations of `rawaa-outbox` and six runtime log events for that function (all log-level, including normal `EarlyDrop` events). No other Edge Function request appeared in the returned edge-log window; this does not establish that the other endpoints are safe to expose.
+## Recovered source and current commercial-policy difference
 
-## Supabase read-only security review
-- Project `oyoyozdugicmnkfhjovo` is `ACTIVE_HEALTHY` on Postgres 17.11.
-- Six Edge Functions are active. The owner-login and Telegram pairing/test functions have JWT verification enabled; the outbox, retention, and commerce API functions have platform JWT verification disabled and need their own endpoint-level authorization review before any public use.
-- The relevant `rawaa_store` tables have RLS enabled. Read-only SQL found no policies and no table grants to `anon` or `authenticated` in the inspected `public`, `rawaa_store`, and `commerce` schemas. This is fail-closed for direct client table access; do not add broad policies just to clear the advisor warning.
-- Supabase Security Advisor reports leaked-password protection disabled (WARN) and 17 RLS-enabled/no-policy informational findings. Enable leaked-password protection in Auth settings after reviewing the impact on owner sign-in.
-- Performance Advisor reports one duplicate-index warning on `rawaa_store.orders` and 10 unused-index notices. No indexes were changed.
+### Source in GitHub main
+- Homepage and Serum content/style/scripts use the PR #188 checkpoint.
+- Sham Cash discount is 10% on eligible orders only; no discount applies to other payment methods.
+- Delivery is free to every Syrian governorate for all payment methods.
+- The Serum page states that current blends contain oils and fragrance.
+- Customization is a preliminary request; availability and price are confirmed before acceptance.
+- Packaging imagery is disclosed as conceptual.
+- No unapproved Product Offer/AggregateOffer pricing schema is emitted on the Serum page.
+- The full 88,132-character cart implementation from PR #205 is retained; the partial PR #188 cart was excluded.
 
-## Next safe sequence
-1. Recover the two MP4 assets and compare all restored files against the deployment manifest.
-2. Complete a mobile functional pass for product selection, pricing, cart, WhatsApp message composition, privacy, and the owner login flow.
-3. Resolve the SYP/USD, discount, and delivery-policy differences with one canonical pricing policy before changing live copy.
-4. Fix the EU.org parent delegation using the exact Cloudflare nameservers; then re-check Pages custom-domain verification.
-5. Keep the existing Pages project on its current Direct Upload path. If repository automation is added, use a controlled Wrangler deployment workflow rather than converting this production project to Git integration.
-6. Review the three Edge Functions with `verify_jwt=false` at source level before enabling any public order flow.
+### Public production checkpoint
+- The last inspected production deployment predates this source restoration and was observed advertising 15% Sham Cash.
+- Therefore live production and the recovered source currently encode different discount values (15% live vs. 10% in GitHub main). The recovered source deliberately follows the PR #188 policy. Confirm the canonical commercial decision before any deployment.
+- The Hama campaign's SYP/USD messaging and campaign context should be reviewed as part of the next content pass; no prices were changed in this recovery.
+
+## Supabase/backend boundary
+
+- The inspected Pages deployments report `uses_functions: false`; the public site is a static Pages deployment.
+- A separate Supabase project contains owner/order/Telegram functions and staging-named services. Their presence does not establish that the public checkout uses them.
+- The prior read-only review found the `rawaa_store` tables RLS-enabled and no direct `anon` or `authenticated` grants/policies in the inspected schemas. Do not add broad policies to clear advisor notices.
+- Three Edge Functions previously appeared with `verify_jwt=false`; inspect their endpoint-level authorization in source before exposing public order intake.
+- No Supabase writes, migrations, function deployments, or secrets changes were made during recovery. Two function source retrievals previously failed with ProtocolError, so those function bodies were not verified.
+
+## Next safe work
+
+1. Run a functional mobile Safari/iPhone pass on an isolated preview: product selection, pricing, cart, WhatsApp message composition, privacy, and owner login.
+2. Resolve the 10% vs. 15% discount difference before release; preserve free delivery unless the owner changes it.
+3. Review Hama campaign prices and content against the intended current offer.
+4. Verify asset bytes against Cloudflare hashes where practical.
+5. Resolve the `rawaa.eu.org` parent delegation only after confirming it is the intended customer-facing domain.
+6. Prepare an isolated Cloudflare Direct Upload preview with Wrangler. Promote to production only after review and explicit approval.
+7. Review the three `verify_jwt=false` Edge Functions at source level before enabling any public order flow.
+
+## Safety record
+
+No production deployment, DNS mutation, database write, migration, secret rotation, or destructive action was performed during source restoration.
