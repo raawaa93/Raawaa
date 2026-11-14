@@ -20,7 +20,8 @@ jobs:
       - name: Checkout canonical main source
         uses: actions/checkout@v4
         with:
-          ref: main
+          ref: ${{ github.sha }}
+          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -35,12 +36,17 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          SOURCE_SHA="$(git rev-parse HEAD)"
-          TRIGGER_PARENT="$(git rev-parse "${GITHUB_SHA}^")"
-          if [[ "$TRIGGER_PARENT" != "$SOURCE_SHA" ]]; then
+          git fetch --no-tags origin main --depth=1
+          SOURCE_SHA="$(git rev-parse "${GITHUB_SHA}^")"
+          MAIN_SHA="$(git rev-parse FETCH_HEAD)"
+          if [[ "$SOURCE_SHA" != "$MAIN_SHA" ]]; then
             echo "Release trigger does not target the current main commit."
-            echo "Trigger parent: $TRIGGER_PARENT"
-            echo "Current main: $SOURCE_SHA"
+            echo "Trigger parent: $SOURCE_SHA"
+            echo "Current main: $MAIN_SHA"
+            exit 1
+          fi
+          if ! git diff-tree --quiet "${GITHUB_SHA}^" "${GITHUB_SHA}"; then
+            echo "Release trigger commit must not contain source changes."
             exit 1
           fi
           echo "sha=$SOURCE_SHA" >> "$GITHUB_OUTPUT"
