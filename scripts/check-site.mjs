@@ -36,6 +36,10 @@ const index = read('index.html');
 const serum = read('serum.html');
 const campaign = read('campaign.html');
 const campaignScript = read('js/campaign.js');
+const ownerPricing = read('owner/pricing.html');
+const ownerSettings = read('owner/settings.mjs');
+const ownerApp = read('owner/app.mjs');
+const ownerPricingTool = read('owner/pricing-tool.mjs');
 const configSource = read('js/config.js');
 const cart = read('js/cart.js');
 const views = read('js/serum-views.js');
@@ -51,6 +55,11 @@ assert.ok(config.delivery.zones.every((zone) => Number(zone.fee) === 0), 'All co
 
 assert.match(index, /خصم 10%/u, 'Homepage must display the approved 10% discount');
 assert.match(campaign, /خصم 10%/u, 'Campaign page must display the approved 10% discount');
+assert.match(ownerPricing, /الليرة السورية/u, 'Owner pricing editor must use the current SYP currency');
+assert.doesNotMatch(ownerPricing, /الدولار الأمريكي|بالدولار/u, 'Owner pricing editor must not present stale USD labels');
+assert.match(ownerSettings, /currency: 'SYP'/u, 'Owner dashboard currency default must be SYP');
+assert.match(ownerApp, /Intl\.NumberFormat/u, 'Owner dashboard must format order totals by currency');
+assert.match(ownerPricingTool, /let currencySymbol = 'ل\.س '/u, 'Owner pricing editor fallback currency must be SYP');
 assert.match(campaign, /التوصيل مجاني إلى جميع المحافظات ولكل طرق الدفع/u, 'Campaign page must state free delivery for all payment methods');
 assert.doesNotMatch(campaign, /لا تشمل التوصيل|رسوم التوصيل|بلا عطر/u, 'Campaign page must not imply a delivery fee or scent-free base product');
 assert.ok(campaignScript.includes('product.image && product.image.src'), 'Campaign cards must display the configured product image');

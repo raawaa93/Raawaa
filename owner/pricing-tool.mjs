@@ -16,7 +16,7 @@ const el = (id) => document.getElementById(id);
  * «$2,400» بينما الزبونة ترى «ل.س 2,400» — رقم صحيح برمز مضلِّل.
  * نقرأ الرمز من `config` وقت التحميل، والافتراضي رمز الإعدادات إن لم يُحمَّل بعد.
  */
-let currencySymbol = '$';
+let currencySymbol = 'ل.س ';
 const money = (value) => {
   const amount = (Math.round(value * 100) / 100);
   const isInt = Math.abs(amount - Math.round(amount)) < 0.005;

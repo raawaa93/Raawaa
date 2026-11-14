@@ -10,6 +10,13 @@ const scents = {unscented:'بلا عطر',vanilla:'فانيلا دافئة',rose
 const oils = {argan:'أرجان',castor:'خروع',almond:'لوز حلو',jojoba:'جوجوبا',coconut:'جوز الهند',grapeseed:'بذور العنب'};
 let cursor = null, busy = false, generation = 0, authenticated = false;
 function element(tag, text, className) { const node=document.createElement(tag); if(text != null) node.textContent=String(text); if(className) node.className=className; return node; }
+function formatOrderTotal(order) {
+  if (!Number.isInteger(order.totalCents)) return 'يؤكد عند المراجعة';
+  const currency = typeof order.currency === 'string' && /^[A-Z]{3}$/.test(order.currency) ? order.currency : (settings.currency || 'SYP');
+  const amount = order.totalCents / 100;
+  try { return new Intl.NumberFormat('ar-SY', { style: 'currency', currency, maximumFractionDigits: 2 }).format(amount); }
+  catch { return amount.toLocaleString('ar-SY') + ' ' + currency; }
+}
 function field(dl, name, value, cls='') { dl.append(element('dt',name),element('dd',value || '—',cls)); }
 function card(order) {
   const box=element('article',null,'card'), head=element('div',null,'card-head'), meta=element('div');
@@ -20,7 +27,7 @@ function card(order) {
   field(dl,'المنتجات',(order.items || []).map(x => `${x.size} × ${x.qty}`).join('، '));
   field(dl,'العطر',scents[order.scent] || (order.scent ? 'يؤكد عند المراجعة' : 'غير محدد')); field(dl,'الزيت',oils[order.oil] || (order.oil ? 'يؤكد عند المراجعة' : 'بدون إضافة'));
   field(dl,'الدفع',order.method === 'shamcash' ? 'شام كاش' : order.method === 'cod' ? 'عند الاستلام' : 'غير محدد');
-  field(dl,'التقدير',Number.isInteger(order.totalCents) ? `$${(order.totalCents/100).toFixed(2)}` : 'يؤكد عند المراجعة','total');
+  field(dl,'التقدير',formatOrderTotal(order),'total');
   field(dl,'التنبيه',notificationLabels[order.notification] || 'غير متاح'); box.append(dl);
   if(order.oilPricePending) box.append(element('p','سعر إضافة الزيت وتوفّرها يحتاجان تأكيدًا، ولا يدخل سعرها في التقدير.','caution'));
   if(order.notification === 'unknown' || order.notification === 'failed') box.append(element('p','راجع حالة التنبيه؛ لا تعني هذه الحالة أن الطلب غير محفوظ.','caution'));
