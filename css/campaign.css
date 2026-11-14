@@ -10,8 +10,12 @@
   gap: 1rem;
 }
 .campaign-header { min-height: 4.5rem; border-bottom: 1px solid var(--line-soft); }
-.campaign-brand { display: inline-flex; align-items: baseline; gap: .5rem; color: var(--ink); text-decoration: none; font-weight: 700; }
-.campaign-brand-latin { font-family: var(--font-latin); font-size: 1.25rem; letter-spacing: .22em; font-weight: 500; }
+.campaign-brand { display: inline-flex; align-items: center; gap: .5rem; color: var(--ink); text-decoration: none; font-weight: 700; }
+.campaign-brand-lockup { flex: 0 0 auto; }
+.campaign-brand-mark { display: block; width: 36px; height: 36px; flex: 0 0 36px; object-fit: contain; }
+.campaign-brand-wordmark { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; line-height: 1; }
+.campaign-brand-latin { font-family: var(--font-latin); font-size: 1.12rem; letter-spacing: .24em; font-weight: 500; }
+.campaign-brand-arabic { font-family: var(--font-display); font-size: .82rem; color: var(--olive); }
 .campaign-header-link,
 .campaign-footer > a:last-child { color: var(--ink-soft); text-decoration-thickness: 1px; text-underline-offset: .2em; font-size: .84rem; }
 .campaign-hero {
@@ -124,13 +128,18 @@
   .campaign-proof p { padding-inline: .3rem; }
   .campaign-proof strong { font-size: .73rem; }
   .campaign-proof span { font-size: .62rem; }
-  .campaign-product-grid { gap: .4rem; }
-  .campaign-product-card { padding: .7rem .55rem; border-radius: .65rem; }
-  .campaign-product-card h3 { font-size: .8rem; }
-  .campaign-product-price { font-size: 1.35rem; }
-  .campaign-product-meta { font-size: .64rem; }
-  .campaign-product-unit { font-size: .6rem; }
-  .campaign-product-card a { font-size: .67rem; }
+  /* Nine product/size combinations must remain readable on a phone.
+     Three columns compressed Arabic descriptions to near-microcopy size. */
+  .campaign-product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .55rem;
+  }
+  .campaign-product-card { padding: .8rem .7rem; border-radius: .7rem; }
+  .campaign-product-card h3 { font-size: .88rem; line-height: 1.55; }
+  .campaign-product-price { font-size: 1.5rem; }
+  .campaign-product-meta { font-size: .74rem; line-height: 1.7; }
+  .campaign-product-unit { font-size: .69rem; line-height: 1.6; }
+  .campaign-product-card a { font-size: .74rem; line-height: 1.6; }
   .campaign-actions { display: grid; grid-template-columns: 1fr; }
   .campaign-footer { flex-wrap: wrap; justify-content: center; padding-block: .75rem; }
 }
