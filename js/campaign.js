@@ -111,7 +111,7 @@
     if (addon) addon.textContent = 'إضافة العطر ' + scentPriceText + ' لكل عبوة.';
     if (faqScent) faqScent.textContent = scentPriceText;
   } else {
-    if (addon) addon.textContent = 'تحتوي المزيجات الحالية على زيوت وعطر. أي تعديل إضافي يُؤكّد توفره وسعره قبل الاعتماد.';
+    if (addon) addon.textContent = 'السعر المعروض هو سعر المزيج كما هو؛ نؤكد التوفّر قبل اعتماد الطلب.';
     if (faqScent) faqScent.textContent = 'لا تُضاف';
   }
 
