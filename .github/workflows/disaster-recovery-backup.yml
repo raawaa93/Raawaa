@@ -1,0 +1,44 @@
+name: RAWAA disaster-recovery backup
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 2 * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rawaa-disaster-recovery-backup
+  cancel-in-progress: false
+
+jobs:
+  backup:
+    name: Create verifiable repository backup
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout complete Git history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Create Git bundle and source archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p backup
+          git bundle create backup/rawaa-full-history.bundle --all
+          git archive --format=tar.gz --prefix=rawaa/ HEAD > backup/rawaa-source-${GITHUB_SHA}.tar.gz
+          printf '%s\n' "$GITHUB_SHA" > backup/source-commit.txt
+          git bundle verify backup/rawaa-full-history.bundle
+          (cd backup && sha256sum rawaa-full-history.bundle rawaa-source-${GITHUB_SHA}.tar.gz source-commit.txt > SHA256SUMS)
+          cat backup/SHA256SUMS
+
+      - name: Upload recovery package
+        uses: actions/upload-artifact@v4
+        with:
+          name: rawaa-disaster-recovery-${{ github.run_id }}-${{ github.sha }}
+          path: backup/
+          if-no-files-found: error
+          retention-days: 90
