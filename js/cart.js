@@ -243,7 +243,7 @@
       'مرحبًا رواء، أود الاستفسار عن ' + product.name + ' بحجم ' + product.sizeLabel + '.',
       'سعر العبوة المرجعي: ' + money(unitOffer(product).cents / 100 + scentFee()) +
         (unitOffer(product).cutCents > 0 ? ' بعد عرض «' + unitOffer(product).slot.label + '» (' + money(product.price) + ' قبل العرض)' : '') +
-        ' قبل الخصم والتوصيل؛ سعر الزيت إن اختير يُؤكّد.'
+        ' قبل الخصم والتوصيل.'
     ];
     var cfg = CONFIG.customization || {};
     var scent = (cfg.scentOptions || []).filter(function (o) { return o.id === custom.scent; })[0];
