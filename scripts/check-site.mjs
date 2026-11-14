@@ -53,7 +53,7 @@ assert.match(index, /خصم 10%/u, 'Homepage must display the approved 10% disco
 assert.match(campaign, /خصم 10%/u, 'Campaign page must display the approved 10% discount');
 assert.match(campaign, /التوصيل مجاني إلى جميع المحافظات ولكل طرق الدفع/u, 'Campaign page must state free delivery for all payment methods');
 assert.doesNotMatch(campaign, /لا تشمل التوصيل|رسوم التوصيل|بلا عطر/u, 'Campaign page must not imply a delivery fee or scent-free base product');
-assert.match(campaignScript, /product\\.image && product\\.image\\.src/u, 'Campaign cards must display the configured product image');
+assert.match(campaignScript, /product\.image && product\.image\\.src/u, 'Campaign cards must display the configured product image');
 assert.doesNotMatch(index, /خصم 15%|15%[^<]{0,40}شام كاش/u, 'Homepage must not advertise a 15% Sham Cash discount');
 assert.match(serum, /تحتوي المزيجات الحالية على زيوت وعطر/u, 'Serum page must disclose oils and fragrance');
 assert.match(serum, /نؤكد توفّره وسعره قبل الاعتماد/u, 'Customization must be confirmed before acceptance');
