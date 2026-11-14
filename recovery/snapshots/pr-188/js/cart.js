@@ -1427,4 +1427,437 @@
     lines.push(CONFIG.order.intro);
     lines.push('');
 
-  
+    p.entries.forEach(function (entry) {
+      var priced = unitOffer(entry.product);
+      var plan = planFor(entry.product, entry.qty, priced.cents);
+      var scentCents = toCents(scentFee()) * entry.qty;
+      var lineTotalCents = plan.totalCents + scentCents;
+      var labels = [];
+      if (priced.cutCents > 0) labels.push(priced.slot.label);
+      plan.sets.forEach(function (set) { labels.push(set.slot.label); });
+      lines.push('• ' + entry.product.name + ' · ' + entry.product.sizeLabel + ' × ' + entry.qty +
+        ' — ' + money(lineTotalCents / entry.qty / 100) + ' للواحدة = ' +
+        money(lineTotalCents / 100) +
+        (labels.length ? ' (بدل ' + money(entry.product.price) + ' — عرض «' + labels.join('» + «') + '»)' : ''));
+    });
+
+    if (custom.request && custom.request.trim()) {
+      lines.push('طلب تعديل الخلطة (غير مؤكد): ' + custom.request.trim());
+      lines.push('ملاحظة: نؤكد إمكانية التعديل وتوفره وسعره قبل الاعتماد؛ ولا تُضاف رسوم غير معتمدة إلى الإجمالي.');
+    }
+
+    lines.push('');
+    lines.push('قيمة المنتجات: ' + money(p.listCents / 100));
+    if (p.offerCents > 0) {
+      p.appliedOffers.forEach(function (item) {
+        lines.push('خصم عرض «' + item.slot.label + '»: − ' + money(item.cents / 100));
+      });
+    }
+
+    if (p.zone) {
+      lines.push('منطقة التوصيل: ' + p.zone.label);
+    }
+
+    if (p.method) {
+      if (p.discountCents > 0) {
+        lines.push('خصم ' + p.method.short + ' (' + p.method.discountPercent + '%): − ' +
+          money(p.discountCents / 100));
+      } else {
+        lines.push('خصم: لا يوجد (طريقة ' + p.method.short + ').');
+      }
+
+      // سياسة المتجر: التوصيل مجاني لكل المناطق ومع كل طرق الدفع (alwaysFree).
+      // كان النص يربطه بشام كاش («مجاني … مع شام كاش») فيوحي بأن الدفع عند الاستلام
+      // عليه رسوم، وهو خلاف القرار: خصم 10% على إجمالي الطلب المؤهل عند شام كاش فقط، والتوصيل مجاني دائمًا.
+      if (p.freeDelivery) {
+        var alwaysFree = !CONFIG.delivery || !CONFIG.delivery.policy || CONFIG.delivery.policy.alwaysFree !== false;
+        lines.push('التوصيل: مجاني (' + p.zone.label +
+          (alwaysFree ? ' — لكل طرق الدفع' : ' مع ' + p.method.short) + ').');
+      } else {
+        lines.push('رسوم التوصيل: ' + money(p.deliveryCents / 100) + ' (' + p.zone.label + ' مع ' + p.method.short + ').');
+      }
+
+      lines.push('طريقة الدفع المطلوبة: ' + p.method.label + '.');
+    }
+
+    lines.push('المجموع التقديري: ' + money(p.totalCents / 100));
+    if (custom.scent || custom.oil) {
+      var cfgC = CONFIG.customization || {};
+      lines.push('');
+      lines.push('التخصيص:');
+      if (custom.scent) {
+        var so = (cfgC.scentOptions || []).filter(function (o) { return o.id === custom.scent; })[0];
+        if (so) lines.push('• العطر: ' + so.label + (scentFee() ? ' (إضافة ' + money(scentFee()) + ' لكل عبوة، مشمولة أعلاه)' : ''));
+      }
+      if (custom.oil) {
+        var oo = (cfgC.oilAdditions || []).filter(function (o) { return o.id === custom.oil; })[0];
+        if (oo) lines.push('• إضافة زيت: ' + oo.label + ' (السعر غير مشمول ويؤكد في واتساب)');
+      }
+    }
+
+    lines.push('');
+    lines.push('أرجو تأكيد ما يلي:');
+    CONFIG.order.confirmationPoints.forEach(function (point, index) {
+      lines.push((index + 1) + ') ' + point);
+    });
+    lines.push('');
+    // اسم العملة يُقرأ من الإعدادات: النص الثابت كان يقول «بالدولار الأمريكي»
+    // بينما كل الأسعار المعروضة بالليرة السورية — تناقض يُربك الزائرة على واتساب.
+    lines.push('(' + CONFIG.brand.latinName + ' · ' + CONFIG.brand.arabicName +
+      ' — الأسعار المعتمدة بعملة (' + (CONFIG.currency && CONFIG.currency.code || CONFIG.currency && CONFIG.currency.symbol || 'SYP').trim() +
+      ')، وهذا الاستفسار لا يُعد طلبًا مؤكدًا حتى ردّكم.)');
+
+    return lines.join('\n');
+  }
+
+  /**
+   * قسم الصنعة — يُبنى من CONFIG.craft.
+   * السبب: أقوى رسالة ثقة في الصفحة يجب أن يكون مصدرها ملفًا واحدًا قابلًا للتعديل،
+   * لا HTML مكتوبًا يدويًا ينسى أحد تحديثه عند تغيّر المعلومة.
+   */
+  function renderCraft() {
+    var cfg = CONFIG.craft;
+    if (!cfg) return;
+    var host = document.querySelector('[data-craft]');
+    if (!host) return;
+
+    var list = host.querySelector('[data-craft-points]');
+    if (list) {
+      list.textContent = '';
+      (cfg.points || []).forEach(function (pt) {
+        var li = document.createElement('li');
+        li.className = 'craft-point';
+        var h = document.createElement('h3');
+        h.className = 'craft-point-title';
+        h.textContent = pt.title;
+        var b = document.createElement('p');
+        b.className = 'craft-point-body';
+        b.textContent = pt.body;
+        li.appendChild(h);
+        li.appendChild(b);
+        list.appendChild(li);
+      });
+    }
+    var sig = host.querySelector('[data-craft-signature]');
+    if (sig && cfg.signature) sig.textContent = cfg.signature;
+  }
+
+  /** روتين الاستخدام — من CONFIG.routines */
+  function renderRoutines() {
+    if (CONFIG.formulas) return;
+    var cfg = CONFIG.routines;
+    if (!cfg) return;
+    var host = document.querySelector('[data-routines]');
+    if (!host) return;
+    var list = host.querySelector('[data-routine-list]');
+    if (list) {
+      list.textContent = '';
+      (cfg.items || []).forEach(function (item) {
+        var li = document.createElement('li');
+        li.className = 'routine';
+        var when = document.createElement('span');
+        when.className = 'routine-when';
+        when.textContent = item.when;
+        var t = document.createElement('p');
+        t.className = 'routine-title';
+        t.textContent = item.title;
+        var b = document.createElement('p');
+        b.className = 'routine-body';
+        b.textContent = item.body;
+        li.appendChild(when); li.appendChild(t); li.appendChild(b);
+        list.appendChild(li);
+      });
+    }
+    var note = host.querySelector('[data-routine-note]');
+    if (note) note.textContent = cfg.note || '';
+  }
+
+  /** يبني قائمة اختيار العطر والزيت من CONFIG — لا خيارات مكتوبة يدويًا. */
+  function renderCustomPickers() {
+    var cfg = CONFIG.customization;
+    if (!cfg) return;
+    var scentHost = document.querySelector('[data-scent-options]');
+    var oilHost = document.querySelector('[data-oil-options]');
+
+    function build(host, options, field) {
+      if (!host) return;
+      host.textContent = '';
+      options.forEach(function (opt) {
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'chip';
+        btn.textContent = opt.label;
+        btn.setAttribute('aria-pressed', 'false');
+        btn.setAttribute('data-custom-' + field, opt.id);
+        btn.addEventListener('click', function () {
+          var same = custom[field] === opt.id;
+          setCustom(field, same ? '' : opt.id);
+        });
+        host.appendChild(btn);
+      });
+    }
+
+    build(scentHost, cfg.scentOptions || [], 'scent');
+    build(oilHost, cfg.oilAdditions || [], 'oil');
+    var requestInput = document.querySelector('[data-custom-request]');
+    if (requestInput && requestInput.getAttribute('data-bound') !== 'true') {
+      requestInput.value = custom.request || '';
+      requestInput.addEventListener('input', function () {
+        setCustomRequest(requestInput.value);
+      });
+      requestInput.setAttribute('data-bound', 'true');
+    }
+    syncCustomChips();
+    renderCustomSummary();
+  }
+
+  function checkout() {
+    if (totals().count === 0) {
+      announce('سلتك فارغة. اختاري المزيج والحجم، ثم أضيفيهما إلى السلة لمراجعة الإجمالي.');
+      return;
+    }
+
+    var url = waLink(buildOrderMessage());
+    var opened = null;
+
+    // في وضع عدم الاتصال لا نحاول فتح واتساب؛ نبقي الطلب محليًا ونبيّن أن شيئًا لم يُرسل.
+    if (navigator.onLine === false) {
+      showFallback(url);
+      announce('يبدو أن الاتصال غير متاح. لم يتم إرسال شيء؛ ستبقى السلة على هذه الصفحة. استخدمي رابط واتساب بعد عودة الاتصال.');
+      return;
+    }
+
+    try {
+      opened = window.open(url, '_blank', 'noopener,noreferrer');
+    } catch {
+      opened = null;
+    }
+
+    // مع noopener تعيد المتصفحات الحديثة null حتى عند نجاح الفتح، فلا يمكن
+    // اعتبار null دليل حظر. نُظهر الرابط البديل دائمًا بصياغة محايدة لا تدّعي فشلًا،
+    // ونترك للزبونة تأكيد ما حدث فعليًا في واتساب.
+    showFallback(url);
+    announce('إن لم تُفتح محادثة واتساب تلقائيًا، استخدمي الرابط البديل في السلة. راجعي المحادثة وأرسلي الرسالة بنفسك؛ لا يُعد الطلب مؤكدًا قبل ردّنا عليك.');
+    if (opened) {
+      try { opened.opener = null; } catch { /* تجاهل: لا شيء نفعله بالخطأ */ }
+    }
+  }
+
+  function showFallback(url) {
+    if (!el.fallback) return;
+    el.fallback.hidden = false;
+    if (el.fallbackLink) el.fallbackLink.setAttribute('href', url);
+    if (el.fallbackLink) el.fallbackLink.focus();
+  }
+
+  function hideFallback() {
+    if (el.fallback) el.fallback.hidden = true;
+    if (el.copyManual) el.copyManual.hidden = true;
+    if (el.copyStatus) el.copyStatus.textContent = '';
+  }
+
+  /** نسخ رابط السلة عند غياب المشاركة الأصلية أو تعذّرها. */
+  function copyShareUrl(url) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      try {
+        Promise.resolve(navigator.clipboard.writeText(url)).then(function () {
+          announce('تم نسخ رابط السلة.');
+        }, function () {
+          announce('تعذّر النسخ؛ انسخي الرابط يدويًا: ' + url);
+        });
+        return;
+      } catch { /* نعرض الرابط يدويًا عند فشل الحافظة المتزامن أيضًا */ }
+    }
+    announce('انسخي الرابط يدويًا: ' + url);
+  }
+
+  /** مشاركة السلة: Web Share API، مع رجوع للحافظة عند فشلها لا عند إلغائها. */
+  function shareCart(button) {
+    var url = button.getAttribute('data-share-url');
+    if (!url) return;
+    var text = 'أحجام وكميات من رواء — تحقّقي من المنطقة والدفع والخيارات عند فتح الرابط:';
+
+    if (navigator.share) {
+      try {
+        Promise.resolve(navigator.share({ title: 'سلة رواء', text: text, url: url }))
+          .catch(function (error) {
+            // الإلغاء فعل مقصود؛ أما فشل المشاركة التقني فيحتاج مسارًا بديلًا.
+            if (error && error.name === 'AbortError') return;
+            copyShareUrl(url);
+          });
+      } catch {
+        copyShareUrl(url);
+      }
+      return;
+    }
+    copyShareUrl(url);
+  }
+
+  function copyNumber(button) {
+    var number = CONFIG.contact.displayNumber;
+    var done = function (ok) {
+      button.textContent = ok ? 'تم نسخ الرقم ✓' : 'انسخي الرقم يدويًا: ' + number;
+      window.setTimeout(function () {
+        button.textContent = 'نسخ رقم واتساب';
+      }, 2600);
+    };
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(number).then(function () { done(true); }, function () { done(false); });
+    } else {
+      done(false);
+    }
+  }
+
+  /** نسخ الاستفسار يتم عند طلب الزائرة فقط ولا يرسل رسالة. */
+  function copyOrder() {
+    if (cartIsEmpty() || !el.copyText || !el.copyStatus || !el.copyManual) return;
+    var text = withSourceTag(buildOrderMessage());
+    el.copyText.value = text;
+    el.copyManual.hidden = true;
+    el.copyStatus.textContent = '';
+
+    function done(success) {
+      if (cartIsEmpty() || !el.dialog || !el.dialog.open) return;
+      if (text !== withSourceTag(buildOrderMessage())) {
+        el.copyStatus.textContent = 'تغيّرت السلة؛ أعيدي نسخ التفاصيل الحالية.';
+        return;
+      }
+      if (success) {
+        el.copyStatus.textContent = 'نُسخت التفاصيل. الصقيها في واتساب لإرسال استفسارك.';
+      } else {
+        el.copyManual.hidden = false;
+        el.copyStatus.textContent = 'تعذّر النسخ التلقائي؛ انسخي النص يدويًا.';
+      }
+      fitCartFooter();
+      if (!success) {
+        el.copyText.focus();
+        el.copyText.select();
+      }
+    }
+
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function () { done(true); }, function () { done(false); });
+      } else { done(false); }
+    } catch { done(false); }
+  }
+
+  /* ------------------------------ نافذة السلة ------------------------------ */
+
+  /** ألغِ تثبيت التذييل إن حجب المحتوى، بما في ذلك عند تكبير حجم النص. */
+  function fitCartFooter() {
+    if (!el.dialog || !el.dialog.open || !el.cartScroller || !el.cartHead || !el.foot) return;
+    var available = el.cartScroller.clientHeight;
+    var needed = el.cartHead.offsetHeight + (el.foot.hidden ? 0 : el.foot.offsetHeight) + 96;
+    el.cartScroller.classList.toggle('cart-inner--flow', available > 0 && needed > available);
+  }
+
+  function openCart(trigger) {
+    if (!el.dialog) return;
+    lastFocused = trigger || document.activeElement;
+    hideFallback();
+
+    if (typeof el.dialog.showModal === 'function') {
+      if (!el.dialog.open) el.dialog.showModal();
+    } else {
+      el.dialog.setAttribute('open', '');
+    }
+
+    document.body.classList.add('is-locked');
+    if (el.stickyBar) el.stickyBar.hidden = true;
+    fitCartFooter();
+    if (el.cartScroller) el.cartScroller.scrollTop = 0;
+    if (el.closeBtn) el.closeBtn.focus();
+  }
+
+  function closeCart() {
+    if (!el.dialog) return;
+    if (typeof el.dialog.close === 'function' && el.dialog.open) {
+      el.dialog.close();
+    } else {
+      el.dialog.removeAttribute('open');
+      afterClose();
+    }
+  }
+
+  function afterClose() {
+    document.body.classList.remove('is-locked');
+    renderCart();
+    if (lastFocused && typeof lastFocused.focus === 'function' && document.contains(lastFocused)) {
+      lastFocused.focus();
+    } else if (el.cartTriggers && el.cartTriggers[0]) {
+      el.cartTriggers[0].focus();
+    }
+  }
+
+  /** العناصر القابلة للتركيز داخل السلة، بالترتيب. */
+  function focusables() {
+    if (!el.dialog) return [];
+    var selector = 'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])';
+    return Array.prototype.filter.call(el.dialog.querySelectorAll(selector), function (node) {
+      return node.offsetParent !== null || node === document.activeElement;
+    });
+  }
+
+  /**
+   * احتجاز التركيز داخل النافذة: بعض المتصفحات لا تحجز التركيز
+   * بشكل موثوق في <dialog>، لذا نفرضه عند الحدّين.
+   */
+  function trapFocus(event) {
+    if (!el.dialog || !el.dialog.open || event.key !== 'Tab') return;
+    var items = focusables();
+    if (items.length === 0) return;
+
+    var first = items[0];
+    var last = items[items.length - 1];
+    var active = document.activeElement;
+    var inside = el.dialog.contains(active);
+
+    if (!inside) {
+      event.preventDefault();
+      (event.shiftKey ? last : first).focus();
+      return;
+    }
+    if (!event.shiftKey && active === last) {
+      event.preventDefault();
+      first.focus();
+    } else if (event.shiftKey && active === first) {
+      event.preventDefault();
+      last.focus();
+    }
+  }
+
+  /* ------------------------------ التنقل للهاتف ------------------------------ */
+
+  function setNav(open) {
+    if (!el.navPanel || !el.navToggle) return;
+    el.navPanel.hidden = !open;
+    el.navToggle.setAttribute('aria-expanded', String(open));
+    el.navToggle.setAttribute('aria-label', open ? 'إغلاق قائمة التنقل' : 'فتح قائمة التنقل');
+  }
+
+  /* ------------------------------ التهيئة ------------------------------ */
+
+  /**
+   * روابط عرض قابلة للمشاركة: ?offer=shamcash أو ?offer=cod
+   * تختار طريقة الدفع تلقائيًا، فيصل الزائر من منشور فيسبوك أو انستغرام
+   * إلى نفس الحساب الذي رآه في المنشور. لا تُرسَل أي بيانات، ولا يُنفَّذ أي كود من الرابط.
+   */
+  function applyOfferFromUrl(restoredMethod) {
+    var params;
+    try {
+      params = new URLSearchParams(window.location.search);
+    } catch {
+      return;
+    }
+    var wanted = params.get('offer');
+    if (!wanted) return;
+    var method = getMethod(wanted);
+    if (!method || method.id !== wanted) return;
+    // نطبّق رابط العرض عند الوصول إليه، لا كلما حدّثت الزائرة الصفحة بعد أن غيّرت رأيها.
+    try {
+      if (restoredMethod && window.history.state && window.history.state.rawaaAppliedOffer === wanted) return;
+    } catch { /* سجل المتصفح غير متاح؛ يبقى العرض هو الافتراضي */ }
+    selectedMethodId = method.id;
+    saveChoice
