@@ -61,6 +61,25 @@
 .campaign-hero-visual img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
 .campaign-hero-visual figcaption { padding: .6rem .45rem .15rem; color: var(--ink-soft); font-size: .71rem; line-height: 1.6; }
 .campaign-hero-visual figcaption span { color: var(--gold); padding-inline-end: .25rem; }
+.campaign-offer {
+  width: min(100% - 2rem, 76rem);
+  margin: 1rem auto 0;
+  padding: .85rem 1rem;
+  border: 1px solid var(--gold);
+  border-radius: .85rem;
+  background: var(--cream);
+  color: var(--ink);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: .35rem 1.1rem;
+  text-align: center;
+  font-size: .82rem;
+  line-height: 1.7;
+}
+.campaign-offer strong { color: var(--brown); }
+.campaign-offer span + span { border-inline-start: 1px solid var(--line); padding-inline-start: 1.1rem; }
 .campaign-proof {
   width: min(100% - 2rem, 76rem);
   margin: clamp(2rem, 5vw, 4rem) auto 0;
@@ -85,7 +104,11 @@
 .campaign-faq h2 { margin: 0; font-size: clamp(1.55rem, 4vw, 2.55rem); line-height: 1.4; }
 .campaign-section-head > p:last-child { margin: .65rem 0 0; color: var(--ink-soft); font-size: .9rem; max-width: 66ch; }
 .campaign-product-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .8rem; }
-.campaign-product-card { min-width: 0; padding: clamp(.8rem, 2.5vw, 1.25rem); border: 1px solid var(--line); border-radius: .85rem; background: var(--white); display: grid; align-content: start; gap: .35rem; }
+.campaign-product-card { min-width: 0; padding: clamp(.8rem, 2.5vw, 1.25rem); border: 1px solid var(--line); border-radius: .85rem; background: var(--white); display: grid; grid-template-columns: minmax(0, 1fr); align-content: start; gap: .65rem; }
+.campaign-product-visual { min-width: 0; margin: 0; }
+.campaign-product-visual img { width: 100%; aspect-ratio: 4 / 3; object-fit: contain; border-radius: .55rem; background: var(--cream); }
+.campaign-product-visual figcaption { margin-top: .25rem; color: var(--taupe); font-size: .62rem; line-height: 1.45; }
+.campaign-product-copy { min-width: 0; display: grid; align-content: start; gap: .35rem; }
 .campaign-product-card h3 { margin: 0; font-size: clamp(.92rem, 2vw, 1.1rem); }
 .campaign-product-price { margin: 0; font-family: var(--font-latin), var(--font-body); font-size: clamp(1.5rem, 4.5vw, 2.15rem); font-weight: 700; line-height: 1.2; direction: ltr; text-align: right; }
 .campaign-product-meta { margin: 0; color: var(--ink-soft); font-size: .73rem; line-height: 1.6; }
@@ -125,6 +148,8 @@
 }
 @media (max-width: 520px) {
   .campaign-proof { width: min(100% - 1.25rem, 76rem); }
+  .campaign-offer { width: min(100% - 1.25rem, 76rem); font-size: .76rem; }
+  .campaign-offer span + span { border-inline-start: 0; padding-inline-start: 0; }
   .campaign-proof p { padding-inline: .3rem; }
   .campaign-proof strong { font-size: .73rem; }
   .campaign-proof span { font-size: .62rem; }
@@ -135,6 +160,8 @@
     gap: .55rem;
   }
   .campaign-product-card { padding: .8rem .7rem; border-radius: .7rem; }
+  .campaign-product-visual img { aspect-ratio: 1 / 1; }
+  .campaign-product-visual figcaption { font-size: .58rem; }
   .campaign-product-card h3 { font-size: .88rem; line-height: 1.55; }
   .campaign-product-price { font-size: 1.5rem; }
   .campaign-product-meta { font-size: .74rem; line-height: 1.7; }
