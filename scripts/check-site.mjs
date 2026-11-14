@@ -58,6 +58,8 @@ assert.ok(config.delivery.zones.every((zone) => Number(zone.fee) === 0), 'All co
 
 assert.match(index, /خصم 10%/u, 'Homepage must display the approved 10% discount');
 assert.match(campaign, /خصم 10%/u, 'Campaign page must display the approved 10% discount');
+assert.match(campaign, /<link rel="canonical" href="https:\/\/raawaa-store\.pages\.dev\/campaign"/u, 'Campaign canonical must point to the campaign URL');
+assert.match(campaign, /<meta property="og:url" content="https:\/\/raawaa-store\.pages\.dev\/campaign"/u, 'Campaign Open Graph URL must point to the campaign URL');
 assert.match(ownerPricing, /الليرة السورية/u, 'Owner pricing editor must use the current SYP currency');
 assert.doesNotMatch(ownerPricing, /الدولار الأمريكي|بالدولار/u, 'Owner pricing editor must not present stale USD labels');
 assert.match(ownerSettings, /currency: 'SYP'/u, 'Owner dashboard currency default must be SYP');
