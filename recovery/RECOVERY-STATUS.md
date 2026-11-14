@@ -35,7 +35,7 @@ Last updated: 2026-11-14
 - Last inspected production deployment: `10b28454-da98-4bb7-9172-ee947a93a9e3`, dated 2026-11-08, 199 deployed files.
 - Cloudflare Pages is configured for Direct Upload. GitHub merge to `main` does not deploy the website.
 - No production deployment, DNS change, Supabase write, migration, secret change, or customer-facing change was made during source restoration.
-- The public production copy and recovered source are different checkpoints: the live deployment was last observed advertising 15% Sham Cash, while the recovered source intentionally encodes the PR #188 10% policy. This difference must be reviewed before any deployment.
+- **Owner decision updated 2026-11-14: 10% is the sole canonical Sham Cash discount.** The 15% banner observed on the older 2026-11-08 production deployment is superseded historical state, not an active offer. Do not copy it into any new release. The recovered `main` source already encodes 10%; the live production URL still needs a controlled 10% release after preview validation.
 
 ## Domain status — separate issue
 
@@ -52,7 +52,7 @@ Last updated: 2026-11-14
 ## Remaining work before any release
 
 1. Complete a mobile Safari/iPhone functional pass on an isolated preview: product selection, pricing, cart, WhatsApp message composition, privacy, and owner login.
-2. Reconcile the live 15% policy with the recovered 10% policy and confirm the intended canonical policy before release.
+2. Verify the isolated preview displays 10% Sham Cash discount consistently on every page and in all checkout calculations. The owner has already confirmed 10%; do not ask to reconfirm.
 3. Verify restored text/binary assets against Cloudflare deployment hashes where practical.
 4. Resolve the `rawaa.eu.org` parent delegation only after confirming it is the intended customer-facing domain.
 5. Prepare an isolated Cloudflare Direct Upload preview using Wrangler; only promote to production after the preview is approved.
