@@ -82,6 +82,12 @@ assert.equal(config.customization?.scentOptions?.length || 0, 0, 'No unapproved 
 assert.equal(config.customization?.oilAdditions?.length || 0, 0, 'No unapproved oil additions may be published');
 assert.match(serum, /تصوّر تصميمي/u, 'Serum imagery must be identified as conceptual');
 assert.ok(cart.length > 85000, 'Cart source must be the complete recovered version, not the truncated PR #188 snapshot');
+assert.match(cart, /function ensureCartDialog\(\)/u, 'Cart dialog must be supplied on the serum page');
+assert.match(cart, /id="cart-dialog"/u, 'Cart dialog markup must have its expected ID');
+assert.match(cart, /data-cart-items/u, 'Cart dialog must include its item list');
+assert.match(cart, /data-cart-foot/u, 'Cart dialog must include its checkout footer');
+assert.match(cart, /data-cart-checkout/u, 'Cart dialog must include the WhatsApp checkout action');
+assert.match(cart, /ensureCartDialog\(\);\s*el\.toastRegion/u, 'Cart dialog must be injected before cart initialization');
 assert.match(views, /showView\('bottle'\);/, 'Serum image selector must default to the bottle view');
 
 const jsonLd = [...serum.matchAll(/<script[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)].map((match) => match[1]);

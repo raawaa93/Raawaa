@@ -1950,7 +1950,67 @@
     return base + '?cart=' + encodeURIComponent(payload) + '#products';
   }
 
+  function ensureCartDialog() {
+    if (document.getElementById('cart-dialog')) return;
+
+    // نافذة السلة جزء من واجهة صفحة السيروم. لا نعتمد على صفحة /cart مستقلة.
+    // نضيف الهيكل الثابت قبل init حتى لا تتوقف بقية الواجهة عند غياب عناصر الحوار.
+    var template = document.createElement('template');
+    template.innerHTML = `
+      <dialog id="cart-dialog" class="cart-drawer" aria-labelledby="cart-title">
+        <div class="cart-inner">
+          <header class="cart-head">
+            <h2 id="cart-title">سلة رواء</h2>
+            <button type="button" class="icon-btn" data-cart-close aria-label="إغلاق السلة">×</button>
+          </header>
+          <div class="cart-body">
+            <p class="cart-empty" data-cart-empty>سلتك فارغة الآن. اختاري المزيج والحجم لإضافتهما إلى السلة.</p>
+            <ul class="cart-items" data-cart-items aria-label="المنتجات في السلة"></ul>
+            <p class="cart-custom-summary" data-cart-custom-summary hidden></p>
+            <p class="cart-shared-notice" data-cart-shared-notice hidden>أُضيفت اختيارات الرابط إلى سلتك. راجعي الكميات والتفاصيل قبل المتابعة.</p>
+            <div data-cart-order-options hidden>
+              <fieldset data-delivery-zones></fieldset>
+              <fieldset data-payment-methods></fieldset>
+              <p class="zone-inline" data-zone-label></p>
+              <dl class="cart-summary">
+                <div class="sum-row" data-row-subtotal><dt>قيمة المنتجات</dt><dd data-cart-subtotal></dd></div>
+                <div class="sum-row sum-offer" data-row-offer hidden><dt data-offer-label>العرض</dt><dd data-cart-offer></dd></div>
+                <div class="sum-row sum-discount" data-row-discount hidden><dt data-discount-label>الخصم</dt><dd data-cart-discount></dd></div>
+                <div class="sum-row" data-row-delivery><dt>التوصيل</dt><dd data-cart-delivery>مجاني</dd></div>
+              </dl>
+              <p class="margin-note" data-margin-note hidden></p>
+              <p class="cart-total-note" data-cart-total-note></p>
+              <div class="cart-share">
+                <button type="button" class="btn btn-ghost" data-cart-share hidden>مشاركة السلة</button>
+                <p class="cart-share-note">يمكنك مشاركة اختيارات الأحجام والكميات فقط.</p>
+              </div>
+              <div class="cart-fallback" data-cart-fallback hidden>
+                <p>راجعي الرسالة ثم أرسليها بنفسك عبر واتساب؛ لم يُرسل أي شيء تلقائيًا.</p>
+                <a class="fallback-link" data-cart-fallback-link href="#" target="_blank" rel="noopener noreferrer">فتح رسالة واتساب</a>
+                <p class="fallback-alt">أو انسخي رقم التواصل:</p>
+                <button type="button" class="btn btn-ghost" data-cart-copy-number>نسخ رقم واتساب</button>
+                <button type="button" class="btn btn-ghost cart-copy-order" data-cart-copy-order>نسخ تفاصيل الطلب</button>
+                <p class="cart-copy-status" data-cart-copy-status role="status" aria-live="polite"></p>
+                <div data-cart-copy-manual hidden>
+                  <label for="cart-copy-text">انسخي النص يدويًا</label>
+                  <textarea id="cart-copy-text" data-cart-copy-text readonly rows="7"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+          <footer class="cart-foot" data-cart-foot hidden>
+            <div class="cart-total"><span>الإجمالي التقديري</span><strong data-cart-total></strong></div>
+            <p class="cart-context" data-cart-context></p>
+            <button type="button" class="btn btn-primary" data-cart-checkout>متابعة عبر واتساب</button>
+            <p class="cart-disclaimer">لا يُرسل الموقع رسالة أو يؤكد طلبًا تلقائيًا. راجعي الرسالة وأرسليها بنفسك.</p>
+          </footer>
+        </div>
+      </dialog>`;
+    document.body.appendChild(template.content.cloneNode(true));
+  }
+
   function init() {
+    ensureCartDialog();
     el.toastRegion = document.querySelector('[data-toast-region]');
     el.count = document.querySelector('[data-cart-count]');
     el.dialog = document.getElementById('cart-dialog');
