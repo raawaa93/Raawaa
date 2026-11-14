@@ -1,6 +1,8 @@
 import { test, expect } from '@playwright/test';
 
 test('Serum selection, cart quantity, and payment estimate stay synchronized', async ({ page }) => {
+  const pageErrors = [];
+  page.on('pageerror', error => pageErrors.push(error.message));
   await page.goto('/serum.html', { waitUntil: 'domcontentloaded' });
 
   // The formula and size selection must drive the actual product ID added to cart.
@@ -20,7 +22,10 @@ test('Serum selection, cart quantity, and payment estimate stay synchronized', a
 
   // Adding the chosen size must populate and open the cart, then quantity controls
   // must update the item count and line total.
-  await page.locator('[data-add-current]').click();
+  const addButton = page.locator('[data-add-current]');
+  await expect(addButton).toBeEnabled();
+  await expect(addButton).toHaveAttribute('data-add-to-cart', 'rosemary-caffeine-100');
+  await addButton.click();
   await expect(page.locator('#cart-dialog')).toBeVisible();
   await expect(page.locator('[data-cart-count]')).toHaveText('1');
   const item = page.locator('[data-cart-item="rosemary-caffeine-100"]');
@@ -30,4 +35,5 @@ test('Serum selection, cart quantity, and payment estimate stay synchronized', a
   await item.locator('[data-qty-increase]').click();
   await expect(item.locator('[data-qty-value]')).toHaveText('2');
   await expect(item.locator('.cart-item-line')).toContainText('5,600');
+  expect(pageErrors).toEqual([]);
 });
