@@ -66,6 +66,36 @@ Key findings:
 - This proves that `rawaa.eu.org` was added to the current Cloudflare account/project configuration; it does **not** prove that this is the user's intended or historical Store domain.
 - Do not change nameservers, DNS records, or Pages custom-domain settings until the intended production domain is established from historical configuration or explicit confirmation.
 
+## Recovered source snapshots from successful preview deployments
+Using Cloudflare Browser Rendering, actual HTML and text assets were retrieved from authorized public Pages preview URLs and committed into isolated snapshot directories on this recovery branch. The recovered files are snapshots, not a merged production candidate.
+
+### PR #188
+- `recovery/snapshots/pr-188/index.html`
+- `recovery/snapshots/pr-188/serum.html`
+- `recovery/snapshots/pr-188/hama-route.html` (the preview route redirected to the Serum page; this is recorded as a redirect result, not a standalone Hama source page)
+- `recovery/snapshots/pr-188/js/config.js` (UTF-8 Arabic encoding was repaired and verified after Browser Rendering's plain-text wrapper exposed a Windows-1252 mojibake representation)
+
+### PR #197
+- `recovery/snapshots/pr-197/index.html`
+- `recovery/snapshots/pr-197/js/config.js`
+
+### PR #205
+- `recovery/snapshots/pr-205/index.html`
+- `recovery/snapshots/pr-205/serum`
+- `recovery/snapshots/pr-205/privacy`
+- `recovery/snapshots/pr-205/js/config.js`
+- `recovery/snapshots/pr-205/js/marketing.js`
+- `recovery/snapshots/pr-205/js/formula-cards.js`
+- `recovery/snapshots/pr-205/js/index-inline.js`
+- `recovery/snapshots/pr-205/css/home-inline.css`
+- `recovery/snapshots/pr-205/css/utilities.css`
+- `recovery/snapshots/pr-205/css/three-formulas.css`
+
+Each committed file was read back from GitHub and compared byte-for-byte with the retrieved content. Binary media/fonts/images are not yet restored into these snapshot directories.
+
+## Commercial configuration divergence — do not consolidate automatically
+The recovered PR #188 `js/config.js` sets Sham Cash discount to **10%**. The recovered PR #205 `js/config.js` sets it to **15%**. Both contain the same displayed SYP product price ladder (2,000/2,400/2,800 for Rosemary-Caffeine and 1,800/2,200/2,600 for the other two formulas), but the discount changed between checkpoints. The PR #205 homepage copy also says 15%. This is a real version difference, not merely the stale comment already identified in the pricing policy. Preserve both snapshots and do not select a final commercial policy without reconciling the intended approved change.
+
 ## Access limitation
 - The connected GitHub identity for `ghith93` currently receives HTTP 403 with GitHub's message that the account is suspended.
 - The connected `raawaa93` identity can access `raawaa93/Raawaa`, but the original `ghith93/Raawaa-store` repository returns 404 from that identity.
