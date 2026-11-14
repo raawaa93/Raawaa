@@ -1,0 +1,1626 @@
+{
+  "generated_at": "2026-11-14",
+  "source": "GitHub main source snapshot, approved 10% Sham Cash policy",
+  "project": "raawaa-store",
+  "scope_note": "Candidate deployment manifest for the recovered 10% source. Two unavailable Hama MP4s are intentionally excluded; all remaining source paths are mapped and checked before deployment.",
+  "production": {
+    "deployment_id": null,
+    "url": null,
+    "created_on": "2026-11-08T06:18:43.549584Z",
+    "branch": "main",
+    "commit_hash": "e86b349e6da63733ceb6f9849033a29dd71c0eb4",
+    "uses_functions": false,
+    "file_count": 198,
+    "files": [
+      {
+        "path": "/.nojekyll",
+        "hash": "af1349b9f5f9a1a6a0404dea36dcc949"
+      },
+      {
+        "path": "/404.html",
+        "hash": "1bd7375b05b98caf70c93e514fe420a1"
+      },
+      {
+        "path": "/assets/brand/logo-mark-v2.svg",
+        "hash": "1f0df51befc1441fcb0685a31925445c"
+      },
+      {
+        "path": "/assets/brand/logo-primary-v2-dark.svg",
+        "hash": "ebaa6c6593194aca90c9ad93764b7e56"
+      },
+      {
+        "path": "/assets/brand/logo-primary-v2.svg",
+        "hash": "6edf73405de64f20cfc047d202d4cb2e"
+      },
+      {
+        "path": "/assets/favicon.svg",
+        "hash": "7ab8aaa48f06c43b5b342fb87a7b0d5e"
+      },
+      {
+        "path": "/assets/fonts/cormorant-500-latin.subset.woff2",
+        "hash": "a41f8f83eed6b4585a914850035b50b7"
+      },
+      {
+        "path": "/assets/fonts/licenses/OFL-CormorantGaramond.txt",
+        "hash": "9a2b60f4f9949d865bb7d842910190b2"
+      },
+      {
+        "path": "/assets/fonts/licenses/OFL-IBMPlexSansArabic.txt",
+        "hash": "8dc94b22fd542a3d834ccdf830f82073"
+      },
+      {
+        "path": "/assets/fonts/plexar-400.subset.woff2",
+        "hash": "266df2dd7551ec620b9b14ffcb167996"
+      },
+      {
+        "path": "/assets/fonts/plexar-700.subset.woff2",
+        "hash": "7799d131f8eb374f7fd92adb0b77fe3b"
+      },
+      {
+        "path": "/assets/fonts/plexar-bold-latin.subset.woff2",
+        "hash": "9067f1c5b242d4075e3c8d58145ecb30"
+      },
+      {
+        "path": "/assets/fonts/plexar-latin.subset.woff2",
+        "hash": "2145b28b8523661d27b9496d895e7496"
+      },
+      {
+        "path": "/assets/icons/apple-touch-icon.png",
+        "hash": "a05f7fe131b1a23249972c45f383aa14"
+      },
+      {
+        "path": "/assets/icons/favicon-64.png",
+        "hash": "317558865bb33e173a05a6a7533bfe3b"
+      },
+      {
+        "path": "/assets/icons/icon-192.png",
+        "hash": "5ba382853e3d8324aef2d1002d3ab7a8"
+      },
+      {
+        "path": "/assets/icons/icon-512.png",
+        "hash": "ed4ebf7e1f1606e650cb1756a7c14221"
+      },
+      {
+        "path": "/assets/icons/icon-maskable-512.png",
+        "hash": "509840ab3ba588d04d0f279482754020"
+      },
+      {
+        "path": "/assets/img/campaign/quiet-finish-editorial-v1-1080.avif",
+        "hash": "8ff8a3e0460bb1f72da4be842257fa15"
+      },
+      {
+        "path": "/assets/img/campaign/quiet-finish-editorial-v1-1080.jpg",
+        "hash": "cb0b22eba38fe0b5de7f203f4b485e3a"
+      },
+      {
+        "path": "/assets/img/campaign/quiet-finish-editorial-v1-1080.webp",
+        "hash": "a734fe736ad234c9473b9674548fb6ec"
+      },
+      {
+        "path": "/assets/img/campaign/quiet-finish-editorial-v1-480.avif",
+        "hash": "2263415343514ca42c7fd65951c9697a"
+      },
+      {
+        "path": "/assets/img/campaign/quiet-finish-editorial-v1-480.webp",
+        "hash": "18e4f8840e001753637541915156c411"
+      },
+      {
+        "path": "/assets/img/campaign/quiet-finish-editorial-v1-720.avif",
+        "hash": "cddf773820e0a2f6b9427c6f582de0ca"
+      },
+      {
+        "path": "/assets/img/campaign/quiet-finish-editorial-v1-720.webp",
+        "hash": "4a612709f2dcc2fdac1f3f020ac1ddda"
+      },
+      {
+        "path": "/assets/img/hama/card-30-entry.jpg",
+        "hash": "b6b9ce7b5a3fb25bb73aaf57342de0c8"
+      },
+      {
+        "path": "/assets/img/hama/card-50-hero.jpg",
+        "hash": "0196b7f0e3fa14f698a631812ff3542d"
+      },
+      {
+        "path": "/assets/img/hama/card-compare.jpg",
+        "hash": "86ce48ee7dbd9d79c73486b4071b2f21"
+      },
+      {
+        "path": "/assets/img/hama/card-payment.jpg",
+        "hash": "063cda41104399c46cd52045a801b6cf"
+      },
+      {
+        "path": "/assets/img/hama/card-reel-cover.jpg",
+        "hash": "667d6912af22920db18837aef121f1c0"
+      },
+      {
+        "path": "/assets/img/hama/duo-sizes.jpg",
+        "hash": "682f9053ea1742ed9b1b7949313349dd"
+      },
+      {
+        "path": "/assets/img/hama/hama-window.jpg",
+        "hash": "dfa2042171a210ab49c560d30cfb2446"
+      },
+      {
+        "path": "/assets/img/hama/hero-30.jpg",
+        "hash": "e15765edce714d1a18d0d96ad1bd3dc6"
+      },
+      {
+        "path": "/assets/img/hama/hero-50.jpg",
+        "hash": "e8bb1442bb81dd9d9d42fe7d0e195bcb"
+      },
+      {
+        "path": "/assets/img/hama/lifestyle-hands.jpg",
+        "hash": "731399e04bbb4caf969adbbb01c772a8"
+      },
+      {
+        "path": "/assets/img/hama/outro.jpg",
+        "hash": "40209aa801e68548f1dff73c0a0a6c5a"
+      },
+      {
+        "path": "/assets/img/hama/payment/sham-cash-qr.png",
+        "hash": "e28a6c9148ba0f586d3930d777ea5863"
+      },
+      {
+        "path": "/assets/img/hama/reel-50ml.ar.vtt",
+        "hash": "a8573bfd2c92cdc49f81137afcfe6009"
+      },
+      {
+        "path": "/assets/img/hama/reel-hama.ar.vtt",
+        "hash": "febe75a5b3b82b6dcbaca7b79f54e27f"
+      },
+      {
+        "path": "/assets/img/hama/salon-shelf.jpg",
+        "hash": "39844e3597824ec2cc424c5f3d657ce4"
+      },
+      {
+        "path": "/assets/img/hama/story-bg.jpg",
+        "hash": "ef6d20012f5b07621f7105da7f101c8c"
+      },
+      {
+        "path": "/assets/img/products/castor-blend-emblem.svg",
+        "hash": "258902731bd87cd9b2cadb964d73115a"
+      },
+      {
+        "path": "/assets/img/products/castor-blend-label.svg",
+        "hash": "2be8dc5422145c5d5751cf9a4670703f"
+      },
+      {
+        "path": "/assets/img/products/detail-label-v4-720.jpg",
+        "hash": "e15c6336cc30c0379480d5e4c2486b8f"
+      },
+      {
+        "path": "/assets/img/products/detail-label-v5-480.avif",
+        "hash": "aa0ace3f84ba99d2688031d740192450"
+      },
+      {
+        "path": "/assets/img/products/detail-label-v5-480.webp",
+        "hash": "7969d9f1538f80dfa25c13729a8f9261"
+      },
+      {
+        "path": "/assets/img/products/detail-label-v5-720.avif",
+        "hash": "1ec95c4e435c9d30a734bd94a6cdf953"
+      },
+      {
+        "path": "/assets/img/products/detail-label-v5-720.jpg",
+        "hash": "c561762fc6786ca8cb10d3d1f7bf59a6"
+      },
+      {
+        "path": "/assets/img/products/detail-label-v5-720.webp",
+        "hash": "f5224214a21d399717f812c3dc62293f"
+      },
+      {
+        "path": "/assets/img/products/detail-label-v5-900.avif",
+        "hash": "e0b33cb18829e62b0b675e9ddadfab54"
+      },
+      {
+        "path": "/assets/img/products/detail-label-v5-900.webp",
+        "hash": "4717af70e7051d46259c6c282d44dca9"
+      },
+      {
+        "path": "/assets/img/products/editorial-v4-720.jpg",
+        "hash": "217ed85fb93d08672a181e92be2fba54"
+      },
+      {
+        "path": "/assets/img/products/editorial-v5-480.avif",
+        "hash": "f01b1cff2e759a1849278754f33c9907"
+      },
+      {
+        "path": "/assets/img/products/editorial-v5-480.webp",
+        "hash": "ab38dbeb24beaa77c53e36c0870a2799"
+      },
+      {
+        "path": "/assets/img/products/editorial-v5-720.avif",
+        "hash": "062ebf8d6949fcf5980bc0375eafc620"
+      },
+      {
+        "path": "/assets/img/products/editorial-v5-720.jpg",
+        "hash": "125fc94263732eb3a5118d21a0a07d4c"
+      },
+      {
+        "path": "/assets/img/products/editorial-v5-720.webp",
+        "hash": "556703bc383c80fc891db55e6d77fc04"
+      },
+      {
+        "path": "/assets/img/products/editorial-v5-900.avif",
+        "hash": "b62112febf21a11c381b5853341c7fc4"
+      },
+      {
+        "path": "/assets/img/products/editorial-v5-900.webp",
+        "hash": "109e6936de2a5f88c3deb16d6dde40ce"
+      },
+      {
+        "path": "/assets/img/products/hero-wide-v3-v4-1080.avif",
+        "hash": "4ea288a7f6805f35987508aa70e6a500"
+      },
+      {
+        "path": "/assets/img/products/manifest.json",
+        "hash": "a1658d7df3468fa1aa55c286e88959c9"
+      },
+      {
+        "path": "/assets/img/products/og-image-v4-1200.jpg",
+        "hash": "303509e3375e6a164444bd98bf18636e"
+      },
+      {
+        "path": "/assets/img/products/og-image-v5-1200.jpg",
+        "hash": "e213a9a380195dc7bb09ba6644f32477"
+      },
+      {
+        "path": "/assets/img/products/og-image-v6-1200.jpg",
+        "hash": "91eade9f82cbbe868b1939a9ea4d2178"
+      },
+      {
+        "path": "/assets/img/products/olive-panthenol-emblem.svg",
+        "hash": "d85a720e46dedba009f17c6120496b95"
+      },
+      {
+        "path": "/assets/img/products/olive-panthenol-label.svg",
+        "hash": "4308d0d20d5add170da2b9d94158c3b2"
+      },
+      {
+        "path": "/assets/img/products/rawaa-castor.jpg",
+        "hash": "e41b002b93271856888880be208ffeaa"
+      },
+      {
+        "path": "/assets/img/products/rawaa-olive.jpg",
+        "hash": "e3ba2580928d2e8df60ce8e05e29e230"
+      },
+      {
+        "path": "/assets/img/products/rawaa-rosemary.jpg",
+        "hash": "bdbbe133396d3d3b3e3a68a19321cd64"
+      },
+      {
+        "path": "/assets/img/products/ritual-v5-1080.avif",
+        "hash": "0db8f757b0298cea22babeea037348ff"
+      },
+      {
+        "path": "/assets/img/products/ritual-v5-1080.webp",
+        "hash": "1f2d33c5245529f2066185437a353611"
+      },
+      {
+        "path": "/assets/img/products/ritual-v5-480.avif",
+        "hash": "5ad19bd723fbe6df809295521706cdde"
+      },
+      {
+        "path": "/assets/img/products/ritual-v5-480.webp",
+        "hash": "240c0581d817a3cb49474ecec2d0d693"
+      },
+      {
+        "path": "/assets/img/products/ritual-v5-720.avif",
+        "hash": "f6a88d26b76730632f0d7b07831fed4d"
+      },
+      {
+        "path": "/assets/img/products/ritual-v5-720.jpg",
+        "hash": "d92fd2a24c550a8cc050f1403b259a2b"
+      },
+      {
+        "path": "/assets/img/products/ritual-v5-720.webp",
+        "hash": "8e473997402d30c0c1ebd0ff8b7b56ed"
+      },
+      {
+        "path": "/assets/img/products/rosemary-caffeine-emblem.svg",
+        "hash": "fe9163736646602b8350df37a187b68d"
+      },
+      {
+        "path": "/assets/img/products/rosemary-caffeine-label.svg",
+        "hash": "c32b3d1850fd6668c39f488d789a4d0d"
+      },
+      {
+        "path": "/assets/img/products/size-100-v4-720.jpg",
+        "hash": "7c3ee66fd20983f44c1adb6e671f5825"
+      },
+      {
+        "path": "/assets/img/products/size-100-v4-720.webp",
+        "hash": "2b1eb1dae303eac2344403f731927d8e"
+      },
+      {
+        "path": "/assets/img/products/size-100-v5-480.avif",
+        "hash": "d6fe0c98573cb7f517637c6b0ba98d66"
+      },
+      {
+        "path": "/assets/img/products/size-100-v5-480.webp",
+        "hash": "9bda6b883a11eb9bfda422587a142742"
+      },
+      {
+        "path": "/assets/img/products/size-100-v5-720.avif",
+        "hash": "ee562899bc4bfc0c40c3f0ecaf8f3a90"
+      },
+      {
+        "path": "/assets/img/products/size-100-v5-720.jpg",
+        "hash": "1bc9810c6ecf54f1f9979256f55185e8"
+      },
+      {
+        "path": "/assets/img/products/size-100-v5-720.webp",
+        "hash": "febf173bf467cfaa36d516a0bdaa331d"
+      },
+      {
+        "path": "/assets/img/products/size-100-v5-900.avif",
+        "hash": "056ef058a36b4cc4fb5bf653d4deb084"
+      },
+      {
+        "path": "/assets/img/products/size-100-v5-900.webp",
+        "hash": "2d00ef19c25c06eb3b473005f715e45e"
+      },
+      {
+        "path": "/assets/img/products/size-100-v6-480.avif",
+        "hash": "c2eac6f76ed2f6c1317db9b127669cac"
+      },
+      {
+        "path": "/assets/img/products/size-100-v6-480.jpg",
+        "hash": "6b41db0fee94c5acb40787d3bf5a96b1"
+      },
+      {
+        "path": "/assets/img/products/size-100-v6-480.webp",
+        "hash": "3dc50cfceb319a4eb4134a11e3372f93"
+      },
+      {
+        "path": "/assets/img/products/size-100-v6-720.avif",
+        "hash": "3b79b43def1e3c9b3e432edd862cfce3"
+      },
+      {
+        "path": "/assets/img/products/size-100-v6-720.jpg",
+        "hash": "bf3568addd551d0c34429c5e54c0ebdb"
+      },
+      {
+        "path": "/assets/img/products/size-100-v6-720.webp",
+        "hash": "08cf72273d47a95304b6b1a24090b55d"
+      },
+      {
+        "path": "/assets/img/products/size-100-v6-900.avif",
+        "hash": "de764766b0db25225251a1851ac5da7c"
+      },
+      {
+        "path": "/assets/img/products/size-100-v6-900.webp",
+        "hash": "bdf0f330260d9c0b62f8a35457ceac50"
+      },
+      {
+        "path": "/assets/img/products/size-30-v4-720.jpg",
+        "hash": "00da3d25331a7ecb8ae514d204360ea6"
+      },
+      {
+        "path": "/assets/img/products/size-30-v4-720.webp",
+        "hash": "7b341a761d511eb471761d5f4bad44a9"
+      },
+      {
+        "path": "/assets/img/products/size-30-v5-480.avif",
+        "hash": "9c3a8da4bfdbb2767b796d50c9d3b911"
+      },
+      {
+        "path": "/assets/img/products/size-30-v5-480.webp",
+        "hash": "dae4f6958a655f741db5b05c7c2fc358"
+      },
+      {
+        "path": "/assets/img/products/size-30-v5-720.avif",
+        "hash": "2a41393381a55c2846fd07b210f8dbf1"
+      },
+      {
+        "path": "/assets/img/products/size-30-v5-720.jpg",
+        "hash": "02047c86c2de9ea0fb5b783b55b8a182"
+      },
+      {
+        "path": "/assets/img/products/size-30-v5-720.webp",
+        "hash": "568f91945008659c795ba81ac0143308"
+      },
+      {
+        "path": "/assets/img/products/size-30-v5-900.avif",
+        "hash": "e82f6a854b8db2fc607ff08e4f3d59c7"
+      },
+      {
+        "path": "/assets/img/products/size-30-v5-900.webp",
+        "hash": "620a47e4784fe6077d4e99e4604dc5de"
+      },
+      {
+        "path": "/assets/img/products/size-30-v6-480.avif",
+        "hash": "49b5a2d92afdacebe3d9754f2b88bff0"
+      },
+      {
+        "path": "/assets/img/products/size-30-v6-480.jpg",
+        "hash": "e8d63ddb127b48debf292cbe59d28ba8"
+      },
+      {
+        "path": "/assets/img/products/size-30-v6-480.webp",
+        "hash": "99f0d48ca304d23c083f09b1b5b84f6e"
+      },
+      {
+        "path": "/assets/img/products/size-30-v6-720.avif",
+        "hash": "5f23c406c61c05271b89ce41aca23b57"
+      },
+      {
+        "path": "/assets/img/products/size-30-v6-720.jpg",
+        "hash": "9c6a50243164a00e62def037119c31ae"
+      },
+      {
+        "path": "/assets/img/products/size-30-v6-720.webp",
+        "hash": "d167d3e600eb4b38332c46fb6b4ccb88"
+      },
+      {
+        "path": "/assets/img/products/size-30-v6-900.avif",
+        "hash": "a98c75f49e1e3b2276f78c3bbfa258d0"
+      },
+      {
+        "path": "/assets/img/products/size-30-v6-900.webp",
+        "hash": "8492fab22216fc9ccbf659ffa72a78c1"
+      },
+      {
+        "path": "/assets/img/products/size-50-v4-720.jpg",
+        "hash": "9905dea01af6f173ec5064e86267dfd6"
+      },
+      {
+        "path": "/assets/img/products/size-50-v4-720.webp",
+        "hash": "0b51b5ac552d76d5d693fa70093d653c"
+      },
+      {
+        "path": "/assets/img/products/size-50-v5-480.avif",
+        "hash": "9c394930e08d2898cc0d77e6c79557ac"
+      },
+      {
+        "path": "/assets/img/products/size-50-v5-480.webp",
+        "hash": "dfed1f8b446cb8e7503538e3014047d3"
+      },
+      {
+        "path": "/assets/img/products/size-50-v5-720.avif",
+        "hash": "20617a664e587379b0deed5a7c30de0b"
+      },
+      {
+        "path": "/assets/img/products/size-50-v5-720.jpg",
+        "hash": "d270f992003d6686a90aa82593623427"
+      },
+      {
+        "path": "/assets/img/products/size-50-v5-720.webp",
+        "hash": "12d2e0e8c495e907b635c27a5e486cce"
+      },
+      {
+        "path": "/assets/img/products/size-50-v5-900.avif",
+        "hash": "d20463e5058df1e13e3fb29ed9b194d7"
+      },
+      {
+        "path": "/assets/img/products/size-50-v5-900.webp",
+        "hash": "4f58f8331ed33ee597f6fbf040162365"
+      },
+      {
+        "path": "/assets/img/products/size-50-v6-480.avif",
+        "hash": "ae818eb70133d9caf4b8d177767a7ef9"
+      },
+      {
+        "path": "/assets/img/products/size-50-v6-480.jpg",
+        "hash": "50a5fa8d093006396b5c7b6c8b2b5bc3"
+      },
+      {
+        "path": "/assets/img/products/size-50-v6-480.webp",
+        "hash": "0ca59bb9726519169c2cc8cedd347aef"
+      },
+      {
+        "path": "/assets/img/products/size-50-v6-720.avif",
+        "hash": "72ff4df13382b3780ab5ad7d78ea5c65"
+      },
+      {
+        "path": "/assets/img/products/size-50-v6-720.jpg",
+        "hash": "fd0d03431fe7c9f247a17e15fda87334"
+      },
+      {
+        "path": "/assets/img/products/size-50-v6-720.webp",
+        "hash": "a140e81ad6d8f8f619eeefe4c3679d5e"
+      },
+      {
+        "path": "/assets/img/products/size-50-v6-900.avif",
+        "hash": "c6b7ee54297bb5b33ba6ea0f81f7bd7e"
+      },
+      {
+        "path": "/assets/img/products/size-50-v6-900.webp",
+        "hash": "cd5294c7d6ab3ad4547b86142c1f8d7a"
+      },
+      {
+        "path": "/assets/img/products/social-square-v4-1080.avif",
+        "hash": "deae6f1133a0160c0c859d2ef69f43fb"
+      },
+      {
+        "path": "/assets/img/products/social-vertical-v4-1080.avif",
+        "hash": "b1ffeaf0f94d22f3027e0aa96bf3dae6"
+      },
+      {
+        "path": "/assets/img/products/trio-v4-1080.avif",
+        "hash": "4a716f96fd1183f4713dbba90c73795a"
+      },
+      {
+        "path": "/assets/img/products/trio-v5-1080.avif",
+        "hash": "2fa6923d818de98c8038daa0404942f3"
+      },
+      {
+        "path": "/assets/img/products/trio-v5-1080.jpg",
+        "hash": "7d0d9590a7e79388bbda420e58dd7003"
+      },
+      {
+        "path": "/assets/img/products/trio-v5-1080.webp",
+        "hash": "18c47f24f39d8b031d4b0cc2524e2c59"
+      },
+      {
+        "path": "/assets/img/products/trio-v5-1195.avif",
+        "hash": "157d1598b2518d57cffd846198ab3877"
+      },
+      {
+        "path": "/assets/img/products/trio-v5-1195.webp",
+        "hash": "53cadfefde308e7ede7944641c519956"
+      },
+      {
+        "path": "/assets/img/products/trio-v5-1400.avif",
+        "hash": "f8f0cd845e07f5779f878ccf728169ac"
+      },
+      {
+        "path": "/assets/img/products/trio-v5-1400.webp",
+        "hash": "0376b7f61f89b91c04dc3fc61c835e0c"
+      },
+      {
+        "path": "/assets/img/products/trio-v5-480.avif",
+        "hash": "46ffa801b56893a48b5993ad96b34db8"
+      },
+      {
+        "path": "/assets/img/products/trio-v5-480.webp",
+        "hash": "0e7ce7123572ad1554b4d21cb57c285a"
+      },
+      {
+        "path": "/assets/img/products/trio-v5-720.avif",
+        "hash": "4d87b2f7d9e6616bcebaf7ee7d4d924a"
+      },
+      {
+        "path": "/assets/img/products/trio-v5-720.webp",
+        "hash": "18f8e95a7c41a27c0a2f2ff0fe787e5f"
+      },
+      {
+        "path": "/assets/img/products/trio-v6-1080.avif",
+        "hash": "d2881958074625d4fb6ac387ffa39671"
+      },
+      {
+        "path": "/assets/img/products/trio-v6-1080.jpg",
+        "hash": "869891be676333eadd06a3adc9da7948"
+      },
+      {
+        "path": "/assets/img/products/trio-v6-1080.webp",
+        "hash": "896a2b312aa1f5427233a58393505ce8"
+      },
+      {
+        "path": "/assets/img/products/trio-v6-1195.avif",
+        "hash": "78ba22e88e53b30d53202a72f3e9b7c2"
+      },
+      {
+        "path": "/assets/img/products/trio-v6-1195.webp",
+        "hash": "1c5acf3637dd811d2562cbef400bf279"
+      },
+      {
+        "path": "/assets/img/products/trio-v6-480.avif",
+        "hash": "5dcb8990b48317bda4821948db3141a0"
+      },
+      {
+        "path": "/assets/img/products/trio-v6-480.jpg",
+        "hash": "9075e815b2d013b0db90d61bddb0f85d"
+      },
+      {
+        "path": "/assets/img/products/trio-v6-480.webp",
+        "hash": "eae709c74ab0e6ce8e89b34d1d1f0828"
+      },
+      {
+        "path": "/assets/img/products/trio-v6-720.avif",
+        "hash": "3a339625d1242f08ab5a99c6005889ae"
+      },
+      {
+        "path": "/assets/img/products/trio-v6-720.webp",
+        "hash": "c0e8832478cf91fb4895fe5a8127e96c"
+      },
+      {
+        "path": "/campaign.html",
+        "hash": "4bf0d0c275e95e07fd45c60b56fd0018"
+      },
+      {
+        "path": "/check.html",
+        "hash": "a3404da787ab6b573cb0115eca6325c4"
+      },
+      {
+        "path": "/css/campaign.css",
+        "hash": "e790354ea6ebeeebeff82339dbac6796"
+      },
+      {
+        "path": "/css/check.css",
+        "hash": "7eaeb222c9960e1b437919d1cca9bc70"
+      },
+      {
+        "path": "/css/hama.css",
+        "hash": "d126dd509c45c464b815371d0537dd6f"
+      },
+      {
+        "path": "/css/home-inline.css",
+        "hash": "32bda0e301bfa3820bd9a5f89995ae44"
+      },
+      {
+        "path": "/css/serum.css",
+        "hash": "033c0a5d4471ebbbb0c9a66302f1623e"
+      },
+      {
+        "path": "/css/setup.css",
+        "hash": "0a732d7f1a7b217a2a06b7c962c912ff"
+      },
+      {
+        "path": "/css/styles.css",
+        "hash": "22a45e29471498969e7d9c04f741c1d5"
+      },
+      {
+        "path": "/css/three-formulas.css",
+        "hash": "37d4b7cd9ae78465dda925bd977e49cb"
+      },
+      {
+        "path": "/css/utilities.css",
+        "hash": "bf4c50b725f13fae0ca0102a5d9fd36b"
+      },
+      {
+        "path": "/hama.html",
+        "hash": "6c11766bbfdaa9504176092a19ab45b8"
+      },
+      {
+        "path": "/index.html",
+        "hash": "89539cab34a9a9211777cf3768d82405"
+      },
+      {
+        "path": "/js/campaign.js",
+        "hash": "58cb363cbb5cc48008daf8d0540eb6ac"
+      },
+      {
+        "path": "/js/cart.js",
+        "hash": "f37cd078e077d17c04e656a416dcd4b4"
+      },
+      {
+        "path": "/js/check-inline.js",
+        "hash": "f94990ec2889f1f1e11b2e060128c8cd"
+      },
+      {
+        "path": "/js/config.js",
+        "hash": "034e6bdbb339a2dfe0bedd89c78e5eba"
+      },
+      {
+        "path": "/js/formula-cards.js",
+        "hash": "2e39d110bc80f5f2eafffe6f571290cf"
+      },
+      {
+        "path": "/js/index-inline.js",
+        "hash": "aa9ca982ddab5d8538f4359b56375e35"
+      },
+      {
+        "path": "/js/marketing.js",
+        "hash": "8229d3321c2664d0ba4c68cefeb869b7"
+      },
+      {
+        "path": "/js/offers.js",
+        "hash": "478f8141c8fec0494bed354485b3981f"
+      },
+      {
+        "path": "/js/pricing-policy.js",
+        "hash": "b460ad2a0919296c48c4f4c79307b0f5"
+      },
+      {
+        "path": "/js/privacy-inline.js",
+        "hash": "3b9994fc138274fad9d2d658ad1d1fac"
+      },
+      {
+        "path": "/js/pwa-install.js",
+        "hash": "5db0f611915e0f4af17516da5897d252"
+      },
+      {
+        "path": "/js/serum-inline.js",
+        "hash": "6621171f8a5967619a395a203ced5d8a"
+      },
+      {
+        "path": "/js/serum-views.js",
+        "hash": "85206ff16759b22fe0f9b020976c233a"
+      },
+      {
+        "path": "/js/setup-inline.js",
+        "hash": "b8e476b7329433eefcc2c36f2174c159"
+      },
+      {
+        "path": "/manifest.webmanifest",
+        "hash": "19cdbb3a9bd638c32b5a9f78cc51d9c1"
+      },
+      {
+        "path": "/owner/app.mjs",
+        "hash": "f2661b917f31aab3556c2d6e81c36486"
+      },
+      {
+        "path": "/owner/base.css",
+        "hash": "1b2f6f941afbeb22fbb68db8d51ed2b7"
+      },
+      {
+        "path": "/owner/index.html",
+        "hash": "20b8e1d8ce712918661e84f6fc001e1f"
+      },
+      {
+        "path": "/owner/owner-client.mjs",
+        "hash": "f6f827857d1cd801ff12f65fc6fcf732"
+      },
+      {
+        "path": "/owner/owner.css",
+        "hash": "25825f8a20df727fba0a694255cc8d10"
+      },
+      {
+        "path": "/owner/pricing-editor.mjs",
+        "hash": "481b0085835f9c8d3c49ab371cd33960"
+      },
+      {
+        "path": "/owner/pricing-tool.mjs",
+        "hash": "cba996447905829a1b3dcf78ebdf10ab"
+      },
+      {
+        "path": "/owner/pricing.css",
+        "hash": "f08cd0b82983f0e0c1067429f4c2dba2"
+      },
+      {
+        "path": "/owner/pricing.html",
+        "hash": "b474d7f6780ba326874523a22339f33e"
+      },
+      {
+        "path": "/owner/settings.mjs",
+        "hash": "efd1c0bab9c49ee9a8ccbae3f9e5f7ce"
+      },
+      {
+        "path": "/privacy.html",
+        "hash": "03ac086a90562a98dcd79f62238b01ba"
+      },
+      {
+        "path": "/robots.txt",
+        "hash": "158c0d186370baa537a3d4ad088c5fc6"
+      },
+      {
+        "path": "/serum.html",
+        "hash": "f370386d7d026c8e5c95c152987025de"
+      },
+      {
+        "path": "/setup.html",
+        "hash": "81588d64b7732c6d23f19ec221bf3684"
+      },
+      {
+        "path": "/sitemap.xml",
+        "hash": "84bef56dd57aae9ee29e5be7832713e9"
+      },
+      {
+        "path": "/sw.js",
+        "hash": "31d4a151866b0a5c42f6991283292510"
+      }
+    ],
+    "commit_message": "Recovered Raawaa source; approved 10% Sham Cash discount"
+  },
+  "latest_preview": {
+    "deployment_id": "10b8ef21-037c-43a9-adf8-37ac7874dcdd",
+    "url": "https://10b8ef21.raawaa-store.pages.dev",
+    "created_on": "2026-11-14T05:32:31.762155Z",
+    "branch": "pr-208",
+    "commit_hash": "fa6df14c1a58efee3e93ab106e5cfc0ccc821529",
+    "uses_functions": false,
+    "file_count": 200,
+    "files": [
+      {
+        "path": "/.nojekyll",
+        "hash": "af1349b9f5f9a1a6a0404dea36dcc949"
+      },
+      {
+        "path": "/404.html",
+        "hash": "1bd7375b05b98caf70c93e514fe420a1"
+      },
+      {
+        "path": "/assets/brand/logo-mark-v2.svg",
+        "hash": "1f0df51befc1441fcb0685a31925445c"
+      },
+      {
+        "path": "/assets/brand/logo-primary-v2-dark.svg",
+        "hash": "ebaa6c6593194aca90c9ad93764b7e56"
+      },
+      {
+        "path": "/assets/brand/logo-primary-v2.svg",
+        "hash": "6edf73405de64f20cfc047d202d4cb2e"
+      },
+      {
+        "path": "/assets/favicon.svg",
+        "hash": "7ab8aaa48f06c43b5b342fb87a7b0d5e"
+      },
+      {
+        "path": "/assets/fonts/cormorant-500-latin.subset.woff2",
+        "hash": "a41f8f83eed6b4585a914850035b50b7"
+      },
+      {
+        "path": "/assets/fonts/licenses/OFL-CormorantGaramond.txt",
+        "hash": "9a2b60f4f9949d865bb7d842910190b2"
+      },
+      {
+        "path": "/assets/fonts/licenses/OFL-IBMPlexSansArabic.txt",
+        "hash": "8dc94b22fd542a3d834ccdf830f82073"
+      },
+      {
+        "path": "/assets/fonts/plexar-400.subset.woff2",
+        "hash": "266df2dd7551ec620b9b14ffcb167996"
+      },
+      {
+        "path": "/assets/fonts/plexar-700.subset.woff2",
+        "hash": "7799d131f8eb374f7fd92adb0b77fe3b"
+      },
+      {
+        "path": "/assets/fonts/plexar-bold-latin.subset.woff2",
+        "hash": "9067f1c5b242d4075e3c8d58145ecb30"
+      },
+      {
+        "path": "/assets/fonts/plexar-latin.subset.woff2",
+        "hash": "2145b28b8523661d27b9496d895e7496"
+      },
+      {
+        "path": "/assets/icons/apple-touch-icon.png",
+        "hash": "a05f7fe131b1a23249972c45f383aa14"
+      },
+      {
+        "path": "/assets/icons/favicon-64.png",
+        "hash": "317558865bb33e173a05a6a7533bfe3b"
+      },
+      {
+        "path": "/assets/icons/icon-192.png",
+        "hash": "5ba382853e3d8324aef2d1002d3ab7a8"
+      },
+      {
+        "path": "/assets/icons/icon-512.png",
+        "hash": "ed4ebf7e1f1606e650cb1756a7c14221"
+      },
+      {
+        "path": "/assets/icons/icon-maskable-512.png",
+        "hash": "509840ab3ba588d04d0f279482754020"
+      },
+      {
+        "path": "/assets/img/campaign/quiet-finish-editorial-v1-1080.avif",
+        "hash": "8ff8a3e0460bb1f72da4be842257fa15"
+      },
+      {
+        "path": "/assets/img/campaign/quiet-finish-editorial-v1-1080.jpg",
+        "hash": "cb0b22eba38fe0b5de7f203f4b485e3a"
+      },
+      {
+        "path": "/assets/img/campaign/quiet-finish-editorial-v1-1080.webp",
+        "hash": "a734fe736ad234c9473b9674548fb6ec"
+      },
+      {
+        "path": "/assets/img/campaign/quiet-finish-editorial-v1-480.avif",
+        "hash": "2263415343514ca42c7fd65951c9697a"
+      },
+      {
+        "path": "/assets/img/campaign/quiet-finish-editorial-v1-480.webp",
+        "hash": "18e4f8840e001753637541915156c411"
+      },
+      {
+        "path": "/assets/img/campaign/quiet-finish-editorial-v1-720.avif",
+        "hash": "cddf773820e0a2f6b9427c6f582de0ca"
+      },
+      {
+        "path": "/assets/img/campaign/quiet-finish-editorial-v1-720.webp",
+        "hash": "4a612709f2dcc2fdac1f3f020ac1ddda"
+      },
+      {
+        "path": "/assets/img/hama/card-30-entry.jpg",
+        "hash": "b6b9ce7b5a3fb25bb73aaf57342de0c8"
+      },
+      {
+        "path": "/assets/img/hama/card-50-hero.jpg",
+        "hash": "0196b7f0e3fa14f698a631812ff3542d"
+      },
+      {
+        "path": "/assets/img/hama/card-compare.jpg",
+        "hash": "86ce48ee7dbd9d79c73486b4071b2f21"
+      },
+      {
+        "path": "/assets/img/hama/card-payment.jpg",
+        "hash": "063cda41104399c46cd52045a801b6cf"
+      },
+      {
+        "path": "/assets/img/hama/card-reel-cover.jpg",
+        "hash": "667d6912af22920db18837aef121f1c0"
+      },
+      {
+        "path": "/assets/img/hama/duo-sizes.jpg",
+        "hash": "682f9053ea1742ed9b1b7949313349dd"
+      },
+      {
+        "path": "/assets/img/hama/hama-window.jpg",
+        "hash": "dfa2042171a210ab49c560d30cfb2446"
+      },
+      {
+        "path": "/assets/img/hama/hero-30.jpg",
+        "hash": "e15765edce714d1a18d0d96ad1bd3dc6"
+      },
+      {
+        "path": "/assets/img/hama/hero-50.jpg",
+        "hash": "e8bb1442bb81dd9d9d42fe7d0e195bcb"
+      },
+      {
+        "path": "/assets/img/hama/lifestyle-hands.jpg",
+        "hash": "731399e04bbb4caf969adbbb01c772a8"
+      },
+      {
+        "path": "/assets/img/hama/outro.jpg",
+        "hash": "40209aa801e68548f1dff73c0a0a6c5a"
+      },
+      {
+        "path": "/assets/img/hama/payment/sham-cash-qr.png",
+        "hash": "e28a6c9148ba0f586d3930d777ea5863"
+      },
+      {
+        "path": "/assets/img/hama/reel-50ml.ar.vtt",
+        "hash": "a8573bfd2c92cdc49f81137afcfe6009"
+      },
+      {
+        "path": "/assets/img/hama/reel-50ml.mp4",
+        "hash": "a4a602e3a098e871f1ef96ba195f5306"
+      },
+      {
+        "path": "/assets/img/hama/reel-hama.ar.vtt",
+        "hash": "febe75a5b3b82b6dcbaca7b79f54e27f"
+      },
+      {
+        "path": "/assets/img/hama/reel-hama.mp4",
+        "hash": "37be589ca8e37bedd9f0cccbe83edd9c"
+      },
+      {
+        "path": "/assets/img/hama/salon-shelf.jpg",
+        "hash": "39844e3597824ec2cc424c5f3d657ce4"
+      },
+      {
+        "path": "/assets/img/hama/story-bg.jpg",
+        "hash": "ef6d20012f5b07621f7105da7f101c8c"
+      },
+      {
+        "path": "/assets/img/products/castor-blend-emblem.svg",
+        "hash": "258902731bd87cd9b2cadb964d73115a"
+      },
+      {
+        "path": "/assets/img/products/castor-blend-label.svg",
+        "hash": "2be8dc5422145c5d5751cf9a4670703f"
+      },
+      {
+        "path": "/assets/img/products/detail-label-v4-720.jpg",
+        "hash": "e15c6336cc30c0379480d5e4c2486b8f"
+      },
+      {
+        "path": "/assets/img/products/detail-label-v5-480.avif",
+        "hash": "aa0ace3f84ba99d2688031d740192450"
+      },
+      {
+        "path": "/assets/img/products/detail-label-v5-480.webp",
+        "hash": "7969d9f1538f80dfa25c13729a8f9261"
+      },
+      {
+        "path": "/assets/img/products/detail-label-v5-720.avif",
+        "hash": "1ec95c4e435c9d30a734bd94a6cdf953"
+      },
+      {
+        "path": "/assets/img/products/detail-label-v5-720.jpg",
+        "hash": "c561762fc6786ca8cb10d3d1f7bf59a6"
+      },
+      {
+        "path": "/assets/img/products/detail-label-v5-720.webp",
+        "hash": "f5224214a21d399717f812c3dc62293f"
+      },
+      {
+        "path": "/assets/img/products/detail-label-v5-900.avif",
+        "hash": "e0b33cb18829e62b0b675e9ddadfab54"
+      },
+      {
+        "path": "/assets/img/products/detail-label-v5-900.webp",
+        "hash": "4717af70e7051d46259c6c282d44dca9"
+      },
+      {
+        "path": "/assets/img/products/editorial-v4-720.jpg",
+        "hash": "217ed85fb93d08672a181e92be2fba54"
+      },
+      {
+        "path": "/assets/img/products/editorial-v5-480.avif",
+        "hash": "f01b1cff2e759a1849278754f33c9907"
+      },
+      {
+        "path": "/assets/img/products/editorial-v5-480.webp",
+        "hash": "ab38dbeb24beaa77c53e36c0870a2799"
+      },
+      {
+        "path": "/assets/img/products/editorial-v5-720.avif",
+        "hash": "062ebf8d6949fcf5980bc0375eafc620"
+      },
+      {
+        "path": "/assets/img/products/editorial-v5-720.jpg",
+        "hash": "125fc94263732eb3a5118d21a0a07d4c"
+      },
+      {
+        "path": "/assets/img/products/editorial-v5-720.webp",
+        "hash": "556703bc383c80fc891db55e6d77fc04"
+      },
+      {
+        "path": "/assets/img/products/editorial-v5-900.avif",
+        "hash": "b62112febf21a11c381b5853341c7fc4"
+      },
+      {
+        "path": "/assets/img/products/editorial-v5-900.webp",
+        "hash": "109e6936de2a5f88c3deb16d6dde40ce"
+      },
+      {
+        "path": "/assets/img/products/hero-wide-v3-v4-1080.avif",
+        "hash": "4ea288a7f6805f35987508aa70e6a500"
+      },
+      {
+        "path": "/assets/img/products/manifest.json",
+        "hash": "a1658d7df3468fa1aa55c286e88959c9"
+      },
+      {
+        "path": "/assets/img/products/og-image-v4-1200.jpg",
+        "hash": "303509e3375e6a164444bd98bf18636e"
+      },
+      {
+        "path": "/assets/img/products/og-image-v5-1200.jpg",
+        "hash": "e213a9a380195dc7bb09ba6644f32477"
+      },
+      {
+        "path": "/assets/img/products/og-image-v6-1200.jpg",
+        "hash": "91eade9f82cbbe868b1939a9ea4d2178"
+      },
+      {
+        "path": "/assets/img/products/olive-panthenol-emblem.svg",
+        "hash": "d85a720e46dedba009f17c6120496b95"
+      },
+      {
+        "path": "/assets/img/products/olive-panthenol-label.svg",
+        "hash": "4308d0d20d5add170da2b9d94158c3b2"
+      },
+      {
+        "path": "/assets/img/products/rawaa-castor.jpg",
+        "hash": "e41b002b93271856888880be208ffeaa"
+      },
+      {
+        "path": "/assets/img/products/rawaa-olive.jpg",
+        "hash": "e3ba2580928d2e8df60ce8e05e29e230"
+      },
+      {
+        "path": "/assets/img/products/rawaa-rosemary.jpg",
+        "hash": "bdbbe133396d3d3b3e3a68a19321cd64"
+      },
+      {
+        "path": "/assets/img/products/ritual-v5-1080.avif",
+        "hash": "0db8f757b0298cea22babeea037348ff"
+      },
+      {
+        "path": "/assets/img/products/ritual-v5-1080.webp",
+        "hash": "1f2d33c5245529f2066185437a353611"
+      },
+      {
+        "path": "/assets/img/products/ritual-v5-480.avif",
+        "hash": "5ad19bd723fbe6df809295521706cdde"
+      },
+      {
+        "path": "/assets/img/products/ritual-v5-480.webp",
+        "hash": "240c0581d817a3cb49474ecec2d0d693"
+      },
+      {
+        "path": "/assets/img/products/ritual-v5-720.avif",
+        "hash": "f6a88d26b76730632f0d7b07831fed4d"
+      },
+      {
+        "path": "/assets/img/products/ritual-v5-720.jpg",
+        "hash": "d92fd2a24c550a8cc050f1403b259a2b"
+      },
+      {
+        "path": "/assets/img/products/ritual-v5-720.webp",
+        "hash": "8e473997402d30c0c1ebd0ff8b7b56ed"
+      },
+      {
+        "path": "/assets/img/products/rosemary-caffeine-emblem.svg",
+        "hash": "fe9163736646602b8350df37a187b68d"
+      },
+      {
+        "path": "/assets/img/products/rosemary-caffeine-label.svg",
+        "hash": "c32b3d1850fd6668c39f488d789a4d0d"
+      },
+      {
+        "path": "/assets/img/products/size-100-v4-720.jpg",
+        "hash": "7c3ee66fd20983f44c1adb6e671f5825"
+      },
+      {
+        "path": "/assets/img/products/size-100-v4-720.webp",
+        "hash": "2b1eb1dae303eac2344403f731927d8e"
+      },
+      {
+        "path": "/assets/img/products/size-100-v5-480.avif",
+        "hash": "d6fe0c98573cb7f517637c6b0ba98d66"
+      },
+      {
+        "path": "/assets/img/products/size-100-v5-480.webp",
+        "hash": "9bda6b883a11eb9bfda422587a142742"
+      },
+      {
+        "path": "/assets/img/products/size-100-v5-720.avif",
+        "hash": "ee562899bc4bfc0c40c3f0ecaf8f3a90"
+      },
+      {
+        "path": "/assets/img/products/size-100-v5-720.jpg",
+        "hash": "1bc9810c6ecf54f1f9979256f55185e8"
+      },
+      {
+        "path": "/assets/img/products/size-100-v5-720.webp",
+        "hash": "febf173bf467cfaa36d516a0bdaa331d"
+      },
+      {
+        "path": "/assets/img/products/size-100-v5-900.avif",
+        "hash": "056ef058a36b4cc4fb5bf653d4deb084"
+      },
+      {
+        "path": "/assets/img/products/size-100-v5-900.webp",
+        "hash": "2d00ef19c25c06eb3b473005f715e45e"
+      },
+      {
+        "path": "/assets/img/products/size-100-v6-480.avif",
+        "hash": "c2eac6f76ed2f6c1317db9b127669cac"
+      },
+      {
+        "path": "/assets/img/products/size-100-v6-480.jpg",
+        "hash": "6b41db0fee94c5acb40787d3bf5a96b1"
+      },
+      {
+        "path": "/assets/img/products/size-100-v6-480.webp",
+        "hash": "3dc50cfceb319a4eb4134a11e3372f93"
+      },
+      {
+        "path": "/assets/img/products/size-100-v6-720.avif",
+        "hash": "3b79b43def1e3c9b3e432edd862cfce3"
+      },
+      {
+        "path": "/assets/img/products/size-100-v6-720.jpg",
+        "hash": "bf3568addd551d0c34429c5e54c0ebdb"
+      },
+      {
+        "path": "/assets/img/products/size-100-v6-720.webp",
+        "hash": "08cf72273d47a95304b6b1a24090b55d"
+      },
+      {
+        "path": "/assets/img/products/size-100-v6-900.avif",
+        "hash": "de764766b0db25225251a1851ac5da7c"
+      },
+      {
+        "path": "/assets/img/products/size-100-v6-900.webp",
+        "hash": "bdf0f330260d9c0b62f8a35457ceac50"
+      },
+      {
+        "path": "/assets/img/products/size-30-v4-720.jpg",
+        "hash": "00da3d25331a7ecb8ae514d204360ea6"
+      },
+      {
+        "path": "/assets/img/products/size-30-v4-720.webp",
+        "hash": "7b341a761d511eb471761d5f4bad44a9"
+      },
+      {
+        "path": "/assets/img/products/size-30-v5-480.avif",
+        "hash": "9c3a8da4bfdbb2767b796d50c9d3b911"
+      },
+      {
+        "path": "/assets/img/products/size-30-v5-480.webp",
+        "hash": "dae4f6958a655f741db5b05c7c2fc358"
+      },
+      {
+        "path": "/assets/img/products/size-30-v5-720.avif",
+        "hash": "2a41393381a55c2846fd07b210f8dbf1"
+      },
+      {
+        "path": "/assets/img/products/size-30-v5-720.jpg",
+        "hash": "02047c86c2de9ea0fb5b783b55b8a182"
+      },
+      {
+        "path": "/assets/img/products/size-30-v5-720.webp",
+        "hash": "568f91945008659c795ba81ac0143308"
+      },
+      {
+        "path": "/assets/img/products/size-30-v5-900.avif",
+        "hash": "e82f6a854b8db2fc607ff08e4f3d59c7"
+      },
+      {
+        "path": "/assets/img/products/size-30-v5-900.webp",
+        "hash": "620a47e4784fe6077d4e99e4604dc5de"
+      },
+      {
+        "path": "/assets/img/products/size-30-v6-480.avif",
+        "hash": "49b5a2d92afdacebe3d9754f2b88bff0"
+      },
+      {
+        "path": "/assets/img/products/size-30-v6-480.jpg",
+        "hash": "e8d63ddb127b48debf292cbe59d28ba8"
+      },
+      {
+        "path": "/assets/img/products/size-30-v6-480.webp",
+        "hash": "99f0d48ca304d23c083f09b1b5b84f6e"
+      },
+      {
+        "path": "/assets/img/products/size-30-v6-720.avif",
+        "hash": "5f23c406c61c05271b89ce41aca23b57"
+      },
+      {
+        "path": "/assets/img/products/size-30-v6-720.jpg",
+        "hash": "9c6a50243164a00e62def037119c31ae"
+      },
+      {
+        "path": "/assets/img/products/size-30-v6-720.webp",
+        "hash": "d167d3e600eb4b38332c46fb6b4ccb88"
+      },
+      {
+        "path": "/assets/img/products/size-30-v6-900.avif",
+        "hash": "a98c75f49e1e3b2276f78c3bbfa258d0"
+      },
+      {
+        "path": "/assets/img/products/size-30-v6-900.webp",
+        "hash": "8492fab22216fc9ccbf659ffa72a78c1"
+      },
+      {
+        "path": "/assets/img/products/size-50-v4-720.jpg",
+        "hash": "9905dea01af6f173ec5064e86267dfd6"
+      },
+      {
+        "path": "/assets/img/products/size-50-v4-720.webp",
+        "hash": "0b51b5ac552d76d5d693fa70093d653c"
+      },
+      {
+        "path": "/assets/img/products/size-50-v5-480.avif",
+        "hash": "9c394930e08d2898cc0d77e6c79557ac"
+      },
+      {
+        "path": "/assets/img/products/size-50-v5-480.webp",
+        "hash": "dfed1f8b446cb8e7503538e3014047d3"
+      },
+      {
+        "path": "/assets/img/products/size-50-v5-720.avif",
+        "hash": "20617a664e587379b0deed5a7c30de0b"
+      },
+      {
+        "path": "/assets/img/products/size-50-v5-720.jpg",
+        "hash": "d270f992003d6686a90aa82593623427"
+      },
+      {
+        "path": "/assets/img/products/size-50-v5-720.webp",
+        "hash": "12d2e0e8c495e907b635c27a5e486cce"
+      },
+      {
+        "path": "/assets/img/products/size-50-v5-900.avif",
+        "hash": "d20463e5058df1e13e3fb29ed9b194d7"
+      },
+      {
+        "path": "/assets/img/products/size-50-v5-900.webp",
+        "hash": "4f58f8331ed33ee597f6fbf040162365"
+      },
+      {
+        "path": "/assets/img/products/size-50-v6-480.avif",
+        "hash": "ae818eb70133d9caf4b8d177767a7ef9"
+      },
+      {
+        "path": "/assets/img/products/size-50-v6-480.jpg",
+        "hash": "50a5fa8d093006396b5c7b6c8b2b5bc3"
+      },
+      {
+        "path": "/assets/img/products/size-50-v6-480.webp",
+        "hash": "0ca59bb9726519169c2cc8cedd347aef"
+      },
+      {
+        "path": "/assets/img/products/size-50-v6-720.avif",
+        "hash": "72ff4df13382b3780ab5ad7d78ea5c65"
+      },
+      {
+        "path": "/assets/img/products/size-50-v6-720.jpg",
+        "hash": "fd0d03431fe7c9f247a17e15fda87334"
+      },
+      {
+        "path": "/assets/img/products/size-50-v6-720.webp",
+        "hash": "a140e81ad6d8f8f619eeefe4c3679d5e"
+      },
+      {
+        "path": "/assets/img/products/size-50-v6-900.avif",
+        "hash": "c6b7ee54297bb5b33ba6ea0f81f7bd7e"
+      },
+      {
+        "path": "/assets/img/products/size-50-v6-900.webp",
+        "hash": "cd5294c7d6ab3ad4547b86142c1f8d7a"
+      },
+      {
+        "path": "/assets/img/products/social-square-v4-1080.avif",
+        "hash": "deae6f1133a0160c0c859d2ef69f43fb"
+      },
+      {
+        "path": "/assets/img/products/social-vertical-v4-1080.avif",
+        "hash": "b1ffeaf0f94d22f3027e0aa96bf3dae6"
+      },
+      {
+        "path": "/assets/img/products/trio-v4-1080.avif",
+        "hash": "4a716f96fd1183f4713dbba90c73795a"
+      },
+      {
+        "path": "/assets/img/products/trio-v5-1080.avif",
+        "hash": "2fa6923d818de98c8038daa0404942f3"
+      },
+      {
+        "path": "/assets/img/products/trio-v5-1080.jpg",
+        "hash": "7d0d9590a7e79388bbda420e58dd7003"
+      },
+      {
+        "path": "/assets/img/products/trio-v5-1080.webp",
+        "hash": "18c47f24f39d8b031d4b0cc2524e2c59"
+      },
+      {
+        "path": "/assets/img/products/trio-v5-1195.avif",
+        "hash": "157d1598b2518d57cffd846198ab3877"
+      },
+      {
+        "path": "/assets/img/products/trio-v5-1195.webp",
+        "hash": "53cadfefde308e7ede7944641c519956"
+      },
+      {
+        "path": "/assets/img/products/trio-v5-1400.avif",
+        "hash": "f8f0cd845e07f5779f878ccf728169ac"
+      },
+      {
+        "path": "/assets/img/products/trio-v5-1400.webp",
+        "hash": "0376b7f61f89b91c04dc3fc61c835e0c"
+      },
+      {
+        "path": "/assets/img/products/trio-v5-480.avif",
+        "hash": "46ffa801b56893a48b5993ad96b34db8"
+      },
+      {
+        "path": "/assets/img/products/trio-v5-480.webp",
+        "hash": "0e7ce7123572ad1554b4d21cb57c285a"
+      },
+      {
+        "path": "/assets/img/products/trio-v5-720.avif",
+        "hash": "4d87b2f7d9e6616bcebaf7ee7d4d924a"
+      },
+      {
+        "path": "/assets/img/products/trio-v5-720.webp",
+        "hash": "18f8e95a7c41a27c0a2f2ff0fe787e5f"
+      },
+      {
+        "path": "/assets/img/products/trio-v6-1080.avif",
+        "hash": "d2881958074625d4fb6ac387ffa39671"
+      },
+      {
+        "path": "/assets/img/products/trio-v6-1080.jpg",
+        "hash": "869891be676333eadd06a3adc9da7948"
+      },
+      {
+        "path": "/assets/img/products/trio-v6-1080.webp",
+        "hash": "896a2b312aa1f5427233a58393505ce8"
+      },
+      {
+        "path": "/assets/img/products/trio-v6-1195.avif",
+        "hash": "78ba22e88e53b30d53202a72f3e9b7c2"
+      },
+      {
+        "path": "/assets/img/products/trio-v6-1195.webp",
+        "hash": "1c5acf3637dd811d2562cbef400bf279"
+      },
+      {
+        "path": "/assets/img/products/trio-v6-480.avif",
+        "hash": "5dcb8990b48317bda4821948db3141a0"
+      },
+      {
+        "path": "/assets/img/products/trio-v6-480.jpg",
+        "hash": "9075e815b2d013b0db90d61bddb0f85d"
+      },
+      {
+        "path": "/assets/img/products/trio-v6-480.webp",
+        "hash": "eae709c74ab0e6ce8e89b34d1d1f0828"
+      },
+      {
+        "path": "/assets/img/products/trio-v6-720.avif",
+        "hash": "3a339625d1242f08ab5a99c6005889ae"
+      },
+      {
+        "path": "/assets/img/products/trio-v6-720.webp",
+        "hash": "c0e8832478cf91fb4895fe5a8127e96c"
+      },
+      {
+        "path": "/campaign.html",
+        "hash": "4bf0d0c275e95e07fd45c60b56fd0018"
+      },
+      {
+        "path": "/check.html",
+        "hash": "a3404da787ab6b573cb0115eca6325c4"
+      },
+      {
+        "path": "/css/campaign.css",
+        "hash": "e790354ea6ebeeebeff82339dbac6796"
+      },
+      {
+        "path": "/css/check.css",
+        "hash": "7eaeb222c9960e1b437919d1cca9bc70"
+      },
+      {
+        "path": "/css/hama.css",
+        "hash": "d126dd509c45c464b815371d0537dd6f"
+      },
+      {
+        "path": "/css/home-inline.css",
+        "hash": "32bda0e301bfa3820bd9a5f89995ae44"
+      },
+      {
+        "path": "/css/serum.css",
+        "hash": "033c0a5d4471ebbbb0c9a66302f1623e"
+      },
+      {
+        "path": "/css/setup.css",
+        "hash": "0a732d7f1a7b217a2a06b7c962c912ff"
+      },
+      {
+        "path": "/css/styles.css",
+        "hash": "22a45e29471498969e7d9c04f741c1d5"
+      },
+      {
+        "path": "/css/three-formulas.css",
+        "hash": "37d4b7cd9ae78465dda925bd977e49cb"
+      },
+      {
+        "path": "/css/utilities.css",
+        "hash": "bf4c50b725f13fae0ca0102a5d9fd36b"
+      },
+      {
+        "path": "/elyra/index.html",
+        "hash": "5d95f1e2a3d76756d0be59993561d009"
+      },
+      {
+        "path": "/hama.html",
+        "hash": "6c11766bbfdaa9504176092a19ab45b8"
+      },
+      {
+        "path": "/index.html",
+        "hash": "89539cab34a9a9211777cf3768d82405"
+      },
+      {
+        "path": "/js/campaign.js",
+        "hash": "58cb363cbb5cc48008daf8d0540eb6ac"
+      },
+      {
+        "path": "/js/cart.js",
+        "hash": "f37cd078e077d17c04e656a416dcd4b4"
+      },
+      {
+        "path": "/js/check-inline.js",
+        "hash": "f94990ec2889f1f1e11b2e060128c8cd"
+      },
+      {
+        "path": "/js/config.js",
+        "hash": "034e6bdbb339a2dfe0bedd89c78e5eba"
+      },
+      {
+        "path": "/js/formula-cards.js",
+        "hash": "2e39d110bc80f5f2eafffe6f571290cf"
+      },
+      {
+        "path": "/js/index-inline.js",
+        "hash": "aa9ca982ddab5d8538f4359b56375e35"
+      },
+      {
+        "path": "/js/marketing.js",
+        "hash": "8229d3321c2664d0ba4c68cefeb869b7"
+      },
+      {
+        "path": "/js/offers.js",
+        "hash": "478f8141c8fec0494bed354485b3981f"
+      },
+      {
+        "path": "/js/pricing-policy.js",
+        "hash": "b460ad2a0919296c48c4f4c79307b0f5"
+      },
+      {
+        "path": "/js/privacy-inline.js",
+        "hash": "3b9994fc138274fad9d2d658ad1d1fac"
+      },
+      {
+        "path": "/js/pwa-install.js",
+        "hash": "5db0f611915e0f4af17516da5897d252"
+      },
+      {
+        "path": "/js/serum-inline.js",
+        "hash": "6621171f8a5967619a395a203ced5d8a"
+      },
+      {
+        "path": "/js/serum-views.js",
+        "hash": "85206ff16759b22fe0f9b020976c233a"
+      },
+      {
+        "path": "/js/setup-inline.js",
+        "hash": "b8e476b7329433eefcc2c36f2174c159"
+      },
+      {
+        "path": "/manifest.webmanifest",
+        "hash": "19cdbb3a9bd638c32b5a9f78cc51d9c1"
+      },
+      {
+        "path": "/owner/app.mjs",
+        "hash": "f2661b917f31aab3556c2d6e81c36486"
+      },
+      {
+        "path": "/owner/base.css",
+        "hash": "1b2f6f941afbeb22fbb68db8d51ed2b7"
+      },
+      {
+        "path": "/owner/index.html",
+        "hash": "20b8e1d8ce712918661e84f6fc001e1f"
+      },
+      {
+        "path": "/owner/owner-client.mjs",
+        "hash": "f6f827857d1cd801ff12f65fc6fcf732"
+      },
+      {
+        "path": "/owner/owner.css",
+        "hash": "25825f8a20df727fba0a694255cc8d10"
+      },
+      {
+        "path": "/owner/pricing-editor.mjs",
+        "hash": "481b0085835f9c8d3c49ab371cd33960"
+      },
+      {
+        "path": "/owner/pricing-tool.mjs",
+        "hash": "cba996447905829a1b3dcf78ebdf10ab"
+      },
+      {
+        "path": "/owner/pricing.css",
+        "hash": "f08cd0b82983f0e0c1067429f4c2dba2"
+      },
+      {
+        "path": "/owner/pricing.html",
+        "hash": "b474d7f6780ba326874523a22339f33e"
+      },
+      {
+        "path": "/owner/settings.mjs",
+        "hash": "efd1c0bab9c49ee9a8ccbae3f9e5f7ce"
+      },
+      {
+        "path": "/privacy.html",
+        "hash": "03ac086a90562a98dcd79f62238b01ba"
+      },
+      {
+        "path": "/robots.txt",
+        "hash": "158c0d186370baa537a3d4ad088c5fc6"
+      },
+      {
+        "path": "/serum.html",
+        "hash": "f370386d7d026c8e5c95c152987025de"
+      },
+      {
+        "path": "/setup.html",
+        "hash": "81588d64b7732c6d23f19ec221bf3684"
+      },
+      {
+        "path": "/sitemap.xml",
+        "hash": "84bef56dd57aae9ee29e5be7832713e9"
+      },
+      {
+        "path": "/sw.js",
+        "hash": "25b6432fd80f5746575beac8cd2f4973"
+      }
+    ]
+  },
+  "comparison": {
+    "production_only": [],
+    "preview_only": [
+      "/elyra/index.html"
+    ],
+    "changed_hashes": [
+      "/sw.js"
+    ]
+  }
+}
