@@ -10,7 +10,7 @@ These are isolated source/page snapshots recovered from Cloudflare Pages preview
 | PR #196 | Homepage, Serum route, privacy page | HTML checkpoint only |
 | PR #197 | Homepage, config | HTML/config checkpoint |
 | PR #204 | Homepage, Serum route | HTML checkpoint |
-| PR #205 | Homepage, Serum, privacy, campaign, Hama route; config, marketing, offers, pricing policy, cart, Serum views, campaign, PWA and page scripts; global/home/Serum/campaign/Hama/utilities/formula CSS | Recovered text sources are complete and read-back verified |
+| PR #205 | Homepage, Serum, privacy, campaign, Hama route, Elyra landing page; config, marketing, offers, pricing policy, cart, Serum views, campaign, PWA and page scripts; global/home/Serum/campaign/Hama/utilities/formula CSS | Recovered text sources are complete and read-back verified |
 
 ## Important rules
 
