@@ -52,17 +52,17 @@ for (const forbidden of [
 assert.ok(!paths.some((path) => path.split('/').includes('hama')), 'Legacy Hama assets must not enter the deployment payload');
 assert.ok(!paths.some((path) => path.startsWith('recovery/') || path.startsWith('.github/') || path.startsWith('scripts/') || path.startsWith('deploy/')), 'Recovery and tooling files must not be deployed');
 
-const textFiles = files.filter((path) => /\\.(html|js|mjs)$/i.test(path));
+const textFiles = files.filter((path) => ['.html', '.js', '.mjs'].some((ext) => path.toLowerCase().endsWith(ext)));
 for (const path of textFiles) {
   const content = readFileSync(path, 'utf8');
-  assert.doesNotMatch(content, /15\\s*%/u, relative(out, path) + ' contains the superseded 15% offer');
+  assert.ok(!/15\\s*%/u.test(content), relative(out, path) + ' contains the superseded 15% offer');
 }
 const read = (path) => readFileSync(join(out, path), 'utf8');
-assert.match(read('sitemap.xml'), /\\/campaign/u, 'Campaign page must be present in sitemap');
-assert.doesNotMatch(read('sitemap.xml'), /\\/hama/u, 'Legacy Hama page must be absent from sitemap');
-assert.doesNotMatch(read('sw.js'), /hama/i, 'Service worker must not cache the legacy Hama route');
-assert.match(read('robots.txt'), /Disallow: \\/hama/u, 'Robots must disallow the retired Hama route');
-assert.match(read('campaign.html'), /خصم 10%/u, 'Campaign must display the canonical 10% discount');
-assert.match(read('campaign.html'), /التوصيل مجاني إلى جميع المحافظات ولكل طرق الدفع/u, 'Campaign must state free delivery for every payment method');
-assert.doesNotMatch(read('owner/pricing.html'), /الدولار الأمريكي|بالدولار/u, 'Owner pricing must not contain stale USD labels');
+assert.ok(read('sitemap.xml').includes('/campaign'), 'Campaign page must be present in sitemap');
+assert.ok(!read('sitemap.xml').includes('/hama'), 'Legacy Hama page must be absent from sitemap');
+assert.ok(!read('sw.js').toLowerCase().includes('hama'), 'Service worker must not cache the legacy Hama route');
+assert.ok(read('robots.txt').includes('Disallow: /hama'), 'Robots must disallow the retired Hama route');
+assert.ok(read('campaign.html').includes('خصم 10%'), 'Campaign must display the canonical 10% discount');
+assert.ok(read('campaign.html').includes('التوصيل مجاني إلى جميع المحافظات ولكل طرق الدفع'), 'Campaign must state free delivery for every payment method');
+assert.ok(!read('owner/pricing.html').includes('الدولار الأمريكي') && !read('owner/pricing.html').includes('بالدولار'), 'Owner pricing must not contain stale USD labels');
 console.log('Clean Cloudflare Pages payload validated: ' + files.length + ' files at ' + out);
