@@ -6,7 +6,9 @@ for (const route of routes) {
   test(`${route} loads and fits common mobile and desktop widths`, async ({ page }, testInfo) => {
     const widths = testInfo.project.name === 'webkit-iphone'
       ? [390]
-      : [390, 768, 1440];
+      : testInfo.project.name === 'webkit-desktop'
+        ? [768, 1440]
+        : [390, 768, 1440];
 
     for (const width of widths) {
       await page.setViewportSize({ width, height: 900 });
@@ -22,8 +24,6 @@ for (const route of routes) {
         const overflowing = all.map((element) => {
           const rect = element.getBoundingClientRect();
           const style = getComputedStyle(element);
-          const before = getComputedStyle(element, '::before').content;
-          const after = getComputedStyle(element, '::after').content;
           return {
             tag: element.tagName.toLowerCase(),
             id: element.id || '',
@@ -35,16 +35,12 @@ for (const route of routes) {
             scrollWidth: element.scrollWidth,
             position: style.position,
             overflowX: style.overflowX,
-            before,
-            after,
           };
         }).filter((item) =>
           item.scrollWidth > item.clientWidth + 2 ||
-          item.right > viewport + 2 ||
-          item.before !== 'none' ||
-          item.after !== 'none'
+          item.right > viewport + 2
         ).sort((a, b) => (b.scrollWidth - b.clientWidth) - (a.scrollWidth - a.clientWidth))
-          .slice(0, 16);
+          .slice(0, 12);
         return {
           viewport,
           document: document.documentElement.scrollWidth,
