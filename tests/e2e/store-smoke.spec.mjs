@@ -52,10 +52,20 @@ for (const route of routes) {
             grandparent: img.parentElement?.parentElement?.className || img.parentElement?.parentElement?.tagName,
           };
         });
+        const stylesheets = Array.from(document.styleSheets).map((sheet) => {
+          try {
+            return { href: sheet.href, disabled: sheet.disabled, rules: sheet.cssRules.length };
+          } catch (error) {
+            return { href: sheet.href, disabled: sheet.disabled, error: String(error) };
+          }
+        });
         return {
           viewport,
           document: document.documentElement.scrollWidth,
           body: document.body.scrollWidth,
+          bodyMargin: getComputedStyle(document.body).margin,
+          bodyOverflowX: getComputedStyle(document.body).overflowX,
+          stylesheets,
           overflowing,
           images: images.filter((img) => img.renderedRight > viewport + 2 || img.renderedWidth > viewport + 2),
         };
