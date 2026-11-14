@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" role="img" aria-labelledby="title"><title id="title">ملصق رواء — خروع وزيوت مختارة</title>
+ <rect width="600" height="800" fill="#f6f1e6"/>
+ <rect x="23" y="23" width="554" height="754" rx="2" fill="none" stroke="#b5a17b" stroke-width="1"/>
+ <path d="M37 96V37h59M504 37h59v59M37 704v59h59M504 763h59v-59" fill="none" stroke="#b5a17b" stroke-width="2"/>
+ <text x="306" y="166" text-anchor="middle" fill="#28352c" font-family="Georgia,serif" font-size="61" letter-spacing="11">RAWAA</text>
+ <text x="300" y="230" text-anchor="middle" fill="#28352c" font-family="Tahoma,serif" font-size="45" lang="ar">رواء</text>
+ <path d="M265 273h70" stroke="#b5a17b" stroke-width="1"/>
+ <g transform="translate(191 310) scale(1.7)"><g fill="none" stroke="#916c40" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round"><path d="M64 18C54 43 32 62 32 82a32 32 0 0 0 64 0C96 62 74 43 64 18Z"/><path d="M64 34C55 53 40 67 40 82a24 24 0 0 0 48 0C88 67 73 53 64 34Z"/><path d="M64 49C57 63 48 72 48 82a16 16 0 0 0 32 0C80 72 71 63 64 49Z"/><path d="M64 64c-4 8-8 13-8 18a8 8 0 0 0 16 0c0-5-4-10-8-18ZM16 65c-3 6-7 10-7 15a7 7 0 0 0 14 0c0-5-4-9-7-15ZM112 65c-3 6-7 10-7 15a7 7 0 0 0 14 0c0-5-4-9-7-15Z"/></g></g>
+ <text x="300" y="599" text-anchor="middle" fill="#916c40" font-family="Georgia,serif" font-size="23" letter-spacing="1.4">CASTOR BLEND</text>
+ <text x="300" y="645" text-anchor="middle" fill="#916c40" font-family="Tahoma,sans-serif" font-size="23" lang="ar">خروع وزيوت مختارة</text>
+ <path d="M260 692h80" stroke="#b5a17b" stroke-width="1"/>
+ <text x="300" y="728" text-anchor="middle" fill="#636757" font-family="Tahoma,sans-serif" font-size="17" lang="ar">عناية بالشعر</text>
+ <path d="M130 777h340" stroke="#916c40" stroke-width="3"/>
+ </svg>
