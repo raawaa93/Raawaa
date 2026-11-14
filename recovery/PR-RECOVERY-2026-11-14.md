@@ -32,9 +32,9 @@ The following evidence comes from the user's prior work context and the Cloudfla
 ## Recovery findings
 - The 2026-11-08 production snapshot is older than several successful previews created on 2026-11-13.
 - Therefore the production snapshot alone is not an acceptable basis for claiming that the latest Store work has been recovered.
-- Cloudflare's deployment metadata for failed PR #206 still records a full static-file inventory, including the two Hama MP4 paths. Those files may be recoverable from an accessible preview/deployment or another asset source; do not assume they are lost.
+- Cloudflare deployment inventories show the two Hama MP4 files are present in production (2026-11-08), PR #188, PR #197, PR #205, and PR #206 (including its failed latest deployment), with stable asset hashes: `reel-50ml.mp4` = `a4a602e3a098e871f1ef96ba195f5306`; `reel-hama.mp4` = `37be589ca8e37bedd9f0cccbe83edd9c`. They are absent from the PR #196 and PR #204 deployment inventories. The recovery branch currently lacks local copies, but these assets are not missing from the known production/deployment evidence. Recover the bytes from an accessible published asset URL or another authorized source before declaring them unavailable.
 - The failed PR #206 deployment log contains a generic Pages Function publish error. The deployment's metadata still reports `uses_functions: false`; investigate the Pages publish/runtime issue separately from source-code validation.
-- PR #196 and #204 previews are useful recoverable checkpoints and should be compared by file hashes against the production snapshot and the current recovery branch before consolidating.
+- PR #188, #197, #205 and #206 previews retain the two Hama MP4s in their deployment inventories; PR #196 and #204 do not. PR #196 and #204 remain useful checkpoints for their respective campaign/design changes. Compare the complete per-file inventories and hashes across these snapshots before consolidating.
 - Do not merge PRs, overwrite the production deployment, or change commercial pricing/authentication settings as part of source recovery.
 
 ## Domain reconciliation — HOLD
