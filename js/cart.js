@@ -415,6 +415,20 @@
     Array.prototype.forEach.call(document.querySelectorAll('[data-add-current]'), function (btn) {
       btn.setAttribute('data-add-to-cart', selectedSize);
       if (btn.hasAttribute('data-requires-js')) btn.disabled = false;
+
+      // Bind the primary product action directly as well as keeping the shared
+      // delegated handler for other add-to-cart surfaces. This protects the
+      // primary CTA if an unrelated page widget interrupts init() later.
+      if (!btn.hasAttribute('data-cart-direct-bound')) {
+        btn.setAttribute('data-cart-direct-bound', '');
+        btn.addEventListener('click', function (event) {
+          event.preventDefault();
+          event.stopPropagation();
+          var productId = btn.getAttribute('data-add-to-cart');
+          addToCart(productId, btn);
+          if (btn.hasAttribute('data-open-cart-after-add') && cart[productId]) openCart(btn);
+        });
+      }
     });
     updateSelectedInquiry(product);
     refreshOrderEstimate();
