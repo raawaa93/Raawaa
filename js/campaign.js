@@ -66,6 +66,18 @@
     card.setAttribute('data-product-id', product.id);
     card.setAttribute('data-family-id', product.familyId || '');
     var formula = (config.formulas || []).filter(function (f) { return f.id === product.familyId; })[0];
+    var visual = document.createElement('figure');
+    visual.className = 'campaign-product-visual';
+    var image = document.createElement('img');
+    image.src = product.image && product.image.src ? product.image.src : '';
+    image.alt = product.image && product.image.alt ? product.image.alt : (product.name || 'مزيج رواء');
+    image.loading = 'lazy';
+    image.decoding = 'async';
+    var caption = document.createElement('figcaption');
+    caption.textContent = 'تصوّر تصميمي للعبوة؛ ليس صورة للمنتج الفعلي.';
+    visual.append(image, caption);
+    var content = document.createElement('div');
+    content.className = 'campaign-product-copy';
     var title = document.createElement('h3');
     title.textContent = product.name ? product.name + ' · ' + product.sizeLabel : product.sizeLabel;
     var price = document.createElement('p');
@@ -81,7 +93,8 @@
     var link = document.createElement('a');
     link.href = productUrl(source, product.familyId);
     link.textContent = 'راجعي هذا المزيج والحجم';
-    card.append(title, price, meta, unit, link);
+    content.append(title, price, meta, unit, link);
+    card.append(visual, content);
     return card;
   }
 
@@ -98,7 +111,7 @@
     if (addon) addon.textContent = 'إضافة العطر ' + scentPriceText + ' لكل عبوة.';
     if (faqScent) faqScent.textContent = scentPriceText;
   } else {
-    if (addon) addon.textContent = 'تحتوي المزيجات الحالية على زيوت وعطر. يمكنك طلب تعديلها؛ نؤكد إمكانية تنفيذه وتوفّره وسعره قبل الاعتماد.';
+    if (addon) addon.textContent = 'تحتوي المزيجات الحالية على زيوت وعطر. أي تعديل إضافي يُؤكّد توفره وسعره قبل الاعتماد.';
     if (faqScent) faqScent.textContent = 'لا تُضاف';
   }
 
