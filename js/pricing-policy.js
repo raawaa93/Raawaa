@@ -23,7 +23,7 @@
 }(typeof globalThis !== 'undefined' ? globalThis : this, function () {
   'use strict';
 
-  /** دولار (رقم أو نص) ← سنتات صحيحة. للاستخدام مع الأرقام القادمة من config فقط. */
+  /** مبلغ من عملة المتجر (رقم أو نص) ← وحدات داخلية صحيحة بدقة منزلتين. */
   function toCents(value) {
     var n = Number(value);
     return Number.isFinite(n) ? Math.round(n * 100) : 0;
@@ -44,7 +44,7 @@
   }
 
   /**
-   * رسوم التوصيل الفعلية بالدولار.
+   * رسوم التوصيل الفعلية بعملة المتجر.
    *
    * السياسة المعتمدة: التوصيل مجاني دائمًا، لكل منطقة ولكل طريقة دفع.
    * `freeDeliveryIn` و`freeWithShamCash` بقيتا في الإعدادات للتوافق الخلفي فقط
@@ -65,13 +65,14 @@
 
   /** نسبة خصم طريقة الدفع (شام كاش ١٠٪). صفر لأي طريقة أخرى أو غير متاحة. */
   function discountPercentFor(method) {
-    if (!method || method.available === false) return 0;
+    // الخصم البنكي حصري لهوية شام كاش؛ لا يكفي وجود discountPercent في إعداد أي وسيلة أخرى.
+    if (!method || method.available === false || method.id !== 'shamcash') return 0;
     var percent = Number(method.discountPercent);
     if (!Number.isFinite(percent) || percent <= 0) return 0;
     return percent;
   }
 
-  /** مبلغ الخصم بالدولار على أساس محدد (قيمة المنتجات بعد العروض، بلا عطر ولا توصيل). */
+  /** مبلغ الخصم على إجمالي الطلب المؤهل بعد العروض، بما فيه التخصيصات المعتمدة، دون التوصيل. */
   function discountCentsFor(method, baseCents) {
     var base = asCents(baseCents);
     if (base <= 0) return 0;
@@ -90,9 +91,9 @@
     var delivery = input.delivery;
     var productCents = asCents(input.productCents);
     var scentCents = asCents(input.scentCents);
-    var discountCents = discountCentsFor(method, productCents);
-    var deliveryCents = deliveryCentsFor(method, zone, delivery);
     var subtotalCents = productCents + scentCents;
+    var discountCents = discountCentsFor(method, subtotalCents);
+    var deliveryCents = deliveryCentsFor(method, zone, delivery);
     return {
       subtotalCents: subtotalCents,
       discountCents: discountCents,

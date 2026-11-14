@@ -7,11 +7,11 @@
  *
  * قواعد صريحة (لأنها تمسّ المال):
  *  - الخانة لا تعمل إلا إذا كتب المالك `enabled: true` صراحةً. النسيان = لا خصم.
- *  - التاريخ (startsAt / endsAt) بصيغة YYYY-MM-DD ويُقارن بتاريخ جهاز الزائرة.
+ *  - التاريخ (startsAt / endsAt) بصيغة YYYY-MM-DD ويُقارن بتاريخ دمشق (Asia/Damascus).
  *    بعد endsAt يتوقف العرض وحده بلا أي تدخّل.
  *  - الأنواع المسموحة أربعة:
  *      percent   : نسبة من سعر المنتجات — بسقف CONFIG.offers.maxPercent.
- *      amount    : مبلغ ثابت بالدولار يُخصم من قيمة المنتجات.
+ *      amount    : مبلغ ثابت بالليرة السورية يُخصم من قيمة المنتجات.
  *      sizePrice : سعر جديد لحجم واحد بعينه (يحتاج sizeId).
  *      bundle    : سعر عبوة أو عبوتين أو ثلاث: `qty` عدد العبوات و`value` سعرها كاملة.
  *                  يحتاج `qty` (١–١٠). يعمل لكل حجم على حدة: إن كُتب `sizeId` فلهذا الحجم،
@@ -39,12 +39,15 @@
 
   function toCents(value) { return Math.round(Number(value) * 100); }
 
-  /** تاريخ محلي بصيغة YYYY-MM-DD — لا UTC، كي لا يتقدّم/يتأخر يوم في سوريا. */
+  /** تاريخ المتجر بصيغة YYYY-MM-DD حسب توقيت دمشق، لا توقيت جهاز الزائرة. */
   function todayISO(now) {
     var d = now ? new Date(now) : new Date();
-    var m = d.getMonth() + 1;
-    var day = d.getDate();
-    return d.getFullYear() + '-' + (m < 10 ? '0' : '') + m + '-' + (day < 10 ? '0' : '') + day;
+    var parts = new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'Asia/Damascus', year: 'numeric', month: '2-digit', day: '2-digit'
+    }).formatToParts(d);
+    var values = {};
+    parts.forEach(function (part) { if (part.type !== 'literal') values[part.type] = part.value; });
+    return values.year + '-' + values.month + '-' + values.day;
   }
 
   function validDate(value) {

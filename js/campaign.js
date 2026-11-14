@@ -7,24 +7,24 @@
 
   var angles = {
     benefit: {
-      kicker: 'رواء · لمسة أخيرة في روتينك',
-      title: 'لمسة تشطيب لمظهر أنعم ولمعان لطيف',
-      lead: 'لأيام الشعر الباهت أو المتطاير، خطوة بسيطة تكمّل إطلالتك. يختلف الإحساس والمظهر بحسب طبيعة الشعر والكمية.'
+      kicker: 'رواء · ثلاثة مزيجات للعناية بالشعر',
+      title: 'اختاري مزيجك. عناية أبسط.',
+      lead: 'ثلاثة مزيجات من الزيوت للعناية بمظهر الشعر الباهت والمتطاير، مع لمعة لطيفة. لكل مزيج أحجام 30 و50 و100 مل.'
     },
     order_steps: {
       kicker: 'رواء · كل خطوة واضحة',
-      title: 'اختاري الحجم، راجعي التفاصيل، ثم أرسلي استفسارك',
-      lead: 'شاهدي الأسعار المرجعية والتقدير حسب المنطقة وطريقة الدفع. لا دفع في الموقع، ولا يُرسل واتساب الرسالة تلقائيًا.'
+      title: 'اختاري المزيج والحجم، راجعي الإجمالي، ثم أرسلي استفسارك',
+      lead: 'الأسعار بالليرة السورية ومعتمدة. خصم 10% على إجمالي الطلب المؤهل عند الدفع عبر شام كاش فقط، والتوصيل مجاني لجميع المحافظات.'
     },
     reference_prices: {
-      kicker: 'رواء · ثلاثة أحجام بسعر واضح',
-      title: 'قارني الأحجام قبل أن تختاري',
-      lead: 'الأسعار المرجعية ظاهرة لكل حجم، بلا عطر ولا توصيل. يؤكد المالك التوفر والسعر النهائي والتفاصيل في المحادثة.'
+      kicker: 'رواء · ثلاثة مزيجات وتسعة خيارات بالحجم',
+      title: 'قارني المزيجات والأحجام قبل أن تختاري',
+      lead: 'الأسعار المعتمدة بالليرة السورية لكل مزيج وحجم. خصم 10% على إجمالي الطلب المؤهل عند الدفع عبر شام كاش فقط، والتوصيل مجاني لجميع المحافظات.'
     },
     size_guide: {
-      kicker: 'رواء · ثلاثة أحجام واضحة',
-      title: 'اختاري الحجم الذي يناسبك بهدوء',
-      lead: 'قارني كمية كل حجم وسعره المرجعي؛ الأسعار للمنتج قبل العطر والتوصيل، ويُؤكّد التوفر والتفاصيل في المحادثة.'
+      kicker: 'رواء · اختاري على مهل',
+      title: 'اختاري المزيج والحجم اللذين يناسبانك',
+      lead: 'قارني المزيجات والأحجام والأسعار المعتمدة بالليرة السورية. خصم 10% على إجمالي الطلب المؤهل عند الدفع عبر شام كاش فقط، والتوصيل مجاني لجميع المحافظات.'
     }
   };
 
@@ -77,7 +77,7 @@
     meta.textContent = (formula && formula.lead) || product.note || '';
     var unit = document.createElement('p');
     unit.className = 'campaign-product-unit';
-    unit.textContent = formatMoney(product.price / product.sizeMl) + ' لكل مل تقريبًا · قبل الخصم والتوصيل';
+    unit.textContent = formatMoney(product.price / product.sizeMl) + ' لكل مل تقريبًا · السعر الأساسي';
     var link = document.createElement('a');
     link.href = productUrl(source, product.familyId);
     link.textContent = 'راجعي هذا المزيج والحجم';
@@ -86,7 +86,7 @@
   }
 
   /**
-   * لا خيار عطر ولا رسم عطر: المنتجات خلطات مستقلة جاهزة (2026-11-08).
+   * الخلطات الحالية تحتوي زيوتًا وعطرًا؛ يمكن طلب تعديلها، ويُؤكد التوفّر والسعر قبل الاعتماد.
    * إن عاد الخيار للإعدادات لاحقًا يظهر تلقائيًا؛ وإن غاب تُعلن الصفحة ذلك
    * صراحةً بدل ترك خانة قديمة برقم مختلق.
    */
@@ -98,7 +98,7 @@
     if (addon) addon.textContent = 'إضافة العطر ' + scentPriceText + ' لكل عبوة.';
     if (faqScent) faqScent.textContent = scentPriceText;
   } else {
-    if (addon) addon.textContent = 'منتجات جاهزة بلا إضافات عطر أو زيوت، فلا تُضاف رسوم إضافية.';
+    if (addon) addon.textContent = 'تحتوي المزيجات الحالية على زيوت وعطر. يمكنك طلب تعديلها؛ نؤكد إمكانية تنفيذه وتوفّره وسعره قبل الاعتماد.';
     if (faqScent) faqScent.textContent = 'لا تُضاف';
   }
 
@@ -125,7 +125,7 @@
 
   var whatsappLink = document.querySelector('[data-campaign-whatsapp]');
   if (whatsappLink && /^\d{8,15}$/.test(config.contact.whatsappNumber)) {
-    var message = config.order.greeting + ' أريد الاستفسار عن السيروم والتوفر والتوصيل.';
+    var message = config.order.greeting + ' أرغب بالاستفسار عن المزيجات والأحجام والتوفّر.';
     var attribution = [];
     if (source.utm_campaign) attribution.push('المصدر: ' + source.utm_campaign);
     if (source.utm_content && angles[source.utm_content]) attribution.push('نسخة المحتوى: ' + source.utm_content);
@@ -145,7 +145,7 @@
         var item = document.createElement('li');
         var policy = window.RawaaPricingPolicy;
         var fee = policy ? policy.deliveryFeeFor(method, zone, config.delivery) : 0;
-        var discount = method.discountPercent ? ' · خصم ' + method.discountPercent + '% على المنتجات' : ' · بلا خصم';
+        var discount = method.discountPercent ? ' · خصم ' + method.discountPercent + '% على إجمالي الطلب المؤهل' : ' · لا يشمل خصم شام كاش';
         var deliveryText = fee === 0 ? 'توصيل مجاني' : 'توصيل ' + formatMoney(fee);
         item.textContent = method.label + ' — ' + zone.label + ': ' + deliveryText + discount + '.';
         list.append(item);
