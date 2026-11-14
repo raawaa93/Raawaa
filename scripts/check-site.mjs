@@ -17,15 +17,15 @@ const cssFiles = files.filter((file) => file.endsWith('.css'));
 // preserve the Arabic RTL document semantics used throughout the storefront.
 for (const file of htmlFiles) {
   const html = read(file);
-  const htmlTag = html.match(/<html\\b[^>]*>/i)?.[0] || '';
-  assert.match(htmlTag, /\\blang=["']ar["']/i, file + ' must declare Arabic as its document language');
-  assert.match(htmlTag, /\\bdir=["']rtl["']/i, file + ' must declare RTL text direction');
-  assert.match(html, /<meta\\s+name=["']viewport["'][^>]*content=["'][^"']*width=device-width/i, file + ' must include a mobile viewport');
+  const htmlTag = html.match(/<html\b[^>]*>/i)?.[0] || '';
+  assert.match(htmlTag, /\blang=["']ar["']/i, file + ' must declare Arabic as its document language');
+  assert.match(htmlTag, /\bdir=["']rtl["']/i, file + ' must declare RTL text direction');
+  assert.match(html, /<meta\s+name=["']viewport["'][^>]*content=["'][^"']*width=device-width/i, file + ' must include a mobile viewport');
 }
 const globalStyles = read('css/styles.css');
 assert.match(globalStyles, /:focus-visible/, 'Global styles must preserve a visible keyboard focus indicator');
-assert.match(globalStyles, /min-height:\\s*48px/i, 'Primary controls must retain a touch-friendly minimum height');
-assert.match(globalStyles, /env\\(safe-area-inset-bottom\\)/i, 'Cart footer must respect the iPhone safe-area inset');
+assert.match(globalStyles, /min-height:\s*48px/i, 'Primary controls must retain a touch-friendly minimum height');
+assert.match(globalStyles, /env\(safe-area-inset-bottom\)/i, 'Cart footer must respect the iPhone safe-area inset');
 const index = read('index.html');
 const serum = read('serum.html');
 const configSource = read('js/config.js');
