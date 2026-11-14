@@ -190,7 +190,7 @@
     document.querySelectorAll('a[href^="https://wa.me/"]:not([data-cart-fallback-link]):not([data-wa-selected])')
       .forEach(function (link) {
         var url = new URL(link.href);
-        var text = url.searchParams.get('text') || 'مرحبًا رواء، أريد الاستفسار عن السيروم.';
+        var text = url.searchParams.get('text') || 'مرحبًا رواء، أرغب بالاستفسار عن المزيجات.';
         url.searchParams.set('text', text + '\n\n' + note);
         link.href = url.href;
       });
