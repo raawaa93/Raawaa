@@ -18,29 +18,38 @@ for (const route of routes) {
 
       const dimensions = await page.evaluate(() => {
         const viewport = document.documentElement.clientWidth;
-        const offenders = Array.from(document.querySelectorAll('body *'))
-          .map((element) => {
-            const rect = element.getBoundingClientRect();
-            const style = getComputedStyle(element);
-            return {
-              tag: element.tagName.toLowerCase(),
-              id: element.id || '',
-              className: typeof element.className === 'string' ? element.className.slice(0, 100) : '',
-              left: Math.round(rect.left),
-              right: Math.round(rect.right),
-              width: Math.round(rect.width),
-              position: style.position,
-              overflowX: style.overflowX,
-            };
-          })
-          .filter((item) => item.right > viewport + 2 && item.width > 0)
-          .sort((a, b) => b.right - a.right)
-          .slice(0, 8);
+        const all = Array.from(document.querySelectorAll('html, body, body *'));
+        const overflowing = all.map((element) => {
+          const rect = element.getBoundingClientRect();
+          const style = getComputedStyle(element);
+          const before = getComputedStyle(element, '::before').content;
+          const after = getComputedStyle(element, '::after').content;
+          return {
+            tag: element.tagName.toLowerCase(),
+            id: element.id || '',
+            className: typeof element.className === 'string' ? element.className.slice(0, 80) : '',
+            left: Math.round(rect.left),
+            right: Math.round(rect.right),
+            width: Math.round(rect.width),
+            clientWidth: element.clientWidth,
+            scrollWidth: element.scrollWidth,
+            position: style.position,
+            overflowX: style.overflowX,
+            before,
+            after,
+          };
+        }).filter((item) =>
+          item.scrollWidth > item.clientWidth + 2 ||
+          item.right > viewport + 2 ||
+          item.before !== 'none' ||
+          item.after !== 'none'
+        ).sort((a, b) => (b.scrollWidth - b.clientWidth) - (a.scrollWidth - a.clientWidth))
+          .slice(0, 16);
         return {
           viewport,
           document: document.documentElement.scrollWidth,
           body: document.body.scrollWidth,
-          offenders,
+          overflowing,
         };
       });
 
