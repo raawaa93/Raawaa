@@ -1,11 +1,12 @@
 # RAWAA | رواء — robots.txt
-# الموقع منشور على Cloudflare Workers.
+# الموقع منشور على Cloudflare Pages.
 
 User-agent: *
 Allow: /
 
 # مسارات لا تُفهرَس
 Disallow: /404.html
+Disallow: /hama
 Disallow: /check.html
 Disallow: /setup.html
 Disallow: /owner/
