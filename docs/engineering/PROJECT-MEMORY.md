@@ -286,3 +286,34 @@ Update only when a verified, durable fact changes (for example: owner-approved p
 - Plugin directory search returned Firecrawl (already installed) and TinyFish (excluded by owner); no other dedicated crawling plugin was found in the matching searches. Do not use TinyFish.
 - Connected Firecrawl quota endpoint currently reports 0 remaining of 1,000 plan credits, with billing period ending 2026-11-29. Prefer self-hosted/local alternatives and avoid assuming a hosted free quota is currently available.
 - No crawler was installed or deployed in this turn. The research is recorded; deployment requires choosing a runtime/hosting location and estimating compute, memory, storage, and legal crawl scope first.
+
+
+## Execution checkpoint — 2026-11-15 (live verification)
+
+### Repository and automation
+- Current canonical `main`: `fe98d30d8bb3bc9511b64214926e96903327122d`.
+- Live GitHub enumeration confirms **17 branches**, **0 open pull requests**, and the 17 remaining refs are the documented durable backup/recovery/deploy/preview/release/restore checkpoints plus `main`. No further branch deletion or consolidation is justified.
+- All 17 branch refs currently report `protected=false`; the repository rulesets endpoint returns an empty list. This confirms branch protection is still unresolved, not merely an old note. The available GitHub connection has previously been denied the required administrative write permission (403); do not attempt to bypass this boundary.
+- Latest documentation commit triggered and completed the expected repository branch-hygiene, codebase-graph, and disaster-recovery-backup workflows successfully (runs #43683576809, #43683576836, #43683576862). It did not trigger the production validation/deploy workflow because the changes were documentation-only.
+- Latest commit's legacy commit-status endpoint is empty/pending; that is not a failed check and not evidence of a successful production validation. The relevant workflow runs are the successful checks tied to the actual production source commit below.
+
+### Production and quality verification
+- Cloudflare Pages production still points to deployment `b2923438-ad03-4c5a-816d-240fa6b5bbfd`, source `db1e0b131f596208b10e2e9c951d1f22c9beb916`, with deployment stage `success`. No newer production deployment was found.
+- For that deployed source, GitHub checks confirm successful canonical-main validation, automatic production release, mobile performance audit, and visual QA. Visual QA run #43682151818 produced 16 Chromium/WebKit × iPhone 13/desktop captures across home, serum, campaign, and privacy. The downloaded report contains **zero issues**, all 16 navigations returned HTTP 200, and no console/page/CSP/network errors, broken images, or horizontal overflow were reported.
+- Lighthouse CI was run against the local built site in GitHub Actions, not directly against the live public URL. Accessibility and best-practices scored 100 across pages. Home performance varied (median around 99, one low outlier); serum performance was 85–86 with LCP around 3.8–4.0 seconds; campaign performance was 96; privacy performance was 100. Campaign SEO score 69 is expected because `campaign.html` explicitly declares `noindex,follow` and is intentionally absent from the sitemap. Do not remove that directive without a deliberate indexing decision.
+- The serum Lighthouse sample identifies an oversized fallback bottle image (`rawaa-olive.jpg`, 928×928, 86 KB) with estimated savings of about 76 KB at its displayed size. The HTML preloads a different `size-50-v6` image that is not the actual initial bottle image. This is a modest, actionable responsive-image/preload cleanup; the measured 2.4-second TTFB came from the CI local-server run and must not be treated as a verified live-production TTFB.
+
+### Domain and crawler runtime
+- Current Cloudflare API re-check: the only Pages project is `raawaa-store`; its only custom domain is `rawaa.eu.org`, still pending with `CNAME record not set`. The only zone is also pending with activation failure `unresolvable`. The configured CNAME inside the inactive zone points to `raawaa-store.pages.dev` and is annotated for Raawaa Store. This is positive evidence of an intentional store binding, not proof of external domain registration ownership. Keep it unchanged until the registrant/owner intent is confirmed; if the owner confirms it is not for this store, remove only the Pages binding and corresponding CNAME first, then review whether the zone itself can be retired.
+- The free/open-source crawler research is committed at `docs/engineering/WEB-CRAWLING-TOOLING-RESEARCH.md`. No crawler engine has yet been installed or deployed. Firecrawl is connected but currently has 0 of 1,000 credits remaining through 2026-11-29; TinyFish remains prohibited. The next technical decision is a no-paid-runtime execution model (for example, a bounded scheduled GitHub Actions job using Crawl4AI, with artifacts rather than a permanent database) and a confirmed list of public target URLs. Do not add a persistent hosted service or paid LLM dependency by default.
+
+### Remaining launch and operations blockers (not safe to invent)
+1. Enable `main` branch protection and require the actual production validation checks through an authorized GitHub Settings session.
+2. Confirm whether `rawaa.eu.org` is owned/controlled for this store before retaining or detaching it; the current Cloudflare binding is store-specific.
+3. Supply the real Sham Cash wallet number if that payment route is to be operational; the repository intentionally leaves it blank.
+4. Provide verified full ingredient/INCI data, product/manufacturer/supplier documentation, and genuine product photographs before replacing the current conceptual packaging artwork or expanding formula claims.
+5. Review and approve the privacy notice for the actual operating jurisdiction and business process.
+6. Decide whether the store should remain a WhatsApp handoff or gain server-side order storage/payment. Neither connected Supabase project is confirmed as the Store database; do not connect either one or create checkout storage until the correct backend and security/backup design are selected.
+7. Optionally improve serum first-screen image delivery using responsive AVIF/WebP variants and a matching preload, then rerun Playwright, Lighthouse, and visual QA before release.
+
+No branch, DNS record, Pages domain binding, Supabase data, secret, customer/order data, price, discount, delivery rule, or billing setting was changed during this checkpoint.
