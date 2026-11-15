@@ -34,7 +34,7 @@ test('deletes an exact merged head only when its branch is explicitly reviewed',
   );
 });
 
-test('deletes the six newly reviewed merged heads only when their PR head matches', () => {
+test('deletes the seven newly reviewed merged heads only when their PR head matches', () => {
   const names = [
     'fix/branch-hygiene-protect-operational-refs-2026-11-15',
     'fix/visual-audit-csp-screenshots-2026-11-15',
@@ -42,6 +42,7 @@ test('deletes the six newly reviewed merged heads only when their PR head matche
     'maintenance/repository-hygiene-2026-11-15',
     'docs/visual-qa-and-inventory-finalization-2026-11-15',
     'maintenance/finish-branch-cleanup-2026-11-15',
+    'fix/visual-qa-webkit-csp-regression-2026-11-15',
   ];
   for (const name of names) {
     assert.ok(MERGED_PR_BRANCHES.includes(name));
