@@ -32,7 +32,8 @@ for (const engine of engines) {
       locale: 'ar-SY',
       timezoneId: 'Asia/Damascus',
       colorScheme: 'light',
-      reducedMotion: 'reduce',
+      // Keep reduced-motion at context level. Do not pass screenshot animations:'disabled':
+      // Playwright injects an inline stylesheet for that option, which strict style-src blocks in WebKit.
       ignoreHTTPSErrors: false,
     });
 
@@ -128,6 +129,9 @@ for (const engine of engines) {
             lang: document.documentElement.lang,
             dir: document.documentElement.dir,
             viewportWidth: width,
+            viewportHeight: window.innerHeight,
+            visualViewportHeight: window.visualViewport?.height ?? null,
+            screenHeight: window.screen?.height ?? null,
             documentWidth: document.documentElement.scrollWidth,
             documentHeight: document.documentElement.scrollHeight,
             bodyWidth: document.body.scrollWidth,
@@ -143,8 +147,8 @@ for (const engine of engines) {
 
         const prefix = engine.name + '--' + route.name + '--' + viewport.name;
         screenshots.push(prefix + '--viewport.png', prefix + '--full.png');
-        await page.screenshot({ path: path.join(outDir, prefix + '--viewport.png'), fullPage: false, animations: 'disabled' });
-        await page.screenshot({ path: path.join(outDir, prefix + '--full.png'), fullPage: true, animations: 'disabled' });
+        await page.screenshot({ path: path.join(outDir, prefix + '--viewport.png'), fullPage: false });
+        await page.screenshot({ path: path.join(outDir, prefix + '--full.png'), fullPage: true });
         if (route.name === 'serum') {
           for (const view of ['sizes', 'ritual']) {
             const selector = '[data-serum-view="' + view + '"] img';
@@ -154,7 +158,7 @@ for (const engine of engines) {
               return img && img.complete && img.naturalWidth > 0 && img.getBoundingClientRect().width > 0;
             }, selector, { timeout: 15000 });
             const imageName = prefix + '--view-' + view + '.png';
-            await page.locator('.serum-photo').first().screenshot({ path: path.join(outDir, imageName), animations: 'disabled' });
+            await page.locator('.serum-photo').first().screenshot({ path: path.join(outDir, imageName) });
             interactiveScreenshots.push(imageName);
           }
         }

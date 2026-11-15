@@ -21,3 +21,8 @@ Each run uploads an artifact containing viewport screenshots, full-page screensh
 The preview workflow intentionally checks out canonical `main` and deploys it to the isolated Pages preview branch `raawaa-recovery-preview`; it does not deploy the trigger branch's contents and does not publish to production. The visual QA workflow runs after that preview workflow completes successfully and tests the preview URL.
 
 To refresh the screenshots for the currently deployed storefront, create a meaningful update on a `preview-deploy/**` branch. The preview workflow builds the exact current `main` source, then the visual QA workflow captures the four public pages on iPhone 13 emulation (390px) and desktop (1440px), in Chromium and WebKit, plus the serum selector's sizes and ritual states. The audit checks HTTP status, Arabic RTL metadata, font loading, image health, browser errors, failed requests, and horizontal overflow. It is read-only and must never submit a real order or send a WhatsApp message.
+
+
+## WebKit strict-CSP screenshot handling
+
+The visual audit must not use Playwright screenshot option `animations: 'disabled'`. In WebKit, that option injects an inline stylesheet for screenshot capture, which is rejected by the site's strict `style-src 'self'` policy and creates one false console error per screenshot. Keep reduced-motion emulation at browser-context level, allow the existing page-settle wait, and capture screenshots without the injected stylesheet. Do not weaken the site's Content Security Policy to accommodate the test harness. The JSON report also records viewport, visual-viewport, and screen heights so mobile emulation can be checked explicitly.
