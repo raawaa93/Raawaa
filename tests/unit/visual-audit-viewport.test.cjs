@@ -17,3 +17,9 @@ test('visual QA records the actual scroll and visual viewport offset', () => {
   assert.match(audit, /scrollY: window\.scrollY/);
   assert.match(audit, /visualViewportOffsetTop: window\.visualViewport\?\.offsetTop \?\? 0/);
 });
+
+test('iPhone 13 emulation explicitly uses the full 390 by 844 CSS viewport', () => {
+  assert.match(audit, /name: 'iphone-13', device: \{ \.\.\.devices\['iPhone 13'\], viewport: \{ width: 390, height: 844 \}, screen: \{ width: 390, height: 844 \} \}/);
+  assert.match(audit, /viewportHeight: window\.innerHeight/);
+  assert.match(audit, /visualViewportHeight: window\.visualViewport\?\.height \?\? window\.innerHeight/);
+});
