@@ -143,7 +143,7 @@ Update only when a verified, durable fact changes (for example: owner-approved p
 - PR #58 is merged. The homepage now uses explicit, shorter motion transitions, respects `prefers-reduced-motion`, and exposes keyboard focus states. Store checks, Playwright browser checks, Graphify, and the mobile Lighthouse baseline all passed. The change was deployed with the validated `b37f20fd` main commit.
 
 - PR #59 is merged. `package-lock.json` now pins the Playwright toolchain to `@playwright/test@1.65.1`; lock generation validated `npm ci` and `npm audit --audit-level=high` reported zero vulnerabilities. Playwright CI and production validation now use `npm ci`; dependency/test-only changes no longer trigger a static-site production deployment. Google's OSV-Scanner v2.7.1 now runs on dependency PRs/merge groups and weekly on main.
-- PR #61's proposal to make production releases manual-only was closed after checking `AGENTS.md`: canonical-main automatic releases after complete validation are the owner-approved policy. Preserve that policy and its exact-SHA, clean-source, freshness, Cloudflare-secret, and production-environment gates.
+- PR #61's proposal to make production releases manual-only was closed after checking `AGENTS.md`: canonical-main automatic releases after complete validation are the owner-approved policy. Preserve that policy and its exact-SHA, clean-source, freshness, Cloudflare-secret, and technical release gates.
 
 
 ### Maintenance updates after the November 14 baseline
