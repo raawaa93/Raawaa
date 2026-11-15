@@ -10,7 +10,8 @@
 ## Global Constraints
 - Zero-cost only; no billing or paid API.
 - Preserve backup/* and recovery/*.
-- Never delete open-PR, protected, or unreviewed closed-unmerged branches.
+- Never delete merged PR heads by default, open-PR, protected, or unreviewed closed-unmerged branches.
+- Delete only the exact 11 superseded closed-unmerged and four stale no-PR refs when `ahead_by = 0`.
 - Never change DNS, secrets, Supabase data/schema, customer records, commercial policy, or production source.
 - Never use TinyFish.
 - Only validated main may deploy production.
@@ -24,21 +25,21 @@
 
 ### Task 1: Test the policy
 Files: create tests/unit/branch-cleanup-policy.test.cjs; modify .github/workflows/store-checks.yml.
-- [ ] Test merged heads, superseded closed work, open PRs, reused refs, protected refs, backup/recovery namespaces, forks, stale previews.
-- [ ] Add node --test tests/unit/*.test.cjs to Store checks.
-- [ ] Observe expected RED before classifier exists.
+- [x] Test merged heads retained by default, superseded closed work, open PRs, reused refs, protected refs, backup/recovery namespaces, forks, stale previews, and ancestry proof.
+- [x] Add node --test tests/unit/*.test.cjs to Store checks.
+- [x] Observe expected RED for unsafe merged/closed-unmerged/unreferenced deletion rules before tightening the classifier.
 
 ### Task 2: Implement and automate
 Files: create scripts/branch-cleanup-policy.cjs; create .github/workflows/cleanup-merged-branches.yml.
-- [ ] Implement classifyBranches(branches, pullRequests, repositoryFullName).
-- [ ] Add main-push, weekly, and manual triggers.
-- [ ] Delete only policy-approved refs through supported GitHub API.
-- [ ] Verify tests and Store checks.
+- [x] Implement classifyBranches(branches, pullRequests, repositoryFullName) with exact allowlists and `ahead_by = 0` proof.
+- [x] Add main-push, weekly, and manual triggers.
+- [x] Delete only exact allowlisted refs through supported GitHub API.
+- [ ] Verify final tests and Store checks after the safety-policy update.
 
 ### Task 3: Document
 Files: create docs/engineering/BRANCH-INVENTORY.md and TOOLING-REGISTRY.md; create this spec and plan; modify AGENTS.md and README.md.
-- [ ] Record retained namespaces, superseded branches, connected tools, quotas, and blockers.
-- [ ] Align repository guidance with tested cleanup policy.
+- [x] Record retained namespaces, superseded branches, connected tools, quotas, and blockers.
+- [x] Align repository guidance with tested cleanup policy and automatic validated releases.
 - [ ] Date quota observations and distinguish available from active.
 
 ### Task 4: Merge and verify
