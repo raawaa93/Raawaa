@@ -31,7 +31,7 @@ This is the only active commercial policy for the recovered source. Historical s
 
 ## Pages and assets
 
-- Storefront: `index.html`, `serum.html`, `hama.html`, `campaign.html`, `privacy.html`, `setup.html`, `check.html`, `404.html`.
+- Storefront: `index.html`, `serum.html`, `campaign.html`, `privacy.html`, `404.html`. Retired Hama/setup/diagnostic pages remain only in `recovery/`.
 - Owner-facing pages: `owner/index.html`, `owner/pricing.html`.
 - Front-end code: `js/`, `css/`, `owner/`.
 - Static assets: `assets/` (product and campaign images, brand assets, icons, fonts and captions).
