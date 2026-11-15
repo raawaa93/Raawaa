@@ -27,6 +27,21 @@ test('preserves unreviewed merged PR heads by default', () => {
   assert.deepEqual(result, []);
 });
 
+test('includes post-merge QA fixes in the allowlist and a fully integrated docs-only ref', () => {
+  for (const name of [
+    'fix/visual-audit-webkit-csp-2026-11-15',
+    'fix/visual-audit-csp-screenshots-2026-11-15',
+    'fix/branch-hygiene-protect-operational-refs-2026-11-15',
+  ]) assert.ok(MERGED_PR_BRANCHES.includes(name));
+
+  const name = 'docs/project-tooling-and-branch-inventory-2026-11-15';
+  assert.ok(STALE_NO_PR_BRANCHES.includes(name));
+  assert.deepEqual(
+    classifyBranches([branchRef(name)], [], repository, { [name]: { ahead_by: 0 } }).map(x => x.name),
+    [name],
+  );
+});
+
 test('deletes an exact merged head only when its branch is explicitly reviewed', () => {
   const name = 'automation/agent-guidance-2026-11-15';
   assert.ok(MERGED_PR_BRANCHES.includes(name));
