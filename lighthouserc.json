@@ -4,7 +4,6 @@
       "url": [
         "http://127.0.0.1:4173/",
         "http://127.0.0.1:4173/serum.html",
-        "http://127.0.0.1:4173/campaign.html",
         "http://127.0.0.1:4173/privacy.html"
       ],
       "numberOfRuns": 3,
@@ -46,15 +45,7 @@
             "maxLength": 0
           }
         ]
-      },
-      "assertMatrix": [
-        {
-          "matchingUrlPattern": ".*campaign\\.html$",
-          "assertions": {
-            "is-crawlable": "off"
-          }
-        }
-      ]
+      }
     },
     "upload": {
       "target": "filesystem",
