@@ -62,6 +62,7 @@ jobs:
         run: |
           set -euo pipefail
           graphify extract . --code-only --max-workers 2 --out "$RUNNER_TEMP/raawaa-graph"
+          graphify cluster-only "$RUNNER_TEMP/raawaa-graph" --no-label
           test -s "$RUNNER_TEMP/raawaa-graph/graphify-out/graph.json"
           test -s "$RUNNER_TEMP/raawaa-graph/graphify-out/GRAPH_REPORT.md"
 
