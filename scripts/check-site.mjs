@@ -50,7 +50,7 @@ const cart = read('js/cart.js');
 const views = read('js/serum-views.js');
 
 const productionWorkflow = read('.github/workflows/production-cicd.yml');
-assert.match(productionWorkflow, /if: github\\.ref == 'refs\\/heads\\/main' && github\\.event_name == 'push'/u, 'Production releases must run only after validated pushes to canonical main');
+assert.match(productionWorkflow, /if: github\.ref == 'refs\/heads\/main' && github\.event_name == 'push'/u, 'Production releases must run only after validated pushes to canonical main');
 assert.doesNotMatch(productionWorkflow, /^\\s*workflow_dispatch:/mu, 'Production releases must not expose a manual dispatch path');
 assert.doesNotMatch(productionWorkflow, /confirm_production/u, 'Production releases must not depend on a manual confirmation input');
 assert.match(productionWorkflow, /paths-ignore:[\\s\\S]*?- '\\.github\\/workflows\\/\\*\\*'/u, 'Workflow-only changes must not trigger production deployment');
