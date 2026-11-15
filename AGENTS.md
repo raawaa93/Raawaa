@@ -1,7 +1,7 @@
 # RAWAA Store agent guidance
 
 ## Source of truth
-- Branch hygiene: remove merged branches and stale branches only when their head is proven contained in `main`; preserve `main`, all `backup/*` and `recovery/*` refs, protected refs, and open-PR heads. Closed-unmerged or unreferenced refs require an explicit GitHub comparison with `ahead_by = 0`. See `docs/engineering/BRANCH-INVENTORY.md`.
+- Branch hygiene: merged PR heads are retained by default. Retire only exact allowlisted superseded closed-unmerged refs and stale no-PR preview/deploy refs after GitHub comparison confirms `ahead_by = 0`; preserve `main`, all `backup/*` and `recovery/*` refs, protected refs, and open-PR heads. See `docs/engineering/BRANCH-INVENTORY.md`.
 - Do not delete global ChatGPT plugins or Skills as part of repository cleanup; they may be shared by other projects. Curate project relevance in `docs/engineering/TOOLING-REGISTRY.md`.
 - Treat this repository's current main branch and owner-confirmed policy as authoritative.
 - Read `docs/engineering/PROJECT-MEMORY.md` at the start of substantial work; update it only when a durable, verified decision changes.
@@ -75,7 +75,7 @@ These upstream skills are not vendored into this repository. Install them in the
 
 - Read docs/engineering/BRANCH-INVENTORY.md before retiring branches and docs/engineering/TOOLING-REGISTRY.md before adding or replacing integrations.
 - The cleanup policy is implemented in scripts/branch-cleanup-policy.cjs and tested in tests/unit/branch-cleanup-policy.test.cjs.
-- The cleanup workflow removes only same-repository merged PR heads, exact reviewed superseded closed-PR refs, and exact stale preview/deploy refs in the policy. It always preserves main, protected branches, every backup/* and recovery/* branch, and all open-PR heads.
+- The cleanup workflow never deletes merged PR heads by default. It deletes only exact allowlisted superseded closed-PR and stale no-PR refs after `ahead_by = 0`. It always preserves main, protected branches, every backup/* and recovery/* branch, and all open-PR heads.
 - Never add a branch to a deletion allowlist without a separate inventory showing its replacement is already on main and no unresolved PR depends on it.
 - Run node --test tests/unit/*.test.cjs when changing branch cleanup rules. Store checks runs this automatically on PRs.
 - Record connected tools, skill status, and dated free-tier balances in docs/engineering/TOOLING-REGISTRY.md. A tool being available in ChatGPT does not mean it is connected to RAWAA or safe to mutate.
