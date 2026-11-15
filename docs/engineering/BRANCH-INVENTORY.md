@@ -63,3 +63,14 @@
 - This documentation-only branch is included in the reviewed merged-branch allowlist.
 - After this PR merges, the normal branch-hygiene workflow removes its branch ref.
 - Expected steady state: **17 refs, 32 recovery tags, 0 open PRs**.
+
+## Final closure check — 2026-11-15 05:50 UTC
+
+- Canonical main: `0791e380d70cd34ea212ccdc1dc2b9289610a004`.
+- Branch refs at this check: **19** — 17 durable operational/recovery refs plus two temporary maintenance refs.
+- PR history before this final closure PR: 104 total, 75 merged, 29 closed-unmerged, zero open.
+- Recovery tags: **32**.
+- `maintenance/retire-last-stale-refs-2026-11-15` points to `88404f1c02dcc3db3768ab615d4a175f836d398c`, which GitHub confirms is an ancestor of main (`ahead_by=0`, `behind_by=1)); no tag is needed.
+- `maintenance/final-archive-closure-2026-11-15` is the active final cleanup PR branch and is allowlisted for pruning after merge.
+- The final cleanup run must leave exactly the 17 durable refs listed above, keep all 32 tags, and leave no open PRs.
+
