@@ -1,8 +1,8 @@
 name: Store checks
 on:
   push:
+    # Main pushes run the full production validation pipeline; keep this workflow for recovery branches and PRs.
     branches:
-      - main
       - 'recovery/**'
       - 'restore/**'
   pull_request:
