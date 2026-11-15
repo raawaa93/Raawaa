@@ -86,3 +86,38 @@
 - The archive allowlist and no-PR prune allowlist are empty; no inactive working branch refs remain.
 - This final inventory documentation branch is allowlisted for pruning after its own merge.
 
+
+
+## Superseding authoritative snapshot — 2026-11-15 05:54 UTC
+
+This section supersedes every earlier "current", "final", and "expected" count above. The older sections are retained as historical audit trail only.
+
+- Canonical repository: `raawaa93/Raawaa`; default branch: `main`.
+- Latest verified main commit after PR #106: `97706b02e2a42e01ae9ca1054d35430a4b873fe2`.
+- Live branch enumeration: **17 refs**, matching the durable operational set below; no temporary documentation/maintenance branch remains in the live list.
+- Recovery archive: **33 annotated exact-SHA tags**, including the final maintenance archive recorded above. Preserve all archive tags.
+- Pull request state: **105 total, 76 merged, 29 closed-unmerged, 0 open** (latest open-PR query returned an empty list).
+- Inactive non-operational working refs: **0**. Archive and no-PR prune allowlists are empty.
+- Branch protection remains a security gap: `main.protected=false`, no repository rulesets were reported in the latest recorded audit, and the connected GitHub app previously received HTTP 403 when attempting to configure protection. Configure required checks and branch protection through an authorized GitHub settings session; do not treat empty commit statuses as passing CI.
+- Latest combined commit-status query for `97706b0` returned no status entries. This is **not** proof that CI passed. The production release and browser/mobile checks recorded in the tooling/project audit refer to their explicitly recorded source commit and deployment, not automatically to this documentation-only merge.
+- Production baseline recorded after PR #101: Cloudflare Pages deployment `b2923438-ad03-4c5a-816d-240fa6b5bbfd`, source `db1e0b131f596208b10e2e9c951d1f22c9beb916`, URL `https://b2923438.raawaa-store.pages.dev`. No production code, DNS, customer/order data, pricing, discounts, shipping, Supabase data, secrets, or billing changes were made by PRs #102–#106.
+- Live refs (17):
+  - `main`
+  - `backup/continuity-hardening-2026-11-15`
+  - `backup/site-2026-11-14-post-mobile-audit`
+  - `backup/site-2026-11-14-restored-main`
+  - `backup/site-2026-11-15-preproduction`
+  - `deploy/10-percent-2026-11-14`
+  - `deploy/10-percent-site-only`
+  - `preview-deploy/visual-qa-after-csp-fix-2026-11-15`
+  - `preview-deploy/visual-qa-current-2026-11-15`
+  - `preview-deploy/2026-11-14`
+  - `preview-deploy/2026-11-15-main-78ece71`
+  - `production-deploy/release-2026-11-15`
+  - `recovery/archive-store-supabase-migrations-2026-11-15`
+  - `recovery/cloudflare-manifest-2026-11-14`
+  - `recovery/inspect-edge-functions-2026-11-15`
+  - `release/clean-pages-payload-2026-11-14`
+  - `restore/integrated-store-2026-11-14`
+
+Do not delete or consolidate any of these 17 refs without a new individual review proving they are obsolete and a verified recovery point. The current cleanup task is closed; future work should focus on production validation, security controls, and unresolved integrations rather than further branch deletion.
