@@ -15,6 +15,7 @@ const MERGED_PR_BRANCHES = Object.freeze([
   "dependabot/github_actions/actions/setup-python-7",
   "dependabot/github_actions/actions/upload-artifact-7",
   "docs/branch-inventory-cleanup-2026-11-14",
+  "docs/final-branch-inventory-2026-11-15",
   "docs/integration-audit-2026-11-15",
   "docs/owner-currency-alignment-2026-11-14",
   "docs/preview-gate-and-legacy-cleanup-2026-11-14",
