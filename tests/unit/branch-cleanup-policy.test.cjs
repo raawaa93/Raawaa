@@ -270,3 +270,18 @@ test('retires the superseded archive-closure PR branch only after exact ancestry
     [],
   );
 });
+
+
+test('allows deletion of the closed PR117 branch only when main contains its exact head', () => {
+  const name = 'maintenance/finalize-pr113-archive-2026-11-15';
+  assert.ok(SUPERSEDED_CLOSED_PR_BRANCHES.includes(name));
+  assert.deepEqual(classifyBranches([branchRef(name)], [pr(name)], repository, { [name]: { ahead_by: 0, behind_by: 5 } }).map(x => x.name), [name]);
+  assert.deepEqual(classifyBranches([branchRef(name)], [pr(name)], repository, { [name]: { ahead_by: 1, behind_by: 5 } }), []);
+});
+
+test('retires this exact maintenance policy branch after merge', () => {
+  const name = 'maintenance/retire-superseded-finalize-ref-2026-11-15';
+  assert.ok(MERGED_PR_BRANCHES.includes(name));
+  assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
+  assert.deepEqual(classifyBranches([branchRef(name)], [pr(name, { merged: true })], repository).map(x => x.name), [name]);
+});
