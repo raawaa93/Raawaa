@@ -56,11 +56,11 @@ const MERGED_PR_BRANCHES = Object.freeze([
   "fix/visual-audit-csp-screenshots-2026-11-15",
   "fix/visual-audit-webkit-csp-2026-11-15",
   "docs/visual-qa-and-inventory-finalization-2026-11-15",
-  "maintenance/finish-branch-cleanup-2026-11-15",
-  "maintenance/repository-hygiene-2026-11-15",
+  "maintenance/branch-cleanup-final-2026-11-15",
   "fix/visual-qa-webkit-csp-regression-2026-11-15",
-  "maintenance/branch-cleanup-consolidated-2026-11-15",
-  "fix/production-release-push-only-2026-11-15"
+  "maintenance/repository-hygiene-2026-11-15",
+  "fix/production-release-push-only-2026-11-15",
+  "fix/visual-audit-top-viewport-2026-11-15"
 ]);
 const SUPERSEDED_CLOSED_PR_BRANCHES = Object.freeze([
   "ci/restore-release-boundaries-2026-11-15-rebased",
@@ -99,9 +99,8 @@ function classifyBranches(branches, pullRequests, repositoryFullName, comparison
     const name = branch?.name;
     if (!name || name === 'main' || branch.protected) return false;
 
-    const alwaysProtectedPrefixes = ['backup/', 'recovery/', 'restore/', 'release/', 'production-deploy/'];
+    const alwaysProtectedPrefixes = ['backup/', 'recovery/', 'restore/', 'release/', 'production-deploy/', 'deploy/'];
     if (alwaysProtectedPrefixes.some((prefix) => name.startsWith(prefix))) return false;
-    if (name.startsWith('deploy/')) return false;
     if (name.startsWith('preview-deploy/') && !staleNoPr.has(name)) return false;
 
     const related = relatedByHead.get(name) || [];
@@ -114,28 +113,21 @@ function classifyBranches(branches, pullRequests, repositoryFullName, comparison
     );
     const comparison = comparisons[name];
 
-    // A reused ref with a closed-unmerged PR is retained unless it is explicitly
-    // reviewed AND GitHub proves every current commit is already contained in main.
+    // A reused branch must be fully contained in main before it can be removed.
     if (hasClosedUnmergedPR) {
       if (hasMergedPR) return mergedAllowlist.has(name) && comparison?.ahead_by === 0;
       return superseded.has(name) && comparison?.ahead_by === 0;
     }
 
-    // No-PR refs are eligible only when individually reviewed and proven contained in main.
+    // No-PR refs are removed only from the reviewed temporary list and only after ancestry proof.
     if (related.length === 0) return staleNoPr.has(name) && comparison?.ahead_by === 0;
 
-    // Exact merged heads are removed only from the reviewed allowlist.
+    // Exact merged heads require an explicit allowlist. Moved heads require ancestry proof.
     if (hasMergedPR && mergedHeadMatchesCurrent) return mergedAllowlist.has(name);
-    // A moved merged branch requires ancestry proof.
     if (hasMergedPR) return mergedAllowlist.has(name) && comparison?.ahead_by === 0;
 
     return false;
   });
 }
 
-module.exports = {
-  classifyBranches,
-  MERGED_PR_BRANCHES,
-  SUPERSEDED_CLOSED_PR_BRANCHES,
-  STALE_NO_PR_BRANCHES,
-};
+module.exports = { classifyBranches, MERGED_PR_BRANCHES, SUPERSEDED_CLOSED_PR_BRANCHES, STALE_NO_PR_BRANCHES };
