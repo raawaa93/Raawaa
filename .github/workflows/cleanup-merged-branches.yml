@@ -53,10 +53,10 @@ jobs:
             const candidatesForComparison = branches.filter(branch => {
               const name = branch.name;
               if (name === 'main' || branch.protected) return false;
-              const alwaysProtectedPrefixes = ['backup/', 'recovery/', 'restore/', 'release/', 'production-deploy/', 'deploy/'];
+              const alwaysProtectedPrefixes = ['backup/', 'recovery/', 'restore/', 'release/', 'production-deploy/'];
               if (alwaysProtectedPrefixes.some(prefix => name.startsWith(prefix))) return false;
+              if (name.startsWith('deploy/')) return false;
               if (name.startsWith('preview-deploy/') && !staleNoPr.has(name)) return false;
-
               const related = pullRequests.filter(pull => sameRepo(pull) && pull.head.ref === name);
               if (related.some(pull => pull.state === 'open')) return false;
 
@@ -115,7 +115,7 @@ jobs:
               .addHeading('Deleted refs')
               .addList(deleted.length ? deleted : ['No branch refs required deletion'])
               .addHeading('Safety rules')
-              .addList(['main and protected refs retained', 'all backup/*, recovery/*, restore/*, release/*, production-deploy/*, and deploy/* refs retained', 'all open-PR heads retained; active preview-deploy/* refs retained', 'merged refs deleted only from the 60-name reviewed allowlist', 'changed merged heads require ahead_by = 0', 'closed-unmerged refs require explicit review and ahead_by = 0', 'temporary no-PR refs require explicit review and ahead_by = 0', 'comparison failures retained'])
+              .addList(['main and protected refs retained', 'all backup/*, recovery/*, restore/*, release/*, and production-deploy/* refs retained', 'all open-PR heads retained; active preview-deploy/* and deploy/* refs retained', 'merged refs deleted only from the 60-name reviewed allowlist', 'changed merged heads require ahead_by = 0', 'closed-unmerged refs deleted only from the exact superseded allowlist; reused refs require ahead_by = 0', 'temporary no-PR refs require explicit review and ahead_by = 0', 'comparison failures retained'])
               .write();
 
             if (failed.length) core.setFailed(`Branch cleanup had ${failed.length} deletion failures.`);
