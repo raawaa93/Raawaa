@@ -267,3 +267,13 @@ test('retains refs when comparison data is missing or the branch is ahead of mai
     [],
   );
 });
+
+const cleanupWorkflow = require('node:fs').readFileSync(
+  require('node:path').join(process.cwd(), '.github/workflows/cleanup-merged-branches.yml'),
+  'utf8',
+);
+
+test('branch cleanup workflow uses Node 24 compatible github-script v9', () => {
+  assert.match(cleanupWorkflow, /actions\/github-script@v9/u);
+  assert.doesNotMatch(cleanupWorkflow, /actions\/github-script@v7/u);
+});
