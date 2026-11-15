@@ -52,6 +52,8 @@ const views = read('js/serum-views.js');
 const productionWorkflow = read('.github/workflows/production-cicd.yml');
 assert.match(productionWorkflow, /if: github\.ref == 'refs\/heads\/main' && github\.event_name == 'push'/u, 'Production deployment must run automatically after successful validation of a main push');
 assert.doesNotMatch(productionWorkflow, /workflow_dispatch|confirm_production/u, 'Production deployment must not depend on a manual dispatch or confirmation input');
+assert.match(productionWorkflow, /git diff --name-only "\$GITHUB_SHA" "\$MAIN_SHA"/u, 'A queued release may tolerate only non-production main advances');
+assert.match(productionWorkflow, /Production source changed after validation/u, 'Any production-source advance must block a stale deployment');
 
 const configMatch = configSource.match(/window\.RAWAA_CONFIG\s*=\s*deepFreeze\((\{[\s\S]*?\})\s*\);/);
 assert.ok(configMatch, 'RAWAA_CONFIG must be a JSON-compatible object');
