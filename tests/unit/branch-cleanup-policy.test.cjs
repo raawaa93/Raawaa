@@ -128,3 +128,18 @@ test('retains refs when comparison data is missing or the branch is ahead of mai
   });
   assert.deepEqual(result, []);
 });
+
+test('preserves restore, release, production, and active preview/deploy checkpoints', () => {
+  const names = [
+    'restore/integrated-store-2026-11-14',
+    'release/clean-pages-payload-2026-11-14',
+    'production-deploy/release-2026-11-15',
+    'preview-deploy/visual-qa-current-2026-11-15',
+    'preview-deploy/2026-11-14',
+    'deploy/10-percent-2026-11-14',
+  ];
+  const branches = names.map(name => branchRef(name));
+  const pulls = names.map(name => pr(name, { merged: true }));
+  const comparisons = Object.fromEntries(names.map(name => [name, { ahead_by: 0, behind_by: 0 }]));
+  assert.deepEqual(classifyBranches(branches, pulls, repository, comparisons), []);
+});
