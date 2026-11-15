@@ -17,10 +17,11 @@ const pull = (ref, state = 'open', owner = repository) => ({
   state, head: { ref, repo: { full_name: owner } },
 });
 
-test('archives the two merged performance refs only at their reviewed exact SHAs', () => {
+test('archives reviewed merged refs only at their exact SHAs', () => {
   const reviewed = {
     'performance/fix-serum-image-preload-2026-11-15': '9368c47535062ad147bafba2632a899adac2c2fe',
     'performance/trim-serum-css-2026-11-15': '1449c8579d43b5535ef90d956daa8917c4e860a3',
+    'fix/mobile-header-buttons-colors-2026-11-15': '6d9887c48cbbbd5eb9c0bf84a97acb6db2bfaf95',
   };
   assert.deepEqual(ARCHIVE_BRANCHES, reviewed);
   const branches = Object.entries(reviewed).map(([name, sha]) => branch(name, sha));
