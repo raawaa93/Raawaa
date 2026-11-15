@@ -22,7 +22,7 @@ jobs:
     timeout-minutes: 15
     steps:
       - name: Checkout canonical policy
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           ref: main
           persist-credentials: false
@@ -32,7 +32,7 @@ jobs:
         with:
           script: |
             const path = `${process.env.GITHUB_WORKSPACE}/scripts/branch-cleanup-policy.cjs`;
-            const { classifyBranches } = require(path);
+            const { classifyBranches, SUPERSEDED_CLOSED_PR_BRANCHES, STALE_NO_PR_BRANCHES } = require(path);
             const { owner, repo } = context.repo;
             const fullName = `${owner}/${repo}`;
 
@@ -42,12 +42,19 @@ jobs:
             ]);
 
             const comparisons = {};
-            const candidatesForComparison = branches.filter(branch =>
-              branch.name !== 'main' &&
-              !branch.protected &&
-              !branch.name.startsWith('backup/') &&
-              !branch.name.startsWith('recovery/')
-            );
+            const superseded = new Set(SUPERSEDED_CLOSED_PR_BRANCHES);
+            const staleNoPr = new Set(STALE_NO_PR_BRANCHES);
+            const sameRepo = pull => pull?.head?.repo?.full_name === fullName;
+            const candidatesForComparison = branches.filter(branch => {
+              const name = branch.name;
+              if (name === 'main' || branch.protected || name.startsWith('backup/') || name.startsWith('recovery/')) return false;
+              const related = pullRequests.filter(pull => sameRepo(pull) && pull.head.ref === name);
+              if (related.some(pull => pull.state === 'open')) return false;
+              if (related.some(pull => pull.state === 'closed' && !pull.merged_at)) return !superseded.has(name);
+              if (related.length === 0) return !staleNoPr.has(name);
+              const mergedHeadMatches = related.some(pull => Boolean(pull.merged_at) && pull.head.sha === branch.commit?.sha);
+              return related.some(pull => Boolean(pull.merged_at)) && !mergedHeadMatches && !superseded.has(name);
+            });
 
             for (const branch of candidatesForComparison) {
               try {
