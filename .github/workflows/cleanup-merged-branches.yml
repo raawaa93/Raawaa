@@ -17,7 +17,7 @@ concurrency:
 
 jobs:
   prune:
-    name: Prune verified obsolete branch refs
+    name: Prune reviewed obsolete branch refs
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -32,7 +32,10 @@ jobs:
         with:
           script: |
             const path = `${process.env.GITHUB_WORKSPACE}/scripts/branch-cleanup-policy.cjs`;
-            const { classifyBranches, SUPERSEDED_CLOSED_PR_BRANCHES, STALE_NO_PR_BRANCHES } = require(path);
+            const {
+              classifyBranches, MERGED_PR_BRANCHES,
+              SUPERSEDED_CLOSED_PR_BRANCHES, STALE_NO_PR_BRANCHES
+            } = require(path);
             const { owner, repo } = context.repo;
             const fullName = `${owner}/${repo}`;
 
@@ -41,19 +44,25 @@ jobs:
               github.paginate(github.rest.pulls.list, { owner, repo, state: 'all', per_page: 100 }),
             ]);
 
-            const comparisons = {};
+            const mergedAllowlist = new Set(MERGED_PR_BRANCHES);
             const superseded = new Set(SUPERSEDED_CLOSED_PR_BRANCHES);
             const staleNoPr = new Set(STALE_NO_PR_BRANCHES);
             const sameRepo = pull => pull?.head?.repo?.full_name === fullName;
+            const comparisons = {};
+
             const candidatesForComparison = branches.filter(branch => {
               const name = branch.name;
               if (name === 'main' || branch.protected || name.startsWith('backup/') || name.startsWith('recovery/')) return false;
-              if (!superseded.has(name) && !staleNoPr.has(name)) return false;
               const related = pullRequests.filter(pull => sameRepo(pull) && pull.head.ref === name);
               if (related.some(pull => pull.state === 'open')) return false;
-              const hasClosedUnmergedPR = related.some(pull => pull.state === 'closed' && !pull.merged_at);
-              if (hasClosedUnmergedPR) return superseded.has(name);
-              return related.length === 0 && staleNoPr.has(name);
+
+              const hasMerged = related.some(pull => Boolean(pull.merged_at));
+              const hasClosedUnmerged = related.some(pull => pull.state === 'closed' && !pull.merged_at);
+              if (hasClosedUnmerged) return hasMerged ? mergedAllowlist.has(name) : superseded.has(name);
+              if (related.length === 0) return staleNoPr.has(name);
+
+              const mergedHeadMatches = related.some(pull => Boolean(pull.merged_at) && pull.head.sha === branch.commit?.sha);
+              return hasMerged && mergedAllowlist.has(name) && !mergedHeadMatches;
             });
 
             for (const branch of candidatesForComparison) {
@@ -71,9 +80,9 @@ jobs:
             const deleted = [];
             const failed = [];
 
-            core.info(`Inspected ${branches.length} branches, ${pullRequests.length} PRs, and ${Object.keys(comparisons).length} branch comparisons.`);
-            core.info(`Reviewed allowlist comparisons: ${candidatesForComparison.map(branch => branch.name).join(', ') || 'none'}.`);
-            core.info(`Policy-approved deletion candidates (allowlist + ahead_by=0): ${candidates.length}.`);
+            core.info(`Inspected ${branches.length} branches, ${pullRequests.length} PRs, and ${Object.keys(comparisons).length} ancestry comparisons.`);
+            core.info(`Compared refs: ${candidatesForComparison.map(branch => branch.name).join(', ') || 'none'}.`);
+            core.info(`Policy-approved deletion candidates: ${candidates.length}.`);
 
             for (const branch of candidates) {
               try {
@@ -94,7 +103,7 @@ jobs:
               .addTable([
                 [{ data: 'Metric', header: true }, { data: 'Count', header: true }],
                 ['Branches inspected', String(branches.length)],
-                ['Comparisons completed', String(Object.keys(comparisons).length)],
+                ['Ancestry comparisons completed', String(Object.keys(comparisons).length)],
                 ['Deletion candidates', String(candidates.length)],
                 ['Deleted', String(deleted.length)],
                 ['Failures', String(failed.length)],
@@ -102,7 +111,7 @@ jobs:
               .addHeading('Deleted refs')
               .addList(deleted.length ? deleted : ['No branch refs required deletion'])
               .addHeading('Safety rules')
-              .addList(['main and protected refs retained', 'all backup/* and recovery/* refs retained', 'all open-PR heads retained', 'merged PR heads retained by default', 'only 11 exact superseded closed-unmerged refs and four exact stale no-PR refs are eligible', 'every deletion requires an explicit allowlist match and compareCommits ahead_by=0', 'unknown refs and comparison failures retained'])
+              .addList(['main and protected refs retained', 'all backup/* and recovery/* refs retained', 'all open-PR heads retained', 'merged refs deleted only from the 54-name reviewed allowlist', 'changed merged heads require ahead_by = 0', 'closed-unmerged refs require explicit review and ahead_by = 0', 'temporary no-PR refs require explicit review and ahead_by = 0', 'comparison failures retained'])
               .write();
 
             if (failed.length) core.setFailed(`Branch cleanup had ${failed.length} deletion failures.`);
