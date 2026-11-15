@@ -80,8 +80,13 @@ const STALE_NO_PR_BRANCHES = Object.freeze([
   "preview-deploy/visual-qa-2026-11-15",
   "preview-deploy/2026-11-15-post-fix",
   "preview-deploy/2026-11-15-main-78ece71",
-  "docs/project-tooling-and-branch-inventory-2026-11-15"
+  "docs/project-tooling-and-branch-inventory-2026-11-15",
+  "fix/raawaa-final-qa-release-policy-2026-11-15"
 ]);
+
+const DUPLICATE_REF_ALIASES = Object.freeze({
+  "fix/final-visual-release-policy-verified-2026-11-15": "fix/final-visual-release-policy-consolidated-2026-11-15",
+});
 
 function classifyBranches(branches, pullRequests, repositoryFullName, comparisons = {}) {
   const relatedByHead = new Map();
@@ -95,6 +100,7 @@ function classifyBranches(branches, pullRequests, repositoryFullName, comparison
   const mergedAllowlist = new Set(MERGED_PR_BRANCHES);
   const superseded = new Set(SUPERSEDED_CLOSED_PR_BRANCHES);
   const staleNoPr = new Set(STALE_NO_PR_BRANCHES);
+  const branchByName = new Map(branches.map((item) => [item.name, item]));
 
   return branches.filter((branch) => {
     const name = branch?.name;
@@ -107,6 +113,13 @@ function classifyBranches(branches, pullRequests, repositoryFullName, comparison
 
     const related = relatedByHead.get(name) || [];
     if (related.some((pull) => pull.state === 'open')) return false;
+
+    // Retire an explicitly reviewed duplicate ref only while an identical target ref exists.
+    const retainedAlias = DUPLICATE_REF_ALIASES[name];
+    if (retainedAlias) {
+      const retained = branchByName.get(retainedAlias);
+      return Boolean(retained && retained.commit?.sha && retained.commit.sha === branch.commit?.sha);
+    }
 
     const hasMergedPR = related.some((pull) => Boolean(pull.merged_at));
     const hasClosedUnmergedPR = related.some((pull) => pull.state === 'closed' && !pull.merged_at);
@@ -139,4 +152,5 @@ module.exports = {
   MERGED_PR_BRANCHES,
   SUPERSEDED_CLOSED_PR_BRANCHES,
   STALE_NO_PR_BRANCHES,
+  DUPLICATE_REF_ALIASES,
 };
