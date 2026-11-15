@@ -67,3 +67,15 @@ test('Checkout prepares a reviewable WhatsApp order without claiming it was sent
   await expect(page.locator('.cart-disclaimer')).toContainText('لا يُرسل الموقع رسالة');
   expect(await page.evaluate(() => window.__rawaaOpenedUrls.length)).toBe(1);
 });
+
+test('Product variant URLs preselect the exact formula and size', async ({ page }) => {
+  await page.goto('/serum.html?product=rosemary-caffeine&size=100', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('[data-formula-title]')).toHaveText('روزماري وكافيين');
+  await expect(page.locator('input[name="rawaa-size"][value="rosemary-caffeine-100"]')).toBeChecked();
+  await expect(page.locator('[data-add-current]')).toHaveAttribute('data-add-to-cart', 'rosemary-caffeine-100');
+
+  await page.locator('input[name="rawaa-size"][value="rosemary-caffeine-30"]').check();
+  await expect(page).toHaveURL(/product=rosemary-caffeine/);
+  await expect(page).toHaveURL(/size=30/);
+  await expect(page.locator('[data-add-current]')).toHaveAttribute('data-add-to-cart', 'rosemary-caffeine-30');
+});
