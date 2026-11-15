@@ -21,8 +21,40 @@
         "categories:performance": "off",
         "categories:accessibility": "off",
         "categories:best-practices": "off",
-        "categories:seo": "off"
-      }
+        "categories:seo": "off",
+        "unminified-css": [
+          "warn",
+          {
+            "maxLength": 0
+          }
+        ],
+        "unminified-javascript": [
+          "warn",
+          {
+            "maxLength": 0
+          }
+        ],
+        "unused-css-rules": [
+          "warn",
+          {
+            "maxLength": 0
+          }
+        ],
+        "unused-javascript": [
+          "warn",
+          {
+            "maxLength": 0
+          }
+        ]
+      },
+      "assertMatrix": [
+        {
+          "matchingUrlPattern": ".*campaign\\.html$",
+          "assertions": {
+            "is-crawlable": "off"
+          }
+        }
+      ]
     },
     "upload": {
       "target": "filesystem",
