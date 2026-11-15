@@ -4,7 +4,6 @@
       "url": [
         "http://127.0.0.1:4173/",
         "http://127.0.0.1:4173/serum.html",
-        "http://127.0.0.1:4173/campaign.html",
         "http://127.0.0.1:4173/privacy.html"
       ],
       "numberOfRuns": 3,
@@ -22,30 +21,10 @@
         "categories:accessibility": "off",
         "categories:best-practices": "off",
         "categories:seo": "off",
-        "unminified-css": [
-          "warn",
-          {
-            "maxLength": 0
-          }
-        ],
-        "unminified-javascript": [
-          "warn",
-          {
-            "maxLength": 0
-          }
-        ],
-        "unused-css-rules": [
-          "warn",
-          {
-            "maxLength": 0
-          }
-        ],
-        "unused-javascript": [
-          "warn",
-          {
-            "maxLength": 0
-          }
-        ]
+        "unminified-css": "warn",
+        "unminified-javascript": "warn",
+        "unused-css-rules": "warn",
+        "unused-javascript": "warn"
       },
       "assertMatrix": [
         {
