@@ -52,8 +52,11 @@ test('deletes only the nine reviewed merged heads when their PR head matches', (
   assert.equal(new Set(MERGED_PR_BRANCHES).size, MERGED_PR_BRANCHES.length);
   for (const name of names) {
     assert.ok(MERGED_PR_BRANCHES.includes(name), name);
+    const comparisons = DUPLICATE_TREE_BRANCHES.includes(name)
+      ? { [name]: { tree_matches_main: true } }
+      : {};
     assert.deepEqual(
-      classifyBranches([branchRef(name)], [pr(name, { merged: true })], repository).map(x => x.name),
+      classifyBranches([branchRef(name)], [pr(name, { merged: true })], repository, comparisons).map(x => x.name),
       [name],
     );
   }
