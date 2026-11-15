@@ -1,6 +1,10 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { chromium, webkit, devices } from '@playwright/test';
+import { createRequire } from 'node:module';
+
+const require = createRequire(import.meta.url);
+const { isKnownWebKitSelectCspFalsePositive } = require('./visual-audit-csp-policy.cjs');
 
 const baseURL = (process.env.BASE_URL || 'https://raawaa-store.pages.dev').replace(/\/$/, '');
 const outDir = path.resolve('artifacts/visual-audit');
@@ -44,6 +48,20 @@ for (const engine of engines) {
       const failedRequests = [];
       const badResponses = [];
 
+      await page.addInitScript(() => {
+        window.__rawaaCspViolations = [];
+        document.addEventListener('securitypolicyviolation', event => {
+          const target = event.target;
+          window.__rawaaCspViolations.push({
+            violatedDirective: event.violatedDirective || '',
+            blockedURI: event.blockedURI || '',
+            sourceFile: event.sourceFile || '',
+            lineNumber: Number(event.lineNumber || 0),
+            targetTagName: target && target.tagName ? String(target.tagName).toUpperCase() : '',
+            targetHasStyle: Boolean(target && target.nodeType === 1 && target.hasAttribute('style')),
+          });
+        });
+      });
       page.on('console', msg => { if (msg.type() === 'error') consoleErrors.push(msg.text()); });
       page.on('pageerror', err => pageErrors.push(err.message));
       page.on('requestfailed', req => failedRequests.push({ url: req.url(), error: req.failure()?.errorText || 'failed' }));
@@ -145,9 +163,24 @@ for (const engine of engines) {
           };
         });
 
+        const cspViolations = await page.evaluate(() => window.__rawaaCspViolations || []);
+        const knownWebKitCspFalsePositives = cspViolations.filter(violation =>
+          isKnownWebKitSelectCspFalsePositive(engine.name, violation)
+        );
+        const realCspViolations = cspViolations.filter(violation =>
+          !isKnownWebKitSelectCspFalsePositive(engine.name, violation)
+        );
+        const remainingConsoleErrors = [...consoleErrors];
+        for (const _violation of knownWebKitCspFalsePositives) {
+          const index = remainingConsoleErrors.findIndex(message =>
+            message.startsWith('Refused to apply a stylesheet') && message.includes('style-src directive')
+          );
+          if (index !== -1) remainingConsoleErrors.splice(index, 1);
+        }
+
         const prefix = engine.name + '--' + route.name + '--' + viewport.name;
         screenshots.push(prefix + '--viewport.png', prefix + '--full.png');
-        await page.screenshot({ path: path.join(outDir, prefix + '--viewport.png'), fullPage: false, caret: 'initial' });
+        await page.screenshot({ path: path.join(outDir, prefix + '--viewport.png'), fullPage: false });
         await page.screenshot({ path: path.join(outDir, prefix + '--full.png'), fullPage: true, caret: 'initial' });
         if (route.name === 'serum') {
           for (const view of ['sizes', 'ritual']) {
@@ -171,7 +204,10 @@ for (const engine of engines) {
           navigationStatus,
           navigationError,
           metrics,
-          consoleErrors,
+          consoleErrors: remainingConsoleErrors,
+          cspViolations,
+          knownWebKitCspFalsePositives,
+          realCspViolations,
           pageErrors,
           failedRequests,
           badResponses,
@@ -182,7 +218,7 @@ for (const engine of engines) {
         await fs.promises.writeFile(path.join(outDir, prefix + '.json'), JSON.stringify(result, null, 2));
       } catch (error) {
         navigationError = String(error);
-        results.push({ route: route.path, page: route.name, engine: engine.name, viewport: viewport.name, navigationStatus, navigationError, metrics, consoleErrors, pageErrors, failedRequests, badResponses, screenshots, interactiveScreenshots });
+        results.push({ route: route.path, page: route.name, engine: engine.name, viewport: viewport.name, navigationStatus, navigationError, metrics, consoleErrors, cspViolations: [], knownWebKitCspFalsePositives: [], realCspViolations: [], pageErrors, failedRequests, badResponses, screenshots, interactiveScreenshots });
       } finally {
         await page.close();
       }
@@ -199,6 +235,7 @@ for (const r of results) {
   if (r.navigationStatus !== 200) issues.push(r.page + '/' + r.viewport + ': HTTP status ' + r.navigationStatus);
   if (r.navigationError) issues.push(r.page + '/' + r.engine + '/' + r.viewport + ': audit execution error: ' + r.navigationError);
   if (r.consoleErrors?.length) issues.push(r.page + '/' + r.engine + '/' + r.viewport + ': browser console errors: ' + r.consoleErrors.join(' | '));
+  if (r.realCspViolations?.length) issues.push(r.page + '/' + r.engine + '/' + r.viewport + ': CSP violations: ' + JSON.stringify(r.realCspViolations));
   if (r.metrics && r.metrics.lang !== 'ar') issues.push(r.page + '/' + r.engine + '/' + r.viewport + ': document language is not Arabic');
   if (r.metrics && r.metrics.dir !== 'rtl') issues.push(r.page + '/' + r.engine + '/' + r.viewport + ': document direction is not RTL');
   if (r.metrics && r.metrics.fontsStatus !== 'loaded') issues.push(r.page + '/' + r.engine + '/' + r.viewport + ': web fonts are not fully loaded');
