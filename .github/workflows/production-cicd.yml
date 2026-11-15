@@ -73,9 +73,9 @@ jobs:
           fi
 
   deploy:
-    name: Manually approved production release
+    name: Validated automatic production release
     needs: validate
-    if: github.event_name == 'workflow_dispatch' && inputs.confirm_production == 'yes' && github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.confirm_production == 'yes'))
     runs-on: ubuntu-latest
     timeout-minutes: 15
     environment:
@@ -128,4 +128,4 @@ jobs:
             exit 1
           fi
           SOURCE_MESSAGE="$(git log -1 --format=%s "$SOURCE_SHA")"
-          npx --yes wrangler@4 pages deploy "$RUNNER_TEMP/raawaa-pages" --project-name=raawaa-store --branch=main --commit-hash="$SOURCE_SHA" --commit-message="Manually approved production deploy: $SOURCE_MESSAGE"
+          npx --yes wrangler@4 pages deploy "$RUNNER_TEMP/raawaa-pages" --project-name=raawaa-store --branch=main --commit-hash="$SOURCE_SHA" --commit-message="Automatically released after successful main validation: $SOURCE_MESSAGE"
