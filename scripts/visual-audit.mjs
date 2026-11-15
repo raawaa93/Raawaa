@@ -163,6 +163,26 @@ for (const engine of engines) {
           };
         });
 
+
+
+        const prefix = engine.name + '--' + route.name + '--' + viewport.name;
+        screenshots.push(prefix + '--viewport.png', prefix + '--full.png');
+        await page.screenshot({ path: path.join(outDir, prefix + '--viewport.png'), fullPage: false });
+        await page.screenshot({ path: path.join(outDir, prefix + '--full.png'), fullPage: true });
+        if (route.name === 'serum') {
+          for (const view of ['sizes', 'ritual']) {
+            const selector = '[data-serum-view="' + view + '"] img';
+            await page.locator('[data-serum-control="' + view + '"]').first().click();
+            await page.waitForFunction((imageSelector) => {
+              const img = document.querySelector(imageSelector);
+              return img && img.complete && img.naturalWidth > 0 && img.getBoundingClientRect().width > 0;
+            }, selector, { timeout: 15000 });
+            const imageName = prefix + '--view-' + view + '.png';
+            await page.locator('.serum-photo').first().screenshot({ path: path.join(outDir, imageName), caret: 'initial' });
+            interactiveScreenshots.push(imageName);
+          }
+        }
+
         const cspViolations = await page.evaluate(() => window.__rawaaCspViolations || []);
         const knownWebKitCspFalsePositives = cspViolations.filter(violation =>
           isKnownWebKitSelectCspFalsePositive(engine.name, violation)
@@ -176,24 +196,6 @@ for (const engine of engines) {
             message.startsWith('Refused to apply a stylesheet') && message.includes('style-src directive')
           );
           if (index !== -1) remainingConsoleErrors.splice(index, 1);
-        }
-
-        const prefix = engine.name + '--' + route.name + '--' + viewport.name;
-        screenshots.push(prefix + '--viewport.png', prefix + '--full.png');
-        await page.screenshot({ path: path.join(outDir, prefix + '--viewport.png'), fullPage: false });
-        await page.screenshot({ path: path.join(outDir, prefix + '--full.png'), fullPage: true, caret: 'initial' });
-        if (route.name === 'serum') {
-          for (const view of ['sizes', 'ritual']) {
-            const selector = '[data-serum-view="' + view + '"] img';
-            await page.locator('[data-serum-control="' + view + '"]').first().click();
-            await page.waitForFunction((imageSelector) => {
-              const img = document.querySelector(imageSelector);
-              return img && img.complete && img.naturalWidth > 0 && img.getBoundingClientRect().width > 0;
-            }, selector, { timeout: 15000 });
-            const imageName = prefix + '--view-' + view + '.png';
-            await page.locator('.serum-photo').first().screenshot({ path: path.join(outDir, imageName), caret: 'initial' });
-            interactiveScreenshots.push(imageName);
-          }
         }
 
         const result = {
