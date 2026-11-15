@@ -4,7 +4,7 @@
 Track a small, previously researched set of public hair-oil, finishing-serum, scalp-serum, and Syria retail pages. The output is a research snapshot for product positioning, price/size architecture, offer framing, usage guidance, and category changes. It is not a checkout integration and does not interact with customer accounts.
 
 ## Approved seed URLs
-The exact URLs and their market/category labels are maintained in `competitor-targets.json`. They include OUAI, Gisou, OLAPLEX, Moroccanoil, Kérastase, The Ordinary (adjacent scalp-serum benchmark), and Feel22 Syria (local retailer category).
+The exact URLs and their market/category labels are maintained in `competitor-targets.json`. They cover OUAI hair oil and scalp serum, Gisou, OLAPLEX, Moroccanoil, Kérastase UK, The Ordinary hair/scalp category and Multi-Peptide Serum, plus Feel22 Syria's category and Seapuri product page.
 
 ## Collection boundaries
 - Crawl only the exact seed URLs. Do not spider arbitrary links or expand into whole domains.
