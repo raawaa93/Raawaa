@@ -28,7 +28,7 @@ The implementation is scripts/branch-cleanup-policy.cjs, tested by tests/unit/br
 7. Open-PR heads, unknown branches, comparison failures, and branches with unreviewed work are retained.
 8. The action only deletes Git refs. It never deletes Git objects manually, repository files, recovery snapshots, deployments, DNS, secrets, external projects, or customer data.
 
-## Reviewed merged PR refs (60)
+## Reviewed merged PR refs (57)
 
 The exact allowlist in the policy includes the previously reviewed merged branches plus the newly merged maintenance/visual-QA refs:
 - maintenance/repository-hygiene-2026-11-15 (PR #70)
