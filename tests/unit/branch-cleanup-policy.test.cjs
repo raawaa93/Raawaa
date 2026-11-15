@@ -30,6 +30,7 @@ test('preserves unreviewed merged PR heads by default', () => {
 test('deletes an exact merged head only when its branch is explicitly reviewed', () => {
   assert.ok(MERGED_PR_BRANCHES.includes('fix/visual-audit-webkit-csp-2026-11-15'));
   assert.ok(MERGED_PR_BRANCHES.includes('maintenance/repository-hygiene-2026-11-15'));
+  assert.ok(MERGED_PR_BRANCHES.includes('preview-deploy/visual-qa-after-csp-fix-2026-11-15'));
   const name = 'automation/agent-guidance-2026-11-15';
   assert.ok(MERGED_PR_BRANCHES.includes(name));
   const result = classifyBranches([branchRef(name)], [pr(name, { merged: true })], repository);
