@@ -40,7 +40,7 @@
 | `backup/site-2026-11-15-preproduction` | `30ee1bbeda771c194fddc83c066d873ac02f1d81` | Backup | Keep |
 | `deploy/10-percent-2026-11-14` | `fb7a128a78b950c80a835162a178004fb7fbcf46` | Deployment checkpoint | Keep |
 | `deploy/10-percent-site-only` | `064815e643c25c4f2cfa707ecd032088a5f6e282` | Deployment checkpoint | Keep |
-| `docs/workspace-hygiene-2026-11-15` | `c11d94ec1ebd49ebfd8d9e508022859e34cbe7d9` | Closed PR #99; source changes salvaged into this follow-up | Archive with pinned recovery tag after merge |
+| `docs/workspace-hygiene-2026-11-15` | `10e76ec9ed8de51cca6aad0451281f18513615b0` | Closed PR #99; source changes salvaged into this follow-up | Archive with pinned recovery tag after merge |
 | `fix/visual-audit-top-viewport-clean-2026-11-15` | `c0ccb2db0657d414885e68f16b8b79c9f73b4531` | Merged PR #98; post-merge commits remain outside main ancestry | Archive with pinned recovery tag |
 | `main` | `edc49efe9b98f961fccef4554a2969a02d239b0e` | Canonical | Keep |
 | `maintenance/archive-inactive-branches-final-2026-11-15` | `ad3aaa80e47f2a4d823d85123f30c27726fb206d` | PR #100 merged; seven branch-only commits remain | Archive with pinned recovery tag |
