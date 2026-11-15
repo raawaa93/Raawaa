@@ -1,21 +1,31 @@
-name: RAWAA production CI/CD
+name: RAWAA production CI and release
 
 on:
   push:
     branches:
       - main
   workflow_dispatch:
+    inputs:
+      confirm_production:
+        description: "Deploy the validated main commit to Cloudflare production"
+        required: true
+        type: choice
+        options:
+          - "no"
+          - "yes"
+        default: "no"
 
 permissions:
   contents: read
 
 concurrency:
-  group: raawaa-production-cicd
+  group: raawaa-production-release
   cancel-in-progress: false
 
 jobs:
-  validate-and-deploy:
-    name: Validate, test, and deploy production
+  validate:
+    name: Validate canonical main
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -30,8 +40,8 @@ jobs:
         with:
           node-version: 22
 
-      - name: Install test dependencies
-        run: npm install --no-audit --no-fund
+      - name: Install test dependencies without mutating the lockfile
+        run: npm install --package-lock=false --no-save --no-audit --no-fund
 
       - name: Install Chromium and WebKit
         run: npx playwright install --with-deps chromium webkit
@@ -52,6 +62,40 @@ jobs:
       - name: Build and validate clean Cloudflare Pages payload
         run: node scripts/build-deploy.mjs "$RUNNER_TEMP/raawaa-pages"
 
+      - name: Verify validation did not modify tracked or untracked source
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -n "$(git status --porcelain)" ]]; then
+            git status --short
+            echo "::error::Validation modified the source checkout."
+            exit 1
+          fi
+
+  deploy:
+    name: Manually approved production release
+    needs: validate
+    if: github.event_name == 'workflow_dispatch' && inputs.confirm_production == 'yes' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: production
+      url: https://raawaa-store.pages.dev
+    steps:
+      - name: Checkout exact validated main commit
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Rebuild clean Cloudflare Pages payload
+        run: node scripts/build-deploy.mjs "$RUNNER_TEMP/raawaa-pages"
+
       - name: Confirm this is still the latest main commit
         id: source
         shell: bash
@@ -60,9 +104,13 @@ jobs:
           git fetch --no-tags origin main --depth=1
           MAIN_SHA="$(git rev-parse FETCH_HEAD)"
           if [[ "$MAIN_SHA" != "$GITHUB_SHA" ]]; then
-            echo "Current main has moved to $MAIN_SHA; skipping this stale deployment."
-            echo "deploy=false" >> "$GITHUB_OUTPUT"
-            exit 0
+            echo "::error::Main moved to $MAIN_SHA after validation; refusing to deploy stale source."
+            exit 1
+          fi
+          if [[ -n "$(git status --porcelain)" ]]; then
+            git status --short
+            echo "::error::Source checkout is dirty; refusing deployment."
+            exit 1
           fi
           echo "deploy=true" >> "$GITHUB_OUTPUT"
 
@@ -76,8 +124,8 @@ jobs:
         run: |
           set -euo pipefail
           if [[ -z "${CLOUDFLARE_API_TOKEN:-}" ]]; then
-            echo "::error::Missing GitHub Actions secret CLOUDFLARE_API_TOKEN. Add it in repository Settings > Secrets and variables > Actions."
+            echo "::error::Missing GitHub Actions secret CLOUDFLARE_API_TOKEN."
             exit 1
           fi
           SOURCE_MESSAGE="$(git log -1 --format=%s "$SOURCE_SHA")"
-          npx --yes wrangler@4 pages deploy "$RUNNER_TEMP/raawaa-pages" --project-name=raawaa-store --branch=main --commit-hash="$SOURCE_SHA" --commit-message="Automated production deploy: $SOURCE_MESSAGE"
+          npx --yes wrangler@4 pages deploy "$RUNNER_TEMP/raawaa-pages" --project-name=raawaa-store --branch=main --commit-hash="$SOURCE_SHA" --commit-message="Manually approved production deploy: $SOURCE_MESSAGE"
