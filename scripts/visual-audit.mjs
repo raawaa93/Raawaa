@@ -147,8 +147,8 @@ for (const engine of engines) {
 
         const prefix = engine.name + '--' + route.name + '--' + viewport.name;
         screenshots.push(prefix + '--viewport.png', prefix + '--full.png');
-        await page.screenshot({ path: path.join(outDir, prefix + '--viewport.png'), fullPage: false });
-        await page.screenshot({ path: path.join(outDir, prefix + '--full.png'), fullPage: true });
+        await page.screenshot({ path: path.join(outDir, prefix + '--viewport.png'), fullPage: false, caret: 'initial' });
+        await page.screenshot({ path: path.join(outDir, prefix + '--full.png'), fullPage: true, caret: 'initial' });
         if (route.name === 'serum') {
           for (const view of ['sizes', 'ritual']) {
             const selector = '[data-serum-view="' + view + '"] img';
@@ -158,7 +158,7 @@ for (const engine of engines) {
               return img && img.complete && img.naturalWidth > 0 && img.getBoundingClientRect().width > 0;
             }, selector, { timeout: 15000 });
             const imageName = prefix + '--view-' + view + '.png';
-            await page.locator('.serum-photo').first().screenshot({ path: path.join(outDir, imageName) });
+            await page.locator('.serum-photo').first().screenshot({ path: path.join(outDir, imageName), caret: 'initial' });
             interactiveScreenshots.push(imageName);
           }
         }
