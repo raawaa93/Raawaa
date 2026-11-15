@@ -334,3 +334,9 @@ body:not(.serum-page) .mobile-nav {
   overflow-y: auto;
   box-shadow: 0 16px 28px -24px rgba(46, 42, 38, .5);
 }
+
+@media (min-width: 900px) {
+  body:not(.serum-page) .nav-toggle {
+    display: none;
+  }
+}
