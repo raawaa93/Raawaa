@@ -230,3 +230,11 @@ test('retires the final PR113 and PR114 maintenance refs only after exact heads 
     );
   }
 });
+
+
+test('retires the PR116 archive-index documentation branch after its exact head is merged', () => {
+  const name = 'maintenance/record-pr113-archive-2026-11-15';
+  assert.ok(MERGED_PR_BRANCHES.includes(name));
+  assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
+  assert.deepEqual(classifyBranches([branchRef(name)], [pr(name, { merged: true })], repository).map(x => x.name), [name]);
+});
