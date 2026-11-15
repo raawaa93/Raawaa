@@ -41,26 +41,14 @@ function classifyBranches(branches, pullRequests, repositoryFullName, comparison
     const related = relatedByHead.get(name) || [];
     if (related.some((pull) => pull.state === 'open')) return false;
 
-    const explicitlySuperseded = superseded.has(name);
-    const explicitlyStale = staleNoPr.has(name);
-    const hasMergedPR = related.some((pull) => Boolean(pull.merged_at));
+    // Merged PR heads are retained by default. Only exact reviewed stale refs can be retired.
     const hasClosedUnmergedPR = related.some((pull) => pull.state === 'closed' && !pull.merged_at);
-    const mergedHeadMatchesCurrent = related.some((pull) =>
-      Boolean(pull.merged_at) && pull.head.sha && pull.head.sha === branch.commit?.sha
-    );
     const comparison = comparisons[name];
+    if (comparison?.ahead_by !== 0) return false;
 
-    // Explicitly reviewed superseded refs are safe after checking that no open PR uses them.
-    if (hasClosedUnmergedPR) return explicitlySuperseded || comparison?.ahead_by === 0;
-
-    // Temporary preview/deploy refs were individually reviewed; unknown refs still require proof.
-    if (related.length === 0) return explicitlyStale || comparison?.ahead_by === 0;
-
-    // A merged PR is sufficient only when the branch head has not moved since that merge.
-    if (hasMergedPR && mergedHeadMatchesCurrent) return true;
-    if (hasMergedPR) return explicitlySuperseded || comparison?.ahead_by === 0;
-
-    return comparison?.ahead_by === 0;
+    if (hasClosedUnmergedPR) return superseded.has(name);
+    if (related.length === 0) return staleNoPr.has(name);
+    return false;
   });
 }
 
