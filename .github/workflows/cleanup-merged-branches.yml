@@ -129,3 +129,145 @@ jobs:
               .write();
 
             if (failed.length) core.setFailed(`Branch cleanup had ${failed.length} deletion failures.`);
+
+  archive-inactive:
+    name: Archive reviewed inactive branch refs
+    needs: prune
+    if: needs.prune.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout archive policy
+        uses: actions/checkout@v7
+        with:
+          ref: main
+          persist-credentials: false
+
+      - name: Create durable tags before retiring inactive refs
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const path = `${process.env.GITHUB_WORKSPACE}/scripts/branch-archive-policy.cjs`;
+            const { ARCHIVE_BRANCHES, selectArchiveCandidates } = require(path);
+            const { owner, repo } = context.repo;
+            const fullName = `${owner}/${repo}`;
+
+            const [branches, pullRequests] = await Promise.all([
+              github.paginate(github.rest.repos.listBranches, { owner, repo, per_page: 100 }),
+              github.paginate(github.rest.pulls.list, { owner, repo, state: 'all', per_page: 100 }),
+            ]);
+
+            const candidates = selectArchiveCandidates(branches, pullRequests, fullName);
+            const archived = [];
+            const skipped = [];
+            const failed = [];
+
+            async function resolveTagTarget(tagName) {
+              const ref = await github.rest.git.getRef({ owner, repo, ref: `tags/${tagName}` });
+              if (ref.data.object.type === 'tag') {
+                const tag = await github.rest.git.getTag({ owner, repo, tag_sha: ref.data.object.sha });
+                return tag.data.object.sha;
+              }
+              return ref.data.object.sha;
+            }
+
+            core.info(`Inspected ${branches.length} branches and ${pullRequests.length} PRs. ${candidates.length} reviewed archive candidates remain after the ancestry-safe prune job.`);
+
+            for (const branch of candidates) {
+              const name = branch.name;
+              const sha = branch.commit.sha;
+              const expectedSha = ARCHIVE_BRANCHES[name];
+
+              if (expectedSha && expectedSha !== sha) {
+                skipped.push({ name, sha, reason: 'branch head changed after review; retained' });
+                core.warning(`Retained ${name}: head changed after review.`);
+                continue;
+              }
+
+              const tagName = `archive/branches/2026-11-15/${name}`;
+              let targetSha;
+
+              try {
+                try {
+                  targetSha = await resolveTagTarget(tagName);
+                } catch (error) {
+                  if (error.status !== 404) throw error;
+                  const tag = await github.rest.git.createTag({
+                    owner,
+                    repo,
+                    tag: tagName,
+                    message: `Archived inactive branch ${name} at ${sha} during repository hygiene on 2026-11-15.`,
+                    object: sha,
+                    type: 'commit',
+                    tagger: {
+                      name: 'GitHub Actions',
+                      email: '41898282+github-actions[bot]@users.noreply.github.com',
+                      date: new Date().toISOString(),
+                    },
+                  });
+                  try {
+                    await github.rest.git.createRef({
+                      owner,
+                      repo,
+                      ref: `refs/tags/${tagName}`,
+                      sha: tag.data.sha,
+                    });
+                  } catch (createError) {
+                    if (createError.status !== 422) throw createError;
+                  }
+                  targetSha = await resolveTagTarget(tagName);
+                }
+
+                if (targetSha !== sha) {
+                  failed.push({ name, reason: `archive tag points to ${targetSha}, expected ${sha}` });
+                  core.error(`Refusing to delete ${name}: archive tag target does not match its branch head.`);
+                  continue;
+                }
+
+                const latest = await github.rest.repos.getBranch({ owner, repo, branch: name });
+                if (latest.data.commit.sha !== sha) {
+                  skipped.push({ name, sha, tagName, reason: 'branch moved during archival; tag retained and branch kept' });
+                  core.warning(`Retained ${name}: branch moved while archival was running.`);
+                  continue;
+                }
+
+                await github.rest.git.deleteRef({ owner, repo, ref: `heads/${name}` });
+                archived.push({ name, sha, tagName });
+                core.info(`Archived ${name} -> ${tagName} (${sha})`);
+              } catch (error) {
+                failed.push({ name, reason: error.message });
+                core.error(`Could not archive ${name}: ${error.message}`);
+              }
+            }
+
+            await core.summary
+              .addHeading('RAWAA inactive branch archive')
+              .addTable([
+                [{ data: 'Metric', header: true }, { data: 'Count', header: true }],
+                ['Branches inspected', String(branches.length)],
+                ['Reviewed candidates', String(candidates.length)],
+                ['Archived and deleted', String(archived.length)],
+                ['Retained/skipped', String(skipped.length)],
+                ['Failures', String(failed.length)],
+              ])
+              .addHeading('Archived refs and recovery tags')
+              .addTable([
+                [{ data: 'Original branch', header: true }, { data: 'Commit SHA', header: true }, { data: 'Archive tag', header: true }],
+                ...archived.map(x => [x.name, x.sha, x.tagName]),
+              ])
+              .addHeading('Retained refs')
+              .addList(skipped.length ? skipped.map(x => `${x.name}: ${x.reason}`) : ['None'])
+              .addHeading('Safety rules')
+              .addList([
+                'Only the exact reviewed allowlist is eligible',
+                'main and protected branches are never archived',
+                'backup, recovery, restore, release, production-deploy, deploy, and preview-deploy namespaces are never archived',
+                'any branch referenced by an open same-repository PR is retained',
+                'the branch tip is tagged before the branch ref is deleted',
+                'tag target must equal the captured branch SHA',
+                'the branch SHA is rechecked immediately before deletion',
+                'unknown or changed refs are retained',
+              ])
+              .write();
+
+            if (failed.length) core.setFailed(`Branch archival had ${failed.length} failures.`);
