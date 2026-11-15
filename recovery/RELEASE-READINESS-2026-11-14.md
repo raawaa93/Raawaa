@@ -205,7 +205,7 @@ The first post-merge backup has now been verified end-to-end:
 
 ## Automatic production release policy — adopted 2026-11-15
 
-- Owner decision: production deployment is automatic after a successful validation run on canonical `main`; the previous manual-dispatch/confirmation requirement is retired.
+- Owner decision: production deployment is automatic after successful validation of qualifying website-source pushes to canonical `main`. Documentation-only, workflow-only, dependency-only, and test-only changes are excluded. A controlled manual rerun remains available through `workflow_dispatch` with explicit `confirm_production=yes`.
 - The `RAWAA automatic production CI and release` workflow runs on pushes to `main`, validates the exact commit (Chromium + WebKit browser regression, store-policy/page integrity, and clean Cloudflare Pages payload), then deploys that same SHA to `raawaa-store` production.
 - Any failed validation blocks the deploy job. The deploy stage rechecks that `main` still points to the validated SHA and that the checkout is clean before Wrangler Direct Upload.
 - Pull requests, feature branches, recovery branches, and preview workflows must never target production.
