@@ -178,7 +178,7 @@ for (const engine of engines) {
               return img && img.complete && img.naturalWidth > 0 && img.getBoundingClientRect().width > 0;
             }, selector, { timeout: 15000 });
             const imageName = prefix + '--view-' + view + '.png';
-            await page.locator('.serum-photo').first().screenshot({ path: path.join(outDir, imageName), caret: 'initial' });
+            await page.locator('.serum-photo').first().screenshot({ path: path.join(outDir, imageName) });
             interactiveScreenshots.push(imageName);
           }
         }
