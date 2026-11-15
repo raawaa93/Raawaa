@@ -163,3 +163,11 @@ Do not delete or consolidate any of these 17 refs without a new individual revie
 - PR #115's own maintenance branch is added to the exact merged-head cleanup allowlist so it can be pruned after its checks pass and it merges.
 - Cloudflare read-back: zone `rawaa.eu.org` exists but remains `pending`; it contains a proxied CNAME to `raawaa-store.pages.dev`. Pages domain validation is also pending. The outstanding issue is zone/registrar activation or nameserver delegation, not absence of a CNAME in the zone. No DNS or nameserver changes were made.
 - Visual QA is complete (16 cases, zero issues); the latest backup workflow succeeded. Production remains on deployment `44ff2ce7-0379-4311-86aa-43be465fdb75` from source `adbc74f31801afa92a37c83dcb1c7698e1248c3e`.
+
+
+## Final post-cleanup read-back — 2026-11-15 06:25 UTC
+
+- Live GitHub enumeration: **17 branches, 34 tags, 0 open pull requests**.
+- Branch-hygiene workflow `43685324709` completed successfully.
+- The moved PR #113 maintenance ref was preserved as an annotated tag at exact SHA `80e320e4b95138685ad10099c6087050d66b2b62`, tag `archive/branches/2026-11-15/maintenance/pr112-branch-hygiene-inventory-2026-11-15`; the tag target was read back and matched before the branch ref was retired.
+- The remaining 17 branches are the purpose-specific main, backup, deploy, preview, production-deploy, recovery, release, and restore refs. No temporary work branch remains.
