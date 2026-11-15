@@ -40,3 +40,30 @@ test('Serum selection, cart quantity, and payment estimate stay synchronized', a
   await expect(item.locator('.cart-item-line')).toContainText('5,600');
   expect(pageErrors).toEqual([]);
 });
+ 
+test('Checkout prepares a reviewable WhatsApp order without claiming it was sent', async ({ page }) => {
+  await page.addInitScript(() => {
+    window.__rawaaOpenedUrls = [];
+    window.open = (url) => {
+      window.__rawaaOpenedUrls.push(String(url));
+      return null;
+    };
+  });
+  await page.goto('/serum.html', { waitUntil: 'domcontentloaded' });
+  await page.locator('[data-formula-select="rosemary-caffeine"]').click();
+  await page.locator('input[name="rawaa-size"][value="rosemary-caffeine-100"]').check();
+  await page.locator('[data-add-current]').click();
+  await expect(page.locator('#cart-dialog')).toBeVisible();
+  await page.locator('[data-cart-checkout]').click();
+
+  const fallback = page.locator('[data-cart-fallback-link]');
+  await expect(fallback).toBeVisible();
+  const href = await fallback.getAttribute('href');
+  expect(href).toMatch(/^https:\/\/wa\.me\//);
+  const decoded = decodeURIComponent(href);
+  expect(decoded).toContain('روزماري وكافيين');
+  expect(decoded).toContain('100 مل');
+  expect(decoded).toContain('2,800');
+  await expect(page.locator('.cart-disclaimer')).toContainText('لا يُرسل الموقع رسالة');
+  expect(await page.evaluate(() => window.__rawaaOpenedUrls.length)).toBe(1);
+});
