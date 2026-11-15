@@ -153,3 +153,13 @@ Do not delete or consolidate any of these 17 refs without a new individual revie
 - Latest production deployment remains `44ff2ce7-0379-4311-86aa-43be465fdb75` from `adbc74f31801afa92a37c83dcb1c7698e1248c3e`; no production files changed in PRs #112–#113.
 - Visual QA run `43684775744` completed successfully: 16 route/engine/viewport combinations, zero reported issues, and 58 report/screenshot files saved in artifact `14149818943`.
 - Post-merge backup run `43684964177` completed successfully.
+
+
+## Exact-SHA archive of the diverged PR #113 maintenance ref — 2026-11-15 06:25 UTC
+
+- After PR #114 merged, the branch-hygiene run removed its own exact merged branch and preserved all protected operational refs. The remaining PR #113 maintenance branch did not qualify for ancestry-safe deletion: GitHub comparison showed it diverged from main by 8 commits and 3 commits behind.
+- Re-read the exact branch ref: `maintenance/pr112-branch-hygiene-inventory-2026-11-15` points to `80e320e4b95138685ad10099c6087050d66b2b62`. The five changed files are historical documentation and branch-policy/test files; the current main already has newer versions. Because the ref is not an ancestor of main, do not delete it via the merged-branch cleanup path.
+- Added this exact branch/SHA pair to the separate archive allowlist. The archive workflow will create an annotated recovery tag, resolve and verify the tag target against the captured SHA, re-read the live branch head, and only then delete the branch. Any mismatch or open PR retains the branch.
+- PR #115's own maintenance branch is added to the exact merged-head cleanup allowlist so it can be pruned after its checks pass and it merges.
+- Cloudflare read-back: zone `rawaa.eu.org` exists but remains `pending`; it contains a proxied CNAME to `raawaa-store.pages.dev`. Pages domain validation is also pending. The outstanding issue is zone/registrar activation or nameserver delegation, not absence of a CNAME in the zone. No DNS or nameserver changes were made.
+- Visual QA is complete (16 cases, zero issues); the latest backup workflow succeeded. Production remains on deployment `44ff2ce7-0379-4311-86aa-43be465fdb75` from source `adbc74f31801afa92a37c83dcb1c7698e1248c3e`.
