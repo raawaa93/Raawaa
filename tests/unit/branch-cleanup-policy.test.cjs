@@ -68,17 +68,10 @@ test('keeps closed-unmerged work for the exact-SHA archive workflow', () => {
   ]);
 });
 
-test('no unreviewed no-PR branch remains eligible after final cleanup', () => {
-  assert.deepEqual(STALE_NO_PR_BRANCHES, [
-    'maintenance/finalize-archive-index-2026-11-15',
-  ]);
+test('only the individually reviewed no-PR ref remains cleanup-eligible', () => {
+  assert.deepEqual(STALE_NO_PR_BRANCHES, ['maintenance/finalize-archive-index-2026-11-15']);
   const name = 'maintenance/retire-last-stale-refs-2026-11-15';
-  assert.deepEqual(
-    classifyBranches([branchRef(name)], [], repository, {
-      [name]: { ahead_by: 0, behind_by: 1 },
-    }),
-    [],
-  );
+  assert.deepEqual(classifyBranches([branchRef(name)], [], repository, { [name]: { ahead_by: 0, behind_by: 1 } }), []);
 });
 
 test('keeps reused merged/closed refs when any unique commits remain', () => {
@@ -237,22 +230,12 @@ test('retires the final PR113 and PR114 maintenance refs only after exact heads 
   }
 });
 
-test('deletes only the two reviewed no-PR archive-finalization refs after fast-forward to main', () => {
-  const names = [
-    'maintenance/finalize-archive-index-2026-11-15',
-  ];
-  for (const name of names) {
-    assert.ok(STALE_NO_PR_BRANCHES.includes(name));
-    assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
-    assert.deepEqual(
-      classifyBranches([branchRef(name)], [], repository, { [name]: { ahead_by: 0, behind_by: 0 } }).map(x => x.name),
-      [name],
-    );
-    assert.deepEqual(
-      classifyBranches([branchRef(name)], [], repository, { [name]: { ahead_by: 1, behind_by: 0 } }),
-      [],
-    );
-  }
+test('deletes only the remaining reviewed no-PR archive-index ref after fast-forward to main', () => {
+  const name = 'maintenance/finalize-archive-index-2026-11-15';
+  assert.ok(STALE_NO_PR_BRANCHES.includes(name));
+  assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
+  assert.deepEqual(classifyBranches([branchRef(name)], [], repository, { [name]: { ahead_by: 0, behind_by: 0 } }).map(x => x.name), [name]);
+  assert.deepEqual(classifyBranches([branchRef(name)], [], repository, { [name]: { ahead_by: 1, behind_by: 0 } }), []);
 });
 
 test('retires the superseded archive-closure PR branch only after exact ancestry proof', () => {
