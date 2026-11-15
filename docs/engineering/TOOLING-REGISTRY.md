@@ -138,3 +138,11 @@ The catalog being available in ChatGPT is not the same as vendoring a skill into
 - PR #77 completes the reviewed allowlist for merged refs #70, #71, #72, #74, #75, and its own head; it also retires exact closed-unmerged branches whose replacements were verified in main, plus the docs inventory ref after ancestry proof. Reused QA work, unknown branches, and operational namespaces remain protected.
 - Visual QA workflow now runs on harness/workflow changes and after successful production releases; preview runs remain scoped to successful preview deployments. It chooses the live production URL for production-release runs.
 - The WebKit screenshot fix uses Playwright `caret: 'initial'` to avoid injected inline styles; the production CSP remains strict.
+
+
+## Visual QA WebKit regression — 2026-11-15
+
+- PR #75's screenshot-caret option did not resolve the CSP console errors; the root cause is a documented Playwright/WebKit 27.2 regression affecting native `<select>` user-agent shadow styling: https://github.com/microsoft/playwright/issues/43497.
+- PR #78 adds a narrowly scoped filter only for the exact `style-src-attr` / inline / empty-source / line-1 / SELECT / no-author-style signature. All other CSP events and console errors remain failures. Strict CSP is unchanged; no `unsafe-inline` added.
+- Visual QA now runs on audit-harness changes and after successful production releases, using the production URL; preview deployments use the isolated preview host.
+- Production CI excludes `scripts/visual-audit-csp-policy.cjs` from release triggers so test-harness changes do not deploy the storefront.
