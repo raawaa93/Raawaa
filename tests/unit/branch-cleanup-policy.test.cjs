@@ -249,3 +249,11 @@ test('deletes only the two reviewed no-PR archive-finalization refs after fast-f
     );
   }
 });
+
+
+test('retires the final archive-ref maintenance branch after exact merge', () => {
+  const name = 'maintenance/archive-final-closure-ref-2026-11-15';
+  assert.ok(MERGED_PR_BRANCHES.includes(name));
+  assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
+  assert.deepEqual(classifyBranches([branchRef(name)], [pr(name, { merged: true })], repository).map(x => x.name), [name]);
+});
