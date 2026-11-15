@@ -7,6 +7,7 @@ const {
   MERGED_PR_BRANCHES,
   SUPERSEDED_CLOSED_PR_BRANCHES,
   STALE_NO_PR_BRANCHES,
+  DUPLICATE_REF_ALIASES,
 } = require('../../scripts/branch-cleanup-policy.cjs');
 
 const repository = 'raawaa93/Raawaa';
@@ -79,6 +80,32 @@ test('superseded closed-unmerged refs require full ancestry proof before deletio
       [name],
     );
   }
+});
+
+
+test('removes a duplicate ref only while its exact retained alias exists', () => {
+  const alias = 'fix/final-visual-release-policy-verified-2026-11-15';
+  const retained = 'fix/final-visual-release-policy-consolidated-2026-11-15';
+  assert.equal(DUPLICATE_REF_ALIASES[alias], retained);
+  const sameHead = [branchRef(alias, { sha: 'identical-head' }), branchRef(retained, { sha: 'identical-head' })];
+  assert.deepEqual(classifyBranches(sameHead, [], repository).map(x => x.name), [alias]);
+  assert.deepEqual(classifyBranches([sameHead[0]], [], repository), []);
+  assert.deepEqual(
+    classifyBranches([sameHead[0], branchRef(retained, { sha: 'different-head' })], [], repository),
+    [],
+  );
+  assert.deepEqual(classifyBranches(sameHead, [pr(alias, { state: 'open' })], repository), []);
+});
+
+test('removes a reviewed no-PR ref only after ancestry proves it is contained in main', () => {
+  const name = 'fix/raawaa-final-qa-release-policy-2026-11-15';
+  assert.ok(STALE_NO_PR_BRANCHES.includes(name));
+  assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
+  assert.deepEqual(classifyBranches([branchRef(name)], [], repository, { [name]: { ahead_by: 1 } }), []);
+  assert.deepEqual(
+    classifyBranches([branchRef(name)], [], repository, { [name]: { ahead_by: 0, behind_by: 1 } }).map(x => x.name),
+    [name],
+  );
 });
 
 test('deletes a reviewed moved merged branch only after ancestry proof', () => {
