@@ -95,7 +95,7 @@ Update only when a verified, durable fact changes (for example: owner-approved p
 ## Verified integration and release audit — 2026-11-15
 
 ### Production and quality gates
-- Canonical `main` is `49f381c86640f8ced11362755714505ee23d5c0c`. The latest production deployment remains `3967c264`, built from `b37f20fd005024d587df8191414cc80064ff5f47` at 2026-11-15 03:51:50Z; PR #59 changed only dependency/CI files, so the production release was correctly skipped.
+- Canonical `main` is `032a62601e5a6925c8bc97889607b4804ebceb08`. Cloudflare Pages production deployment `d00b2e27` was created from that exact SHA at 2026-11-15 03:58:13Z; the production validation, deploy, and live security-header smoke test all succeeded.
 - The latest Store checks, production release, and disaster-recovery backup workflow runs all completed successfully for that commit.
 - Cloudflare Pages is deployed by GitHub Actions using Wrangler Direct Upload (deployment trigger `ad_hoc`; no Pages build command is configured). The deployment API showed 541 total historical deployment records at the latest check; this is not a monthly usage meter and must not be interpreted as 541 builds in the current month. Keep preview uploads deliberate and avoid redundant production releases.
 - A fresh OpenSEO audit on 2026-11-15 crawled 7/7 pages with no crawl errors, critical issues, or warnings. The only findings are three informational canonicalization notices for product-selection query states that intentionally canonicalize to `/serum`.
@@ -152,3 +152,6 @@ Update only when a verified, durable fact changes (for example: owner-approved p
 - PR #59: committed `package-lock.json`, switched CI to `npm ci`, added npm audit and OSV Scanner v2.7.1; npm audit and the OSV scan both reported no dependency findings. Dependency/test-only changes no longer trigger a static-site production deployment.
 - PR #55 production response-header smoke test passed against the deployed Pages origin, confirming the strict owner CSP, no-store/noindex, X-Frame-Options, Permissions-Policy, Referrer-Policy, and nosniff headers.
 - PR #56 migration archive and its recovery-only workflow changes are in main; the backup artifact after merge includes the archive. No SQL was executed.
+
+- PR #64 strengthened the stale-release guard: a validated release can tolerate only intervening documentation, recovery, workflow, dependency, test, or validation-only commits; any changed production source/configuration/build file still blocks deployment. The earlier run for PR #62's SHA was correctly blocked when main moved, and the subsequent validated run for `032a6260` deployed successfully.
+- PR #65 is open to restore the remaining `AGENTS.md` release boundaries: ignore workflow-only changes as production triggers and retain the controlled manual rerun with `confirm_production=yes`. Automatic releases for qualifying website-source changes remain the default.
