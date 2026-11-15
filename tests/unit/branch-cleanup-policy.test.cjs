@@ -167,3 +167,12 @@ test('allows deletion of the explicitly reviewed no-PR docs ref only after ances
     [name],
   );
 });
+
+test('never retires operational deploy refs even when they are fully contained in main', () => {
+  const names = ['deploy/10-percent-2026-11-14', 'deploy/10-percent-site-only'];
+  assert.equal(STALE_NO_PR_BRANCHES.some(name => name.startsWith('deploy/')), false);
+  const branches = names.map(name => branchRef(name));
+  const pulls = names.map(name => pr(name, { merged: true }));
+  const comparisons = Object.fromEntries(names.map(name => [name, { ahead_by: 0, behind_by: 10 }]));
+  assert.deepEqual(classifyBranches(branches, pulls, repository, comparisons), []);
+});
