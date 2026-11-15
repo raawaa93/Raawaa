@@ -47,7 +47,7 @@ This file is the repository-backed memory that survives AI sessions, client chan
 - Lighthouse reports are retained as GitHub Actions artifacts for 14 days; do not upload reports to a hosted service.
 - Graphify is pinned to `graphifyy==0.9.109`, runs daily offline and code-only, with model/API backends disabled. It excludes `.github/workflows/` and generated/dependency/recovery material. Its graph is a regenerable index, not authoritative business-policy memory.
 - Dependabot weekly updates are enabled for npm dependencies and GitHub Actions (PR #37, merged 2026-11-15).
-- `package.json` currently declares `@playwright/test` as a version range; a committed `package-lock.json` was not present at the last verified read. Do not fabricate a lockfile. Generate it using npm in a real environment, validate with `npm ci`, then add OSV-Scanner against the resolved lockfile. Until then, report the dependency audit as incomplete rather than claiming a clean vulnerability scan.
+- Superseded by PR #59: `package-lock.json` is committed, `npm ci --ignore-scripts` was validated on Node 22, npm audit found zero vulnerabilities, and OSV Scanner v2.7.1 is active. See the latest maintenance entry below.
 
 ## AI/tooling memory policy
 
@@ -89,7 +89,7 @@ Update only when a verified, durable fact changes (for example: owner-approved p
 - Graphify run [#43666416972](https://github.com/raawaa93/Raawaa/actions/runs/43666416972) succeeded: 293 nodes, 617 edges, 22 communities, 28 code files scanned, with no model/API extraction.
 - The Pages project still has only `raawaa-store.pages.dev` attached. `rawaa.sy` is not attached yet.
 - OpenSEO project had 500 credits remaining at the 2026-11-14 check. Google Search Console is now connected to the verified URL-prefix property `https://raawaa-store.pages.dev/`; the latest 3-month report still showed zero clicks/impressions before Google recognized the pages. No GA4 property/stream is exposed by the connected Google account, so GA4 remains unconnected.
-- `package.json` declares `@playwright/test` as a version range and `package-lock.json` is absent. Reproducible dependency lock and OSV lockfile scan remain outstanding; do not claim vulnerability scanning complete.
+- Superseded by PR #59: the lockfile is committed and both npm audit and OSV Scanner are active; the current scan reported no dependency findings.
 
 
 ## Verified integration and release audit — 2026-11-15
@@ -97,7 +97,7 @@ Update only when a verified, durable fact changes (for example: owner-approved p
 ### Production and quality gates
 - Canonical `main` is `49f381c86640f8ced11362755714505ee23d5c0c`. The latest production deployment remains `3967c264`, built from `b37f20fd005024d587df8191414cc80064ff5f47` at 2026-11-15 03:51:50Z; PR #59 changed only dependency/CI files, so the production release was correctly skipped.
 - The latest Store checks, production release, and disaster-recovery backup workflow runs all completed successfully for that commit.
-- Cloudflare Pages is deployed by GitHub Actions using Wrangler Direct Upload (deployment trigger `ad_hoc`; no Pages build command is configured). The deployment API showed 538 total historical deployment records across 22 pages; this is not a monthly usage meter and must not be interpreted as 538 builds in the current month. Keep preview uploads deliberate and avoid redundant production releases.
+- Cloudflare Pages is deployed by GitHub Actions using Wrangler Direct Upload (deployment trigger `ad_hoc`; no Pages build command is configured). The deployment API showed 541 total historical deployment records at the latest check; this is not a monthly usage meter and must not be interpreted as 541 builds in the current month. Keep preview uploads deliberate and avoid redundant production releases.
 - A fresh OpenSEO audit on 2026-11-15 crawled 7/7 pages with no crawl errors, critical issues, or warnings. The only findings are three informational canonicalization notices for product-selection query states that intentionally canonicalize to `/serum`.
 - Fresh Lighthouse sample: desktop performance/accessibility/best-practices/SEO all 100 for home, serum, and privacy; mobile scores were home 100 and serum/privacy 99, with accessibility/best-practices/SEO 100 on all three. Mobile LCP measured approximately 1.23s (home), 2.08s (serum), and 0.95s (privacy) in this run. Treat these as one measured audit, not a guarantee for every device/network.
 
@@ -117,7 +117,7 @@ Update only when a verified, durable fact changes (for example: owner-approved p
 - OpenSEO, GitHub, Cloudflare, Supabase, and Figma integrations are available in the current workspace. Prefer these existing integrations; do not add redundant paid analytics plugins before a concrete data/measurement requirement exists.
 
 ### Dependency and repository hygiene
-- `package-lock.json` is still absent. Production validation currently installs Playwright without a committed lockfile, so the dependency tree is not reproducibly pinned and a complete lockfile-based vulnerability scan remains incomplete. Generate the lockfile in a real Node/npm environment, validate with `npm ci`, then add OSV scanning against the committed lockfile.
+- Superseded by PR #59: production validation and Playwright CI now use `npm ci`; npm audit and OSV Scanner cover the locked dependency tree. Do not revert to mutable `npm install`.
 - The repository currently has 62 branches, including immutable backup/recovery checkpoints and numerous historical feature/automation/preview branches. Do not bulk-delete them. Inventory ancestry and artifact dependencies before retiring any non-backup branch.
 - The GitHub integration could not read the main branch-protection endpoint during this audit (403); do not assume branch protection is enabled or disabled. Revisit with an authorized read path.
 
@@ -143,3 +143,12 @@ Update only when a verified, durable fact changes (for example: owner-approved p
 
 - PR #59 is merged. `package-lock.json` now pins the Playwright toolchain to `@playwright/test@1.65.1`; lock generation validated `npm ci` and `npm audit --audit-level=high` reported zero vulnerabilities. Playwright CI and production validation now use `npm ci`; dependency/test-only changes no longer trigger a static-site production deployment. Google's OSV-Scanner v2.7.1 now runs on dependency PRs/merge groups and weekly on main.
 - PR #61's proposal to make production releases manual-only was closed after checking `AGENTS.md`: canonical-main automatic releases after complete validation are the owner-approved policy. Preserve that policy and its exact-SHA, clean-source, freshness, Cloudflare-secret, and production-environment gates.
+
+
+### Maintenance updates after the November 14 baseline
+
+- PR #54: replaced unsafe dynamic evaluation in the owner pricing editor with JSON parsing and added a deep-link regression test; production deploy was validated.
+- PR #57: removed duplicate Store-check and Playwright workflows from main pushes. PRs and recovery/restore branches still run them; production CI remains the single main-branch release validation path.
+- PR #59: committed `package-lock.json`, switched CI to `npm ci`, added npm audit and OSV Scanner v2.7.1; npm audit and the OSV scan both reported no dependency findings. Dependency/test-only changes no longer trigger a static-site production deployment.
+- PR #55 production response-header smoke test passed against the deployed Pages origin, confirming the strict owner CSP, no-store/noindex, X-Frame-Options, Permissions-Policy, Referrer-Policy, and nosniff headers.
+- PR #56 migration archive and its recovery-only workflow changes are in main; the backup artifact after merge includes the archive. No SQL was executed.
