@@ -9,7 +9,6 @@ on:
       - '**/*.md'
       - 'AGENTS.md'
       - '.agents/**'
-      - '.github/workflows/**'
       - 'recovery/**'
       - 'package.json'
       - 'package-lock.json'
@@ -71,6 +70,9 @@ jobs:
 
       - name: Validate store policy and page integrity
         run: node scripts/check-site.mjs
+
+      - name: Run unit and release-policy regression tests
+        run: node --test tests/unit/*.test.cjs
 
       - name: Build and validate clean Cloudflare Pages payload
         run: node scripts/build-deploy.mjs "$RUNNER_TEMP/raawaa-pages"
