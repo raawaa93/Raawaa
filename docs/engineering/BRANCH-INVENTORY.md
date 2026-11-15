@@ -74,3 +74,15 @@
 - `maintenance/final-archive-closure-2026-11-15` is the active final cleanup PR branch and is allowlisted for pruning after merge.
 - The final cleanup run must leave exactly the 17 durable refs listed above, keep all 32 tags, and leave no open PRs.
 
+
+## Final verified state — 2026-11-15 05:52 UTC
+
+- Canonical main: `41a37816b3e491cfa38bf8f8c81af9092f3b586a`.
+- [Final branch hygiene run #43682885648](https://github.com/raawaa93/Raawaa/actions/runs/43682885648) succeeded.
+- **17 branch refs remain**, exactly the 17 durable backup/recovery/deploy/preview/production/release/restore refs listed above plus `main`.
+- **33 annotated recovery tags** are verified and retained.
+- **105 PRs total:** 76 merged, 29 closed-unmerged, zero open.
+- The final two temporary maintenance refs were retired: the active final cleanup branch after merge, and the superseded maintenance pointer after its exact-SHA recovery tag was verified.
+- The archive allowlist and no-PR prune allowlist are empty; no inactive working branch refs remain.
+- This final inventory documentation branch is allowlisted for pruning after its own merge.
+
