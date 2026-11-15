@@ -77,7 +77,7 @@ Other available skill/tool families include data analysis, user settings, and fi
 - Daily disaster-recovery bundle and source archive.
 - Scheduled visual QA for mobile and desktop.
 - Search Console connected through OpenSEO; IndexNow successfully submitted home, serum, and privacy on 2026-11-15.
-- Automatic production release only after full validation of qualifying website-source changes on main; workflow-only/docs-only changes are excluded.
+- Production release is manual: qualifying source changes on `main` are validated first; a production deploy requires `workflow_dispatch` with `confirm_production=yes`. Documentation/workflow/test-only changes do not trigger production deployment.
 - Branch hygiene PR #70 and namespace-protection PR #74 are merged. Post-protection cleanup run #43677406307 inspected 35 refs, completed 12 ancestry comparisons, found zero candidates, and succeeded. PR #77 adds exact reviewed candidates for merged PR heads #71, #74, #75, #76, the no-PR docs ref, and its own head after merge.
 
 ## Skills available in the ChatGPT workspace
