@@ -48,12 +48,12 @@ jobs:
             const candidatesForComparison = branches.filter(branch => {
               const name = branch.name;
               if (name === 'main' || branch.protected || name.startsWith('backup/') || name.startsWith('recovery/')) return false;
+              if (!superseded.has(name) && !staleNoPr.has(name)) return false;
               const related = pullRequests.filter(pull => sameRepo(pull) && pull.head.ref === name);
               if (related.some(pull => pull.state === 'open')) return false;
-              if (related.some(pull => pull.state === 'closed' && !pull.merged_at)) return !superseded.has(name);
-              if (related.length === 0) return !staleNoPr.has(name);
-              const mergedHeadMatches = related.some(pull => Boolean(pull.merged_at) && pull.head.sha === branch.commit?.sha);
-              return related.some(pull => Boolean(pull.merged_at)) && !mergedHeadMatches && !superseded.has(name);
+              const hasClosedUnmergedPR = related.some(pull => pull.state === 'closed' && !pull.merged_at);
+              if (hasClosedUnmergedPR) return superseded.has(name);
+              return related.length === 0 && staleNoPr.has(name);
             });
 
             for (const branch of candidatesForComparison) {
@@ -72,7 +72,8 @@ jobs:
             const failed = [];
 
             core.info(`Inspected ${branches.length} branches, ${pullRequests.length} PRs, and ${Object.keys(comparisons).length} branch comparisons.`);
-            core.info(`Policy-approved deletion candidates: ${candidates.length}.`);
+            core.info(`Reviewed allowlist comparisons: ${candidatesForComparison.map(branch => branch.name).join(', ') || 'none'}.`);
+            core.info(`Policy-approved deletion candidates (allowlist + ahead_by=0): ${candidates.length}.`);
 
             for (const branch of candidates) {
               try {
@@ -101,7 +102,7 @@ jobs:
               .addHeading('Deleted refs')
               .addList(deleted.length ? deleted : ['No branch refs required deletion'])
               .addHeading('Safety rules')
-              .addList(['main and protected refs retained', 'all backup/* and recovery/* refs retained', 'all open-PR heads retained', 'closed-unmerged refs deleted only when ahead_by is zero', 'unreferenced refs deleted only when ahead_by is zero', 'comparison failures retained'])
+              .addList(['main and protected refs retained', 'all backup/* and recovery/* refs retained', 'all open-PR heads retained', 'merged PR heads retained by default', 'only 11 exact superseded closed-unmerged refs and four exact stale no-PR refs are eligible', 'every deletion requires an explicit allowlist match and compareCommits ahead_by=0', 'unknown refs and comparison failures retained'])
               .write();
 
             if (failed.length) core.setFailed(`Branch cleanup had ${failed.length} deletion failures.`);
