@@ -13,6 +13,8 @@ for (const item of checks) {
   assert.equal(response.status, 200, url.href + ' must return HTTP 200');
   const headers = response.headers;
   assert.equal(headers.get('x-frame-options')?.toLowerCase(), 'deny', url.href + ' must block framing');
+  assert.equal(headers.get('x-content-type-options')?.toLowerCase(), 'nosniff', url.href + ' must prevent MIME sniffing');
+  assert.equal(headers.get('referrer-policy')?.toLowerCase(), 'strict-origin-when-cross-origin', url.href + ' must use Cloudflare Pages safe default referrer policy');
   const permissions = headers.get('permissions-policy') || '';
   for (const feature of ['camera=()', 'microphone=()', 'geolocation=()']) {
     assert.ok(permissions.includes(feature), url.href + ' must disable ' + feature);
