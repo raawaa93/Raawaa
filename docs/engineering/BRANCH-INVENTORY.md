@@ -1,10 +1,10 @@
 # RAWAA Store branch inventory and cleanup policy
 
-**Snapshot:** 2026-11-15 UTC  
+**Snapshot:** 2026-11-15 UTC — refreshed at 04:26Z  
 **Repository:** `raawaa93/Raawaa`  
 **Canonical branch:** `main`  
 **Open cleanup PR:** #70 — https://github.com/raawaa93/Raawaa/pull/70  
-**Other active PR:** #71 — https://github.com/raawaa93/Raawaa/pull/71
+**Other active PR:** #72 — https://github.com/raawaa93/Raawaa/pull/72
 
 ## Snapshot counts
 
