@@ -146,7 +146,7 @@ test('preserves restore, release, production, and active preview/deploy checkpoi
 });
 
 
-test('deletes only newly reviewed merged heads after merge', () => {
+test('deletes only the nine newly reviewed merged heads after merge', () => {
   const names = [
     'fix/branch-hygiene-protect-operational-refs-2026-11-15',
     'fix/visual-audit-csp-screenshots-2026-11-15',
@@ -154,16 +154,18 @@ test('deletes only newly reviewed merged heads after merge', () => {
     'docs/visual-qa-and-inventory-finalization-2026-11-15',
     'maintenance/branch-cleanup-final-2026-11-15',
     'fix/visual-qa-webkit-csp-regression-2026-11-15',
+    'maintenance/repository-hygiene-2026-11-15',
+    'fix/production-release-push-only-2026-11-15',
+    'fix/visual-audit-top-viewport-2026-11-15',
   ];
   for (const name of names) {
-    assert.ok(MERGED_PR_BRANCHES.includes(name), `${name} must be reviewed for merged-head cleanup`);
+    assert.ok(MERGED_PR_BRANCHES.includes(name), name + ' must be reviewed for merged-head cleanup');
     assert.deepEqual(
       classifyBranches([branchRef(name)], [pr(name, { merged: true })], repository).map(x => x.name),
       [name],
     );
   }
 });
-
 test('deletes the integrated no-PR docs ref only after ancestry proof', () => {
   const name = 'docs/project-tooling-and-branch-inventory-2026-11-15';
   assert.ok(STALE_NO_PR_BRANCHES.includes(name));
