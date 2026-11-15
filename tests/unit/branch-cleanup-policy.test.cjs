@@ -306,3 +306,19 @@ test('retires this exact merged cleanup-policy PR branch after merge', () => {
   assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
   assert.deepEqual(classifyBranches([branchRef(name)], [pr(name, { merged: true })], repository).map(x => x.name), [name]);
 });
+
+
+test('retires the exact merged final inventory documentation ref', () => {
+  const name = 'docs/final-live-branch-inventory-2026-11-15';
+  assert.ok(MERGED_PR_BRANCHES.includes(name));
+  const head = 'inventory-merged-head';
+  assert.deepEqual(classifyBranches([branchRef(name, { sha: head })], [pr(name, { merged: true, sha: head })], repository).map(x => x.name), [name]);
+  assert.deepEqual(classifyBranches([branchRef(name, { sha: 'moved-head' })], [pr(name, { merged: true, sha: head })], repository), []);
+});
+
+test('retires this exact final inventory cleanup PR branch after merge', () => {
+  const name = 'maintenance/prune-final-inventory-refs-2026-11-15';
+  assert.ok(MERGED_PR_BRANCHES.includes(name));
+  assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
+  assert.deepEqual(classifyBranches([branchRef(name)], [pr(name, { merged: true })], repository).map(x => x.name), [name]);
+});
