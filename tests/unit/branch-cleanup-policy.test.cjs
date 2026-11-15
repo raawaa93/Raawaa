@@ -42,6 +42,7 @@ test('deletes the four newly reviewed merged heads only when their PR head match
     'maintenance/repository-hygiene-2026-11-15',
     'docs/visual-qa-and-inventory-finalization-2026-11-15',
     'maintenance/finish-branch-cleanup-2026-11-15',
+    'maintenance/finish-branch-cleanup-2026-11-15',
     'docs/visual-qa-and-inventory-finalization-2026-11-15',
   ];
   for (const name of names) {
