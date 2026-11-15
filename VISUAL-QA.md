@@ -31,15 +31,3 @@ The visual audit must not use Playwright screenshot option `animations: 'disable
 ### Mobile viewport integrity
 
 The visual report records the CSS viewport height, visual viewport height, and physical screen height alongside the viewport width. The Playwright iPhone 13 profile is expected to report a 390 × 844 CSS viewport; if the measured height differs, treat the device emulation as suspect and correct the profile before describing the result as iPhone 13 coverage. Screenshot files may be device-scale-factor pixels (for example, 3× width and height), so compare normalized CSS dimensions rather than raw PNG dimensions.
-
-
-## Latest production audit — 2026-11-15
-
-- Run: https://github.com/raawaa93/Raawaa/actions/runs/43678920501
-- Artifact: `rawaa-visual-qa-43678920501` (32 standard viewport/full-page captures, 8 interactive serum captures, per-page JSON, and HTML report).
-- Coverage: home, serum, campaign, and privacy; Chromium and WebKit; iPhone 13 emulation and desktop 1440px. Sixteen route/engine/viewport combinations completed.
-- All 16 navigations returned HTTP 200. No broken visible images, horizontal overflow, browser console errors, page errors, failed requests, bad responses, or real CSP violations were reported. All 16 viewport screenshots recorded `screenshotScrollY = 0` and `visualViewportOffsetTop = 0`.
-- **Viewport geometry caveat:** the run reported iPhone CSS viewport 390×664 while physical screen height was 844. That does not satisfy the documented 390×844 emulation target. The harness now explicitly sets both viewport and screen to 390×844; a fresh run must confirm the resulting metrics before iPhone coverage is marked fully verified.
-- Manual screenshot review found a faint ghosted text layer behind the WebKit home-page header. It is not a console/CSP failure and needs a focused rendering investigation.
-- The serum page, size/mix selector, campaign offer, and privacy page rendered without layout overflow. The homepage has generous vertical spacing before the hero; review whether this is intentional for mobile conversion.
-- **Launch readiness:** the privacy page visibly remains a draft requiring legal/regulatory review before commercial launch. Product imagery is still labelled as conceptual design, not actual product photography; real product photos remain a launch-quality requirement.

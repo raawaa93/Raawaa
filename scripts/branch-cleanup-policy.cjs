@@ -56,13 +56,13 @@ const MERGED_PR_BRANCHES = Object.freeze([
   "fix/visual-audit-csp-screenshots-2026-11-15",
   "fix/visual-audit-webkit-csp-2026-11-15",
   "docs/visual-qa-and-inventory-finalization-2026-11-15",
-  "maintenance/finish-branch-cleanup-2026-11-15",
   "maintenance/repository-hygiene-2026-11-15",
   "fix/visual-qa-webkit-csp-regression-2026-11-15",
   "maintenance/branch-cleanup-consolidated-2026-11-15",
   "fix/production-release-push-only-2026-11-15",
   "fix/visual-audit-top-viewport-clean-2026-11-15",
-  "maintenance/final-inventory-cleanup-2026-11-15"
+  "fix/branch-cleanup-policy-final-2026-11-15",
+  "fix/branch-cleanup-policy-final-rebased-2026-11-15"
 ]);
 const SUPERSEDED_CLOSED_PR_BRANCHES = Object.freeze([
   "ci/restore-release-boundaries-2026-11-15-rebased",
@@ -75,8 +75,17 @@ const SUPERSEDED_CLOSED_PR_BRANCHES = Object.freeze([
   "automation/graphify-and-lighthouse-2026-11-15",
   "automation/graphify-daily-refresh-2026-11-15",
   "qa/visual-audit-2026-11-15",
-  "feature/campaign-nitro-offer-2026-11-14"
+  "feature/campaign-nitro-offer-2026-11-14",
+  "fix/visual-audit-top-viewport-2026-11-15",
+  "fix/final-visual-and-release-policy-2026-11-15",
+  "fix/final-visual-release-policy-consolidated-2026-11-15",
+  "fix/branch-cleanup-allowlist-correction-2026-11-15",
+  "fix/branch-cleanup-policy-current-state-2026-11-15"
 ]);
+const DUPLICATE_TREE_BRANCHES = Object.freeze([
+  "fix/production-policy-site-check-2026-11-15"
+]);
+
 const STALE_NO_PR_BRANCHES = Object.freeze([
   "preview-deploy/visual-qa-2026-11-15",
   "preview-deploy/2026-11-15-post-fix",
@@ -97,6 +106,7 @@ function classifyBranches(branches, pullRequests, repositoryFullName, comparison
   const mergedAllowlist = new Set(MERGED_PR_BRANCHES);
   const superseded = new Set(SUPERSEDED_CLOSED_PR_BRANCHES);
   const staleNoPr = new Set(STALE_NO_PR_BRANCHES);
+  const duplicateTreeBranches = new Set(DUPLICATE_TREE_BRANCHES);
 
   return branches.filter((branch) => {
     const name = branch?.name;
@@ -116,6 +126,14 @@ function classifyBranches(branches, pullRequests, repositoryFullName, comparison
       Boolean(pull.merged_at) && pull.head.sha && pull.head.sha === branch.commit?.sha
     );
     const comparison = comparisons[name];
+
+    // Reviewed closed PR refs are removable only when their entire Git tree is
+    // byte-for-byte identical to main. Commit-count divergence alone is not enough.
+    if (duplicateTreeBranches.has(name)) {
+      return related.length > 0 &&
+        related.every((pull) => pull.state === 'closed') &&
+        comparison?.tree_matches_main === true;
+    }
 
     // A reused ref with a closed-unmerged PR is retained unless it is explicitly
     // reviewed AND GitHub proves every current commit is already contained in main.
@@ -141,4 +159,5 @@ module.exports = {
   MERGED_PR_BRANCHES,
   SUPERSEDED_CLOSED_PR_BRANCHES,
   STALE_NO_PR_BRANCHES,
+  DUPLICATE_TREE_BRANCHES,
 };
