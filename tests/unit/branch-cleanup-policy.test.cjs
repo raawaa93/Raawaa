@@ -180,3 +180,15 @@ test('retires the final archive record PR branch after its exact head is merged'
     [name],
   );
 });
+
+test('retires the merged crawler implementation branches after their exact PR heads are merged', () => {
+  const names = ['feature/competitor-crawl4ai-weekly', 'fix/competitor-crawl-runner'];
+  for (const name of names) {
+    assert.ok(MERGED_PR_BRANCHES.includes(name));
+    assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
+    assert.deepEqual(
+      classifyBranches([branchRef(name)], [pr(name, { merged: true })], repository).map(x => x.name),
+      [name],
+    );
+  }
+});

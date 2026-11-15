@@ -68,7 +68,9 @@ const MERGED_PR_BRANCHES = Object.freeze([
   "docs/final-branch-inventory-2026-11-15",
   "docs/final-tooling-state-2026-11-15",
   "maintenance/final-archive-closure-2026-11-15",
-  "docs/record-final-archive-run-2026-11-15"
+  "docs/record-final-archive-run-2026-11-15",
+  "feature/competitor-crawl4ai-weekly",
+  "fix/competitor-crawl-runner"
 ]);
 const SUPERSEDED_CLOSED_PR_BRANCHES = Object.freeze([]);
 const STALE_NO_PR_BRANCHES = Object.freeze([]);
