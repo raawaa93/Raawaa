@@ -42,7 +42,7 @@ const has = (path) => paths.includes(path);
 for (const required of [
   'index.html', 'serum.html', 'campaign.html', 'privacy.html', '404.html',
   'robots.txt', 'sitemap.xml', 'sw.js', 'manifest.webmanifest', '_headers',
-  'owner/index.html', 'owner/pricing.html', 'owner/settings.mjs',
+  'owner/index.html', 'owner/pricing.html', 'owner/settings.mjs', 'google15a14d81e8e19f8a.html',
   'js/config.js', 'js/pricing-policy.js', 'js/cart.js', 'js/campaign.js', 'css/campaign.css'
 ]) assert.ok(has(required), 'Missing required deployment asset: ' + required);
 for (const forbidden of [
@@ -60,6 +60,7 @@ for (const path of textFiles) {
   assert.ok(!compact.includes('15%'), relative(out, path) + ' contains the superseded 15% offer');
 }
 const read = (path) => readFileSync(join(out, path), 'utf8');
+assert.equal(read('google15a14d81e8e19f8a.html').trim(), 'google-site-verification: google15a14d81e8e19f8a.html', 'Google Search Console verification file must be deployed unchanged');
 assert.ok(read('campaign.html').includes('<meta name="robots" content="noindex,follow">'), 'Campaign landing page must remain noindex');
 assert.ok(!read('sitemap.xml').includes('/campaign'), 'Noindex campaign page must be absent from sitemap');
 assert.ok(!read('sitemap.xml').includes('/hama'), 'Legacy Hama page must be absent from sitemap');

@@ -1,6 +1,6 @@
 # RAWAA Store tooling and skills registry
 
-**Last verified:** 2026-11-15 05:15 UTC  
+**Last verified:** 2026-11-15 05:55 UTC  
 **Policy:** use free tiers and included quotas; never activate billing or paid usage without a separate explicit instruction. Quota values below are dated snapshots, not permanent guarantees.
 
 ## Project source of truth
@@ -13,6 +13,7 @@
 - Agent rules: AGENTS.md
 - Branch rules: docs/engineering/BRANCH-INVENTORY.md
 - This registry is the inventory of connected tools and skills; update it when access, quota, or project architecture changes.
+- Complete Skills catalog: `docs/engineering/SKILL-REGISTRY.md` (151 entries).
 
 ## Connected tool families available in this ChatGPT workspace
 
@@ -46,6 +47,15 @@ The current workspace inventory exposes **801 tool definitions across 24 integra
 | User settings | 2 | Inspect/update ChatGPT appearance and personality settings only when requested |
 
 Other available skill/tool families include data analysis, user settings, and file-library operations. Availability in this workspace does not mean every service is connected to a RAWAA account.
+
+
+## Owned private plugin inventory
+
+- **Hostless** — private USER-scope plugin, version `0.1.0`, plugin ID `plugins_6ade8fe19de081919d932135b5b265b2`.
+- Its manifest points to the remote MCP endpoint `https://mcp.hostless.app/mcp`; the stored configuration contains no authentication headers. The current 801-action workspace tool inventory has no Hostless namespace, so an active Hostless connection is **not confirmed**.
+- Keep it as a dormant owned integration candidate; do not delete or claim it is connected until the account's Hostless authorization and available tools are verified.
+- Plugin Creator can enumerate owned personal plugins (one found). Plugin Management does not expose a complete account-wide installed-plugin listing in this session, so this audit does not claim to enumerate every workspace-installed plugin.
+- No global plugin, connector, or Skill was uninstalled. Destructive uninstall requires exact target IDs and a confirmed dependency/ownership review; broad removal would risk other projects.
 
 ## Free-tier balances observed on 2026-11-15
 
@@ -232,7 +242,7 @@ This is an account-level inventory. Only resources positively identified as belo
 - **Other Workers:** seven Worker scripts exist in the account. Non-Store project workers were left untouched.
 - **D1:** three databases exist and all currently report zero tables. `raawaa-engine-staging` and `raawaa-autonomous-engine` each have one Worker binding. `waa-engine-staging` has no Worker binding; it was retained because external consumers were not ruled out.
 - **Queues:** two queues exist; one currently has a consumer. Both were retained because queue/dead-letter dependencies were not fully ruled out.
-- **KV / R2:** zero KV namespaces and no R2 buckets are configured for this account.
+- **KV / R2:** zero KV namespaces. The R2 buckets endpoint returned HTTP 403 because R2 is not enabled for this account; bucket inventory is unavailable, so the bucket count is unknown.
 - **Web Analytics:** the `raawaa-store.pages.dev` site configuration exists with automatic installation disabled. No beacon is injected and no analytics collection is active.
 - **Secrets:** Worker binding names/counts were inspected only to establish dependencies; secret values were not read, rotated, or changed.
 
@@ -244,3 +254,16 @@ This is an account-level inventory. Only resources positively identified as belo
 - ChatGPT exposes 801 tool definitions across 24 integration families and 151 Skills in the current catalog. The catalog interface is read-only for global Skills; no uninstall action is available. No global Skills were bulk-imported or removed.
 - Notion's enabled-Skills endpoint reports zero enabled Notion Skills. Keep the repository's `AGENTS.md`, `PROJECT-MEMORY.md`, and Graphify index as the durable project guidance/memory stack.
 - **TinyFish remains explicitly prohibited** and is not used, installed, or reintroduced.
+
+### Branch lifecycle and recovery
+
+- PR #100 merged the branch archive workflow.
+- [Archive run #43680881436](https://github.com/raawaa93/Raawaa/actions/runs/43680881436) completed successfully: 29 exact-SHA annotated tags created and verified, 29 branch refs removed, zero failures.
+- The remaining archive allowlist is now limited to three reviewed refs: the closed documentation branch, the merged visual-QA branch whose tree changed after maintenance, and a superseded archive-workflow draft. Each is pinned to its exact current SHA.
+- The branch archive workflow is part of the repository's maintenance stack; it preserves commit history before removing refs. Recovery steps are in `docs/engineering/ARCHIVED-BRANCHES.md`.
+- No global ChatGPT plugin, workspace connector, or Skill was disabled or uninstalled. The integration catalog is shared and the audit found no safe, complete dependency map for destructive workspace-wide cleanup.
+
+
+### GitHub branch protection
+
+- The `main` branch object reports `protected=false`; the repository rulesets endpoint returned an empty list. The connected GitHub app cannot administer legacy branch-protection settings (protection endpoint returns 403). Required checks are therefore not enforced by a GitHub branch-protection rule at this snapshot; configure protection in repository Settings.

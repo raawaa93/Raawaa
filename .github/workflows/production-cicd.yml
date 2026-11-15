@@ -21,6 +21,8 @@ on:
       - 'scripts/branch-archive-policy.cjs'
       - 'scripts/visual-audit.mjs'
       - 'scripts/visual-audit-csp-policy.cjs'
+      - 'lighthouserc.json'
+      - 'lighthouserc.pr.json'
 
 permissions:
   contents: read

@@ -10,7 +10,9 @@ const walk = (dir) => fs.readdirSync(path.join(root, dir), { withFileTypes: true
   return [rel];
 });
 const files = walk('.').filter((file) => !file.startsWith('./recovery/') && !file.startsWith('recovery/'));
-const htmlFiles = files.filter((file) => file.endsWith('.html'));
+const googleVerificationFile = 'google15a14d81e8e19f8a.html';
+assert.equal(read(googleVerificationFile).trim(), 'google-site-verification: google15a14d81e8e19f8a.html', 'Google Search Console verification asset must remain exact');
+const htmlFiles = files.filter((file) => file.endsWith('.html') && file !== googleVerificationFile);
 const cssFiles = files.filter((file) => file.endsWith('.css'));
 
 // Mobile and accessibility baseline: every page must declare its viewport and

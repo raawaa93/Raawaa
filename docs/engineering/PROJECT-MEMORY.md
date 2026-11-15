@@ -3,7 +3,7 @@
 This file is the repository-backed memory that survives AI sessions, client changes, and expired hosted quotas. Keep it concise, factual, and updated when a material decision changes. It contains no credentials, customer records, or private order data.
 
 ## Canonical project
-- Branch hygiene: the tested policy deletes unchanged merged PR heads, branches whose current history is contained in `main`, and exact reviewed superseded/stale refs. It preserves `main`, all `backup/*` and `recovery/*`, protected refs, open-PR heads, and unreviewed closed-unmerged work. See `docs/engineering/BRANCH-INVENTORY.md` and `docs/engineering/TOOLING-REGISTRY.md`.
+- Branch hygiene: the tested policy deletes unchanged merged PR heads, branches whose current history is contained in `main`, and exact reviewed superseded/stale refs. It preserves `main`, all `backup/*` and `recovery/*`, protected refs, open-PR heads, and unreviewed closed-unmerged work. See `docs/engineering/BRANCH-INVENTORY.md`, `docs/engineering/ARCHIVED-BRANCHES.md`, and `docs/engineering/TOOLING-REGISTRY.md`.
 
 - Repository: `raawaa93/Raawaa`; `main` is the only canonical website source.
 - Cloudflare Pages project: `raawaa-store`; current known URL: https://raawaa-store.pages.dev.
@@ -120,7 +120,7 @@ Update only when a verified, durable fact changes (for example: owner-approved p
 ### Dependency and repository hygiene
 - Superseded by PR #59: production validation and Playwright CI now use `npm ci`; npm audit and OSV Scanner cover the locked dependency tree. Do not revert to mutable `npm install`.
 - The repository currently has 62 branches, including immutable backup/recovery checkpoints and numerous historical feature/automation/preview branches. Do not bulk-delete them. Inventory ancestry and artifact dependencies before retiring any non-backup branch.
-- The GitHub integration could not read the main branch-protection endpoint during this audit (403); do not assume branch protection is enabled or disabled. Revisit with an authorized read path.
+- The GitHub branch object reports `main.protected=false` and the repository rulesets endpoint returned an empty list. The connected app cannot administer branch protection (403); required checks are not enforced by a branch-protection rule at this snapshot.
 
 ### Second Supabase project — isolated fallback audit — 2026-11-15
 - A second active project exists: `raawaa-engine-fallback` (`xuwtuhfqjjwszxqkmivj`, `us-east-1`). It is not the same database as `Ghaioooth-core`.
@@ -198,7 +198,7 @@ Update only when a verified, durable fact changes (for example: owner-approved p
 - PR #74 merged and protects operational namespaces. Post-protection cleanup run #43677406307 inspected 35 refs, completed 12 ancestry comparisons, found zero candidates, and succeeded.
 - PR #77 is open. It adds exact cleanup allowlist entries for merged PR heads #71, #74, #75, and #76; a no-PR docs branch proven ahead_by=0/behind_by=3; and its own branch after merge. The open-PR guard protects PR #77's branch until merge.
 - The cleanup classifier now requires ahead_by=0 for every reviewed closed-unmerged ref, moved merged ref, and no-PR ref. Its workflow explicitly performs comparisons for reviewed closed-unmerged candidates. Tests cover this safety rule.
-- Current snapshot: 37 refs, 77 PRs (63 merged, 13 closed-unmerged, 1 open). 16 operational/archive refs are protected; 13 closed-unmerged branches and one moved maintenance branch contain unique commits and remain. Five current refs are eligible for cleanup; PR #77's own head becomes the sixth only after merge. Expected final branch count: 31, pending the actual workflow result.
+- Superseded by the 2026-11-15 branch archive audit: current snapshot is 21 refs and 101 PRs (72 merged, 28 closed-unmerged, 1 open); 29 refs have already been archived with verified annotated tags, and three exact-SHA refs remain for the next archive run.
 - Workspace inventory: 801 tool definitions across 24 integration families and 151 available skills. The repository contains no project-local .agents/skills, skills/, or .claude/ packages. Global skills and integrations are shared across projects; do not uninstall them based only on RAWAA activity.
 - Current balances: OpenSEO 251 credits; Firecrawl 0/1,000 through 2026-11-29; Ahrefs Free API key 0/200,000 units, workspace quota 0; public Domain Rating endpoint costs zero and keyword endpoints are plan-restricted. Figma remains View-only; Notion's advanced connector search/data-source tools require Business/Enterprise. No billing enabled.
 - Store Supabase database remains unidentified among visible projects; no Supabase writes were made. Cloudflare Web Analytics remains configured with auto_install=false and no beacon. No DNS, customer data, secrets, prices, discounts, or shipping policy changed.
@@ -206,7 +206,20 @@ Update only when a verified, durable fact changes (for example: owner-approved p
 ## Repository and integration hygiene — 2026-11-15 (pre-archive snapshot)
 
 - GitHub repository hygiene now separates ancestry-safe merged-ref pruning from recoverable archival of reviewed inactive refs. The archive workflow writes annotated tags before deleting branch refs; open PR heads and backup/recovery/deploy/preview namespaces are retained.
-- Pre-archive inventory: 49 branch refs, 32 reviewed inactive refs in the archive allowlist, and 17 canonical/operational/protected refs intended to remain. The actual post-run branch count and tag results must be recorded in `BRANCH-INVENTORY.md` and `BRANCH-ARCHIVE-MANIFEST.md` after the workflow completes.
+- Archive run #43680881436 completed successfully: 29 exact-SHA annotated tags were created and verified, 29 branch refs were archived and deleted, and the merged archive-workflow branch was pruned. The canonical recovery index is `docs/engineering/ARCHIVED-BRANCHES.md`.
 - Cloudflare Store Worker `raawaa-store` had no routes, custom domains, bindings, or schedules and recorded zero invocations over the previous 30 days. Its `workers.dev` subdomain was disabled; the Worker script and deployment metadata remain as rollback material because source export was unavailable.
 - Cloudflare Pages remains the Store production host. No DNS, custom-domain, Supabase database, queue, secret, customer, or order data was changed.
 - The account-wide tooling catalog is not equivalent to Store integrations. Keep shared-project resources intact unless ownership and dependencies are confirmed; use the Tooling Registry as the current connection/quota/permission inventory.
+
+
+## Current repository and integration state — 2026-11-15 05:55 UTC
+
+- PR #100 merged the exact-SHA archive workflow. Run #43680881436 succeeded: 29 annotated tags verified and 29 branch refs archived/deleted; the merged archive-workflow branch was also pruned. The current inventory is 21 branch refs: 17 operational refs, three SHA-pinned archive candidates, and the active PR #101 branch.
+- PR #101 is open from `maintenance/final-workspace-hygiene-2026-11-15`. It restores the exact Google Search Console HTML verification asset, asserts that the clean Cloudflare Pages payload contains it unchanged, adds a regression test, and consolidates the archive/branch/tool/skill inventories. Merge only after Store checks, Playwright, mobile performance, and Graphify checks complete successfully.
+- Three archive candidates are pinned to exact SHAs in `scripts/branch-archive-policy.cjs` and `docs/engineering/ARCHIVED-BRANCHES.md`: `docs/workspace-hygiene-2026-11-15` (`10e76ec9ed8de51cca6aad0451281f18513615b0`), `fix/visual-audit-top-viewport-clean-2026-11-15` (`c0ccb2db0657d414885e68f16b8b79c9f73b4531`), and `maintenance/archive-inactive-branches-final-2026-11-15` (`ad3aaa80e47f2a4d823d85123f30c27726fb206d`). The PR #101 branch is in the exact merged-head allowlist and is pruned only after its head is merged.
+- The canonical archive record is `docs/engineering/ARCHIVED-BRANCHES.md`; the duplicate `BRANCH-ARCHIVE-MANIFEST.md` was removed. The canonical skill inventory is `docs/engineering/SKILL-REGISTRY.md` (151 workspace Skills); the tooling registry is `docs/engineering/TOOLING-REGISTRY.md`.
+- Workspace catalog: 801 tool definitions across 24 integration families and 151 Skills. These are shared workspace capabilities, not project-local packages. No global plugin, connector, or Skill was removed; the connected management tools do not provide a complete project-scoped dependency inventory or safe bulk-uninstall action. TinyFish remains prohibited.
+- Free quota snapshot: OpenSEO 251 credits; Firecrawl 0/1,000 until 2026-11-29; Ahrefs API allowance 200,000 units with 0 used and workspace quota 0. Figma is View-only; Notion advanced connector actions are plan-limited. No paid billing was enabled.
+- Cloudflare inventory: seven Worker scripts, three D1 databases (zero tables reported), two Queues, zero KV namespaces. R2 is not enabled; its buckets endpoint returns HTTP 403, so the bucket count is unknown. The Store Worker has no routes/bindings/schedules or recent invocations; its workers.dev subdomain is disabled. Web Analytics remains configured with `auto_install=false`; no beacon is installed.
+- GitHub reports `main.protected=false` and no repository rulesets. The connected app cannot configure protection (403); enable required status checks and branch protection in repository Settings.
+- No DNS, custom-domain, Supabase schema, secrets, customer/order data, pricing, discounts, shipping policy, or billing settings were changed.
