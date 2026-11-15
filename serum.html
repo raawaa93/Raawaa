@@ -28,9 +28,8 @@
 <meta name="mobile-web-app-capable" content="yes">
 <link rel="preload" href="assets/fonts/plexar-400.subset.woff2" as="font" type="font/woff2" crossorigin="">
 <link rel="preload" href="assets/fonts/plexar-700.subset.woff2" as="font" type="font/woff2" crossorigin="">
-<!-- صورة أول شاشة في صفحة المنتج: تحميلها مسبقًا بنفس sizes المطابقة
-     يمنع طلبين لنفس الصورة ويقصّر LCP على شبكة بطيئة. -->
-<link rel="preload" href="assets/img/products/size-50-v6-720.avif" as="image" type="image/avif" imagesrcset="assets/img/products/size-50-v6-480.avif 480w, assets/img/products/size-50-v6-720.avif 720w, assets/img/products/size-50-v6-900.avif 900w" imagesizes="(min-width: 900px) 43vw, 42vw" fetchpriority="high">
+<!-- لا نحمّل مسبقًا صورة ثابتة هنا: المزيج الافتراضي قابل للتغيير عبر رابط المنتج،
+     وأولوية الصورة الفعلية تُضبط مباشرة على عنصر img لتجنب تنزيل صورة غير معروضة. -->
 <link rel="stylesheet" href="css/styles.css">
 <link rel="stylesheet" href="css/serum.css">
 <script src="js/config.js" defer=""></script>
@@ -145,8 +144,6 @@
         <div class="serum-media" data-serum-media="">
           <figure class="serum-photo">
             <picture data-size-picture="" data-serum-view="bottle">
-              <source type="image/avif" data-size-avif="" srcset="" sizes="(min-width: 900px) 43vw, 42vw">
-              <source type="image/webp" data-size-webp="" srcset="" sizes="(min-width: 900px) 43vw, 42vw">
               <img data-size-img="" src="assets/img/products/rawaa-olive.jpg" width="1024" height="1024" fetchpriority="high" decoding="async" alt="تصوّر تصميمي لعبوة رواء · زيت الزيتون والبانثينول">
             </picture>
             <picture data-serum-view="sizes" hidden="">
