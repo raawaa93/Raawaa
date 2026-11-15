@@ -146,7 +146,7 @@ test('preserves restore, release, production, and active preview/deploy checkpoi
 });
 
 
-test('deletes only the nine newly reviewed merged heads after merge', () => {
+test('deletes only the ten newly reviewed merged heads after merge', () => {
   const names = [
     'fix/branch-hygiene-protect-operational-refs-2026-11-15',
     'fix/visual-audit-csp-screenshots-2026-11-15',
@@ -157,6 +157,7 @@ test('deletes only the nine newly reviewed merged heads after merge', () => {
     'maintenance/repository-hygiene-2026-11-15',
     'fix/production-release-push-only-2026-11-15',
     'fix/visual-audit-top-viewport-2026-11-15',
+    'maintenance/finalize-branch-cleanup-2026-11-15',
   ];
   for (const name of names) {
     assert.ok(MERGED_PR_BRANCHES.includes(name), name + ' must be reviewed for merged-head cleanup');
