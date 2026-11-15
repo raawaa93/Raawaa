@@ -15,6 +15,7 @@ on:
       - 'playwright.config.mjs'
       - 'tests/**'
       - 'scripts/check-production-headers.mjs'
+      - 'scripts/check-site.mjs'
       - 'scripts/branch-cleanup-policy.cjs'
       - 'scripts/branch-archive-policy.cjs'
       - 'scripts/visual-audit.mjs'
