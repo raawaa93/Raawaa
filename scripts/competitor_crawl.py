@@ -139,6 +139,8 @@ async def crawl_targets():
     results, success_count = [], 0
     async with AsyncWebCrawler(config=browser_config) as crawler:
         for index, target in enumerate(targets):
+            if index:
+                await asyncio.sleep(REQUEST_GAP_SECONDS)
             url = target["url"]
             allowed, robots_source = check_robots(url)
             record = {
@@ -175,7 +177,6 @@ async def crawl_targets():
                 record["error"] = f"{type(exc).__name__}: {exc}"
                 print(f"[ERROR] {target['id']}: {record['error']}", flush=True)
             results.append(record)
-            if index < len(targets) - 1: await asyncio.sleep(REQUEST_GAP_SECONDS)
 
     payload = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
