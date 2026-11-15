@@ -55,6 +55,9 @@ const MERGED_PR_BRANCHES = Object.freeze([
   "fix/visual-audit-webkit-csp-2026-11-15",
   "fix/visual-audit-csp-screenshots-2026-11-15",
   "fix/branch-hygiene-protect-operational-refs-2026-11-15"
+  "fix/visual-audit-webkit-csp-2026-11-15",
+  "maintenance/repository-hygiene-2026-11-15",
+  "fix/branch-hygiene-protect-operational-refs-2026-11-15",
 ]);
 const SUPERSEDED_CLOSED_PR_BRANCHES = Object.freeze([
   "ci/restore-release-boundaries-2026-11-15-rebased",
@@ -68,12 +71,14 @@ const SUPERSEDED_CLOSED_PR_BRANCHES = Object.freeze([
   "automation/graphify-daily-refresh-2026-11-15",
   "qa/visual-audit-2026-11-15",
   "feature/campaign-nitro-offer-2026-11-14"
+  "maintenance/branch-hygiene-followup-2026-11-15",
 ]);
 const STALE_NO_PR_BRANCHES = Object.freeze([
   "preview-deploy/visual-qa-2026-11-15",
   "preview-deploy/2026-11-15-post-fix",
   "preview-deploy/2026-11-15-main-78ece71",
   "docs/project-tooling-and-branch-inventory-2026-11-15"
+  "docs/project-tooling-and-branch-inventory-2026-11-15",
 ]);
 
 const PROTECTED_BRANCH_PREFIXES = Object.freeze([
@@ -110,8 +115,10 @@ function classifyBranches(branches, pullRequests, repositoryFullName, comparison
     const comparison = comparisons[name];
 
     if (hasClosedUnmergedPR) {
+      // A reused branch has later unmerged work; require ancestry proof.
       if (hasMergedPR) return mergedAllowlist.has(name) && comparison?.ahead_by === 0;
-      return superseded.has(name) && comparison?.ahead_by === 0;
+      // Exact closed-unmerged refs are deleted only after their replacement is recorded in the inventory.
+      return superseded.has(name);
     }
 
     if (related.length === 0) return staleNoPr.has(name) && comparison?.ahead_by === 0;
