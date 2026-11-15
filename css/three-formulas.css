@@ -96,3 +96,77 @@
   #products .size-option-size,#products .size-option-price{font-size:.72rem;line-height:1.35}
   .rawaa-formula-options button{font-size:11px;padding:8px 3px}
 }
+
+
+/* Serum-only rules formerly bundled in the homepage design layer.
+   Keeping them here avoids downloading homepage-only CSS on the product page. */
+html { scroll-padding-top: 5.5rem; }
+:focus-visible {
+  outline: 3px solid var(--olive, #556047);
+  outline-offset: 3px;
+}
+button, a { -webkit-tap-highlight-color: transparent; }
+.image-disclosure {
+  margin: .45rem 0 0;
+  color: var(--taupe, #6e6053);
+  font-size: .68rem;
+  line-height: 1.5;
+  text-align: center;
+}
+.site-header a,
+.mobile-nav a,
+a.btn,
+a.button,
+.brand {
+  text-decoration: none;
+}
+main p a:not(.btn):not(.button),
+footer p a:not(.btn):not(.button) {
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: .22em;
+  text-decoration-color: rgba(122, 88, 53, .38);
+}
+a.btn:focus-visible,
+a.button:focus-visible {
+  outline: 3px solid var(--olive, #556047);
+  outline-offset: 3px;
+}
+
+/* Final narrow-screen layout refinements previously applied by the shared
+   homepage stylesheet. Keep them after the component rules to preserve cascade. */
+@media (max-width: 360px) {
+  .serum-card { padding: .7rem !important; }
+  .serum-overview {
+    grid-template-columns: minmax(0, 1fr) minmax(92px, .7fr) !important;
+    gap: .4rem !important;
+  }
+  .serum-available { display: none !important; }
+  .serum-view-rail--small {
+    display: block !important;
+    margin-top: .3rem !important;
+  }
+  .serum-purchase { margin-top: .1rem !important; }
+  .serum-heading .eyebrow { margin-bottom: .25rem !important; }
+  .serum-heading h1 {
+    font-size: 1.1rem !important;
+    margin-bottom: .25rem !important;
+  }
+  .serum-heading .formula-emblem {
+    width: 38px !important;
+    height: 38px !important;
+    margin-bottom: 3px !important;
+  }
+  .serum-purchase .serum-intro {
+    font-size: .7rem !important;
+    line-height: 1.25 !important;
+    margin-bottom: .1rem !important;
+  }
+  .serum-actions { margin-top: .25rem !important; }
+  .serum-photo figcaption {
+    font-size: .58rem !important;
+    line-height: 1.2 !important;
+    margin-top: .2rem !important;
+  }
+  .serum-card { padding-block: .2rem !important; }
+}
