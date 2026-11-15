@@ -3,14 +3,20 @@ name: RAWAA visual QA audit
 on:
   push:
     branches:
+      - main
       - 'qa/visual-audit-*'
+    paths:
+      - 'scripts/visual-audit.mjs'
+      - '.github/workflows/visual-qa.yml'
   workflow_run:
     workflows:
       - Cloudflare Pages preview
+      - RAWAA automatic production CI and release
     types:
       - completed
     branches:
       - 'preview-deploy/**'
+      - main
   schedule:
     - cron: '17 3 * * 1'
   workflow_dispatch:
@@ -39,9 +45,22 @@ jobs:
         run: npm install --package-lock=false --no-save --no-audit --no-fund
       - name: Install Chromium
         run: npx playwright install --with-deps chromium webkit
+      - name: Select production or preview audit target
+        id: target
+        shell: bash
+        env:
+          WORKFLOW_NAME: ${{ github.event.workflow_run.name || '' }}
+        run: |
+          if [[ "$GITHUB_EVENT_NAME" == "workflow_run" && "$WORKFLOW_NAME" == "RAWAA automatic production CI and release" ]]; then
+            echo "base_url=https://raawaa-store.pages.dev" >> "$GITHUB_OUTPUT"
+          elif [[ "$GITHUB_REF" == "refs/heads/main" ]]; then
+            echo "base_url=https://raawaa-store.pages.dev" >> "$GITHUB_OUTPUT"
+          else
+            echo "base_url=https://raawaa-recovery-preview.raawaa-store.pages.dev" >> "$GITHUB_OUTPUT"
+          fi
       - name: Capture screenshots and inspect layout
         env:
-          BASE_URL: https://raawaa-recovery-preview.raawaa-store.pages.dev
+          BASE_URL: ${{ steps.target.outputs.base_url }}
         run: node scripts/visual-audit.mjs
       - name: Upload visual QA report and screenshots
         if: always()
