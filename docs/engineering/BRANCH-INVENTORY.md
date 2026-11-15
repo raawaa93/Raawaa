@@ -185,3 +185,10 @@ Do not delete or consolidate any of these 17 refs without a new individual revie
 - The second exact-SHA archive tag is `archive/branches/2026-11-15/maintenance/record-pr113-archive-2026-11-15`, targeting `1415d8dcac9ca2113626659d4454b2450b42b423`.
 - Two generated archive-finalization refs remain temporarily: `maintenance/finalize-archive-index-2026-11-15` and `maintenance/finalize-pr113-archive-2026-11-15`. Their documentation/policy changes are superseded by canonical main. Both are allowlisted only as no-PR refs and will be deleted only after their heads are fast-forwarded to main and GitHub confirms `ahead_by=0`.
 - Current read-back: **19 branches, 35 tags, 0 open PRs**. Expected stable state after the exact-head cleanup: **17 branches, 35 tags, 0 open PRs**.
+
+
+### Superseded archive-finalization refs reviewed — 2026-11-15
+
+- `maintenance/finalize-archive-index-2026-11-15`, prior head `7035569abb0dcd626347170f3df288af10602eab`: its archive allowlist still referenced the already-retired PR116 head and is superseded by the canonical empty archive policy.
+- `maintenance/finalize-pr113-archive-2026-11-15`, prior head `c91f134ffc24b5f29366fb071175734a872d5524`: its archive index, domain audit, and final branch state are now present in canonical main.
+- Both are no-PR maintenance refs. Their content has been reconciled into main; they are fast-forwarded to the current main SHA and eligible for deletion only after GitHub confirms `ahead_by=0`.
