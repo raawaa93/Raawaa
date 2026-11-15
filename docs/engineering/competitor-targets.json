@@ -1,0 +1,51 @@
+[
+  {
+    "id": "ouai-hair-oil",
+    "brand": "OUAI",
+    "market": "UK",
+    "kind": "direct-hair-oil",
+    "url": "https://theouai.co.uk/products/hair-oil"
+  },
+  {
+    "id": "gisou-honey-hair-oil",
+    "brand": "Gisou",
+    "market": "Global/EU",
+    "kind": "direct-hair-oil",
+    "url": "https://gisou.com/products/honey-infused-hair-oil"
+  },
+  {
+    "id": "olaplex-no7",
+    "brand": "OLAPLEX",
+    "market": "UK",
+    "kind": "direct-hair-oil",
+    "url": "https://uk.olaplex.com/products/olaplex-n-7-bonding-oil-30ml"
+  },
+  {
+    "id": "moroccanoil-treatment",
+    "brand": "Moroccanoil",
+    "market": "UK",
+    "kind": "direct-hair-oil",
+    "url": "https://uk.moroccanoil.com/products/moroccanoil-treatment-original"
+  },
+  {
+    "id": "kerastase-elixir-ultime",
+    "brand": "Kérastase",
+    "market": "Global",
+    "kind": "direct-hair-oil",
+    "url": "https://www.kerastase.com/products/elixir-ultime"
+  },
+  {
+    "id": "the-ordinary-hair-scalp",
+    "brand": "The Ordinary",
+    "market": "UK",
+    "kind": "adjacent-scalp-serum",
+    "url": "https://theordinary.com/en-gb/category/body-hair/hair-scalp-solutions"
+  },
+  {
+    "id": "feel22-syria-hair-oils-serums",
+    "brand": "Feel22",
+    "market": "Syria",
+    "kind": "local-retailer-category",
+    "url": "https://syria.feel22.com/en/collections/face-serums?product_type=hair-oil-and-serum"
+  }
+]
