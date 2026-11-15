@@ -31,6 +31,7 @@ const ARCHIVE_BRANCHES = Object.freeze({
   "seo/noindex-campaign-sitemap-2026-11-15": "9d9dddcc10ae0d487ff8f7efc443ec9be271beda",
   "seo/remove-noindex-campaign-from-sitemap-2026-11-15": "59057a487580be4b13b24a99f0812eb1fb936138",
   "seo/sitemap-noindex-policy-2026-11-15": "e01e7be06307910bf2978888ef5837e7c6db4566",
+  "fix/visual-audit-top-viewport-clean-2026-11-15": "c0ccb2db0657d414885e68f16b8b79c9f73b4531",
   "maintenance/archive-inactive-branches-2026-11-15": null
 });
 const PROTECTED_PREFIXES = Object.freeze([
