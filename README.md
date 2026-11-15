@@ -70,10 +70,10 @@ GitHub Actions runs these checks on pushes and pull requests. Make future edits 
 - main is the sole canonical website source. All new work starts from main on a named feature branch and returns through a reviewed pull request.
 - backup/* branches are immutable rollback checkpoints. Never deploy from them.
 - recovery/snapshots/ and old PR snapshots are read-only historical evidence. They may contain superseded content (including old promotion text); that content is not active policy and must not be copied into the live site.
-- The automated branch hygiene workflow may retire merged PR heads and only the exact superseded/stale refs documented in docs/engineering/BRANCH-INVENTORY.md. It must preserve main, protected refs, every backup/* and recovery/* ref, open-PR heads, and all unreviewed closed-unmerged branches.
+- The automated branch hygiene workflow may retire only the exact superseded closed-PR refs and stale no-PR preview/deploy refs documented in docs/engineering/BRANCH-INVENTORY.md, and only after GitHub comparison proves `ahead_by = 0`. Merged PR heads are retained by default. It must preserve main, protected refs, every backup/* and recovery/* ref, open-PR heads, and all unreviewed branches.
 - Never bulk-delete historical files, recovery snapshots, or external project data. A specific item may be retired only after its replacement is verified and the inventory proves it is unused.
 - Keep docs/engineering/TOOLING-REGISTRY.md current for integrations, skills, and free-tier balances. Do not assume a connected ChatGPT tool is linked to the Store account.
-- Cloudflare Pages is Direct Upload. A GitHub merge is not a deployment. Test an isolated preview and verify its full asset set before any production promotion.
+- Cloudflare Pages uses Direct Upload through GitHub Actions. Eligible storefront-source changes merged to main are automatically deployed after full validation; docs/tooling-only changes do not release. Isolated previews are for QA only and never alias production.
 
 ## Current release status
 
