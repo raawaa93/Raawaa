@@ -201,3 +201,13 @@ The first post-merge backup has now been verified end-to-end:
 - All three embedded SHA-256 checks passed. Git bundle verification passed; an isolated bare restore fetched all 34 refs and `git fsck --full --no-reflogs` found no missing or corrupt objects.
 - The source archive extracted successfully; `scripts/check-site.mjs`, `scripts/build-deploy.mjs` (178-file payload), and all JavaScript syntax checks passed under Node 22.16.0.
 - This verifies the GitHub artifact and an isolated restore. It does not yet create an independent R2/off-platform copy; R2 remains deferred until payment-card readiness.
+
+
+## Automatic production release policy — adopted 2026-11-15
+
+- Owner decision: production deployment is automatic after a successful validation run on canonical `main`; the previous manual-dispatch/confirmation requirement is retired.
+- The `RAWAA automatic production CI and release` workflow runs on pushes to `main`, validates the exact commit (Chromium + WebKit browser regression, store-policy/page integrity, and clean Cloudflare Pages payload), then deploys that same SHA to `raawaa-store` production.
+- Any failed validation blocks the deploy job. The deploy stage rechecks that `main` still points to the validated SHA and that the checkout is clean before Wrangler Direct Upload.
+- Pull requests, feature branches, recovery branches, and preview workflows must never target production.
+- GitHub Actions secret `CLOUDFLARE_API_TOKEN` remains required with least-privilege Cloudflare Pages Edit scope. No DNS permissions are required.
+- This policy change updates the repository workflow and documentation only; it does not itself deploy the website. The first successful post-merge main run is the evidence of activation.

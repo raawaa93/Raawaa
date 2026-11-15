@@ -1,4 +1,4 @@
-name: RAWAA production CI and release
+name: RAWAA automatic production CI and release
 
 on:
   push:
@@ -9,7 +9,6 @@ on:
       - '**/*.md'
       - 'AGENTS.md'
       - '.agents/**'
-      - '.github/workflows/**'
       - 'recovery/**'
       - 'package.json'
       - 'package-lock.json'
@@ -17,16 +16,6 @@ on:
       - 'tests/**'
       - 'scripts/check-site.mjs'
       - 'scripts/check-production-headers.mjs'
-  workflow_dispatch:
-    inputs:
-      confirm_production:
-        description: "Deploy the validated main commit to Cloudflare production"
-        required: true
-        type: choice
-        options:
-          - "no"
-          - "yes"
-        default: "no"
 
 permissions:
   contents: read
@@ -89,9 +78,9 @@ jobs:
           fi
 
   deploy:
-    name: Validated automatic production release
+    name: Automatic production release
     needs: validate
-    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.confirm_production == 'yes'))
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     environment:
@@ -130,7 +119,7 @@ jobs:
           fi
           echo "deploy=true" >> "$GITHUB_OUTPUT"
 
-      - name: Deploy validated main to Cloudflare Pages production
+      - name: Automatically deploy validated main to Cloudflare Pages production
         if: steps.source.outputs.deploy == 'true'
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}

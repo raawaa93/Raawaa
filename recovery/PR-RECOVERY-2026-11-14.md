@@ -170,3 +170,8 @@ Cloudflare Browser Rendering returned HTTP 429 for the content endpoint with a s
 - The 10% Sham Cash-only discount is confirmed. The earlier open decision in this historical reconciliation is closed.
 - The 15% value in PR #205 and the older production deployment is superseded. Keep the evidence for audit, but never reuse it in current customer-facing content.
 - `main` is the sole canonical source; preview snapshots and divergent PR artifacts remain read-only.
+
+
+## Production release policy supersession — 2026-11-15
+
+The earlier manual-release policy described in historical sections of this report is superseded. The owner has selected automatic production deployment after all required CI checks pass on canonical `main`. The release workflow validates and deploys the exact same SHA, blocks on failed checks, and rechecks main freshness and source cleanliness. Pull requests and non-main branches remain excluded from production. This policy update does not authorize DNS, Supabase, secrets, or commercial-policy changes.
