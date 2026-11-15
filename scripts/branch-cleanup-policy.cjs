@@ -77,7 +77,9 @@ const SUPERSEDED_CLOSED_PR_BRANCHES = Object.freeze([
   "feature/campaign-nitro-offer-2026-11-14",
   "fix/visual-audit-top-viewport-2026-11-15",
   "fix/final-visual-and-release-policy-2026-11-15",
-  "fix/final-visual-release-policy-consolidated-2026-11-15"
+  "fix/final-visual-release-policy-consolidated-2026-11-15",
+  "fix/branch-cleanup-allowlist-correction-2026-11-15",
+  "fix/branch-cleanup-policy-current-state-2026-11-15"
 ]);
 const DUPLICATE_REF_ALIASES = Object.freeze({
   'fix/final-visual-release-policy-verified-2026-11-15': 'fix/final-visual-release-policy-consolidated-2026-11-15',
