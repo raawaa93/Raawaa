@@ -156,7 +156,7 @@ test('deletes only the nine newly reviewed merged heads after merge', () => {
     'fix/visual-qa-webkit-csp-regression-2026-11-15',
     'maintenance/repository-hygiene-2026-11-15',
     'fix/production-release-push-only-2026-11-15',
-    'fix/visual-audit-top-viewport-2026-11-15',
+    'fix/final-visual-and-release-policy-2026-11-15',
   ];
   for (const name of names) {
     assert.ok(MERGED_PR_BRANCHES.includes(name), name + ' must be reviewed for merged-head cleanup');
@@ -172,6 +172,16 @@ test('deletes the integrated no-PR docs ref only after ancestry proof', () => {
   assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
   assert.deepEqual(
     classifyBranches([branchRef(name)], [], repository, { [name]: { ahead_by: 0, behind_by: 3 } }).map(x => x.name),
+    [name],
+  );
+});
+
+test('retires the superseded visual-audit branch only after it is fully contained in main', () => {
+  const name = 'fix/visual-audit-top-viewport-2026-11-15';
+  assert.ok(SUPERSEDED_CLOSED_PR_BRANCHES.includes(name));
+  assert.deepEqual(classifyBranches([branchRef(name)], [pr(name)], repository), []);
+  assert.deepEqual(
+    classifyBranches([branchRef(name)], [pr(name)], repository, { [name]: { ahead_by: 0, behind_by: 2 } }).map(x => x.name),
     [name],
   );
 });
