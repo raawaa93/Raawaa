@@ -30,6 +30,7 @@ const MERGED_PR_BRANCHES = Object.freeze([
   "maintenance/finalize-branch-cleanup-policy-2026-11-15",
   "maintenance/retire-final-closed-pr-ref-2026-11-15",
   "maintenance/retire-last-closed-ref-2026-11-15",
+  "fix/privacy-navigation-current-home-2026-11-15",
   "feature/campaign-nitro-offer-2026-11-14-v2",
   "fix/campaign-canonical-2026-11-15",
   "fix/cart-dialog-mobile-2026-11-15",
