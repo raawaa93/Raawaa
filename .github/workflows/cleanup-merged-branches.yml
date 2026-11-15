@@ -2,8 +2,7 @@ name: RAWAA repository branch hygiene
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   schedule:
     - cron: '45 4 * * 0'
   workflow_dispatch:
@@ -20,16 +19,16 @@ jobs:
   prune:
     name: Prune verified obsolete branch refs
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - name: Checkout canonical policy
-        uses: actions/checkout@v7
+        uses: actions/checkout@v4
         with:
           ref: main
           persist-credentials: false
 
       - name: Delete only policy-approved branch refs
-        uses: actions/github-script@v8
+        uses: actions/github-script@v7
         with:
           script: |
             const path = `${process.env.GITHUB_WORKSPACE}/scripts/branch-cleanup-policy.cjs`;
@@ -42,11 +41,30 @@ jobs:
               github.paginate(github.rest.pulls.list, { owner, repo, state: 'all', per_page: 100 }),
             ]);
 
-            const candidates = classifyBranches(branches, pullRequests, fullName);
+            const comparisons = {};
+            const candidatesForComparison = branches.filter(branch =>
+              branch.name !== 'main' &&
+              !branch.protected &&
+              !branch.name.startsWith('backup/') &&
+              !branch.name.startsWith('recovery/')
+            );
+
+            for (const branch of candidatesForComparison) {
+              try {
+                const result = await github.rest.repos.compareCommits({
+                  owner, repo, base: 'main', head: branch.name
+                });
+                comparisons[branch.name] = result.data;
+              } catch (error) {
+                core.warning(`Comparison failed for ${branch.name}; retaining it: ${error.message}`);
+              }
+            }
+
+            const candidates = classifyBranches(branches, pullRequests, fullName, comparisons);
             const deleted = [];
             const failed = [];
 
-            core.info(`Inspected ${branches.length} branches and ${pullRequests.length} pull requests.`);
+            core.info(`Inspected ${branches.length} branches, ${pullRequests.length} PRs, and ${Object.keys(comparisons).length} branch comparisons.`);
             core.info(`Policy-approved deletion candidates: ${candidates.length}.`);
 
             for (const branch of candidates) {
@@ -55,32 +73,28 @@ jobs:
                 deleted.push(branch.name);
                 core.info(`Deleted ${branch.name}`);
               } catch (error) {
-                if (error.status === 404) {
-                  core.info(`Already absent: ${branch.name}`);
-                } else {
+                if (error.status === 404) core.info(`Already absent: ${branch.name}`);
+                else {
                   failed.push({ branch: branch.name, error: error.message });
                   core.error(`Could not delete ${branch.name}: ${error.message}`);
                 }
               }
             }
 
-            const retained = branches.length - deleted.length;
             await core.summary
               .addHeading('RAWAA branch hygiene')
               .addTable([
                 [{ data: 'Metric', header: true }, { data: 'Count', header: true }],
                 ['Branches inspected', String(branches.length)],
+                ['Comparisons completed', String(Object.keys(comparisons).length)],
                 ['Deletion candidates', String(candidates.length)],
                 ['Deleted', String(deleted.length)],
-                ['Retained or already absent', String(retained)],
                 ['Failures', String(failed.length)],
               ])
               .addHeading('Deleted refs')
               .addList(deleted.length ? deleted : ['No branch refs required deletion'])
-              .addHeading('Retained namespaces')
-              .addList(['main', 'all protected refs', 'all backup/* refs', 'all recovery/* refs', 'all open-PR heads', 'closed-unmerged branches not explicitly superseded'])
+              .addHeading('Safety rules')
+              .addList(['main and protected refs retained', 'all backup/* and recovery/* refs retained', 'all open-PR heads retained', 'closed-unmerged refs deleted only when ahead_by is zero', 'unreferenced refs deleted only when ahead_by is zero', 'comparison failures retained'])
               .write();
 
-            if (failed.length) {
-              core.setFailed(`Branch cleanup had ${failed.length} deletion failures.`);
-            }
+            if (failed.length) core.setFailed(`Branch cleanup had ${failed.length} deletion failures.`);
