@@ -54,7 +54,10 @@ const MERGED_PR_BRANCHES = Object.freeze([
   "seo/refresh-sitemap-lastmod",
   "tooling/design-skills-playwright-2026-11-15",
   "tooling/playwright-webkit-iphone-2026-11-15",
-  "work/mobile-ux-audit-2026-11-14"
+  "work/mobile-ux-audit-2026-11-14",
+  "fix/branch-hygiene-protect-operational-refs-2026-11-15",
+  "fix/visual-audit-csp-screenshots-2026-11-15",
+  "fix/visual-audit-webkit-csp-2026-11-15"
 ]);
 const SUPERSEDED_CLOSED_PR_BRANCHES = Object.freeze([
   "ci/restore-release-boundaries-2026-11-15-rebased",
