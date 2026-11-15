@@ -46,7 +46,7 @@ test('site integrity policy agrees with push-only production release workflow', 
 });
 
 test('stale-source guard fetches full main history before ancestry comparison', () => {
-  assert.match(workflow, /git fetch --no-tags origin main\\n/);
+  assert.match(workflow, /git fetch --no-tags origin main\n/);
   assert.doesNotMatch(workflow, /git fetch --no-tags origin main --depth=1/);
   assert.match(workflow, /git merge-base --is-ancestor/);
 });
