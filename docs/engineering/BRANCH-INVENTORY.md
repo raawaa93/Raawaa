@@ -45,7 +45,7 @@
 | `fix/visual-audit-top-viewport-clean-2026-11-15` | `c0ccb2db0657d414885e68f16b8b79c9f73b4531` | Merged PR #98; post-merge commits remain outside main ancestry | Archive with pinned recovery tag |
 | `main` | `edc49efe9b98f961fccef4554a2969a02d239b0e` | Canonical | Keep |
 | `maintenance/archive-inactive-branches-final-2026-11-15` | `ad3aaa80e47f2a4d823d85123f30c27726fb206d` | PR #100 merged; seven branch-only commits remain | Archive with pinned recovery tag |
-| `maintenance/final-workspace-hygiene-2026-11-15` | `98503e87022cbaa86392ef95b53a2b8db90d21cb` | Active follow-up implementation | Keep until PR resolves |
+| `maintenance/final-workspace-hygiene-2026-11-15` | `1942364f00a9bd1fcb6584cba3feb78f9a288924` | Active follow-up implementation | Keep until PR resolves |
 | `preview-deploy/visual-qa-after-csp-fix-2026-11-15` | `2757a76415bd21cdd00fe7a256dfc52321f96b02` | Preview checkpoint | Keep |
 | `preview-deploy/visual-qa-current-2026-11-15` | `7ca62ffaaf2be5fd337255d66679621be399ddae` | Preview checkpoint | Keep |
 | `preview-deploy/2026-11-14` | `342eb994547f255bfc5226bc071d03719b4f8303` | Preview checkpoint | Keep |
