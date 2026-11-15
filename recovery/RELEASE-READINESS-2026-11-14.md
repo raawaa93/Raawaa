@@ -239,3 +239,11 @@ This section supersedes the earlier manual-dispatch statements in the historical
 - A fresh Cloudflare read-back showed that deployment `4b796357-63b2-47e1-8ad1-a2aad5c16626` was automatically published from `main` commit `f2f091f0c19a2d0948c592b6aba538aa56e0d873` at 08:17 UTC. The repository's automatic release trigger conflicts with the owner's explicit freeze boundary requiring validation and release approval before production changes.
 - A separate branch `fix/require-explicit-production-release-approval-2026-11-15` changes production release to a manual `workflow_dispatch` requiring `confirm_production=yes`. Ordinary main pushes continue validation only; they cannot deploy.
 - The release-policy regression tests and site integrity checks are updated to enforce the explicit approval gate. This is a proposed change only until its PR is reviewed and merged. No production action is performed by this change.
+
+
+## Development-artifact payload hardening — 2026-11-15
+
+- A review of the latest Cloudflare Pages deployment manifest found that top-level test files and internal Playwright/Lighthouse configuration were included in the public deployment payload.
+- The isolated fix excludes test directories, generated browser-test reports, Playwright configuration, Lighthouse PR configuration, and dependency manifests from the Pages payload, and adds explicit post-build assertions for these paths.
+- The original PR #136 passed Store checks, codebase graph, and mobile performance workflows on its head, but its branch was five commits behind canonical `main`. The fix was reapplied on a fresh branch from current `main` so the complete current release policy and tests can be revalidated before merge.
+- This change is not a production deployment. Keep production unchanged until the rebased PR's checks pass and release clearance is explicitly confirmed.

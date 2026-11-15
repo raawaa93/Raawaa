@@ -11,8 +11,8 @@ const relOut = relative(root, out);
 assert.ok(relOut === '' || relOut.startsWith('..') || isAbsolute(relOut), 'Deployment output must be outside the source tree');
 assert.notEqual(out, root, 'Refusing to overwrite the repository root');
 
-const excludedTopLevel = new Set(['.git', '.github', 'recovery', 'scripts', 'deploy', 'docs', 'node_modules', 'dist', 'coverage', '.wrangler', '.projectmem', '.lighthouseci', 'graphify-out']);
-const excludedFiles = new Set(['README.md', '.gitignore', '.graphifyignore', 'lighthouserc.json', 'hama.html', 'setup.html', 'check.html', 'package.json', 'package-lock.json', 'pnpm-lock.yaml', 'yarn.lock']);
+const excludedTopLevel = new Set(['.git', '.github', 'recovery', 'scripts', 'deploy', 'docs', 'tests', 'node_modules', 'dist', 'coverage', 'playwright-report', 'test-results', '.playwright', '.wrangler', '.projectmem', '.lighthouseci', 'graphify-out']);
+const excludedFiles = new Set(['README.md', '.gitignore', '.graphifyignore', 'lighthouserc.json', 'lighthouserc.pr.json', 'playwright.config.mjs', 'hama.html', 'setup.html', 'check.html', 'package.json', 'package-lock.json', 'pnpm-lock.yaml', 'yarn.lock']);
 const excludedPaths = new Set(['css/hama.css', 'css/setup.css', 'css/check.css', 'js/setup-inline.js', 'js/check-inline.js']);
 function include(source) {
   const rel = relative(root, source).split(sep).join('/');
@@ -47,11 +47,13 @@ for (const required of [
 ]) assert.ok(has(required), 'Missing required deployment asset: ' + required);
 for (const forbidden of [
   'hama.html', 'setup.html', 'check.html', 'css/hama.css', 'css/setup.css', 'css/check.css',
-  'js/setup-inline.js', 'js/check-inline.js', 'README.md', '.graphifyignore', 'lighthouserc.json'
+  'js/setup-inline.js', 'js/check-inline.js', 'README.md', '.graphifyignore', 'lighthouserc.json',
+  'lighthouserc.pr.json', 'playwright.config.mjs', 'package.json', 'package-lock.json'
 ]) assert.ok(!has(forbidden), 'Forbidden legacy/development file included: ' + forbidden);
 assert.ok(!paths.some((path) => path.split('/').includes('hama')), 'Legacy Hama assets must not enter the deployment payload');
 assert.ok(!paths.some((path) => path.startsWith('recovery/') || path.startsWith('.github/') || path.startsWith('scripts/') || path.startsWith('deploy/') || path.startsWith('docs/')), 'Recovery and tooling files must not be deployed');
-assert.ok(!paths.some((path) => ['.projectmem', '.lighthouseci', 'graphify-out'].includes(path.split('/')[0])), 'Local memory and generated audit outputs must never enter the deployment payload');
+assert.ok(!paths.some((path) => ['.projectmem', '.lighthouseci', 'graphify-out', 'tests', 'playwright-report', 'test-results', '.playwright'].includes(path.split('/')[0])), 'Local memory, tests, and generated audit outputs must never enter the deployment payload');
+assert.ok(!paths.some((path) => ['playwright.config.mjs', 'lighthouserc.pr.json', 'package.json', 'package-lock.json', 'pnpm-lock.yaml', 'yarn.lock'].includes(path)), 'Development and dependency manifests must never enter the deployment payload');
 
 const textFiles = files.filter((path) => ['.html', '.js', '.mjs'].some((ext) => path.toLowerCase().endsWith(ext)));
 for (const path of textFiles) {
