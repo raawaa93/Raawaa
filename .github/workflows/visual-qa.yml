@@ -6,7 +6,7 @@ on:
       - 'qa/visual-audit-*'
   workflow_run:
     workflows:
-      - RAWAA production CI and release
+      - Store checks
     types:
       - completed
     branches:
