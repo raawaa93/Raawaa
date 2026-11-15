@@ -45,6 +45,9 @@ try {
 
       let navigationStatus = null;
       let navigationError = null;
+      let metrics = null;
+      const screenshots = [];
+      const interactiveScreenshots = [];
       try {
         const response = await page.goto(baseURL + route.path, { waitUntil: 'domcontentloaded', timeout: 45000 });
         navigationStatus = response?.status() ?? null;
@@ -63,7 +66,7 @@ try {
           await new Promise(resolve => setTimeout(resolve, 300));
         });
 
-        const metrics = await page.evaluate(() => {
+        metrics = await page.evaluate(() => {
           const width = document.documentElement.clientWidth;
           const overflow = Array.from(document.querySelectorAll('body *')).map(el => {
             const rect = el.getBoundingClientRect();
@@ -112,20 +115,19 @@ try {
         });
 
         const prefix = route.name + '--' + viewport.name;
+        screenshots.push(prefix + '--viewport.png', prefix + '--full.png');
         await page.screenshot({ path: path.join(outDir, prefix + '--viewport.png'), fullPage: false, animations: 'disabled' });
         await page.screenshot({ path: path.join(outDir, prefix + '--full.png'), fullPage: true, animations: 'disabled' });
-
-        const interactiveScreenshots = [];
         if (route.name === 'serum') {
           for (const view of ['sizes', 'ritual']) {
             const selector = '[data-serum-view="' + view + '"] img';
-            await page.locator('[data-serum-control="' + view + '"]').click();
+            await page.locator('[data-serum-control="' + view + '"]').first().click();
             await page.waitForFunction((imageSelector) => {
               const img = document.querySelector(imageSelector);
               return img && img.complete && img.naturalWidth > 0 && img.getBoundingClientRect().width > 0;
             }, selector, { timeout: 15000 });
             const imageName = prefix + '--view-' + view + '.png';
-            await page.locator('.serum-photo').screenshot({ path: path.join(outDir, imageName), animations: 'disabled' });
+            await page.locator('.serum-photo').first().screenshot({ path: path.join(outDir, imageName), animations: 'disabled' });
             interactiveScreenshots.push(imageName);
           }
         }
@@ -141,14 +143,14 @@ try {
           pageErrors,
           failedRequests,
           badResponses,
-          screenshots: [prefix + '--viewport.png', prefix + '--full.png'],
+          screenshots,
           interactiveScreenshots,
         };
         results.push(result);
         await fs.promises.writeFile(path.join(outDir, prefix + '.json'), JSON.stringify(result, null, 2));
       } catch (error) {
         navigationError = String(error);
-        results.push({ route: route.path, page: route.name, viewport: viewport.name, navigationStatus, navigationError, consoleErrors, pageErrors, failedRequests, badResponses });
+        results.push({ route: route.path, page: route.name, viewport: viewport.name, navigationStatus, navigationError, metrics, consoleErrors, pageErrors, failedRequests, badResponses, screenshots, interactiveScreenshots });
       } finally {
         await page.close();
       }
