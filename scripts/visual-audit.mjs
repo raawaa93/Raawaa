@@ -18,7 +18,7 @@ const routes = [
   { name: 'privacy', path: '/privacy.html' },
 ];
 const viewports = [
-  { name: 'iphone-13', device: devices['iPhone 13'] },
+  { name: 'iphone-13', device: { ...devices['iPhone 13'], viewport: { width: 390, height: 844 }, screen: { width: 390, height: 844 } } },
   { name: 'desktop-1440', device: { viewport: { width: 1440, height: 1000 }, screen: { width: 1440, height: 1000 }, deviceScaleFactor: 1, isMobile: false, hasTouch: false } },
 ];
 const engines = [
