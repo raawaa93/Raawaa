@@ -91,7 +91,11 @@ const MERGED_PR_BRANCHES = Object.freeze([
   "maintenance/archive-merged-performance-refs-2026-11-15",
   "maintenance/archive-mobile-header-fix-2026-11-15",
   "docs/record-mobile-visual-qa-and-branch-archive-2026-11-15",
-  "perf/defer-home-price-enhancement-2026-11-15"
+  "perf/defer-home-price-enhancement-2026-11-15",
+  "fix/require-explicit-production-release-approval-2026-11-15",
+  "maintenance/allowlist-verified-doc-branches-2026-11-15",
+  "fix/exclude-dev-files-from-pages-payload-rebased-2026-11-15",
+  "maintenance/close-merged-branches-refresh-inventory-2026-11-15"
 ]);
 const SUPERSEDED_CLOSED_PR_BRANCHES = Object.freeze([
   "maintenance/retire-superseded-finalize-ref-2026-11-15",
