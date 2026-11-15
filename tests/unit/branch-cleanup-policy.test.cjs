@@ -351,3 +351,13 @@ test('retires this exact mobile visual-QA documentation branch after merge', () 
   assert.deepEqual(classifyBranches([branchRef(name, { sha: head })], [pr(name, { merged: true, sha: head })], repository).map(x => x.name), [name]);
   assert.deepEqual(classifyBranches([branchRef(name, { sha: 'moved-head' })], [pr(name, { merged: true, sha: head })], repository), []);
 });
+
+
+test('retires the exact home price idle-enhancement PR branch after merge', () => {
+  const name = 'perf/defer-home-price-enhancement-2026-11-15';
+  assert.ok(MERGED_PR_BRANCHES.includes(name));
+  const head = 'home-price-idle-enhancement-merged-head';
+  assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
+  assert.deepEqual(classifyBranches([branchRef(name, { sha: head })], [pr(name, { merged: true, sha: head })], repository).map(x => x.name), [name]);
+  assert.deepEqual(classifyBranches([branchRef(name, { sha: 'moved-head' })], [pr(name, { merged: true, sha: head })], repository), []);
+});
