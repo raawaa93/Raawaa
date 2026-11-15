@@ -34,7 +34,7 @@ jobs:
             const path = `${process.env.GITHUB_WORKSPACE}/scripts/branch-cleanup-policy.cjs`;
             const {
               classifyBranches, MERGED_PR_BRANCHES,
-              SUPERSEDED_CLOSED_PR_BRANCHES, STALE_NO_PR_BRANCHES, DUPLICATE_TREE_BRANCHES
+              SUPERSEDED_CLOSED_PR_BRANCHES, STALE_NO_PR_BRANCHES
             } = require(path);
             const { owner, repo } = context.repo;
             const fullName = `${owner}/${repo}`;
@@ -47,7 +47,6 @@ jobs:
             const mergedAllowlist = new Set(MERGED_PR_BRANCHES);
             const superseded = new Set(SUPERSEDED_CLOSED_PR_BRANCHES);
             const staleNoPr = new Set(STALE_NO_PR_BRANCHES);
-            const duplicateTreeBranches = new Set(DUPLICATE_TREE_BRANCHES);
             const sameRepo = pull => pull?.head?.repo?.full_name === fullName;
             const comparisons = {};
 
@@ -60,7 +59,6 @@ jobs:
               if (name.startsWith('preview-deploy/') && !staleNoPr.has(name)) return false;
               const related = pullRequests.filter(pull => sameRepo(pull) && pull.head.ref === name);
               if (related.some(pull => pull.state === 'open')) return false;
-              if (duplicateTreeBranches.has(name)) return true;
 
               const hasMerged = related.some(pull => Boolean(pull.merged_at));
               const hasClosedUnmerged = related.some(pull => pull.state === 'closed' && !pull.merged_at);
@@ -71,20 +69,12 @@ jobs:
               return hasMerged && mergedAllowlist.has(name) && !mergedHeadMatches;
             });
 
-            const mainTreeSha = candidatesForComparison.some(branch => duplicateTreeBranches.has(branch.name))
-              ? (await github.rest.repos.getCommit({ owner, repo, ref: 'main' })).data.commit.tree.sha
-              : null;
-
             for (const branch of candidatesForComparison) {
               try {
                 const result = await github.rest.repos.compareCommits({
                   owner, repo, base: 'main', head: branch.name
                 });
                 comparisons[branch.name] = result.data;
-                if (duplicateTreeBranches.has(branch.name)) {
-                  const branchCommit = await github.rest.repos.getCommit({ owner, repo, ref: branch.name });
-                  comparisons[branch.name].tree_matches_main = branchCommit.data.commit.tree.sha === mainTreeSha;
-                }
               } catch (error) {
                 core.warning(`Comparison failed for ${branch.name}; retaining it: ${error.message}`);
               }
@@ -125,7 +115,7 @@ jobs:
               .addHeading('Deleted refs')
               .addList(deleted.length ? deleted : ['No branch refs required deletion'])
               .addHeading('Safety rules')
-              .addList(['main and protected refs retained', 'all backup/*, recovery/*, restore/*, release/*, and production-deploy/* refs retained', 'all open-PR heads retained; active preview-deploy/* and deploy/* refs retained', `merged refs deleted only from the ${MERGED_PR_BRANCHES.length}-name reviewed allowlist`, 'changed merged heads require ahead_by = 0', 'closed-unmerged refs deleted only from the exact superseded allowlist; reused refs require ahead_by = 0', 'temporary no-PR refs require explicit review and ahead_by = 0', 'reviewed duplicate-tree refs deleted only when their full tree matches main', 'comparison failures retained'])
+              .addList(['main and protected refs retained', 'all backup/*, recovery/*, restore/*, release/*, and production-deploy/* refs retained', 'all open-PR heads retained; active preview-deploy/* and deploy/* refs retained', `merged refs deleted only from the ${MERGED_PR_BRANCHES.length}-name reviewed allowlist`, 'changed merged heads require ahead_by = 0', 'closed-unmerged refs deleted only from the exact superseded allowlist; reused refs require ahead_by = 0', 'temporary no-PR refs require explicit review and ahead_by = 0', 'comparison failures retained'])
               .write();
 
             if (failed.length) core.setFailed(`Branch cleanup had ${failed.length} deletion failures.`);
