@@ -36,6 +36,7 @@ for (const engine of engines) {
       locale: 'ar-SY',
       timezoneId: 'Asia/Damascus',
       colorScheme: 'light',
+  reducedMotion: 'reduce',
       // Keep reduced-motion at context level. Do not pass screenshot animations:'disabled':
       // Playwright injects an inline stylesheet for that option, which strict style-src blocks in WebKit.
       ignoreHTTPSErrors: false,
