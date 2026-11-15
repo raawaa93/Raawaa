@@ -6,7 +6,7 @@ const root = process.cwd();
 const read = (file) => fs.readFileSync(path.join(root, file), 'utf8');
 const walk = (dir) => fs.readdirSync(path.join(root, dir), { withFileTypes: true }).flatMap((entry) => {
   const rel = path.posix.join(dir, entry.name);
-  if (entry.isDirectory()) return ['recovery', 'node_modules', '.git'].includes(entry.name) ? [] : walk(rel);
+  if (entry.isDirectory()) return ['recovery', 'node_modules', '.git', '.projectmem', '.lighthouseci', 'graphify-out', 'docs'].includes(entry.name) ? [] : walk(rel);
   return [rel];
 });
 const files = walk('.').filter((file) => !file.startsWith('./recovery/') && !file.startsWith('recovery/'));
