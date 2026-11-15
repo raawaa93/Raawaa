@@ -60,7 +60,7 @@ const MERGED_PR_BRANCHES = Object.freeze([
   "fix/visual-qa-webkit-csp-regression-2026-11-15",
   "maintenance/repository-hygiene-2026-11-15",
   "fix/production-release-push-only-2026-11-15",
-  "fix/visual-audit-top-viewport-2026-11-15"
+  "fix/final-visual-and-release-policy-2026-11-15"
 ]);
 const SUPERSEDED_CLOSED_PR_BRANCHES = Object.freeze([
   "ci/restore-release-boundaries-2026-11-15-rebased",
@@ -73,7 +73,8 @@ const SUPERSEDED_CLOSED_PR_BRANCHES = Object.freeze([
   "automation/graphify-and-lighthouse-2026-11-15",
   "automation/graphify-daily-refresh-2026-11-15",
   "qa/visual-audit-2026-11-15",
-  "feature/campaign-nitro-offer-2026-11-14"
+  "feature/campaign-nitro-offer-2026-11-14",
+  "fix/visual-audit-top-viewport-2026-11-15"
 ]);
 const STALE_NO_PR_BRANCHES = Object.freeze([
   "preview-deploy/visual-qa-2026-11-15",
