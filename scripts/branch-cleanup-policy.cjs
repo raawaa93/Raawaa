@@ -2,6 +2,8 @@
 
 const MERGED_PR_BRANCHES = Object.freeze([
   "automation/agent-guidance-2026-11-15",
+  "fix/visual-audit-webkit-csp-2026-11-15",
+  "maintenance/repository-hygiene-2026-11-15",
   "automation/ai-memory-graph-performance",
   "automation/graphify-lighthouse-baseline-2026-11-15",
   "automation/validated-auto-production-release",
