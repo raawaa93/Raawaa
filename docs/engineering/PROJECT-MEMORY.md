@@ -95,7 +95,7 @@ Update only when a verified, durable fact changes (for example: owner-approved p
 ## Verified integration and release audit — 2026-11-15
 
 ### Production and quality gates
-- Canonical `main` is `5febb25a82ac05a4206f1610360f22b03a44863e`. The latest production deployment remains `d00b2e27`, built from `032a62601e5a6925c8bc97889607b4804ebceb08` at 2026-11-15 03:58:13Z; PR #65 changed only workflow/docs/validation files, so production deployment was correctly skipped.
+- Canonical `main` is `845ace2c45c0cc9aa70c9b4093bf4aa69780cc7f`. The latest production deployment remains `d00b2e27`, built from `032a62601e5a6925c8bc97889607b4804ebceb08` at 2026-11-15 03:58:13Z; PRs #65 and #53 changed only workflow/docs/validation files, so production deployment was correctly skipped.
 - The latest Store checks, production release, and disaster-recovery backup workflow runs all completed successfully for that commit.
 - Cloudflare Pages is deployed by GitHub Actions using Wrangler Direct Upload (deployment trigger `ad_hoc`; no Pages build command is configured). The deployment API showed 541 total historical deployment records at the latest check; this is not a monthly usage meter and must not be interpreted as 541 builds in the current month. Keep preview uploads deliberate and avoid redundant production releases.
 - A fresh OpenSEO audit on 2026-11-15 crawled 7/7 pages with no crawl errors, critical issues, or warnings. The only findings are three informational canonicalization notices for product-selection query states that intentionally canonicalize to `/serum`.
