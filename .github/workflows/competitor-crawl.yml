@@ -21,7 +21,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: rawaa-competitor-crawl-\${{ github.ref }}
+  group: rawaa-competitor-crawl-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -61,7 +61,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: rawaa-competitor-crawl-\${{ github.run_id }}
+          name: rawaa-competitor-crawl-${{ github.run_id }}
           path: artifacts/competitor-crawl/
           if-no-files-found: warn
           retention-days: 30
