@@ -77,4 +77,4 @@ GitHub Actions runs these checks on pushes and pull requests. Make future edits 
 
 ## Current release status
 
-See `recovery/RELEASE-READINESS-2026-11-14.md` for the release gates and backend audit. The latest operational audit records production/preview deployment IDs, automatic validated releases, and the controlled manual-rerun path.
+See `recovery/RELEASE-READINESS-2026-11-14.md` for the release gates and backend audit. The operational audit records production/preview deployment IDs; production releases require explicit manual approval after validation.
