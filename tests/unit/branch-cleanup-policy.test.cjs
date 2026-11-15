@@ -39,6 +39,9 @@ test('deletes the four newly reviewed merged heads only when their PR head match
     'fix/branch-hygiene-protect-operational-refs-2026-11-15',
     'fix/visual-audit-csp-screenshots-2026-11-15',
     'fix/visual-audit-webkit-csp-2026-11-15',
+    'maintenance/repository-hygiene-2026-11-15',
+    'docs/visual-qa-and-inventory-finalization-2026-11-15',
+    'maintenance/finish-branch-cleanup-2026-11-15',
     'docs/visual-qa-and-inventory-finalization-2026-11-15',
   ];
   for (const name of names) {
@@ -137,6 +140,7 @@ test('preserves restore, release, production, and active preview/deploy checkpoi
     'release/clean-pages-payload-2026-11-14',
     'production-deploy/release-2026-11-15',
     'preview-deploy/visual-qa-current-2026-11-15',
+    'preview-deploy/visual-qa-after-csp-fix-2026-11-15',
     'preview-deploy/2026-11-14',
     'deploy/10-percent-2026-11-14',
     'deploy/10-percent-site-only',
