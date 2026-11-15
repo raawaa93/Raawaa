@@ -127,3 +127,20 @@ test('serum page skips homepage-only CSS and keeps narrow mobile refinements', a
   expect(padding).toEqual({ top: '3.2px', bottom: '3.2px' });
   await expect(page.locator('[data-add-current]')).toBeVisible();
 });
+
+
+test('serum hero does not preload an unrelated image or keep empty picture sources', async ({ page }) => {
+  await page.goto('/serum.html', { waitUntil: 'domcontentloaded' });
+
+  const hero = page.locator('[data-size-img]');
+  await expect(hero).toBeVisible();
+  await expect(hero).toHaveAttribute('fetchpriority', 'high');
+  await expect(hero).toHaveAttribute('src', /rawaa-olive\.jpg$/);
+  await expect(page.locator('link[rel="preload"][as="image"]')).toHaveCount(0);
+  await expect(page.locator('[data-size-picture] source')).toHaveCount(0);
+
+  await page.locator('[data-formula-select="rosemary-caffeine"]').click();
+  await expect(hero).toHaveAttribute('src', /rawaa-rosemary\.jpg$/);
+  await page.locator('[data-formula-select="castor-blend"]').click();
+  await expect(hero).toHaveAttribute('src', /rawaa-castor\.jpg$/);
+});
