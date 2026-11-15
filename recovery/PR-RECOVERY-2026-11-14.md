@@ -175,3 +175,8 @@ Cloudflare Browser Rendering returned HTTP 429 for the content endpoint with a s
 ## Production release policy supersession — 2026-11-15
 
 The earlier manual-release policy described in historical sections of this report is superseded. The owner has selected automatic production deployment after all required CI checks pass on canonical `main`. The release workflow validates and deploys the exact same SHA, blocks on failed checks, and rechecks main freshness and source cleanliness. Pull requests and non-main branches remain excluded from production. This policy update does not authorize DNS, Supabase, secrets, or commercial-policy changes.
+
+
+## Automatic release activation evidence — 2026-11-15
+
+PR #62 merged the automatic validated production release policy at `96b5766ab436f9bb754cca6b57280187a724d1b8`. Source/configuration changes on `main` now deploy after successful validation; docs, recovery archives, tests and validation-script-only changes are excluded by workflow path filters. Cloudflare's latest production deployment checked after the merge remains source SHA `b37f20fd005024d587df8191414cc80064ff5f47`; the first release under the new policy is not yet confirmed.
