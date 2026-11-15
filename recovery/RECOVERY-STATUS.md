@@ -98,3 +98,11 @@ The first post-merge backup has now been verified end-to-end:
 - The updated production workflow validates the exact main commit using Chromium/WebKit regression tests, policy and asset-integrity checks, and a clean Pages payload build. Deployment runs only after validation succeeds, rechecks that `main` has not moved, and refuses dirty source.
 - PRs and non-main branches remain non-production. Preview remains isolated.
 - This is a repository policy change, not proof of a live production deployment. Activation must be confirmed from the first successful post-merge GitHub Actions run and its Cloudflare deployment record.
+
+
+## Automatic release activation evidence — 2026-11-15
+
+- Policy commit: `96b5766ab436f9bb754cca6b57280187a724d1b8` (PR #62 merged).
+- Production-affecting main source/config changes now validate and deploy automatically; docs/recovery/test-only changes are excluded by explicit path filters.
+- Latest Cloudflare production deployment checked after the merge remains `3967c264-587c-4576-a7c9-b7f9f6864b2d`, source SHA `b37f20fd005024d587df8191414cc80064ff5f47`. The new policy commit has not yet appeared as a production deployment.
+- Workflow-run evidence for the main push is unavailable through the connected PR-only run reader. First successful automated release remains pending verification.
