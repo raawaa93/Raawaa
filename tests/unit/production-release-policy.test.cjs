@@ -35,3 +35,9 @@ test('stale-source guard recognizes all maintenance and visual-audit helpers', (
     assert.ok(guard.includes(file), file + ' must be treated as maintenance-only by the stale-source guard');
   }
 });
+
+test('site integrity policy agrees that production releases are push-only', () => {
+  const siteCheck = fs.readFileSync(path.join(process.cwd(), 'scripts/check-site.mjs'), 'utf8');
+  assert.doesNotMatch(siteCheck, /workflow_dispatch|confirm_production/u);
+  assert.match(siteCheck, /github\\.event_name == 'push'/u);
+});
