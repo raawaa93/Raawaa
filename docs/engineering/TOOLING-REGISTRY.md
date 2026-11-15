@@ -259,7 +259,7 @@ This is an account-level inventory. Only resources positively identified as belo
 
 - PR #100 merged the branch archive workflow.
 - [Archive run #43680881436](https://github.com/raawaa93/Raawaa/actions/runs/43680881436) completed successfully: 29 exact-SHA annotated tags created and verified, 29 branch refs removed, zero failures.
-- The remaining archive allowlist is now limited to three reviewed refs: the closed documentation branch, the merged visual-QA branch whose tree changed after maintenance, and a superseded archive-workflow draft. Each is pinned to its exact current SHA.
+- The exact-SHA archive allowlist is now empty. All 32 inactive branch refs were tagged and removed; no archive candidates remain. The historical recovery tags are retained in `docs/engineering/ARCHIVED-BRANCHES.md`.
 - The branch archive workflow is part of the repository's maintenance stack; it preserves commit history before removing refs. Recovery steps are in `docs/engineering/ARCHIVED-BRANCHES.md`.
 - No global ChatGPT plugin, workspace connector, or Skill was disabled or uninstalled. The integration catalog is shared and the audit found no safe, complete dependency map for destructive workspace-wide cleanup.
 
@@ -267,3 +267,12 @@ This is an account-level inventory. Only resources positively identified as belo
 ### GitHub branch protection
 
 - The `main` branch object reports `protected=false`; the repository rulesets endpoint returned an empty list. The connected GitHub app cannot administer legacy branch-protection settings (protection endpoint returns 403). Required checks are therefore not enforced by a GitHub branch-protection rule at this snapshot; configure protection in repository Settings.
+
+
+## Final repository state — 2026-11-15 05:55 UTC
+
+- 17 operational branch refs remain; the 32 exact-SHA recovery tags are verified. The archive allowlist is empty and no inactive working refs remain. PR #102 is the only temporary documentation branch and is explicitly allowlisted for deletion after merge.
+- PR #101 merged; production deployment `b2923438-ad03-4c5a-816d-240fa6b5bbfd` succeeded from `db1e0b131f596208b10e2e9c951d1f22c9beb916`. The clean Pages payload contained 188 files including the Google Search Console verification HTML, and post-deploy security-header checks passed.
+- Search Console URL-prefix property `https://raawaa-store.pages.dev/` is visible with `siteOwner` permission. The separate domain property `sc-domain:raawaa-store.pages.dev` is still unverified.
+- Main Lighthouse audit, Playwright Chromium/WebKit, Store checks, Graphify, repository backup, production validation, deployment, and post-deploy security checks all succeeded.
+- `main.protected=false` and no repository rulesets are configured; the connected GitHub app cannot administer branch protection (403). Enable required checks in repository Settings.
