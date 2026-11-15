@@ -144,3 +144,32 @@ test('preserves restore, release, production, and active preview/deploy checkpoi
   const comparisons = Object.fromEntries(names.map(name => [name, { ahead_by: 0, behind_by: 0 }]));
   assert.deepEqual(classifyBranches(branches, pulls, repository, comparisons), []);
 });
+
+
+test('deletes only newly reviewed merged heads after merge', () => {
+  const names = [
+    'fix/branch-hygiene-protect-operational-refs-2026-11-15',
+    'fix/visual-audit-csp-screenshots-2026-11-15',
+    'fix/visual-audit-webkit-csp-2026-11-15',
+    'docs/visual-qa-and-inventory-finalization-2026-11-15',
+    'maintenance/branch-cleanup-final-2026-11-15',
+    'fix/visual-qa-webkit-csp-regression-2026-11-15',
+  ];
+  for (const name of names) {
+    assert.ok(MERGED_PR_BRANCHES.includes(name), `${name} must be reviewed for merged-head cleanup`);
+    assert.deepEqual(
+      classifyBranches([branchRef(name)], [pr(name, { merged: true })], repository).map(x => x.name),
+      [name],
+    );
+  }
+});
+
+test('deletes the integrated no-PR docs ref only after ancestry proof', () => {
+  const name = 'docs/project-tooling-and-branch-inventory-2026-11-15';
+  assert.ok(STALE_NO_PR_BRANCHES.includes(name));
+  assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
+  assert.deepEqual(
+    classifyBranches([branchRef(name)], [], repository, { [name]: { ahead_by: 0, behind_by: 3 } }).map(x => x.name),
+    [name],
+  );
+});
