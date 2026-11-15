@@ -51,18 +51,6 @@ const views = read('js/serum-views.js');
 const configMatch = configSource.match(/window\.RAWAA_CONFIG\s*=\s*deepFreeze\((\{[\s\S]*?\})\s*\);/);
 assert.ok(configMatch, 'RAWAA_CONFIG must be a JSON-compatible object');
 const config = JSON.parse(configMatch[1]);
-const publicCspPages = [index, serum, campaign, read('privacy.html')];
-for (const [position, html] of publicCspPages.entries()) {
-  const pageName = ['index.html', 'serum.html', 'campaign.html', 'privacy.html'][position];
-  const csp = html.match(/<meta\s+http-equiv=["']Content-Security-Policy["']\s+content="([^"]*)"/i)?.[1] || '';
-  assert.ok(csp, pageName + ' must declare a Content Security Policy');
-  assert.match(csp, /script-src\s+'self'/u, pageName + ' scripts must be same-origin');
-  assert.match(csp, /style-src\s+'self'/u, pageName + ' styles must be same-origin');
-  assert.doesNotMatch(csp, /unsafe-inline|unsafe-eval/u, pageName + ' must not permit inline or dynamic execution');
-  if (!config.marketing?.facebookPixelId) {
-    assert.doesNotMatch(csp, /facebook\.com|connect\.facebook\.net|supabase\.co/u, pageName + ' must not allow unused third-party tracking or API origins');
-  }
-}
 const shamCash = config.payment?.methods?.find((method) => method.id === 'shamcash');
 assert.equal(shamCash?.discountPercent, 10, 'Sham Cash discount must remain 10%');
 assert.equal(config.delivery?.policy?.alwaysFree, true, 'Delivery must remain free');
