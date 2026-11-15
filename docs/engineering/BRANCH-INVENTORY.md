@@ -178,3 +178,10 @@ Do not delete or consolidate any of these 17 refs without a new individual revie
 - The post-merge PR #113 maintenance head was preserved as annotated tag `archive/branches/2026-11-15/maintenance/pr112-branch-hygiene-inventory-2026-11-15` at exact commit `80e320e4b95138685ad10099c6087050d66b2b62`.
 - Archive workflow `43685324709` verified the tag target and retired the branch ref.
 - Current inventory remains **17 branches, 34 tags, 0 open PRs**.
+
+
+## Final archive-follow-up cleanup — 2026-11-15 06:29 UTC
+
+- The second exact-SHA archive tag is `archive/branches/2026-11-15/maintenance/record-pr113-archive-2026-11-15`, targeting `1415d8dcac9ca2113626659d4454b2450b42b423`.
+- Two generated archive-finalization refs remain temporarily: `maintenance/finalize-archive-index-2026-11-15` and `maintenance/finalize-pr113-archive-2026-11-15`. Their documentation/policy changes are superseded by canonical main. Both are allowlisted only as no-PR refs and will be deleted only after their heads are fast-forwarded to main and GitHub confirms `ahead_by=0`.
+- Current read-back: **19 branches, 35 tags, 0 open PRs**. Expected stable state after the exact-head cleanup: **17 branches, 35 tags, 0 open PRs**.
