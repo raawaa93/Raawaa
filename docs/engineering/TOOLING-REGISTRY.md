@@ -117,3 +117,11 @@ The catalog being available in ChatGPT is not the same as vendoring a skill into
 - Current visual audit run `43675783829` tested the isolated preview built from canonical main. No HTTP errors, JavaScript page errors, failed requests, broken visible images, missing fonts, or horizontal overflow were reported. It failed only because Playwright's screenshot `animations: 'disabled'` option triggers a CSP-blocked inline stylesheet in WebKit (20 console errors, one per screenshot); the site CSP must remain strict. A test-harness fix is in review and must be rerun before marking visual QA complete.
 - Latest Graphify run produced 299 nodes, 626 edges, and 23 communities across 29 code files; generated recovery archives and workflows remain intentionally excluded. The latest disaster-recovery artifact is 12.96 MB with 90-day retention.
 - Cloudflare Web Analytics site configuration exists with `auto_install=false`; no beacon is installed and no analytics data is collected. Do not enable it until privacy disclosure and CSP are reviewed together.
+
+
+## Repository cleanup execution — 2026-11-15
+
+- Branch hygiene PR #70 merged successfully; first cleanup run [#43676889692](https://github.com/raawaa93/Raawaa/actions/runs/43676889692) completed with **55/55 branch deletions successful and zero failures**.
+- Branch inventory is maintained in `docs/engineering/BRANCH-INVENTORY.md`; after the run, 29 refs remained, including canonical main, backup/recovery archives, unmerged or unreviewed work, and a small number of refs created/recreated by subsequent PR workflows.
+- Follow-up PR #73 refreshes the allowlist for PR #70–#72 and a generated docs branch whose head is already contained in main. The follow-up run must be checked before declaring the branch inventory fully settled.
+- Global ChatGPT plugin uninstall is intentionally not performed: the request did not identify exact app IDs, and these integrations may be shared with other projects. Repository cleanup curates RAWAA usage without deleting user-wide connections.
