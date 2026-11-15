@@ -7,8 +7,8 @@ This file is the repository-backed memory that survives AI sessions, client chan
 
 - Repository: `raawaa93/Raawaa`; `main` is the only canonical website source.
 - Cloudflare Pages project: `raawaa-store`; current known URL: https://raawaa-store.pages.dev.
-- Pages uses Direct Upload, not Git integration. A merge to `main` is **not** a production deployment.
-- Main pushes run validation only. A production release requires a separate `workflow_dispatch` from canonical `main` with `confirm_production=yes`, after explicit owner approval of that release. PRs and non-main branches never deploy. The release must still pass the full validation, exact-commit, clean-source, and freshness gates. No blanket standing production-release approval is assumed.
+- Pages uses Direct Upload, not Git integration. Qualifying website-source pushes to canonical `main` run full validation and automatically deploy the validated commit to production.
+- No manual dispatch, confirmation input, or GitHub Environment reviewer gate is part of the production release path. PRs and non-main branches never deploy. Exact-SHA checkout, latest-main freshness, clean-source, Cloudflare secret, and successful validation gates remain mandatory.
 - Preview deployment is isolated from production. Never deploy a backup branch.
 - `backup/*` branches and `recovery/` snapshots are historical rollback/evidence; do not delete, overwrite, or deploy them.
 
@@ -35,7 +35,7 @@ This file is the repository-backed memory that survives AI sessions, client chan
 - `scripts/check-site.mjs` validates commercial policy, page integrity, metadata, cart completeness, and local asset references.
 - `scripts/build-deploy.mjs` creates the clean Cloudflare payload and excludes recovery/development material.
 - Playwright tests cover browser behavior, including Chromium and WebKit. Add deterministic regression coverage before changing cart, pricing, or WhatsApp behavior.
-- Production deploy is disabled on ordinary pushes. It runs only from an explicitly confirmed `workflow_dispatch` on `main`, after the owner approves that specific release; pull-request events never deploy. Preserve exact-SHA checkout, latest-main freshness check, clean-source check, Cloudflare secret check, and the production environment. Never bypass a failed gate.
+- Production deploy runs automatically on qualifying pushes to `main` after full validation; pull-request events and non-main branches never deploy. There is no manual confirmation input or approval-gated GitHub Environment. Preserve exact-SHA checkout, latest-main freshness check, clean-source check, and Cloudflare secret check. Never bypass a failed technical gate.
 - Do not change DNS/domain ownership, secrets, billing, Supabase data/schema, customer/order records, or security permissions unless technically necessary and within the owner's standing authority; irreversible/destructive data changes still require a recoverable plan and specific approval.
 - Do not confuse unrelated Supabase projects. Verify the project ID before any backend operation.
 
@@ -155,7 +155,7 @@ Update only when a verified, durable fact changes (for example: owner-approved p
 - PR #56 migration archive and its recovery-only workflow changes are in main; the backup artifact after merge includes the archive. No SQL was executed.
 
 - PR #64 strengthened the stale-release guard: a validated release can tolerate only intervening documentation, recovery, workflow, dependency, test, or validation-only commits; any changed production source/configuration/build file still blocks deployment. The earlier run for PR #62's SHA was correctly blocked when main moved, and the subsequent validated run for `032a6260` deployed successfully.
-- PR #65 is merged. The production workflow now excludes workflow-only changes from deployment triggers and retains the controlled manual rerun with `confirm_production=yes`. Automatic releases for qualifying website-source changes remain the default; pull requests and non-main branches remain excluded.
+- PR #65 is merged. The production workflow excludes workflow-only changes from deployment triggers and automatically releases qualifying website-source changes after successful validation; no manual dispatch or confirmation input is present.
 
 
 ## Verified tooling and discovery update — 2026-11-15
