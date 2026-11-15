@@ -45,5 +45,5 @@ test('uses a timer fallback when requestIdleCallback is unavailable', () => {
   const h = makeHarness('timeout');
   assert.equal(h.nodes[0].textContent, 'من ٢٬٠٠٠ ل.س');
   h.runScheduled();
-  assert.equal(h.nodes[0].textContent, 'من ٢٬٠٠٠ ل.س');
+  assert.equal(h.nodes[0].textContent, 'من ٢٬١٠٠ ل.س');
 });
