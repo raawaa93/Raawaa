@@ -52,6 +52,18 @@ Every archived tag resolves to the exact original branch-head SHA. These are dur
 
 **Final repository state after run #43682035975:** 17 branch refs remain; all 32 recovery tags are verified; no unprotected inactive working branch refs remain. The archive allowlist is cleared in the follow-up cleanup PR so these refs cannot be re-archived accidentally.
 
+
+## Final closed-PR archive — pending
+
+- Closed PR #103 without merge: `docs/final-branch-inventory-2026-11-15`.
+- Captured branch head: `eaad2be711bec297bf298c6d78e5c46df8be327f`.
+- The branch contains documentation-only changes beyond main; it is preserved with the exact recovery tag below before its ref is retired.
+- The unrelated `docs/final-tooling-state-2026-11-15` ref is byte-for-byte identical to main and is eligible for ancestry-safe pruning without a recovery tag.
+
+| Original branch | Preserved commit SHA | Recovery tag |
+|---|---|---|
+| `docs/final-branch-inventory-2026-11-15` | `eaad2be711bec297bf298c6d78e5c46df8be327f` | `archive/branches/2026-11-15/docs/final-branch-inventory-2026-11-15` |
+
 ## Tag format
 
 `archive/branches/YYYY-MM-DD/<original-branch-name>`
