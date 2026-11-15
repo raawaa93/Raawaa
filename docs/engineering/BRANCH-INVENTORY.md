@@ -10,11 +10,11 @@
 ## Final snapshot
 
 - **17 branch refs remain** after the final cleanup run.
-- **101 pull requests** at snapshot time: **73 merged**, **28 closed-unmerged**, **0 open**.
+- **103 pull requests** after PR #103 merges: **75 merged**, **28 closed-unmerged**, **0 open**.
 - **32 annotated recovery tags** preserve the 32 retired branch heads.
 - **0 inactive non-operational branch refs** remain.
 - The archive allowlist is cleared; future runs will not attempt to archive already-retired refs.
-- This documentation-only follow-up branch is created after the snapshot and is explicitly allowlisted for automatic pruning after its merge.
+- The two temporary documentation refs are both explicitly allowlisted: the old inventory ref points exactly to main and the PR #103 branch is removed after its exact merged head is confirmed.
 
 ## Completed cleanup
 
