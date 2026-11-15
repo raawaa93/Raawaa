@@ -169,7 +169,13 @@ No branch was deleted. The connected GitHub toolset exposes branch reads and PR 
 
 ### Backup verification
 
-- The disaster-recovery workflow definition exists, but this audit could not verify a completed run, artifact, SHA-256 verification, or restore drill through the available GitHub Actions read interface. Backup completion is therefore **unverified**, not complete.
+The first post-merge backup has now been verified end-to-end:
+- Workflow run: `43656695373` (success).
+- Artifact: `rawaa-disaster-recovery-43656695373-5678c59d993a8de772f5e79708c474859e612d3e`, artifact ID `14138676139`, 12,812,495 bytes; expires 2027-02-13.
+- Artifact ZIP SHA-256 matches GitHub's recorded digest: `f83983670c6197635f5e6af58f2174340520646bb65c8463fe9cb3dd268ac23f`.
+- All three embedded SHA-256 checks passed. Git bundle verification passed; an isolated bare restore fetched all 34 refs and `git fsck --full --no-reflogs` found no missing or corrupt objects.
+- The source archive extracted successfully; `scripts/check-site.mjs`, `scripts/build-deploy.mjs` (178-file payload), and all JavaScript syntax checks passed under Node 22.16.0.
+- This verifies the GitHub artifact and an isolated restore. It does not yet create an independent R2/off-platform copy; R2 remains deferred until payment-card readiness.
 - R2 remains deliberately inactive pending the owner's payment-card readiness. Do not enable paid resources or change DNS without the owner-side prerequisite.
 
 ### Release blockers unchanged
@@ -184,3 +190,14 @@ No branch was deleted. The connected GitHub toolset exposes branch reads and PR 
 
 - The backup workflow now runs on every push to canonical `main`, in addition to its daily schedule and manual trigger. The PR #24 merge commit should start a backup run and produce a 90-day GitHub Actions artifact without requiring Cloudflare R2 or a paid service.
 - Artifact creation, SHA-256 verification and an isolated restore drill still require read-back evidence; the trigger change alone is not proof that a backup completed.
+
+
+## Verified backup evidence — 2026-11-15
+
+The first post-merge backup has now been verified end-to-end:
+- Workflow run: `43656695373` (success).
+- Artifact: `rawaa-disaster-recovery-43656695373-5678c59d993a8de772f5e79708c474859e612d3e`, artifact ID `14138676139`, 12,812,495 bytes; expires 2027-02-13.
+- Artifact ZIP SHA-256 matches GitHub's recorded digest: `f83983670c6197635f5e6af58f2174340520646bb65c8463fe9cb3dd268ac23f`.
+- All three embedded SHA-256 checks passed. Git bundle verification passed; an isolated bare restore fetched all 34 refs and `git fsck --full --no-reflogs` found no missing or corrupt objects.
+- The source archive extracted successfully; `scripts/check-site.mjs`, `scripts/build-deploy.mjs` (178-file payload), and all JavaScript syntax checks passed under Node 22.16.0.
+- This verifies the GitHub artifact and an isolated restore. It does not yet create an independent R2/off-platform copy; R2 remains deferred until payment-card readiness.
