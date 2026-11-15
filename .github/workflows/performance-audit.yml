@@ -10,13 +10,7 @@ on:
       - "js/**"
       - "assets/**"
       - "lighthouserc.json"
-      - ".github/workflows/performance-audit.yml"
-      - ".github/workflows/codebase-graph.yml"
-      - ".graphifyignore"
-      - "AGENTS.md"
-      - "docs/engineering/PROJECT-MEMORY.md"
       - "scripts/build-deploy.mjs"
-      - "scripts/check-site.mjs"
   pull_request:
     paths:
       - "**/*.html"
@@ -24,13 +18,7 @@ on:
       - "js/**"
       - "assets/**"
       - "lighthouserc.json"
-      - ".github/workflows/performance-audit.yml"
-      - ".github/workflows/codebase-graph.yml"
-      - ".graphifyignore"
-      - "AGENTS.md"
-      - "docs/engineering/PROJECT-MEMORY.md"
       - "scripts/build-deploy.mjs"
-      - "scripts/check-site.mjs"
   workflow_dispatch:
 
 permissions:
@@ -38,7 +26,7 @@ permissions:
 
 concurrency:
   group: raawaa-mobile-performance-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   lighthouse:
