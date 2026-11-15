@@ -137,6 +137,7 @@ test('preserves restore, release, production, and active preview/deploy checkpoi
     'preview-deploy/visual-qa-current-2026-11-15',
     'preview-deploy/2026-11-14',
     'deploy/10-percent-2026-11-14',
+    'deploy/10-percent-site-only',
   ];
   const branches = names.map(name => branchRef(name));
   const pulls = names.map(name => pr(name, { merged: true }));
