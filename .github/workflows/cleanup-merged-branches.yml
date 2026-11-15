@@ -62,7 +62,7 @@ jobs:
 
               const hasMerged = related.some(pull => Boolean(pull.merged_at));
               const hasClosedUnmerged = related.some(pull => pull.state === 'closed' && !pull.merged_at);
-              if (hasClosedUnmerged) return hasMerged ? mergedAllowlist.has(name) : superseded.has(name);
+              if (hasClosedUnmerged) return hasMerged ? mergedAllowlist.has(name) : false;
               if (related.length === 0) return staleNoPr.has(name);
 
               const mergedHeadMatches = related.some(pull => Boolean(pull.merged_at) && pull.head.sha === branch.commit?.sha);
