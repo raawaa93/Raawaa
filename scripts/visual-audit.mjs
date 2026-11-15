@@ -149,6 +149,8 @@ for (const engine of engines) {
             viewportWidth: width,
             viewportHeight: window.innerHeight,
             visualViewportHeight: window.visualViewport?.height ?? null,
+            scrollY: window.scrollY,
+            visualViewportOffsetTop: window.visualViewport?.offsetTop ?? 0,
             screenHeight: window.screen?.height ?? null,
             documentWidth: document.documentElement.scrollWidth,
             documentHeight: document.documentElement.scrollHeight,
@@ -178,6 +180,10 @@ for (const engine of engines) {
           if (index !== -1) remainingConsoleErrors.splice(index, 1);
         }
 
+        await page.evaluate(() => window.scrollTo({ top: 0, left: 0, behavior: 'instant' }));
+        await page.waitForFunction(() => window.scrollY === 0 && (window.visualViewport?.offsetTop ?? 0) === 0, null, { timeout: 3000 });
+        const screenshotScrollY = await page.evaluate(() => window.scrollY);
+
         const prefix = engine.name + '--' + route.name + '--' + viewport.name;
         screenshots.push(prefix + '--viewport.png', prefix + '--full.png');
         await page.screenshot({ path: path.join(outDir, prefix + '--viewport.png'), fullPage: false });
@@ -204,6 +210,7 @@ for (const engine of engines) {
           navigationStatus,
           navigationError,
           metrics,
+          screenshotScrollY,
           consoleErrors: remainingConsoleErrors,
           cspViolations,
           knownWebKitCspFalsePositives,
@@ -236,6 +243,7 @@ for (const r of results) {
   if (r.navigationError) issues.push(r.page + '/' + r.engine + '/' + r.viewport + ': audit execution error: ' + r.navigationError);
   if (r.consoleErrors?.length) issues.push(r.page + '/' + r.engine + '/' + r.viewport + ': browser console errors: ' + r.consoleErrors.join(' | '));
   if (r.realCspViolations?.length) issues.push(r.page + '/' + r.engine + '/' + r.viewport + ': CSP violations: ' + JSON.stringify(r.realCspViolations));
+  if (r.screenshotScrollY !== 0) issues.push(r.page + '/' + r.engine + '/' + r.viewport + ': viewport screenshot was not captured at the top of the page (scrollY=' + r.screenshotScrollY + ')');
   if (r.metrics && r.metrics.lang !== 'ar') issues.push(r.page + '/' + r.engine + '/' + r.viewport + ': document language is not Arabic');
   if (r.metrics && r.metrics.dir !== 'rtl') issues.push(r.page + '/' + r.engine + '/' + r.viewport + ': document direction is not RTL');
   if (r.metrics && r.metrics.fontsStatus !== 'loaded') issues.push(r.page + '/' + r.engine + '/' + r.viewport + ': web fonts are not fully loaded');
