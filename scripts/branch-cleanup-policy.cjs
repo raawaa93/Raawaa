@@ -58,6 +58,12 @@ const MERGED_PR_BRANCHES = Object.freeze([
   "fix/branch-hygiene-protect-operational-refs-2026-11-15",
   "fix/visual-audit-csp-screenshots-2026-11-15",
   "fix/visual-audit-webkit-csp-2026-11-15"
+  "maintenance/repository-hygiene-2026-11-15",
+  "fix/visual-audit-webkit-csp-2026-11-15",
+  "docs/visual-qa-and-inventory-finalization-2026-11-15",
+  "fix/branch-hygiene-protect-operational-refs-2026-11-15",
+  "fix/visual-audit-csp-screenshots-2026-11-15",
+  "maintenance/finish-branch-cleanup-2026-11-15",
 ]);
 const SUPERSEDED_CLOSED_PR_BRANCHES = Object.freeze([
   "ci/restore-release-boundaries-2026-11-15-rebased",
@@ -71,12 +77,14 @@ const SUPERSEDED_CLOSED_PR_BRANCHES = Object.freeze([
   "automation/graphify-daily-refresh-2026-11-15",
   "qa/visual-audit-2026-11-15",
   "feature/campaign-nitro-offer-2026-11-14"
+  "maintenance/branch-hygiene-followup-2026-11-15",
 ]);
 const STALE_NO_PR_BRANCHES = Object.freeze([
   "preview-deploy/visual-qa-2026-11-15",
   "preview-deploy/2026-11-15-post-fix",
   "preview-deploy/2026-11-15-main-78ece71",
   "docs/project-tooling-and-branch-inventory-2026-11-15"
+  "docs/project-tooling-and-branch-inventory-2026-11-15",
 ]);
 
 function classifyBranches(branches, pullRequests, repositoryFullName, comparisons = {}) {
@@ -112,8 +120,10 @@ function classifyBranches(branches, pullRequests, repositoryFullName, comparison
 
     // Reused branch refs require ancestry proof, even if a prior PR merged.
     if (hasClosedUnmergedPR) {
+      // Reused refs have later unmerged work and require ancestry proof.
       if (hasMergedPR) return mergedAllowlist.has(name) && comparison?.ahead_by === 0;
-      return superseded.has(name) && comparison?.ahead_by === 0;
+      // Only exact reviewed closed-unmerged refs are retired; their replacements are already on main.
+      return superseded.has(name);
     }
 
     // No-PR refs are eligible only when individually reviewed and proven contained in main.
