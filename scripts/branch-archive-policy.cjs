@@ -1,6 +1,7 @@
 'use strict';
 
 const ARCHIVE_BRANCHES = Object.freeze({
+  "fix/mobile-header-buttons-colors-2026-11-15": "6d9887c48cbbbd5eb9c0bf84a97acb6db2bfaf95",
   "performance/fix-serum-image-preload-2026-11-15": "9368c47535062ad147bafba2632a899adac2c2fe",
   "performance/trim-serum-css-2026-11-15": "1449c8579d43b5535ef90d956daa8917c4e860a3",
 });
