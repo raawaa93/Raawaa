@@ -17,15 +17,10 @@ const pull = (ref, state = 'open', owner = repository) => ({
   state, head: { ref, repo: { full_name: owner } },
 });
 
-test('archives only the exact reviewed PR116 archive-index maintenance head', () => {
-  assert.deepEqual(ARCHIVE_BRANCHES, {
-    "maintenance/record-pr113-archive-2026-11-15": "1415d8dcac9ca2113626659d4454b2450b42b423",
-  });
-  assert.equal(expectedArchiveShaMatches(branch("maintenance/record-pr113-archive-2026-11-15", "1415d8dcac9ca2113626659d4454b2450b42b423")), true);
-  assert.deepEqual(selectArchiveCandidates([branch("maintenance/record-pr113-archive-2026-11-15", "1415d8dcac9ca2113626659d4454b2450b42b423")], [], repository).map(x => x.name), ["maintenance/record-pr113-archive-2026-11-15"]);
-  assert.equal(expectedArchiveShaMatches(branch("maintenance/record-pr113-archive-2026-11-15", "changed-head")), false);
-  assert.deepEqual(selectArchiveCandidates([branch("maintenance/record-pr113-archive-2026-11-15", "changed-head")], [], repository), []);
-  assert.deepEqual(selectArchiveCandidates([branch("maintenance/record-pr113-archive-2026-11-15", "1415d8dcac9ca2113626659d4454b2450b42b423")], [pull("maintenance/record-pr113-archive-2026-11-15")], repository), []);
+test('archive allowlist is cleared after the PR116 exact-SHA tag is verified', () => {
+  assert.deepEqual(ARCHIVE_BRANCHES, {});
+  assert.equal(expectedArchiveShaMatches(branch("maintenance/record-pr113-archive-2026-11-15", "1415d8dcac9ca2113626659d4454b2450b42b423")), false);
+  assert.deepEqual(selectArchiveCandidates([branch("maintenance/record-pr113-archive-2026-11-15", "1415d8dcac9ca2113626659d4454b2450b42b423")], [], repository), []);
 });
 
 test('does not re-archive any retired ref if a stale branch is recreated', () => {
