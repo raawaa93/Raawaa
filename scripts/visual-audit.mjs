@@ -53,6 +53,17 @@ for (const engine of engines) {
 
       await page.addInitScript(() => {
         window.__rawaaCspViolations = [];
+        // The PR-only HTTPS server uses an ephemeral self-signed certificate.
+        // Skip service-worker installation in that isolated visual harness; the
+        // production audit still exercises the real worker on the trusted domain.
+        if (location.hostname === '127.0.0.1' && navigator.serviceWorker) {
+          try {
+            Object.defineProperty(navigator.serviceWorker, 'register', {
+              configurable: true,
+              value: () => Promise.resolve(null),
+            });
+          } catch (_) {}
+        }
         document.addEventListener('securitypolicyviolation', event => {
           const target = event.target;
           window.__rawaaCspViolations.push({
