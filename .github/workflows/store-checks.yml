@@ -9,6 +9,10 @@ on:
     branches:
       - main
       - 'recovery/**'
+concurrency:
+  group: rawaa-store-checks-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 jobs:
