@@ -1,6 +1,8 @@
 # RAWAA Store agent guidance
 
 ## Source of truth
+- Branch hygiene: remove merged branches and stale branches only when their head is proven contained in `main`; preserve `main`, all `backup/*` and `recovery/*` refs, protected refs, and open-PR heads. Closed-unmerged or unreferenced refs require an explicit GitHub comparison with `ahead_by = 0`. See `docs/engineering/BRANCH-INVENTORY.md`.
+- Do not delete global ChatGPT plugins or Skills as part of repository cleanup; they may be shared by other projects. Curate project relevance in `docs/engineering/TOOLING-REGISTRY.md`.
 - Treat this repository's current main branch and owner-confirmed policy as authoritative.
 - Read `docs/engineering/PROJECT-MEMORY.md` at the start of substantial work; update it only when a durable, verified decision changes.
 - Preserve the existing static-site architecture unless a measured need justifies a change.
