@@ -232,3 +232,26 @@ This snapshot supersedes the earlier 08:02 inventory for current branch and pull
 - PR #142 changed deployment tooling and audit documentation only; the explicit production workflow runs validation on main pushes but does not deploy without a manual `workflow_dispatch` approval input. No production deployment was requested or initiated by this merge.
 - The follow-up branch-hygiene policy PR adds only the three exact merged branch names above plus its own exact head to the reviewed merged allowlist. Expected post-merge cleanup state: **18 refs** — the 17 durable operational refs plus the deliberately retained closed-unmerged PR #136 branch. This expectation must be verified by a fresh live enumeration after the workflow completes.
 - Branch protection remains an administrative gap; do not claim it is enabled. Production DNS, customer/order data, pricing, payment configuration, secrets, and Supabase data were not changed.
+
+
+## Live reconciliation — 2026-11-15 09:43 UTC
+
+This read-back supersedes the 09:16 expected-state note above.
+
+- Canonical `main`: `14ce2522ea9f6fffdd9bf665335e3341695c8421`.
+- Live branch enumeration: **19 refs** — the 17 durable operational/recovery refs listed above, plus two closed-unmerged work refs:
+  - `fix/exclude-dev-files-from-pages-payload-2026-11-15` — PR #136, closed without merge and retained because it diverged from current main.
+  - `fix/retired-hama-service-worker-2026-11-15` — PR #144, closed without merge after confirming no active HTML or JavaScript file registers or references `sw.js`; the proposed change therefore did not address the production alias issue. Its branch is retained as an audit trail.
+- Open pull requests: **0**.
+- No branch refs or recovery tags were deleted during this reconciliation.
+- The three merged cleanup targets from PRs #137, #141, and #142 are absent from the live branch list.
+- The 17 durable refs remain protected by policy. Do not delete either closed-unmerged ref without a separate exact-SHA archival review.
+
+## Production reconciliation — 2026-11-15 09:43 UTC
+
+- Cloudflare Pages latest successful production deployment remains `4b796357-63b2-47e1-8ad1-a2aad5c16626`, source commit `f2f091f0c19a2d0948c592b6aba538aa56e0d873`.
+- Canonical main is seven commits ahead of that deployment. The intervening changes are deployment-payload hardening, validation/release policy, branch cleanup policy, and documentation; they do not change storefront product, pricing, payment, or delivery content.
+- The production workflow now requires an explicit `workflow_dispatch` with `confirm_production=yes`. No production release was initiated in this reconciliation.
+- Live response mismatch remains: `https://raawaa-store.pages.dev/hama` returns HTTP 200 with the retired Hama page and USD pricing, while the immutable latest deployment URL returns HTTP 404 for the same path. Current source excludes the legacy Hama page, excludes it from the sitemap, and disallows it in robots.txt. The cause of the production-alias mismatch is not yet established.
+- The current source contains `sw.js`, but none of the active storefront HTML or JavaScript files references or registers it. Do not treat service-worker caching as the confirmed cause of the live alias response.
+- Next release must first resolve the production-alias mismatch and pass the release validation pipeline. Production remains gated by explicit owner confirmation.
