@@ -121,3 +121,12 @@ This section supersedes every earlier "current", "final", and "expected" count a
   - `restore/integrated-store-2026-11-14`
 
 Do not delete or consolidate any of these 17 refs without a new individual review proving they are obsolete and a verified recovery point. The current cleanup task is closed; future work should focus on production validation, security controls, and unresolved integrations rather than further branch deletion.
+
+
+## Follow-up after inventory correction — 2026-11-15 05:56 UTC
+
+- This documentation correction is committed directly to canonical `main` as `74762017ceea2c0344dd4273319f1ecd4115a89c`; that commit supersedes the immediately preceding main SHA `97706b02e2a42e01ae9ca1054d35430a4b873fe2` recorded in the preceding snapshot.
+- The latest branch enumeration still returns exactly the same 17 durable refs. Latest open-PR query returned zero. No branches or recovery tags were deleted or modified during this follow-up.
+- Cloudflare Pages `raawaa-store` still reports production deployment `b2923438-ad03-4c5a-816d-240fa6b5bbfd` as latest, built from `db1e0b131f596208b10e2e9c951d1f22c9beb916`; deployment stage is success. Later commits were documentation/maintenance only and did not trigger a new production release.
+- Cloudflare Pages custom domain `rawaa.eu.org` remains `pending`: CNAME record not set. No DNS change was attempted.
+- The current combined status query for the latest main commit had no status entries; treat CI as unverified, not passed.
