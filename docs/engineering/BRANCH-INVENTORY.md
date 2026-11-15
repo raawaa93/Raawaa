@@ -1,20 +1,20 @@
 # RAWAA Store branch inventory and cleanup record
 
-**Verified:** 2026-11-15 UTC, after PR #79 and before PR #80 merge  
+**Verified:** 2026-11-15 UTC, after PR #79 and PR #81, before PR #80 merge  
 **Repository:** `raawaa93/Raawaa`  
 **Canonical branch:** `main`  
 **Current consolidation PR:** #80 — https://github.com/raawaa93/Raawaa/pull/80  
-**Push-only release policy regression PR:** #81 — https://github.com/raawaa93/Raawaa/pull/81  
+**Push-only release policy:** #81 merged  
 **Earlier safety fix:** #74 merged  
 **Current cleanup workflow:** `.github/workflows/cleanup-merged-branches.yml`
 
 ## Current snapshot
 
-- Branch refs: **36**.
-- Pull requests: **81** total — **66 merged**, **14 closed-unmerged**, **1 open.
+- Branch refs: **39**.
+- Pull requests: **83** total — **66 merged**, **15 closed-unmerged**, **2 open.
 - Backup refs: **4**.
 - Recovery refs: **3**.
-- Reviewed merged-PR allowlist: **58** names.
+- Reviewed merged-PR allowlist: **60** names.
 - Reviewed closed-unmerged allowlist: **11** names.
 - Reviewed no-PR temporary allowlist: **4** names.
 
@@ -63,11 +63,14 @@
 | `feature/campaign-nitro-offer-2026-11-14` | #6 closed | REVIEWED CLOSED-UNMERGED | Delete only if ahead_by = 0 |
 | `fix/branch-hygiene-protect-operational-refs-2026-11-15` | #74 merged | REVIEWED MERGED | Delete exact merged head; moved head requires ahead_by = 0 |
 | `fix/manual-only-production-release` | #61 closed | REVIEWED CLOSED-UNMERGED | Delete only if ahead_by = 0 |
-| `fix/production-release-push-only-2026-11-15` | #81 merged | MERGED / NOT ALLOWLISTED | Retain |
+| `fix/production-policy-site-check-2026-11-15` | #82 closed | CLOSED-UNMERGED | Retain |
+| `fix/production-release-push-only-2026-11-15` | #81 merged | REVIEWED MERGED | Delete exact merged head; moved head requires ahead_by = 0 |
+| `fix/visual-audit-top-viewport-2026-11-15` | #83 open | OPEN PR | Keep until PR resolves |
 | `fix/visual-qa-webkit-csp-regression-2026-11-15` | #78 merged | REVIEWED MERGED | Delete exact merged head; moved head requires ahead_by = 0 |
 | `main` | — | CANONICAL | Keep |
 | `maintenance/branch-cleanup-consolidated-2026-11-15` | #80 open | OPEN PR | Keep until PR resolves |
 | `maintenance/branch-hygiene-followup-2026-11-15` | #73 closed | CLOSED-UNMERGED | Retain |
+| `maintenance/finalize-branch-cleanup-2026-11-15` | — | NO PR / RETAIN | Retain pending review |
 | `maintenance/finish-branch-cleanup-2026-11-15` | #77 closed | CLOSED-UNMERGED | Retain |
 | `maintenance/repository-hygiene-2026-11-15` | #70 merged | REVIEWED MERGED | Delete exact merged head; moved head requires ahead_by = 0 |
 | `preview-deploy/2026-11-14` | — | ACTIVE / HISTORICAL PREVIEW | Keep |
@@ -87,7 +90,7 @@
 
 ## Reviewed allowlists
 
-### Merged PR refs (58)
+### Merged PR refs (60)
 - `automation/agent-guidance-2026-11-15`
 - `automation/ai-memory-graph-performance`
 - `automation/graphify-lighthouse-baseline-2026-11-15`
@@ -146,6 +149,8 @@
 - `maintenance/finish-branch-cleanup-2026-11-15`
 - `maintenance/repository-hygiene-2026-11-15`
 - `fix/visual-qa-webkit-csp-regression-2026-11-15`
+- `maintenance/branch-cleanup-consolidated-2026-11-15`
+- `fix/production-release-push-only-2026-11-15`
 
 ### Closed-unmerged refs (11)
 - `ci/restore-release-boundaries-2026-11-15-rebased`
@@ -173,11 +178,11 @@
 - `maintenance/repository-hygiene-2026-11-15` contains post-merge commits beyond PR #70; retain until its 12-file tree diff is reviewed.
 - `fix/branch-hygiene-protect-operational-refs-2026-11-15` has post-merge commits beyond PR #74; retain until its current tree is proven identical to main.
 - `fix/visual-qa-webkit-csp-regression-2026-11-15` is PR #78's merged branch but its current head moved after merge; retain until ancestry proof succeeds.
-- `docs/project-tooling-and-branch-inventory-2026-11-15` was removed by run #43678179625 after ahead_by = 0 proof.
+- `fix/production-release-push-only-2026-11-15` is PR #81's merged branch; PR #80 adds it to the reviewed allowlist and will remove it only after ancestry proof.
+- PR #80 branch `maintenance/branch-cleanup-consolidated-2026-11-15` is open and protected until merge.
 
 ## Next verification
 
 - Merge PR #80 only after Store checks and Graphify are green.
-- PR #80 also enforces push-only production release after full validation and adds a regression test; no manual workflow_dispatch release remains.
-- Close PR #81 as superseded after PR #80 merges; review its branch for exact-head retirement.
+- PR #80 enforces push-only production release after full validation and adds regression coverage; no manual `workflow_dispatch` release remains.
 - Verify the next cleanup run's deleted refs, retained operational checkpoints, and zero failures.
