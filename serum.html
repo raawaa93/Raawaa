@@ -42,284 +42,36 @@
 <script src="js/pwa-install.js" defer=""></script>
 <script type="application/ld+json">{
   "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "ProductGroup",
-      "@id": "https://raawaa-store.pages.dev/serum#rosemary-caffeine",
-      "name": "روزماري وكافيين",
-      "description": "مزيج رواء للعناية بمظهر الشعر يضم الروزماري والكافيين.",
-      "productGroupID": "rosemary-caffeine",
-      "brand": {
-        "@type": "Brand",
-        "name": "RAWAA"
+  "@type": "CollectionPage",
+  "@id": "https://raawaa-store.pages.dev/serum#collection",
+  "name": "مزيجات رواء للعناية بالشعر",
+  "description": "ثلاثة مزيجات للعناية بالشعر: روزماري وكافيين، زيت الزيتون والبانثينول، وخروع مع زيوت مختارة. لكل مزيج أحجام 30 و50 و100 مل.",
+  "url": "https://raawaa-store.pages.dev/serum",
+  "mainEntity": {
+    "@type": "ItemList",
+    "itemListOrder": "https://schema.org/ItemListUnordered",
+    "numberOfItems": 3,
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "روزماري وكافيين",
+        "url": "https://raawaa-store.pages.dev/serum?product=rosemary-caffeine"
       },
-      "variesBy": [
-        "https://schema.org/size"
-      ],
-      "hasVariant": [
-        {
-          "@id": "https://raawaa-store.pages.dev/serum#rosemary-caffeine-30"
-        },
-        {
-          "@id": "https://raawaa-store.pages.dev/serum#rosemary-caffeine-50"
-        },
-        {
-          "@id": "https://raawaa-store.pages.dev/serum#rosemary-caffeine-100"
-        }
-      ],
-      "url": "https://raawaa-store.pages.dev/serum"
-    },
-    {
-      "@type": "ProductGroup",
-      "@id": "https://raawaa-store.pages.dev/serum#olive-panthenol",
-      "name": "زيت الزيتون والبانثينول",
-      "description": "مزيج رواء للعناية بمظهر الشعر يضم زيت الزيتون والبانثينول.",
-      "productGroupID": "olive-panthenol",
-      "brand": {
-        "@type": "Brand",
-        "name": "RAWAA"
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "زيت الزيتون والبانثينول",
+        "url": "https://raawaa-store.pages.dev/serum?product=olive-panthenol"
       },
-      "variesBy": [
-        "https://schema.org/size"
-      ],
-      "hasVariant": [
-        {
-          "@id": "https://raawaa-store.pages.dev/serum#olive-panthenol-30"
-        },
-        {
-          "@id": "https://raawaa-store.pages.dev/serum#olive-panthenol-50"
-        },
-        {
-          "@id": "https://raawaa-store.pages.dev/serum#olive-panthenol-100"
-        }
-      ],
-      "url": "https://raawaa-store.pages.dev/serum"
-    },
-    {
-      "@type": "ProductGroup",
-      "@id": "https://raawaa-store.pages.dev/serum#castor-blend",
-      "name": "خروع وزيوت مختارة",
-      "description": "مزيج رواء للعناية بمظهر الشعر يضم زيت الخروع وزيوتاً مختارة.",
-      "productGroupID": "castor-blend",
-      "brand": {
-        "@type": "Brand",
-        "name": "RAWAA"
-      },
-      "variesBy": [
-        "https://schema.org/size"
-      ],
-      "hasVariant": [
-        {
-          "@id": "https://raawaa-store.pages.dev/serum#castor-blend-30"
-        },
-        {
-          "@id": "https://raawaa-store.pages.dev/serum#castor-blend-50"
-        },
-        {
-          "@id": "https://raawaa-store.pages.dev/serum#castor-blend-100"
-        }
-      ],
-      "url": "https://raawaa-store.pages.dev/serum"
-    },
-    {
-      "@type": "Product",
-      "@id": "https://raawaa-store.pages.dev/serum#rosemary-caffeine-30",
-      "name": "روزماري وكافيين - 30 مل",
-      "description": "مزيج رواء للعناية بمظهر الشعر يضم الروزماري والكافيين. الحجم 30 مل. الصورة التوضيحية لا تمثل صورة المنتج الفعلي.",
-      "sku": "rosemary-caffeine-30",
-      "size": "30 ml",
-      "brand": {
-        "@type": "Brand",
-        "name": "RAWAA"
-      },
-      "isVariantOf": {
-        "@id": "https://raawaa-store.pages.dev/serum#rosemary-caffeine"
-      },
-      "offers": {
-        "@type": "Offer",
-        "url": "https://raawaa-store.pages.dev/serum?product=rosemary-caffeine&size=30",
-        "priceCurrency": "SYP",
-        "price": "2000",
-        "itemCondition": "https://schema.org/NewCondition"
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "خروع وزيوت مختارة",
+        "url": "https://raawaa-store.pages.dev/serum?product=castor-blend"
       }
-    },
-    {
-      "@type": "Product",
-      "@id": "https://raawaa-store.pages.dev/serum#rosemary-caffeine-50",
-      "name": "روزماري وكافيين - 50 مل",
-      "description": "مزيج رواء للعناية بمظهر الشعر يضم الروزماري والكافيين. الحجم 50 مل. الصورة التوضيحية لا تمثل صورة المنتج الفعلي.",
-      "sku": "rosemary-caffeine-50",
-      "size": "50 ml",
-      "brand": {
-        "@type": "Brand",
-        "name": "RAWAA"
-      },
-      "isVariantOf": {
-        "@id": "https://raawaa-store.pages.dev/serum#rosemary-caffeine"
-      },
-      "offers": {
-        "@type": "Offer",
-        "url": "https://raawaa-store.pages.dev/serum?product=rosemary-caffeine&size=50",
-        "priceCurrency": "SYP",
-        "price": "2400",
-        "itemCondition": "https://schema.org/NewCondition"
-      }
-    },
-    {
-      "@type": "Product",
-      "@id": "https://raawaa-store.pages.dev/serum#rosemary-caffeine-100",
-      "name": "روزماري وكافيين - 100 مل",
-      "description": "مزيج رواء للعناية بمظهر الشعر يضم الروزماري والكافيين. الحجم 100 مل. الصورة التوضيحية لا تمثل صورة المنتج الفعلي.",
-      "sku": "rosemary-caffeine-100",
-      "size": "100 ml",
-      "brand": {
-        "@type": "Brand",
-        "name": "RAWAA"
-      },
-      "isVariantOf": {
-        "@id": "https://raawaa-store.pages.dev/serum#rosemary-caffeine"
-      },
-      "offers": {
-        "@type": "Offer",
-        "url": "https://raawaa-store.pages.dev/serum?product=rosemary-caffeine&size=100",
-        "priceCurrency": "SYP",
-        "price": "2800",
-        "itemCondition": "https://schema.org/NewCondition"
-      }
-    },
-    {
-      "@type": "Product",
-      "@id": "https://raawaa-store.pages.dev/serum#olive-panthenol-30",
-      "name": "زيت الزيتون والبانثينول - 30 مل",
-      "description": "مزيج رواء للعناية بمظهر الشعر يضم زيت الزيتون والبانثينول. الحجم 30 مل. الصورة التوضيحية لا تمثل صورة المنتج الفعلي.",
-      "sku": "olive-panthenol-30",
-      "size": "30 ml",
-      "brand": {
-        "@type": "Brand",
-        "name": "RAWAA"
-      },
-      "isVariantOf": {
-        "@id": "https://raawaa-store.pages.dev/serum#olive-panthenol"
-      },
-      "offers": {
-        "@type": "Offer",
-        "url": "https://raawaa-store.pages.dev/serum?product=olive-panthenol&size=30",
-        "priceCurrency": "SYP",
-        "price": "1800",
-        "itemCondition": "https://schema.org/NewCondition"
-      }
-    },
-    {
-      "@type": "Product",
-      "@id": "https://raawaa-store.pages.dev/serum#olive-panthenol-50",
-      "name": "زيت الزيتون والبانثينول - 50 مل",
-      "description": "مزيج رواء للعناية بمظهر الشعر يضم زيت الزيتون والبانثينول. الحجم 50 مل. الصورة التوضيحية لا تمثل صورة المنتج الفعلي.",
-      "sku": "olive-panthenol-50",
-      "size": "50 ml",
-      "brand": {
-        "@type": "Brand",
-        "name": "RAWAA"
-      },
-      "isVariantOf": {
-        "@id": "https://raawaa-store.pages.dev/serum#olive-panthenol"
-      },
-      "offers": {
-        "@type": "Offer",
-        "url": "https://raawaa-store.pages.dev/serum?product=olive-panthenol&size=50",
-        "priceCurrency": "SYP",
-        "price": "2200",
-        "itemCondition": "https://schema.org/NewCondition"
-      }
-    },
-    {
-      "@type": "Product",
-      "@id": "https://raawaa-store.pages.dev/serum#olive-panthenol-100",
-      "name": "زيت الزيتون والبانثينول - 100 مل",
-      "description": "مزيج رواء للعناية بمظهر الشعر يضم زيت الزيتون والبانثينول. الحجم 100 مل. الصورة التوضيحية لا تمثل صورة المنتج الفعلي.",
-      "sku": "olive-panthenol-100",
-      "size": "100 ml",
-      "brand": {
-        "@type": "Brand",
-        "name": "RAWAA"
-      },
-      "isVariantOf": {
-        "@id": "https://raawaa-store.pages.dev/serum#olive-panthenol"
-      },
-      "offers": {
-        "@type": "Offer",
-        "url": "https://raawaa-store.pages.dev/serum?product=olive-panthenol&size=100",
-        "priceCurrency": "SYP",
-        "price": "2600",
-        "itemCondition": "https://schema.org/NewCondition"
-      }
-    },
-    {
-      "@type": "Product",
-      "@id": "https://raawaa-store.pages.dev/serum#castor-blend-30",
-      "name": "خروع وزيوت مختارة - 30 مل",
-      "description": "مزيج رواء للعناية بمظهر الشعر يضم زيت الخروع وزيوتاً مختارة. الحجم 30 مل. الصورة التوضيحية لا تمثل صورة المنتج الفعلي.",
-      "sku": "castor-blend-30",
-      "size": "30 ml",
-      "brand": {
-        "@type": "Brand",
-        "name": "RAWAA"
-      },
-      "isVariantOf": {
-        "@id": "https://raawaa-store.pages.dev/serum#castor-blend"
-      },
-      "offers": {
-        "@type": "Offer",
-        "url": "https://raawaa-store.pages.dev/serum?product=castor-blend&size=30",
-        "priceCurrency": "SYP",
-        "price": "1800",
-        "itemCondition": "https://schema.org/NewCondition"
-      }
-    },
-    {
-      "@type": "Product",
-      "@id": "https://raawaa-store.pages.dev/serum#castor-blend-50",
-      "name": "خروع وزيوت مختارة - 50 مل",
-      "description": "مزيج رواء للعناية بمظهر الشعر يضم زيت الخروع وزيوتاً مختارة. الحجم 50 مل. الصورة التوضيحية لا تمثل صورة المنتج الفعلي.",
-      "sku": "castor-blend-50",
-      "size": "50 ml",
-      "brand": {
-        "@type": "Brand",
-        "name": "RAWAA"
-      },
-      "isVariantOf": {
-        "@id": "https://raawaa-store.pages.dev/serum#castor-blend"
-      },
-      "offers": {
-        "@type": "Offer",
-        "url": "https://raawaa-store.pages.dev/serum?product=castor-blend&size=50",
-        "priceCurrency": "SYP",
-        "price": "2200",
-        "itemCondition": "https://schema.org/NewCondition"
-      }
-    },
-    {
-      "@type": "Product",
-      "@id": "https://raawaa-store.pages.dev/serum#castor-blend-100",
-      "name": "خروع وزيوت مختارة - 100 مل",
-      "description": "مزيج رواء للعناية بمظهر الشعر يضم زيت الخروع وزيوتاً مختارة. الحجم 100 مل. الصورة التوضيحية لا تمثل صورة المنتج الفعلي.",
-      "sku": "castor-blend-100",
-      "size": "100 ml",
-      "brand": {
-        "@type": "Brand",
-        "name": "RAWAA"
-      },
-      "isVariantOf": {
-        "@id": "https://raawaa-store.pages.dev/serum#castor-blend"
-      },
-      "offers": {
-        "@type": "Offer",
-        "url": "https://raawaa-store.pages.dev/serum?product=castor-blend&size=100",
-        "priceCurrency": "SYP",
-        "price": "2600",
-        "itemCondition": "https://schema.org/NewCondition"
-      }
-    }
-  ]
+    ]
+  }
 }</script>
 
 <link rel="stylesheet" href="css/three-formulas.css">
