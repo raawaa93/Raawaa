@@ -269,12 +269,18 @@ This is an account-level inventory. Only resources positively identified as belo
 - The `main` branch object reports `protected=false`; the repository rulesets endpoint returned an empty list. The connected GitHub app cannot administer legacy branch-protection settings (protection endpoint returns 403). Required checks are therefore not enforced by a GitHub branch-protection rule at this snapshot; configure protection in repository Settings.
 
 
-## Current repository finalization — 2026-11-15 06:00 UTC
+## Final repository state — 2026-11-15 05:53 UTC
 
-- Canonical main commit: `88404f1c02dcc3db3768ab615d4a175f836d398c` (PR #102 merged).
-- Current live refs: 19 — 17 durable operational refs plus two temporary documentation refs. PR #103 is the sole open PR. After it merges, the exact merged-head cleanup removes both temporary refs, leaving 17.
-- All 32 recovery tags are verified. The archive allowlist is empty; no inactive branch requires a new tag.
-- PR #101 restored the Google Search Console verification asset and deployed it successfully. Production deployment ID `b2923438-ad03-4c5a-816d-240fa6b5bbfd`, source commit `db1e0b131f596208b10e2e9c951d1f22c9beb916`, deployment URL `https://b2923438.raawaa-store.pages.dev`. The clean payload contained 188 files and post-deploy security-header checks passed.
-- Search Console URL-prefix property `https://raawaa-store.pages.dev/` is visible with `siteOwner` permission; `sc-domain:raawaa-store.pages.dev` remains unverified.
-- Store checks, Playwright Chromium/WebKit, main Lighthouse audit (12 reports), Graphify, repository backup, production validation, deployment, and security-header checks all succeeded.
-- GitHub reports `main.protected=false` and no repository rulesets. The connected app cannot administer branch protection (403); required checks must be enabled in repository Settings.
+- Canonical main commit: `41a37816b3e491cfa38bf8f8c81af9092f3b586a` (PR #105 merged).
+- Final branch hygiene run [#43682885648](https://github.com/raawaa93/Raawaa/actions/runs/43682885648) succeeded: **17 branch refs remain**, **33 exact-SHA recovery tags** are verified, and **0 open PRs** remain.
+- Pull request history: 105 total, 76 merged, 29 closed-unmerged.
+- Remaining branch refs are the canonical main plus 4 backups, 3 recovery refs, 2 deploy checkpoints, 4 preview checkpoints, 1 production-deploy checkpoint, 1 release checkpoint, and 1 restore checkpoint.
+- The archive allowlist and no-PR prune allowlist are empty. The branch archive workflow remains scheduled but has no inactive candidates.
+- Production deployment from PR #101: `b2923438-ad03-4c5a-816d-240fa6b5bbfd`, source commit `db1e0b131f596208b10e2e9c951d1f22c9beb916`, URL https://b2923438.raawaa-store.pages.dev. The validated Pages payload contained 188 files and post-deploy security-header checks passed.
+- Visual QA [run #43682151818](https://github.com/raawaa93/Raawaa/actions/runs/43682151818) covered 16 Chromium/WebKit × iPhone/desktop captures across home, serum, campaign, and privacy: all 200, zero console/page/CSP errors, zero failed or bad responses, zero horizontal overflow, and zero broken images.
+- Mobile Lighthouse audit passed. Advisory scores: home 99 median (one 77 outlier), serum 86–87, campaign 96–97, privacy 100. Accessibility and best practices were 100 throughout. Campaign SEO 69 is intentional because the campaign page is noindex.
+- Search Console URL-prefix property `https://raawaa-store.pages.dev/` has `siteOwner`; the separate `sc-domain:raawaa-store.pages.dev` property remains unverified.
+- Workspace inventory: 801 tool definitions across 24 integration families and 151 Skills across 15 provider packages. Hostless is the only discovered private user-scope plugin and is dormant/not connected. TinyFish remains prohibited. No global plugin, connector, or Skill was uninstalled because they are shared workspace resources and no complete cross-project dependency map is available.
+- Free quota snapshot: OpenSEO 251 credits; Firecrawl 0/1,000 until 2026-11-29; Ahrefs API allowance 200,000 units with 0 used and workspace quota 0. Figma is View-only; Supabase Store DB remains unidentified; Lovable has no RAWAA project, workspace Skills, or custom connectors; Metricool has no social networks connected; HubSpot is not onboarded.
+- **Security follow-up:** `main.protected=false` and no repository rulesets are configured. The connected GitHub app receives 403 when attempting to administer branch protection. Enable required status checks and branch protection in repository Settings or provide an authorized GitHub connection.
+- No DNS, custom-domain, Supabase schema/data, secrets, customer/order data, pricing, checkout rules, shipping policy, billing, or paid services were changed.
