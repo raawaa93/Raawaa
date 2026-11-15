@@ -61,26 +61,23 @@ test('keeps closed-unmerged work for the exact-SHA archive workflow', () => {
     }),
     [],
   );
-  assert.deepEqual(SUPERSEDED_CLOSED_PR_BRANCHES, [
+  assert.deepEqual(SUPERSEDED_CLOSED_PR_BRANCHES, []);
+});
+
+test('no closed-unmerged or no-PR maintenance refs remain individually eligible', () => {
+  assert.deepEqual(SUPERSEDED_CLOSED_PR_BRANCHES, []);
+  assert.deepEqual(STALE_NO_PR_BRANCHES, []);
+  const retired = [
     'maintenance/close-archive-closure-2026-11-15',
     'maintenance/archive-final-closure-ref-2026-11-15',
     'maintenance/finalize-pr113-archive-2026-11-15',
     'maintenance/retire-superseded-finalize-ref-2026-11-15',
-  ]);
-});
-
-test('no unreviewed no-PR branch remains eligible after final cleanup', () => {
-  assert.deepEqual(STALE_NO_PR_BRANCHES, [
     'maintenance/finalize-archive-index-2026-11-15',
-    'maintenance/finalize-pr113-archive-2026-11-15',
-  ]);
-  const name = 'maintenance/retire-last-stale-refs-2026-11-15';
-  assert.deepEqual(
-    classifyBranches([branchRef(name)], [], repository, {
-      [name]: { ahead_by: 0, behind_by: 1 },
-    }),
-    [],
-  );
+  ];
+  for (const name of retired) {
+    assert.deepEqual(classifyBranches([branchRef(name)], [pr(name)], repository, { [name]: { ahead_by: 0, behind_by: 10 } }), []);
+    assert.deepEqual(classifyBranches([branchRef(name)], [], repository, { [name]: { ahead_by: 0, behind_by: 10 } }), []);
+  }
 });
 
 test('keeps reused merged/closed refs when any unique commits remain', () => {
@@ -239,36 +236,26 @@ test('retires the final PR113 and PR114 maintenance refs only after exact heads 
   }
 });
 
-test('deletes only the two reviewed no-PR archive-finalization refs after fast-forward to main', () => {
-  const names = [
-    'maintenance/finalize-archive-index-2026-11-15',
-    'maintenance/finalize-pr113-archive-2026-11-15',
-  ];
+test('does not delete retired no-PR refs after their allowlist is cleared', () => {
+  const names = ['maintenance/finalize-archive-index-2026-11-15', 'maintenance/finalize-pr113-archive-2026-11-15'];
   for (const name of names) {
-    assert.ok(STALE_NO_PR_BRANCHES.includes(name));
-    assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
-    assert.deepEqual(
-      classifyBranches([branchRef(name)], [], repository, { [name]: { ahead_by: 0, behind_by: 0 } }).map(x => x.name),
-      [name],
-    );
-    assert.deepEqual(
-      classifyBranches([branchRef(name)], [], repository, { [name]: { ahead_by: 1, behind_by: 0 } }),
-      [],
-    );
+    assert.equal(STALE_NO_PR_BRANCHES.includes(name), false);
+    assert.deepEqual(classifyBranches([branchRef(name)], [], repository, { [name]: { ahead_by: 0, behind_by: 0 } }), []);
   }
 });
 
-test('retires the superseded archive-closure PR branch only after exact ancestry proof', () => {
-  const name = 'maintenance/close-archive-closure-2026-11-15';
-  const closed = [pr(name, { state: 'closed', merged: false })];
-  assert.ok(SUPERSEDED_CLOSED_PR_BRANCHES.includes(name));
-  assert.deepEqual(classifyBranches([branchRef(name)], closed, repository), []);
-  assert.deepEqual(
-    classifyBranches([branchRef(name)], closed, repository, { [name]: { ahead_by: 0, behind_by: 8 } }).map(x => x.name),
-    [name],
-  );
-  assert.deepEqual(
-    classifyBranches([branchRef(name)], closed, repository, { [name]: { ahead_by: 1, behind_by: 8 } }),
-    [],
-  );
+test('does not retain superseded closed-PR cleanup permissions after retirement', () => {
+  const names = ['maintenance/close-archive-closure-2026-11-15', 'maintenance/archive-final-closure-ref-2026-11-15'];
+  assert.deepEqual(SUPERSEDED_CLOSED_PR_BRANCHES, []);
+  for (const name of names) {
+    assert.deepEqual(classifyBranches([branchRef(name)], [pr(name)], repository, { [name]: { ahead_by: 0, behind_by: 8 } }), []);
+  }
+});
+
+
+test('retires this exact maintenance policy branch after merge', () => {
+  const name = 'maintenance/finalize-branch-cleanup-policy-2026-11-15';
+  assert.ok(MERGED_PR_BRANCHES.includes(name));
+  assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
+  assert.deepEqual(classifyBranches([branchRef(name)], [pr(name, { merged: true })], repository).map(x => x.name), [name]);
 });
