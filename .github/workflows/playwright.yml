@@ -12,7 +12,8 @@ on:
       - 'package.json'
       - '.github/workflows/playwright.yml'
   push:
-    branches: [main]
+    # Main pushes run the full production validation pipeline; retain recovery/restore branch coverage.
+    branches: ['recovery/**', 'restore/**']
     paths:
       - '**.html'
       - 'css/**'
