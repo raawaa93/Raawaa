@@ -83,7 +83,6 @@ const SUPERSEDED_CLOSED_PR_BRANCHES = Object.freeze([
   "fix/branch-cleanup-policy-current-state-2026-11-15"
 ]);
 const DUPLICATE_TREE_BRANCHES = Object.freeze([
-  "fix/branch-cleanup-policy-final-2026-11-15",
   "fix/production-policy-site-check-2026-11-15"
 ]);
 
