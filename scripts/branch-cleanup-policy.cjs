@@ -61,7 +61,8 @@ const MERGED_PR_BRANCHES = Object.freeze([
   "fix/visual-qa-webkit-csp-regression-2026-11-15",
   "maintenance/branch-cleanup-consolidated-2026-11-15",
   "fix/production-release-push-only-2026-11-15",
-  "fix/visual-audit-top-viewport-clean-2026-11-15"
+  "fix/visual-audit-top-viewport-clean-2026-11-15",
+  "maintenance/final-inventory-cleanup-2026-11-15"
 ]);
 const SUPERSEDED_CLOSED_PR_BRANCHES = Object.freeze([
   "ci/restore-release-boundaries-2026-11-15-rebased",
@@ -80,7 +81,8 @@ const STALE_NO_PR_BRANCHES = Object.freeze([
   "preview-deploy/visual-qa-2026-11-15",
   "preview-deploy/2026-11-15-post-fix",
   "preview-deploy/2026-11-15-main-78ece71",
-  "docs/project-tooling-and-branch-inventory-2026-11-15"
+  "docs/project-tooling-and-branch-inventory-2026-11-15",
+  "fix/raawaa-final-qa-release-policy-2026-11-15"
 ]);
 
 function classifyBranches(branches, pullRequests, repositoryFullName, comparisons = {}) {
