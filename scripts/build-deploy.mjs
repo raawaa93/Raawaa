@@ -60,7 +60,8 @@ for (const path of textFiles) {
   assert.ok(!compact.includes('15%'), relative(out, path) + ' contains the superseded 15% offer');
 }
 const read = (path) => readFileSync(join(out, path), 'utf8');
-assert.ok(read('sitemap.xml').includes('/campaign'), 'Campaign page must be present in sitemap');
+assert.ok(read('campaign.html').includes('<meta name="robots" content="noindex,follow"'), 'Campaign must remain intentionally noindex');
+assert.ok(!read('sitemap.xml').includes('/campaign'), 'Noindex campaign page must be excluded from sitemap');
 assert.ok(!read('sitemap.xml').includes('/hama'), 'Legacy Hama page must be absent from sitemap');
 assert.ok(!read('sw.js').toLowerCase().includes('hama'), 'Service worker must not cache the legacy Hama route');
 assert.ok(read('robots.txt').includes('Disallow: /hama'), 'Robots must disallow the retired Hama route');
