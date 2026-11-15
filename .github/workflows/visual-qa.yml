@@ -1,0 +1,62 @@
+name: RAWAA visual QA audit
+
+on:
+  push:
+    branches:
+      - 'qa/visual-audit-*'
+  workflow_run:
+    workflows:
+      - RAWAA production CI and release
+    types:
+      - completed
+    branches:
+      - main
+  schedule:
+    - cron: '17 3 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rawaa-visual-qa
+  cancel-in-progress: true
+
+jobs:
+  visual-audit:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    name: Capture production pages on iPhone and desktop
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout audit branch
+        uses: actions/checkout@v7
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - name: Install Playwright test dependency
+        run: npm install --package-lock=false --no-save --no-audit --no-fund
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Capture screenshots and inspect layout
+        env:
+          BASE_URL: https://raawaa-store.pages.dev
+        run: node scripts/visual-audit.mjs
+      - name: Upload visual QA report and screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rawaa-visual-qa-${{ github.run_id }}
+          path: artifacts/visual-audit/
+          if-no-files-found: warn
+          retention-days: 30
+      - name: Add report link to workflow summary
+        if: always()
+        shell: bash
+        run: |
+          if [[ -f artifacts/visual-audit/report.json ]]; then
+            echo '## RAWAA Visual QA' >> "$GITHUB_STEP_SUMMARY"
+            echo 'Screenshots and the HTML report are attached as the workflow artifact: rawaa-visual-qa-${{ github.run_id }}.' >> "$GITHUB_STEP_SUMMARY"
+            cat artifacts/visual-audit/report.json >> "$GITHUB_STEP_SUMMARY"
+          fi
