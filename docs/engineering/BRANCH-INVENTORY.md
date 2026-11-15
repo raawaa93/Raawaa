@@ -55,7 +55,7 @@ The following are intentionally preserved:
 
 ## Expected cleanup
 
-The initial review found 53 merged-PR branch refs eligible for deletion (after protecting backup/recovery namespaces), 10 additional closed-unmerged refs in the explicit superseded list (the reused visual-QA branch is already counted among merged heads), and four stale no-PR refs: 67 unique refs total.
+The initial review found 53 merged-PR branch refs; all 53 are retained by default. The only automatic cleanup candidates are the 11 exact superseded closed-unmerged refs and four exact stale no-PR refs (15 unique refs total), and each is deleted only if its current head is proven fully contained in main. The actual deletion count may be lower.
 
 The post-run section below must be completed from the actual GitHub Actions run and a fresh branch listing; never infer success from the workflow file alone.
 
