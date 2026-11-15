@@ -304,3 +304,15 @@ This is an account-level inventory. Only resources positively identified as belo
 - Cloudflare zone `rawaa.eu.org` exists in the Raawaa account but its zone status is `pending`.
 - Its DNS zone contains a proxied CNAME `rawaa.eu.org -> raawaa-store.pages.dev`; the Pages project also lists `rawaa.eu.org` as a custom domain with HTTP validation still `pending`.
 - The blocker is zone activation / registrar nameserver delegation, not a missing CNAME inside the Cloudflare zone. Do not change registrar nameservers, DNS records, or Pages bindings without confirming the owner controls the domain and intends it for this store.
+
+
+## Verified Agency Agents evaluation — 2026-11-15
+
+- Evaluated [msitarzewski/agency-agents](https://github.com/msitarzewski/agency-agents): MIT-licensed specialist instruction catalog with scenario runbooks; it is not an execution runtime.
+- The companion [Agency Agents app](https://github.com/msitarzewski/agency-agents-app) is a desktop installer/manager for supported coding tools, not an iPhone app and not an agent runtime. Its v0.3.2 release notes describe 282 agents across 18 divisions and Codex support.
+- Decision: adopt selectively as a reference layer. Do not bulk-import the catalog or install its desktop app from this iPhone-only session.
+- Curated RAWAA roles: codebase onboarding, frontend development, test automation, code review, SRE, accessibility, AppSec, SEO, growth, and product management. Activate only task-relevant roles; deterministic Playwright/Lighthouse/CI checks remain authoritative.
+- Framework comparison: LangGraph for durable stateful orchestration; CrewAI for role-based Crews and deterministic Flows; Pydantic AI for typed agent IO and evaluation. None is justified as a new runtime for the current static storefront.
+- Full assessment, upstream file links, adoption workflow, and security/cost guardrails: [AGENCY-AGENTS-ADOPTION.md](AGENCY-AGENTS-ADOPTION.md).
+- **Release-policy correction:** the older registry text above that describes manual production dispatch/confirmation is superseded. Current canonical `main` uses automatic production deployment for qualifying website-source pushes only after full technical validation; workflow-only and documentation-only changes do not trigger storefront deployment. Manual dispatch/confirmation is disabled. See `AGENTS.md` and `docs/engineering/PROJECT-MEMORY.md` for the current release boundary.
+- Current canonical `main` at this review: `5fc284cffa589ad995728fae3210a64e4f603b5c`. Latest recorded visual QA run `43701376564` succeeded; branch-hygiene, disaster-recovery, and offline Graphify runs for the subsequent workflow/docs-only update also succeeded. This does not claim a new storefront deployment occurred.
