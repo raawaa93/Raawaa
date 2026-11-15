@@ -1,6 +1,6 @@
 # RAWAA Store tooling and skills registry
 
-**Last verified:** 2026-11-15 05:50 UTC  
+**Last verified:** 2026-11-15 05:55 UTC  
 **Policy:** use free tiers and included quotas; never activate billing or paid usage without a separate explicit instruction. Quota values below are dated snapshots, not permanent guarantees.
 
 ## Project source of truth
