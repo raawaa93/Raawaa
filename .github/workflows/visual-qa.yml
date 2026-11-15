@@ -60,7 +60,7 @@ jobs:
           WORKFLOW_NAME: ${{ github.event.workflow_run.name || '' }}
         run: |
           if [[ "$GITHUB_EVENT_NAME" == "pull_request" ]]; then
-            echo "base_url=http://127.0.0.1:4173" >> "$GITHUB_OUTPUT"
+            echo "base_url=https://127.0.0.1:4173" >> "$GITHUB_OUTPUT"
           elif [[ "$GITHUB_EVENT_NAME" == "workflow_run" && "$WORKFLOW_NAME" == "RAWAA automatic production CI and release" ]]; then
             echo "base_url=https://raawaa-store.pages.dev" >> "$GITHUB_OUTPUT"
           elif [[ "$GITHUB_REF" == "refs/heads/main" ]]; then
@@ -68,17 +68,24 @@ jobs:
           else
             echo "base_url=https://raawaa-recovery-preview.raawaa-store.pages.dev" >> "$GITHUB_OUTPUT"
           fi
+      - name: Generate ephemeral HTTPS certificate
+        if: github.event_name == 'pull_request'
+        run: |
+          openssl req -x509 -newkey rsa:2048 -keyout /tmp/rawaa-visual.key -out /tmp/rawaa-visual.crt -days 1 -nodes -subj "/CN=127.0.0.1"
       - name: Start local pull-request site
         if: github.event_name == 'pull_request'
         shell: bash
+        env:
+          TLS_CERT: /tmp/rawaa-visual.crt
+          TLS_KEY: /tmp/rawaa-visual.key
         run: |
           set -euo pipefail
-          python3 -m http.server 4173 --directory . > /tmp/rawaa-visual-qa-http.log 2>&1 &
+          python3 tests/e2e/https-server.py > /tmp/rawaa-visual-qa-https.log 2>&1 &
           for attempt in {1..20}; do
-            if curl --fail --silent http://127.0.0.1:4173/ >/dev/null; then exit 0; fi
+            if curl --insecure --fail --silent https://127.0.0.1:4173/ >/dev/null; then exit 0; fi
             sleep 1
           done
-          cat /tmp/rawaa-visual-qa-http.log
+          cat /tmp/rawaa-visual-qa-https.log
           exit 1
       - name: Capture screenshots and inspect layout
         env:
