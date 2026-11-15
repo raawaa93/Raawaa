@@ -63,7 +63,7 @@ This repository is a reconstruction from Cloudflare Pages production and success
  
 ## Operational re-audit — 2026-11-15
 
-- Latest canonical main commit after PR #24: `e04f3775baca0a4a9e9b7ac067fe7d595ddfd0ff`.
+- Latest canonical main commit after PR #24 and the two documentation follow-ups: `fc89295b82556cc9946dc52f59b39fc23d1fdad6`.
 - Latest production deployment: `4222fbbf-5d51-423d-a309-a2cec96b2f78` (success; `commit_dirty=true`).
 - Latest isolated preview: `652d59e8-a3b0-42dd-bd44-10a59d4c3d08` (success; `commit_dirty=false`).
 - Production/preview deployment source commit is identical, but the dirty production provenance warning remains. Do not treat the production deployment as clean-source verified.
