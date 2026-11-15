@@ -1,0 +1,44 @@
+name: OSV dependency vulnerability scan
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'package.json'
+      - 'package-lock.json'
+      - '**/package.json'
+      - '**/package-lock.json'
+      - '.github/workflows/osv-scanner.yml'
+  merge_group:
+    branches: [main]
+  push:
+    branches: [main]
+    paths:
+      - 'package.json'
+      - 'package-lock.json'
+      - '**/package.json'
+      - '**/package-lock.json'
+  schedule:
+    - cron: '30 12 * * 1'
+
+permissions:
+  actions: read
+  contents: read
+  security-events: write
+
+jobs:
+  scan-pr:
+    if: github.event_name == 'pull_request' || github.event_name == 'merge_group'
+    uses: google/osv-scanner-action/.github/workflows/osv-scanner-reusable-pr.yml@v2.7.1
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+  scan-scheduled:
+    if: github.event_name == 'schedule' || github.event_name == 'push'
+    uses: google/osv-scanner-action/.github/workflows/osv-scanner-reusable.yml@v2.7.1
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
