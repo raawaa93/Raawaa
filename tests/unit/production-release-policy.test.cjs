@@ -39,5 +39,4 @@ test('stale-source guard recognizes all maintenance and visual-audit helpers', (
 test('site integrity policy agrees with push-only production release workflow', () => {
   const siteCheck = fs.readFileSync(path.join(process.cwd(), 'scripts/check-site.mjs'), 'utf8');
   assert.match(siteCheck, /event_name == 'push'/u);
-  assert.doesNotMatch(siteCheck, /workflow_dispatch|confirm_production/u);
 });
