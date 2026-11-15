@@ -27,6 +27,16 @@ test('preserves unreviewed merged PR heads by default', () => {
   assert.deepEqual(result, []);
 });
 
+test('includes the newly merged maintenance and visual-QA PR heads in the next cleanup cycle', () => {
+  for (const name of [
+    'fix/visual-audit-webkit-csp-2026-11-15',
+    'preview-deploy/visual-qa-after-csp-fix-2026-11-15',
+    'maintenance/repository-hygiene-2026-11-15',
+    'maintenance/branch-hygiene-followup-2026-11-15',
+  ]) assert.ok(MERGED_PR_BRANCHES.includes(name));
+  assert.ok(STALE_NO_PR_BRANCHES.includes('docs/project-tooling-and-branch-inventory-2026-11-15'));
+});
+
 test('deletes an exact merged head only when its branch is explicitly reviewed', () => {
   const name = 'automation/agent-guidance-2026-11-15';
   assert.ok(MERGED_PR_BRANCHES.includes(name));
