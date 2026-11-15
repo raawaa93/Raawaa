@@ -140,3 +140,41 @@ No branch was deleted. The connected GitHub toolset exposes branch reads and PR 
 - A preview-only GitHub Actions workflow is installed. The first run completed the build successfully but skipped deployment because `CLOUDFLARE_API_TOKEN` is absent from repository secrets. No Cloudflare deployment was attempted by that workflow.
 - Required one-time action: add `CLOUDFLARE_API_TOKEN` as a GitHub Actions repository secret, with only Account → Cloudflare Pages → Edit permission for the correct Cloudflare account. Do not paste the token into ChatGPT. After it is added, update the existing `preview-deploy/2026-11-14` trigger file to start the isolated preview.
 - Expected preview hostname after a successful deployment: `raawaa-recovery-preview.raawaa-store.pages.dev`. This hostname does not exist until the workflow reports a created deployment.
+
+ 
+## Operational re-audit — 2026-11-15
+
+### Current Cloudflare state (API read-back)
+
+- Pages project: `raawaa-store`, Direct Upload, `uses_functions=false`.
+- Current production deployment: `4222fbbf-5d51-423d-a309-a2cec96b2f78`, URL https://4222fbbf.raawaa-store.pages.dev, source commit `4754dc63fff0f6d38f34d777699d1a99a8a41473`, deployment stage success.
+- Current preview deployment: `652d59e8-a3b0-42dd-bd44-10a59d4c3d08`, URL https://652d59e8.raawaa-store.pages.dev, alias https://raawaa-recovery-preview.raawaa-store.pages.dev, same source commit, deployment stage success.
+- Cloudflare reports `commit_dirty=true` on the latest production deployment and `commit_dirty=false` on the preview. This is a release-provenance warning: deployment succeeded, but the production deployment was built from a dirty working tree. It must not be represented as a fully clean/provenance-verified release.
+- The only configured Pages domain remains `raawaa-store.pages.dev`; `rawaa.eu.org` is still pending with CNAME-not-set. Do not change DNS. The intended `rawaa.sy` purchase is a separate owner-side matter.
+
+### CI/CD root cause and correction
+
+- Root cause confirmed: `.github/workflows/production-cicd.yml` was configured to deploy on every push to `main`, contradicting the documented Direct Upload approval boundary. A second workflow, `pages-production.yml`, also provided a separate branch-push production deployment route.
+- The corrective branch changes production CI so pushes to `main` validate only; a production release requires a manual `workflow_dispatch` from `main` with `confirm_production=yes`. The deploy job is tied to the `production` GitHub Environment, rebuilds from the exact commit, verifies that `main` has not moved, and rejects dirty source.
+- The duplicate `pages-production.yml` trigger is removed in the corrective branch. The isolated preview workflow remains separate.
+- The workflow installs Playwright with `--package-lock=false` and uses a new `.gitignore` for local test/dependency output, preventing dependency installation from polluting the deploy working tree.
+- This is a proposed PR change until its GitHub Actions run passes and it is merged. GitHub Environment required reviewers must still be configured in repository Settings → Environments → production if an additional human approval gate is desired; the workflow's manual confirmation is already required.
+
+### Supabase advisor recheck (read-only)
+
+- Project `oyoyozdugicmnkfhjovo`: Auth leaked-password protection remains disabled (WARN).
+- The advisor reports 17 RLS-enabled/no-policy INFO findings, including Store tables. The current audit still does not show public `anon` or `authenticated` table grants; do not add broad policies or grants.
+- Performance advisor reports 10 unused indexes (INFO) and one duplicate-index warning on `rawaa_store.orders` (`orders_closed_at_idx`, `orders_retention_idx`). Do not drop indexes without migration/history and workload review.
+- Separate fallback project `xuwtuhfqjjwszxqkmivj` also has RLS-enabled/no-policy INFO findings. It remains unrelated to the Store and must not be substituted.
+
+### Backup verification
+
+- The disaster-recovery workflow definition exists, but this audit could not verify a completed run, artifact, SHA-256 verification, or restore drill through the available GitHub Actions read interface. Backup completion is therefore **unverified**, not complete.
+- R2 remains deliberately inactive pending the owner's payment-card readiness. Do not enable paid resources or change DNS without the owner-side prerequisite.
+
+### Release blockers unchanged
+
+- Real product INCI/formula percentages and supplier documents are still required.
+- Product images remain conceptual; actual product/packaging photography is still required.
+- Privacy policy remains a draft pending legal review.
+- Direct website order intake remains disabled; do not enable it until the Edge Function source and full order lifecycle are reviewed.
