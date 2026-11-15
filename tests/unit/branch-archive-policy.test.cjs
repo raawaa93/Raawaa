@@ -17,15 +17,15 @@ const pull = (ref, state = 'open', owner = repository) => ({
   state, head: { ref, repo: { full_name: owner } },
 });
 
-test('archives only the exact reviewed PR113 maintenance branch head', () => {
+test('archives only the exact reviewed PR116 archive-index maintenance head', () => {
   assert.deepEqual(ARCHIVE_BRANCHES, {
-    "maintenance/pr112-branch-hygiene-inventory-2026-11-15": "80e320e4b95138685ad10099c6087050d66b2b62",
+    "maintenance/record-pr113-archive-2026-11-15": "1415d8dcac9ca2113626659d4454b2450b42b423",
   });
-  assert.equal(expectedArchiveShaMatches(branch("maintenance/pr112-branch-hygiene-inventory-2026-11-15", "80e320e4b95138685ad10099c6087050d66b2b62")), true);
-  assert.deepEqual(selectArchiveCandidates([branch("maintenance/pr112-branch-hygiene-inventory-2026-11-15", "80e320e4b95138685ad10099c6087050d66b2b62")], [], repository).map(x => x.name), ["maintenance/pr112-branch-hygiene-inventory-2026-11-15"]);
-  assert.equal(expectedArchiveShaMatches(branch("maintenance/pr112-branch-hygiene-inventory-2026-11-15", "changed-head")), false);
-  assert.deepEqual(selectArchiveCandidates([branch("maintenance/pr112-branch-hygiene-inventory-2026-11-15", "changed-head")], [], repository), []);
-  assert.deepEqual(selectArchiveCandidates([branch("maintenance/pr112-branch-hygiene-inventory-2026-11-15", "80e320e4b95138685ad10099c6087050d66b2b62")], [pull("maintenance/pr112-branch-hygiene-inventory-2026-11-15")], repository), []);
+  assert.equal(expectedArchiveShaMatches(branch("maintenance/record-pr113-archive-2026-11-15", "1415d8dcac9ca2113626659d4454b2450b42b423")), true);
+  assert.deepEqual(selectArchiveCandidates([branch("maintenance/record-pr113-archive-2026-11-15", "1415d8dcac9ca2113626659d4454b2450b42b423")], [], repository).map(x => x.name), ["maintenance/record-pr113-archive-2026-11-15"]);
+  assert.equal(expectedArchiveShaMatches(branch("maintenance/record-pr113-archive-2026-11-15", "changed-head")), false);
+  assert.deepEqual(selectArchiveCandidates([branch("maintenance/record-pr113-archive-2026-11-15", "changed-head")], [], repository), []);
+  assert.deepEqual(selectArchiveCandidates([branch("maintenance/record-pr113-archive-2026-11-15", "1415d8dcac9ca2113626659d4454b2450b42b423")], [pull("maintenance/record-pr113-archive-2026-11-15")], repository), []);
 });
 
 test('does not re-archive any retired ref if a stale branch is recreated', () => {
