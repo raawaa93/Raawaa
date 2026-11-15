@@ -29,18 +29,18 @@ test('preserves merged PR heads by default, even when the exact head is already 
   assert.deepEqual(result, []);
 });
 
-test('preserves a branch updated after its merged PR unless the new head is in main', () => {
+test('preserves a branch updated after its merged PR even when its new head is in main', () => {
   const prs = [pr('fix/reused', { merged: true, sha: 'old-sha' })];
   assert.deepEqual(classifyBranches([branch('fix/reused', { sha: 'new-sha' })], prs, repository), []);
   assert.deepEqual(
     classifyBranches([branch('fix/reused', { sha: 'new-sha' })], prs, repository, {
       'fix/reused': { ahead_by: 0, behind_by: 4 },
-    }).map(x => x.name),
-    ['fix/reused'],
+    }),
+    [],
   );
 });
 
-test('preserves closed-unmerged work unless its head is already in main', () => {
+test('preserves closed-unmerged work unless explicitly allowlisted and contained in main', () => {
   const keep = classifyBranches([branch('feature/unresolved')], [pr('feature/unresolved')], repository);
   const remove = classifyBranches([branch('feature/in-main')], [pr('feature/in-main')], repository, {
     'feature/in-main': { ahead_by: 0, behind_by: 3 },
@@ -62,14 +62,14 @@ test('prunes only explicitly reviewed superseded closed-unmerged branches', () =
   assert.deepEqual(contained.map(x => x.name), [name]);
 });
 
-test('preserves a branch reused by merged and closed-unmerged PRs unless explicitly superseded or contained in main', () => {
+test('preserves a branch reused by merged and closed-unmerged PRs unless its name is explicitly allowlisted', () => {
   const prs = [pr('qa/reused', { merged: true, sha: 'old-sha' }), pr('qa/reused', { sha: 'new-sha' })];
   assert.deepEqual(classifyBranches([branch('qa/reused', { sha: 'new-sha' })], prs, repository), []);
   assert.deepEqual(
     classifyBranches([branch('qa/reused', { sha: 'new-sha' })], prs, repository, {
       'qa/reused': { ahead_by: 0 },
-    }).map(x => x.name),
-    ['qa/reused'],
+    }),
+    []
   );
 });
 
@@ -120,7 +120,7 @@ test('does not prune an arbitrary unreferenced branch without ancestry proof', (
   assert.deepEqual(result, []);
 });
 
-test('prunes an unreferenced branch only when its head is contained in main', () => {
+test('preserves arbitrary unreferenced branches even when their heads are contained in main', () => {
   const result = classifyBranches([branch('old/ancestor')], [], repository, {
     'old/ancestor': { ahead_by: 0, behind_by: 10 },
   });
