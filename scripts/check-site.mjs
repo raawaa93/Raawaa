@@ -55,7 +55,7 @@ const productionWorkflow = read('.github/workflows/production-cicd.yml');
 assert.doesNotMatch(productionWorkflow, /workflow_dispatch|confirm_production|environment:\s*\n\s+name:\s*production/u, 'Production deployment must not require manual dispatch or an approval-gated environment');
 assert.match(productionWorkflow, /if: github\.ref == 'refs\/heads\/main' && github\.event_name == 'push'/u, 'Production deploy must run automatically after validated canonical main push');
 assert.match(productionWorkflow, /Deploy validated main to Cloudflare Pages production/u, 'A main push must deploy to production after successful validation');
-assert.match(productionWorkflow, /paths-ignore:[\s\S]*?- '\\.github\\/workflows\\/\\*\\*'/u, 'Workflow-only changes must not trigger a storefront production release');
+assert.ok(productionWorkflow.includes("      - '.github/workflows/**'"), 'Workflow-only changes must not trigger a storefront production release');
 assert.doesNotMatch(productionWorkflow, /confirm_production/u, 'Production release must not retain a confirmation input');
 assert.match(productionWorkflow, /git diff --name-only "\$GITHUB_SHA" "\$MAIN_SHA"/u, 'A queued release may tolerate only non-production main advances');
 assert.match(productionWorkflow, /Production source changed after validation/u, 'Any production-source advance must block a stale deployment');
