@@ -15,7 +15,7 @@ test('validated pushes to canonical main deploy automatically without manual app
   assert.match(workflow, /if: github\.ref == 'refs\/heads\/main' && github\.event_name == 'push'/);
 });
 
-test('maintenance and visual-audit helpers are ignored by production release triggers', () => {
+test('workflow-only and maintenance changes are ignored by production release triggers', () => {
   const ignored = workflow.split('paths-ignore:')[1]?.split('\n\npermissions:')[0] || '';
   for (const file of [
     '.github/workflows/**',
