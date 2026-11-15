@@ -24,16 +24,6 @@ on:
       - 'lighthouserc.json'
       - 'lighthouserc.pr.json'
 
-  workflow_dispatch:
-    inputs:
-      confirm_production:
-        description: Explicit owner approval to release the validated main commit to production
-        required: true
-        type: choice
-        options:
-          - no
-          - yes
-        default: no
 
 permissions:
   contents: read
@@ -96,14 +86,11 @@ jobs:
           fi
 
   deploy:
-    name: Explicitly approved production release
+    name: Automatic production release
     needs: validate
-    if: github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch' && inputs.confirm_production == 'yes'
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    environment:
-      name: production
-      url: https://raawaa-store.pages.dev
     steps:
       - name: Checkout exact validated main commit
         uses: actions/checkout@v7
