@@ -57,7 +57,9 @@ No commits or file contents are deleted by this process. The original branch tip
 | `seo/remove-noindex-campaign-from-sitemap-2026-11-15` | `59057a487580be4b13b24a99f0812eb1fb936138` | `archive/branches/2026-11-15/seo/remove-noindex-campaign-from-sitemap-2026-11-15` |
 | `seo/sitemap-noindex-policy-2026-11-15` | `e01e7be06307910bf2978888ef5837e7c6db4566` | `archive/branches/2026-11-15/seo/sitemap-noindex-policy-2026-11-15` |
 | `fix/visual-audit-top-viewport-clean-2026-11-15` | `c0ccb2db0657d414885e68f16b8b79c9f73b4531` | `archive/branches/2026-11-15/fix/visual-audit-top-viewport-clean-2026-11-15` |
-| `maintenance/archive-inactive-branches-2026-11-15` | Captured at archive time | `archive/branches/2026-11-15/maintenance/archive-inactive-branches-2026-11-15` |
+| `maintenance/archive-inactive-branches-final-2026-11-15` | `ad3aaa80e47f2a4d823d85123f30c27726fb206d` | `archive/branches/2026-11-15/maintenance/archive-inactive-branches-final-2026-11-15` |
+| `docs/workspace-hygiene-2026-11-15` | `10e76ec9ed8de51cca6aad0451281f18513615b0` | `archive/branches/2026-11-15/docs/workspace-hygiene-2026-11-15` |
+
 
 ## Restore an archived branch
 
