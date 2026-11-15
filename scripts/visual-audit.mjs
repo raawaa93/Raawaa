@@ -81,14 +81,18 @@ try {
             };
           }).filter(item => item.right > width + 2 || item.scrollWidth > item.clientWidth + 2)
             .sort((a, b) => (b.right - width) - (a.right - width)).slice(0, 30);
-          const images = Array.from(document.images).map(img => ({
+          const images = Array.from(document.images).map(img => {
+          const rect = img.getBoundingClientRect();
+          const style = getComputedStyle(img);
+          return {
             src: img.currentSrc || img.src,
             alt: img.alt || '',
             complete: img.complete,
             naturalWidth: img.naturalWidth,
             naturalHeight: img.naturalHeight,
-            visible: !img.closest('picture')?.hidden && getComputedStyle(img).display !== 'none' && getComputedStyle(img).visibility !== 'hidden' && rect.width > 0 && rect.height > 0,
-          }));
+            visible: !img.closest('picture')?.hidden && style.display !== 'none' && style.visibility !== 'hidden' && rect.width > 0 && rect.height > 0,
+          };
+        });
           return {
             title: document.title,
             lang: document.documentElement.lang,
@@ -157,7 +161,9 @@ try {
 
 const issues = [];
 for (const r of results) {
-  if (r.navigationStatus !== 200) issues.push(r.page + '/' + r.viewport + ': HTTP status ' + r.navigationStatus + (r.navigationError ? ' — ' + r.navigationError : ''));
+  if (r.navigationStatus !== 200) issues.push(r.page + '/' + r.viewport + ': HTTP status ' + r.navigationStatus);
+  if (r.navigationError) issues.push(r.page + '/' + r.viewport + ': audit execution error: ' + r.navigationError);
+  if (!r.metrics) issues.push(r.page + '/' + r.viewport + ': metrics were not collected');
   if (r.metrics?.documentWidth > r.metrics?.viewportWidth + 1) issues.push(r.page + '/' + r.viewport + ': horizontal page overflow ' + r.metrics.documentWidth + 'px > ' + r.metrics.viewportWidth + 'px');
   if (r.metrics?.brokenImages?.length) issues.push(r.page + '/' + r.viewport + ': ' + r.metrics.brokenImages.length + ' broken visible images');
   if (r.metrics?.incompleteVisibleImages?.length) issues.push(r.page + '/' + r.viewport + ': ' + r.metrics.incompleteVisibleImages.length + ' visible images did not finish loading');
