@@ -346,3 +346,16 @@ No branch, DNS record, Pages domain binding, Supabase data, secret, customer/ord
 6. Confirm whether `rawaa.eu.org` is controlled by the store owner; detach the Pages binding/CNAME only if the owner confirms it is not for Raawaa.
 
 No prices, discounts, delivery rules, payment settings, customer/order data, Supabase records, DNS records, or secrets were changed during this checkpoint.
+
+
+## Final repository and release confirmation — 2026-11-15 06:25 UTC
+
+- Canonical main after final maintenance merge: `b6c50075dae95179ea430a60b6dbdf92946b5f56`.
+- Final GitHub inventory: **17 branches, 34 tags, 0 open pull requests**. The 17 branches are the retained main, backup, deploy, preview, production-deploy, recovery, release, and restore refs.
+- Branch hygiene run `43685324709` completed successfully. The one diverged post-merge maintenance branch was not force-deleted: it was preserved at exact commit `80e320e4b95138685ad10099c6087050d66b2b62` as annotated tag `archive/branches/2026-11-15/maintenance/pr112-branch-hygiene-inventory-2026-11-15`; tag target was read back and matched, then the temporary branch was deleted.
+- No temporary work branches or open PRs remain. All durable operational/recovery refs remain.
+- Latest successful production deployment remains Cloudflare Pages deployment `44ff2ce7-0379-4311-86aa-43be465fdb75`, source `adbc74f31801afa92a37c83dcb1c7698e1248c3e`. Subsequent main commits were documentation/maintenance only.
+- Latest competitor crawl run `43684667793`: 9/10 pages HTTP 200; Kérastase UK official page returned a 307 JavaScript challenge and was not bypassed. Snapshot report: `docs/engineering/COMPETITOR-CRAWL-SNAPSHOT-2026-11-15.md`; artifact: https://github.com/raawaa93/Raawaa/actions/runs/43684667793.
+- Visual QA remains successful: run `43684775744`, 16 browser/viewport/page combinations, zero reported issues.
+- Remaining external controls are unchanged: GitHub `main.protected=false`, repository rulesets count 0 (connected integration received 403 for administrative settings); `rawaa.eu.org` remains pending/unresolvable despite its store-specific CNAME and Pages binding. No DNS or nameserver changes were made.
+- Store owner inputs still required before full order/payment operation: Sham Cash wallet number, approved INCI/formula data, real product photographs, privacy notice review, and confirmation of whether WhatsApp-only order handoff remains the intended workflow. No connected Supabase project has been attached or modified.
