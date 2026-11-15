@@ -41,7 +41,7 @@ jobs:
         run: npx playwright install --with-deps chromium webkit
       - name: Capture screenshots and inspect layout
         env:
-          BASE_URL: https://raawaa-store.pages.dev
+          BASE_URL: https://raawaa-recovery-preview.raawaa-store.pages.dev
         run: node scripts/visual-audit.mjs
       - name: Upload visual QA report and screenshots
         if: always()
