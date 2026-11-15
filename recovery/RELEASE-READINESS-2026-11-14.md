@@ -178,3 +178,9 @@ No branch was deleted. The connected GitHub toolset exposes branch reads and PR 
 - Product images remain conceptual; actual product/packaging photography is still required.
 - Privacy policy remains a draft pending legal review.
 - Direct website order intake remains disabled; do not enable it until the Edge Function source and full order lifecycle are reviewed.
+
+
+### Backup trigger improvement in this PR
+
+- The backup workflow now runs on every push to canonical `main`, in addition to its daily schedule and manual trigger. Once this PR is merged, the merge commit itself should start a backup run and produce a 90-day GitHub Actions artifact without requiring Cloudflare R2 or a paid service.
+- Artifact creation, SHA-256 verification and an isolated restore drill still require read-back evidence; the trigger change alone is not proof that a backup completed.
