@@ -6,11 +6,11 @@ on:
       - 'qa/visual-audit-*'
   workflow_run:
     workflows:
-      - Store checks
+      - Cloudflare Pages preview
     types:
       - completed
     branches:
-      - main
+      - 'preview-deploy/**'
   schedule:
     - cron: '17 3 * * 1'
   workflow_dispatch:
@@ -25,7 +25,7 @@ concurrency:
 jobs:
   visual-audit:
     if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
-    name: Capture production pages on iPhone and desktop
+    name: Capture isolated preview pages on iPhone and desktop
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
