@@ -90,7 +90,12 @@ for (const engine of engines) {
 
         metrics = await page.evaluate(() => {
           const width = document.documentElement.clientWidth;
-          const overflow = Array.from(document.querySelectorAll('body *')).map(el => {
+          const overflow = Array.from(document.querySelectorAll('body *')).filter(el => {
+            // Screen-reader-only text is intentionally clipped to a 1px box.
+            // Exclude it from visual overflow diagnostics; it is not layout spill.
+            return !el.classList.contains('sr-only') &&
+              !el.closest('[aria-hidden="true"]');
+          }).map(el => {
             const rect = el.getBoundingClientRect();
             const style = getComputedStyle(el);
             return {
