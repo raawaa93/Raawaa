@@ -67,10 +67,12 @@ GitHub Actions runs these checks on pushes and pull requests. Make future edits 
 
 ## Source-of-truth and cleanup rules
 
-- `main` is the sole canonical website source. All new work starts from `main` on a named feature branch and returns through a reviewed pull request.
-- `backup/*` branches are immutable rollback checkpoints. Never deploy from them.
-- `recovery/snapshots/` and old PR snapshots are read-only historical evidence. They may contain superseded content (including old promotion text); that content is not active policy and must not be copied into the live site.
-- Do not bulk-delete historical files, branches, or recovery evidence. Retire a specific item only after its replacement is verified and a separate inventory proves it is unused.
+- main is the sole canonical website source. All new work starts from main on a named feature branch and returns through a reviewed pull request.
+- backup/* branches are immutable rollback checkpoints. Never deploy from them.
+- recovery/snapshots/ and old PR snapshots are read-only historical evidence. They may contain superseded content (including old promotion text); that content is not active policy and must not be copied into the live site.
+- The automated branch hygiene workflow may retire merged PR heads and only the exact superseded/stale refs documented in docs/engineering/BRANCH-INVENTORY.md. It must preserve main, protected refs, every backup/* and recovery/* ref, open-PR heads, and all unreviewed closed-unmerged branches.
+- Never bulk-delete historical files, recovery snapshots, or external project data. A specific item may be retired only after its replacement is verified and the inventory proves it is unused.
+- Keep docs/engineering/TOOLING-REGISTRY.md current for integrations, skills, and free-tier balances. Do not assume a connected ChatGPT tool is linked to the Store account.
 - Cloudflare Pages is Direct Upload. A GitHub merge is not a deployment. Test an isolated preview and verify its full asset set before any production promotion.
 
 ## Current release status
