@@ -134,10 +134,14 @@ The catalog being available in ChatGPT is not the same as vendoring a skill into
 
 ## Latest cleanup and visual QA automation — 2026-11-15
 
-- Current inventory: 37 branch refs; 77 PRs (63 merged, 13 closed-unmerged, 1 open).
-- PR #77 completes the reviewed allowlist for merged refs #70, #71, #72, #74, #75, and its own head; it also retires exact closed-unmerged branches whose replacements were verified in main, plus the docs inventory ref after ancestry proof. Reused QA work, unknown branches, and operational namespaces remain protected.
-- Visual QA workflow now runs on harness/workflow changes and after successful production releases; preview runs remain scoped to successful preview deployments. It chooses the live production URL for production-release runs.
-- The WebKit screenshot fix uses Playwright `caret: 'initial'` to avoid injected inline styles; the production CSP remains strict.
+- Current verified inventory before PR #80 merge: 36 branch refs; 81 PRs (66 merged, 14 closed-unmerged, 1 open).
+- PR #79 merged the final branch allowlist and the no-PR docs ancestry check. Cleanup run #43678179625 inspected 40 refs and 80 PRs, completed 15 ancestry comparisons, deleted five reviewed refs, and reported zero failures.
+- The five deleted refs were `docs/project-tooling-and-branch-inventory-2026-11-15`, `docs/visual-qa-and-inventory-finalization-2026-11-15`, `fix/visual-audit-csp-screenshots-2026-11-15`, `fix/visual-audit-webkit-csp-2026-11-15`, and `maintenance/branch-cleanup-final-2026-11-15`.
+- PR #74's operational namespace protection remains active. All `backup/*`, `recovery/*`, `restore/*`, `release/*`, `production-deploy/*`, `deploy/*`, active `preview-deploy/*`, and open-PR heads are preserved.
+- Closed-unmerged branches are now compared with main; allowlist membership alone is insufficient. Any ahead commit, comparison failure, unknown ref, or active PR causes retention.
+- PR #80 consolidates this cleanup with a production release policy regression fix: production release is push-only after validated main checks; no manual `workflow_dispatch` deployment remains. Maintenance/visual-audit helper files are excluded from production release triggers and stale-source checks.
+- Visual QA workflow runs on harness/workflow changes and after successful production releases; preview runs remain scoped to successful preview deployments. It chooses the live production URL for production-release runs.
+- PR #78's narrowly scoped WebKit CSP event filter remains limited to the exact native SELECT user-agent shadow-style signature. All other CSP and console errors remain failures; strict CSP is unchanged.
 
 
 ## Visual QA WebKit regression — 2026-11-15
@@ -146,3 +150,35 @@ The catalog being available in ChatGPT is not the same as vendoring a skill into
 - PR #78 adds a narrowly scoped filter only for the exact `style-src-attr` / inline / empty-source / line-1 / SELECT / no-author-style signature. All other CSP events and console errors remain failures. Strict CSP is unchanged; no `unsafe-inline` added.
 - Visual QA now runs on audit-harness changes and after successful production releases, using the production URL; preview deployments use the isolated preview host.
 - Production CI excludes `scripts/visual-audit-csp-policy.cjs` from release triggers so test-harness changes do not deploy the storefront.
+
+
+## Live account, workspace, and quota audit — 2026-11-15
+
+### Free-tier balances
+
+- **OpenSEO:** account verified; 251 credits remaining.
+- **Ahrefs:** Free API allowance; 200,000 monthly API-key units, 0 used; next reset 2026-12-04. Workspace units are not included.
+- **Firecrawl:** 0 of 1,000 credits remaining; current period ends 2026-11-29. Keep idle until renewal.
+- **Cloudflare:** connected account verified. Pages and existing RUM site configuration remain; Web Analytics beacon is not installed.
+- No paid plan, billing, credit purchase, or paid API was activated.
+
+### External workspace state
+
+- **Lovable:** Free workspace; zero projects, zero workspace skills, zero custom connectors, and zero templates. Its standard connector catalog is available but no RAWAA project or custom connector is configured.
+- **HubSpot:** connected portal is not onboarded. No CRM data or settings changed.
+- **Metricool:** one brand exists but no social network is connected. No posts or schedules exist for RAWAA.
+- **Figma:** Starter team with a View seat; read-only. No file or team mutation.
+- **Supabase:** only `raawaa-engine-fallback` and `Ghaioooth-core` are visible; neither is confirmed as the RAWAA Store database. No project, schema, secret, or data changes.
+- **Notion:** connected and searchable; recovery, development history, operating models, and sales pages retained.
+- **GitHub:** RAWAA repository connected with administrative access; cleanup is scoped to the repository.
+- **ChatGPT Skills:** 151 skills listed in the current catalog. Project-relevant design, testing, data, SEO, and engineering skills were reviewed. The current skill catalog interface is read-only and exposes no uninstall operation.
+- **Plugin Management:** current tools can search plugins and manage a specifically identified integration, but do not expose a safe complete account-wide inventory-and-prune operation. No broad uninstall or permission relaxation was performed.
+- **TinyFish:** owner-prohibited; never call, install, or reintroduce it.
+
+### Cleanup boundaries
+
+- Keep GitHub, Cloudflare, OpenSEO, Ahrefs, Search Console, Notion, and the read-only Figma connection available.
+- Keep Firecrawl connected but idle until credits renew.
+- Keep Lovable, HubSpot, and Metricool dormant; they currently have no configured RAWAA Store project, CRM onboarding, or connected social channel.
+- Do not delete Supabase projects, Notion pages, Figma files, or account-wide plugins solely because they are inactive for RAWAA; they may serve other projects and require exact-target authorization.
+- Never send customer/order data, phone numbers, addresses, or secrets to external AI, memory, or indexing services.
