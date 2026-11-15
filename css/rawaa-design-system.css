@@ -256,3 +256,72 @@ a.button:focus-visible {
 @media (max-width: 360px) {
   body.serum-page .serum-card { padding-block: .2rem !important; }
 }
+
+
+/* ---------- Final mobile/header visual corrections (2026-11-15) ---------- */
+/* Keep the promotion strip visible; the old fixed header covered it at page load. */
+body:not(.serum-page) .site-header {
+  position: sticky;
+  top: 0;
+}
+
+/* Center the mobile menu control and keep its tap target predictable. */
+body:not(.serum-page) .nav-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  padding: 0;
+  border: 1px solid var(--rawaa-line);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--rawaa-ink);
+  font-size: 1.2rem;
+  line-height: 1;
+}
+body:not(.serum-page) .header-cta {
+  gap: .5rem;
+}
+body:not(.serum-page) .header-cta .btn {
+  min-height: 44px;
+  padding: .55rem .95rem;
+  white-space: nowrap;
+}
+
+/* On phones, start the hero immediately below the header instead of vertically
+   centering the copy in an almost full-screen empty section. */
+@media (max-width: 899px) {
+  body:not(.serum-page) .hero {
+    height: auto !important;
+    min-height: 0 !important;
+    padding-block: 1.5rem 2.5rem !important;
+    align-items: flex-start;
+  }
+  body:not(.serum-page) .hero-grid {
+    gap: 1.75rem;
+  }
+}
+
+/* Keep primary and secondary actions visibly distinct in every interaction state. */
+body:not(.serum-page) .btn-gold {
+  border: 1px solid var(--rawaa-ink);
+  background: var(--rawaa-ink);
+  color: var(--rawaa-paper);
+}
+body:not(.serum-page) .btn-gold:hover {
+  border-color: var(--rawaa-olive);
+  background: var(--rawaa-olive);
+  color: var(--rawaa-paper);
+}
+body:not(.serum-page) .btn-outline {
+  border: 1px solid rgba(46, 42, 38, .38);
+  background: transparent;
+  color: var(--rawaa-ink);
+}
+body:not(.serum-page) .btn-outline:hover {
+  border-color: var(--rawaa-copper);
+  background: var(--rawaa-cream);
+  color: var(--rawaa-ink);
+}
