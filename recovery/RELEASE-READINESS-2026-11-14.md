@@ -155,10 +155,10 @@ No branch was deleted. The connected GitHub toolset exposes branch reads and PR 
 ### CI/CD root cause and correction
 
 - Root cause confirmed: `.github/workflows/production-cicd.yml` was configured to deploy on every push to `main`, contradicting the documented Direct Upload approval boundary. A second workflow, `pages-production.yml`, also provided a separate branch-push production deployment route.
-- The corrective branch changes production CI so pushes to `main` validate only; a production release requires a manual `workflow_dispatch` from `main` with `confirm_production=yes`. The deploy job is tied to the `production` GitHub Environment, rebuilds from the exact commit, verifies that `main` has not moved, and rejects dirty source.
-- The duplicate `pages-production.yml` trigger is removed in the corrective branch. The isolated preview workflow remains separate.
+- PR #24 was merged on 2026-11-15. Pushes to `main` now validate only; a production release requires a manual `workflow_dispatch` from `main` with `confirm_production=yes`. The deploy job is tied to the `production` GitHub Environment, rebuilds from the exact commit, verifies that `main` has not moved, and rejects dirty source.
+- The duplicate `pages-production.yml` trigger was removed in PR #24. The isolated preview workflow remains separate.
 - The workflow installs Playwright with `--package-lock=false` and uses a new `.gitignore` for local test/dependency output, preventing dependency installation from polluting the deploy working tree.
-- This is a proposed PR change until its GitHub Actions run passes and it is merged. GitHub Environment required reviewers must still be configured in repository Settings → Environments → production if an additional human approval gate is desired; the workflow's manual confirmation is already required.
+- PR #24 is merged. The workflow run triggered by the merge still requires Actions read-back verification. GitHub Environment required reviewers must be configured in repository Settings → Environments → production if an additional human approval gate is desired; the workflow's manual confirmation is already required. GitHub Environment required reviewers must still be configured in repository Settings → Environments → production if an additional human approval gate is desired; the workflow's manual confirmation is already required.
 
 ### Supabase advisor recheck (read-only)
 
@@ -180,7 +180,7 @@ No branch was deleted. The connected GitHub toolset exposes branch reads and PR 
 - Direct website order intake remains disabled; do not enable it until the Edge Function source and full order lifecycle are reviewed.
 
 
-### Backup trigger improvement in this PR
+### Backup trigger improvement (merged PR #24)
 
-- The backup workflow now runs on every push to canonical `main`, in addition to its daily schedule and manual trigger. Once this PR is merged, the merge commit itself should start a backup run and produce a 90-day GitHub Actions artifact without requiring Cloudflare R2 or a paid service.
+- The backup workflow now runs on every push to canonical `main`, in addition to its daily schedule and manual trigger. The PR #24 merge commit should start a backup run and produce a 90-day GitHub Actions artifact without requiring Cloudflare R2 or a paid service.
 - Artifact creation, SHA-256 verification and an isolated restore drill still require read-back evidence; the trigger change alone is not proof that a backup completed.
