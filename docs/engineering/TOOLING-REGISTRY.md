@@ -304,3 +304,10 @@ This is an account-level inventory. Only resources positively identified as belo
 - Cloudflare zone `rawaa.eu.org` exists in the Raawaa account but its zone status is `pending`.
 - Its DNS zone contains a proxied CNAME `rawaa.eu.org -> raawaa-store.pages.dev`; the Pages project also lists `rawaa.eu.org` as a custom domain with HTTP validation still `pending`.
 - The blocker is zone activation / registrar nameserver delegation, not a missing CNAME inside the Cloudflare zone. Do not change registrar nameservers, DNS records, or Pages bindings without confirming the owner controls the domain and intends it for this store.
+
+
+## Repository archive closure — 2026-11-15 06:26 UTC
+
+- Verified archive tag `archive/branches/2026-11-15/maintenance/pr112-branch-hygiene-inventory-2026-11-15` points to exact preserved commit `80e320e4b95138685ad10099c6087050d66b2b62`; the original branch ref has been deleted by the ancestry-safe archive workflow.
+- Current repository steady state after PR #115: 17 durable branch refs, 34 verified recovery tags, and zero open pull requests. The one-time archive allowlist is cleared in this follow-up PR to prevent accidental re-archival.
+- Cloudflare `rawaa.eu.org` CNAME is present in the zone and targets `raawaa-store.pages.dev`, but the zone and Pages HTTP validation remain pending. No nameserver or DNS mutation was made.
