@@ -209,6 +209,13 @@ test('retires the merged release-fix, cleanup, and crawler-coverage branches aft
   }
 });
 
+test('retires the PR115 archive maintenance ref after its exact head is merged', () => {
+  const name = 'maintenance/archive-pr113-branch-2026-11-15';
+  assert.ok(MERGED_PR_BRANCHES.includes(name));
+  assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
+  assert.deepEqual(classifyBranches([branchRef(name)], [pr(name, { merged: true })], repository).map(x => x.name), [name]);
+});
+
 test('retires the final PR113 and PR114 maintenance refs only after exact heads are merged', () => {
   const names = [
     'maintenance/pr112-branch-hygiene-inventory-2026-11-15',

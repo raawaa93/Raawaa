@@ -26,6 +26,7 @@ const MERGED_PR_BRANCHES = Object.freeze([
   "docs/correct-production-release-trigger-2026-11-15",
   "maintenance/pr112-branch-hygiene-inventory-2026-11-15",
   "maintenance/final-branch-cleanup-2026-11-15",
+  "maintenance/archive-pr113-branch-2026-11-15",
   "feature/campaign-nitro-offer-2026-11-14-v2",
   "fix/campaign-canonical-2026-11-15",
   "fix/cart-dialog-mobile-2026-11-15",

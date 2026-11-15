@@ -297,3 +297,10 @@ This is an account-level inventory. Only resources positively identified as belo
 - The database has two overlapping BEFORE INSERT/UPDATE triggers on `rawaa_store.orders` (`orders_set_closed_at` and `orders_track_closure`) that both maintain `closed_at`. Current behavior appears to be defensive/redundant, not a proven defect; reconcile their migration history before considering removal. No orders exist and no trigger changes were made.
 - The `commerce.orders` schema still defaults to USD and has unit/courier/refusal cost defaults that are not owner-approved for this SYP storefront. Keep it isolated; do not populate costs or connect it to the live owner dashboard by assumption.
 - Supabase's current changelog notes the 2026-10-30 Data API exposure change (new public-schema tables are not automatically exposed by default) and the 2026-11-10 TLS CBC cipher retirement. No observed project issue requires a migration from this read-only audit.
+
+
+## Cloudflare custom-domain read-back — 2026-11-15 06:25 UTC
+
+- Cloudflare zone `rawaa.eu.org` exists in the Raawaa account but its zone status is `pending`.
+- Its DNS zone contains a proxied CNAME `rawaa.eu.org -> raawaa-store.pages.dev`; the Pages project also lists `rawaa.eu.org` as a custom domain with HTTP validation still `pending`.
+- The blocker is zone activation / registrar nameserver delegation, not a missing CNAME inside the Cloudflare zone. Do not change registrar nameservers, DNS records, or Pages bindings without confirming the owner controls the domain and intends it for this store.
