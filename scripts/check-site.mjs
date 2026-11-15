@@ -52,11 +52,10 @@ const cart = read('js/cart.js');
 const views = read('js/serum-views.js');
 
 const productionWorkflow = read('.github/workflows/production-cicd.yml');
-assert.match(productionWorkflow, /workflow_dispatch:[\s\S]*?confirm_production:[\s\S]*?required: true[\s\S]*?options:[\s\S]*?- no[\s\S]*?- yes/u, 'Production release must require an explicit yes/no owner confirmation');
-assert.match(productionWorkflow, /if: github\.ref == 'refs\/heads\/main' && github\.event_name == 'workflow_dispatch' && inputs\.confirm_production == 'yes'/u, 'Production deploy must require an explicit confirmed dispatch from canonical main');
-assert.doesNotMatch(productionWorkflow, /if: github\.ref == 'refs\/heads\/main' && github\.event_name == 'push'/u, 'A main push must never deploy to production automatically');
+assert.doesNotMatch(productionWorkflow, /workflow_dispatch|confirm_production|environment:\s*\n\s+name:\s*production/u, 'Production deployment must not require manual dispatch or an approval-gated environment');
+assert.match(productionWorkflow, /if: github\.ref == 'refs\/heads\/main' && github\.event_name == 'push'/u, 'A validated push to canonical main must deploy automatically');
 assert.match(productionWorkflow, /paths-ignore:[\s\S]*?- '\.github\/workflows\/\*\*'/u, 'Workflow-only changes must not trigger production deployment');
-assert.match(productionWorkflow, /confirm_production/u, 'Production release must retain its explicit confirmation input');
+assert.doesNotMatch(productionWorkflow, /confirm_production/u, 'Production release must not retain a confirmation input');
 assert.match(productionWorkflow, /git diff --name-only "\$GITHUB_SHA" "\$MAIN_SHA"/u, 'A queued release may tolerate only non-production main advances');
 assert.match(productionWorkflow, /Production source changed after validation/u, 'Any production-source advance must block a stale deployment');
 
