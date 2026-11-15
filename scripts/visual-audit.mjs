@@ -39,7 +39,9 @@ for (const engine of engines) {
   reducedMotion: 'reduce',
       // Keep reduced-motion at context level. Do not pass screenshot animations:'disabled':
       // Playwright injects an inline stylesheet for that option, which strict style-src blocks in WebKit.
-      ignoreHTTPSErrors: false,
+      // Trust only the ephemeral self-signed certificate used by local PR QA.
+      // Production and recovery-preview audits continue to verify real TLS strictly.
+      ignoreHTTPSErrors: baseURL.startsWith('https://127.0.0.1:4173'),
     });
 
     for (const route of routes) {
