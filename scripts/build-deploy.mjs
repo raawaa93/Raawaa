@@ -66,7 +66,10 @@ assert.equal(read('google15a14d81e8e19f8a.html').trim(), 'google-site-verificati
 assert.ok(read('campaign.html').includes('<meta name="robots" content="noindex,follow">'), 'Campaign landing page must remain noindex');
 assert.ok(!read('sitemap.xml').includes('/campaign'), 'Noindex campaign page must be absent from sitemap');
 assert.ok(!read('sitemap.xml').includes('/hama'), 'Legacy Hama page must be absent from sitemap');
-assert.ok(!read('sw.js').toLowerCase().includes('hama'), 'Service worker must not cache the legacy Hama route');
+const serviceWorker = read('sw.js');
+assert.match(serviceWorker, /const CACHE_VERSION = 'v20261115-retired-route-purge'/u, 'Service worker cache version must advance to remove stale offline pages');
+assert.match(serviceWorker, /url\\.pathname === '\\/hama' \\|\\| url\\.pathname === '\\/hama\\/'/u, 'Retired Hama route must be intercepted before cache fallback');
+assert.match(serviceWorker, /new Response\\(response\\.body, \\{[\\s\\S]*?status: 404/u, 'Retired Hama route must return a real 404 response');
 assert.ok(read('robots.txt').includes('Disallow: /hama'), 'Robots must disallow the retired Hama route');
 assert.ok(read('campaign.html').includes('خصم 10%'), 'Campaign must display the canonical 10% discount');
 assert.ok(read('campaign.html').includes('التوصيل مجاني إلى جميع المحافظات ولكل طرق الدفع'), 'Campaign must state free delivery for every payment method');
