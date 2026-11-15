@@ -39,17 +39,18 @@ Every archived tag resolves to the exact original branch-head SHA. These are dur
 | `seo/remove-noindex-campaign-from-sitemap-2026-11-15` | `59057a487580be4b13b24a99f0812eb1fb936138` | `archive/branches/2026-11-15/seo/remove-noindex-campaign-from-sitemap-2026-11-15` |
 | `seo/sitemap-noindex-policy-2026-11-15` | `e01e7be06307910bf2978888ef5837e7c6db4566` | `archive/branches/2026-11-15/seo/sitemap-noindex-policy-2026-11-15` |
 
-## Final archive batch pending
+## Final archive batch — completed
 
-Three exact refs are pinned for the next successful run after PR #101 merges:
+**Run:** [#43682035975](https://github.com/raawaa93/Raawaa/actions/runs/43682035975)  
+**Result:** Success — 3 exact-SHA tags created and verified, 3 branch refs deleted, zero failures.
 
-| Original branch | Expected commit SHA | Reason |
+| Original branch | Preserved commit SHA | Recovery tag |
 |---|---|---|
-| `docs/workspace-hygiene-2026-11-15` | `10e76ec9ed8de51cca6aad0451281f18513615b0` | Closed documentation branch; content is being consolidated into PR #101 |
-| `fix/visual-audit-top-viewport-clean-2026-11-15` | `c0ccb2db0657d414885e68f16b8b79c9f73b4531` | Merged visual-QA work; current tree differs from main after maintenance changes |
-| `maintenance/archive-inactive-branches-final-2026-11-15` | `ad3aaa80e47f2a4d823d85123f30c27726fb206d` | Superseded no-PR archive-workflow draft |
+| `docs/workspace-hygiene-2026-11-15` | `10e76ec9ed8de51cca6aad0451281f18513615b0` | `archive/branches/2026-11-15/docs/workspace-hygiene-2026-11-15` |
+| `fix/visual-audit-top-viewport-clean-2026-11-15` | `c0ccb2db0657d414885e68f16b8b79c9f73b4531` | `archive/branches/2026-11-15/fix/visual-audit-top-viewport-clean-2026-11-15` |
+| `maintenance/archive-inactive-branches-final-2026-11-15` | `ad3aaa80e47f2a4d823d85123f30c27726fb206d` | `archive/branches/2026-11-15/maintenance/archive-inactive-branches-final-2026-11-15` |
 
-The active PR branch `maintenance/final-workspace-hygiene-2026-11-15` is handled by the merged-ref cleanup policy after PR #101 merges; it is not in the archive list.
+**Final repository state after run #43682035975:** 17 branch refs remain; all 32 recovery tags are verified; no unprotected inactive working branch refs remain. The archive allowlist is cleared in the follow-up cleanup PR so these refs cannot be re-archived accidentally.
 
 ## Tag format
 
