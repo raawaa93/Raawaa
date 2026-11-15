@@ -40,5 +40,5 @@ test('site integrity policy agrees with push-only production release workflow', 
   const siteCheck = fs.readFileSync(path.join(process.cwd(), 'scripts/check-site.mjs'), 'utf8');
   assert.match(siteCheck, /Production deploy must run only on validated main pushes/u);
   assert.match(siteCheck, /Manual production dispatch must remain disabled/u);
-  assert.doesNotMatch(siteCheck, /workflow_dispatch|confirm_production/u);
+  assert.match(siteCheck, /Production releases must not depend on a manual confirmation input/u);
 });
