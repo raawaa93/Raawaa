@@ -253,3 +253,12 @@ Update only when a verified, durable fact changes (for example: owner-approved p
 - Free quota snapshot: OpenSEO 251 credits; Firecrawl 0/1,000 until 2026-11-29; Ahrefs API allowance 200,000 units with 0 used and workspace quota 0. Figma remains View-only; Supabase Store database is still unidentified; no paid billing was enabled.
 - **Security follow-up:** GitHub reports `main.protected=false` and no repository rulesets. The connected GitHub app cannot configure branch protection (403). Enable required status checks and branch protection in repository Settings or provide an authorized GitHub connection. No security control was bypassed.
 - No DNS, custom-domain, Supabase schema, secrets, customer/order data, pricing, discounts, shipping policy, or billing settings were changed.
+
+
+## Operational follow-up — 2026-11-15 05:56 UTC
+
+- Repository hygiene is closed: 17 live durable branches, 33 verified exact-SHA recovery tags, zero open PRs. The authoritative inventory is `docs/engineering/BRANCH-INVENTORY.md`.
+- Latest docs-only inventory correction is commit `74762017ceea2c0344dd4273319f1ecd4115a89c` on `main`; it does not represent a production release.
+- Cloudflare Pages `raawaa-store` latest production deployment remains `b2923438-ad03-4c5a-816d-240fa6b5bbfd`, source `db1e0b131f596208b10e2e9c951d1f22c9beb916`, deployment stage success. The Pages custom domain `rawaa.eu.org` is still pending because its CNAME is absent; DNS was not changed.
+- GitHub `main` branch protection remains unresolved. The repository's recorded audit found no protection/rulesets and the connected app was denied permission to configure them (403). Configure required checks through an authorized GitHub settings session; do not infer success from empty commit-status results.
+- No production source, prices, discounts, delivery policy, customer/order data, Supabase data, secrets, billing, or DNS was changed in this follow-up.
