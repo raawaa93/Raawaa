@@ -6,7 +6,7 @@
 **Current cleanup PR:** #79 — https://github.com/raawaa93/Raawaa/pull/79  
 **Previous cleanup PR:** #70 merged  
 **Operational namespace protection:** #74 merged  
-**Visual QA fixes:** #71, #72, #75, #76 merged
+**Visual QA fixes:** #71, #72, #75, #76, #78 merged
 
 ## Current snapshot
 
