@@ -8,7 +8,7 @@ This file is the repository-backed memory that survives AI sessions, client chan
 - Repository: `raawaa93/Raawaa`; `main` is the only canonical website source.
 - Cloudflare Pages project: `raawaa-store`; current known URL: https://raawaa-store.pages.dev.
 - Pages uses Direct Upload, not Git integration. A merge to `main` is **not** a production deployment.
-- Production release is push-triggered only by qualifying website-source/configuration changes on `main`. The `RAWAA automatic production CI and release` workflow runs full validation, rebuilds the clean payload, and refuses stale/dirty source before deployment. There is no manual production dispatch. Documentation, workflow-only, dependency-only, test-only, and validation-script-only changes do not trigger a production release. Owner has granted standing authorization for routine releases after these gates pass.
+- Main pushes run validation only. A production release requires a separate `workflow_dispatch` from canonical `main` with `confirm_production=yes`, after explicit owner approval of that release. PRs and non-main branches never deploy. The release must still pass the full validation, exact-commit, clean-source, and freshness gates. No blanket standing production-release approval is assumed.
 - Preview deployment is isolated from production. Never deploy a backup branch.
 - `backup/*` branches and `recovery/` snapshots are historical rollback/evidence; do not delete, overwrite, or deploy them.
 
@@ -35,7 +35,7 @@ This file is the repository-backed memory that survives AI sessions, client chan
 - `scripts/check-site.mjs` validates commercial policy, page integrity, metadata, cart completeness, and local asset references.
 - `scripts/build-deploy.mjs` creates the clean Cloudflare payload and excludes recovery/development material.
 - Playwright tests cover browser behavior, including Chromium and WebKit. Add deterministic regression coverage before changing cart, pricing, or WhatsApp behavior.
-- Production deploy runs automatically only after successful validation on pushes to `main`; pull-request events never deploy. Preserve exact-SHA checkout, latest-main freshness check, clean-source check, Cloudflare secret check, and the production environment. Never bypass a failed gate.
+- Production deploy is disabled on ordinary pushes. It runs only from an explicitly confirmed `workflow_dispatch` on `main`, after the owner approves that specific release; pull-request events never deploy. Preserve exact-SHA checkout, latest-main freshness check, clean-source check, Cloudflare secret check, and the production environment. Never bypass a failed gate.
 - Do not change DNS/domain ownership, secrets, billing, Supabase data/schema, customer/order records, or security permissions unless technically necessary and within the owner's standing authority; irreversible/destructive data changes still require a recoverable plan and specific approval.
 - Do not confuse unrelated Supabase projects. Verify the project ID before any backend operation.
 
