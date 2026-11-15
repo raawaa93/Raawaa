@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { chromium, devices } from '@playwright/test';
+import { chromium, webkit, devices } from '@playwright/test';
 
 const baseURL = (process.env.BASE_URL || 'https://raawaa-store.pages.dev').replace(/\/$/, '');
 const outDir = path.resolve('artifacts/visual-audit');
@@ -17,11 +17,16 @@ const viewports = [
   { name: 'iphone-13', device: devices['iPhone 13'] },
   { name: 'desktop-1440', device: { viewport: { width: 1440, height: 1000 }, screen: { width: 1440, height: 1000 }, deviceScaleFactor: 1, isMobile: false, hasTouch: false } },
 ];
-const browser = await chromium.launch({ headless: true });
+const engines = [
+  { name: 'chromium', browser: chromium },
+  { name: 'webkit', browser: webkit },
+];
 const results = [];
 
-try {
-  for (const viewport of viewports) {
+for (const engine of engines) {
+  const browser = await engine.browser.launch({ headless: true });
+  try {
+    for (const viewport of viewports) {
     const context = await browser.newContext({
       ...viewport.device,
       locale: 'ar-SY',
@@ -114,7 +119,7 @@ try {
           };
         });
 
-        const prefix = route.name + '--' + viewport.name;
+        const prefix = engine.name + '--' + route.name + '--' + viewport.name;
         screenshots.push(prefix + '--viewport.png', prefix + '--full.png');
         await page.screenshot({ path: path.join(outDir, prefix + '--viewport.png'), fullPage: false, animations: 'disabled' });
         await page.screenshot({ path: path.join(outDir, prefix + '--full.png'), fullPage: true, animations: 'disabled' });
@@ -135,6 +140,7 @@ try {
         const result = {
           route: route.path,
           page: route.name,
+          engine: engine.name,
           viewport: viewport.name,
           navigationStatus,
           navigationError,
@@ -150,21 +156,26 @@ try {
         await fs.promises.writeFile(path.join(outDir, prefix + '.json'), JSON.stringify(result, null, 2));
       } catch (error) {
         navigationError = String(error);
-        results.push({ route: route.path, page: route.name, viewport: viewport.name, navigationStatus, navigationError, metrics, consoleErrors, pageErrors, failedRequests, badResponses, screenshots, interactiveScreenshots });
+        results.push({ route: route.path, page: route.name, engine: engine.name, viewport: viewport.name, navigationStatus, navigationError, metrics, consoleErrors, pageErrors, failedRequests, badResponses, screenshots, interactiveScreenshots });
       } finally {
         await page.close();
       }
     }
-    await context.close();
+      await context.close();
+    }
+  } finally {
+    await browser.close();
   }
-} finally {
-  await browser.close();
 }
 
 const issues = [];
 for (const r of results) {
   if (r.navigationStatus !== 200) issues.push(r.page + '/' + r.viewport + ': HTTP status ' + r.navigationStatus);
-  if (r.navigationError) issues.push(r.page + '/' + r.viewport + ': audit execution error: ' + r.navigationError);
+  if (r.navigationError) issues.push(r.page + '/' + r.engine + '/' + r.viewport + ': audit execution error: ' + r.navigationError);
+  if (r.consoleErrors?.length) issues.push(r.page + '/' + r.engine + '/' + r.viewport + ': browser console errors: ' + r.consoleErrors.join(' | '));
+  if (r.metrics && r.metrics.lang !== 'ar') issues.push(r.page + '/' + r.engine + '/' + r.viewport + ': document language is not Arabic');
+  if (r.metrics && r.metrics.dir !== 'rtl') issues.push(r.page + '/' + r.engine + '/' + r.viewport + ': document direction is not RTL');
+  if (r.metrics && r.metrics.fontsStatus !== 'loaded') issues.push(r.page + '/' + r.engine + '/' + r.viewport + ': web fonts are not fully loaded');
   if (!r.metrics) issues.push(r.page + '/' + r.viewport + ': metrics were not collected');
   if (r.metrics?.documentWidth > r.metrics?.viewportWidth + 1) issues.push(r.page + '/' + r.viewport + ': horizontal page overflow ' + r.metrics.documentWidth + 'px > ' + r.metrics.viewportWidth + 'px');
   if (r.metrics?.brokenImages?.length) issues.push(r.page + '/' + r.viewport + ': ' + r.metrics.brokenImages.length + ' broken visible images');

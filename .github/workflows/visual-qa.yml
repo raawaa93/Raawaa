@@ -38,7 +38,7 @@ jobs:
       - name: Install Playwright test dependency
         run: npm install --package-lock=false --no-save --no-audit --no-fund
       - name: Install Chromium
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install --with-deps chromium webkit
       - name: Capture screenshots and inspect layout
         env:
           BASE_URL: https://raawaa-store.pages.dev
