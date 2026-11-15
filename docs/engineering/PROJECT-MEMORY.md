@@ -5,7 +5,7 @@ This file is the repository-backed memory that survives AI sessions, client chan
 ## Canonical project
 
 - Repository: `raawaa93/Raawaa`; `main` is the only canonical website source.
-- Cloudflare Pages project: `raawaa-store`; production URL: https://raawaa-store.pages.dev.
+- Cloudflare Pages project: `raawaa-store`; current known URL: https://raawaa-store.pages.dev.
 - Pages uses Direct Upload, not Git integration. A merge to `main` is **not** a production deployment.
 - Production release is exclusively the existing `RAWAA production CI and release` workflow, manually dispatched from `main` with `confirm_production=yes`. It validates the exact current `main` SHA and refuses stale/dirty source.
 - Preview deployment is isolated from production. Never deploy a backup branch.
@@ -38,11 +38,22 @@ This file is the repository-backed memory that survives AI sessions, client chan
 - Do not change DNS, secrets, Cloudflare account settings, Supabase data/schema, customer/order records, or security permissions without a demonstrated need and explicit authorization.
 - Do not confuse unrelated Supabase projects. Verify the project ID before any backend operation.
 
+## SEO, performance, and source quality
+
+- A page marked `noindex` must not appear in `sitemap.xml`. The campaign landing page remains accessible for campaigns but is intentionally `noindex,follow` and excluded from the sitemap (PR #42, merged 2026-11-15).
+- Product selection query variants that are UI states of `/serum` should canonicalize to `/serum`; do not create duplicate indexable product URLs without an explicit information-architecture decision.
+- Do not use Google's Indexing API for ordinary storefront pages. It is restricted to JobPosting and livestreaming VideoObject content.
+- Lighthouse CI measures mobile performance on the key storefront pages. Current measured gates: Performance >=80, Accessibility >=95, Best Practices >=95. SEO and intentional noindex states remain warnings; do not disable checks to obtain a green run.
+- Lighthouse reports are retained as GitHub Actions artifacts for 14 days; do not upload reports to a hosted service.
+- Graphify is pinned to `graphifyy==0.9.109`, runs daily offline and code-only, with model/API backends disabled. It excludes `.github/workflows/` and generated/dependency/recovery material. Its graph is a regenerable index, not authoritative business-policy memory.
+- Dependabot weekly updates are enabled for npm dependencies and GitHub Actions (PR #37, merged 2026-11-15).
+- `package.json` currently declares `@playwright/test` as a version range; a committed `package-lock.json` was not present at the last verified read. Do not fabricate a lockfile. Generate it using npm in a real environment, validate with `npm ci`, then add OSV-Scanner against the resolved lockfile. Until then, report the dependency audit as incomplete rather than claiming a clean vulnerability scan.
+
 ## AI/tooling memory policy
 
 - Read this file and `AGENTS.md` before substantial repository work.
 - Keep decisions and lessons here when they are durable and useful across tools. Keep transient debugging details out; use an optional local memory tool for those.
-- **Primary optional event memory — [ProjectMem](https://github.com/riponcm/projectmem):** MIT, local-first, no cloud quota or API key. Pin the reviewed v0.3.5 rather than auto-upgrading. The project has one maintainer and its PyPI v0.3.5 artifacts did not show trusted-publishing provenance in the inspected release metadata; treat it as an opt-in trial, not a trusted dependency. Its changelog shows active bug fixing but also a young project with meaningful recent corrections.
+- **Primary optional event memory — [ProjectMem](https://github.com/riponcm/projectmem):** MIT, local-first, no cloud quota or API key. Pin the reviewed v0.3.5 rather than auto-upgrading. Its PyPI v0.3.5 artifacts did not show trusted-publishing provenance in the inspected release metadata; treat it as an opt-in trial, not a trusted dependency.
 - On a developer machine with a local clone and a compatible MCP client, install in an isolated Python environment and initialize conservatively:
 
   ```bash
@@ -52,14 +63,24 @@ This file is the repository-backed memory that survives AI sessions, client chan
   ~/.venvs/rawaa-projectmem/bin/pjm init --no-hooks --no-global --no-watch --no-backfill --no-claude-md --no-structure
   ```
 
-  Then configure the MCP client using the configuration printed by `pjm init` and the official client-specific guide. This local MCP process is not automatically connected to ChatGPT's hosted environment. Keep `.projectmem/` untracked; this repository ignores it.
+  Then configure the MCP client using the configuration printed by `pjm init` and the official client-specific guide. This local MCP process is not automatically connected to ChatGPT's hosted environment. Keep `.projectmem/` untracked.
 - ProjectMem's security policy documents that its event log is append-only, its git hooks execute code on commits, and its generated summaries/maps may be sent to the connected AI provider. The conservative init flags above avoid hooks, watcher, global memory, automatic history ingestion, and generated project-structure cache. Never record secrets, API keys, customer names, phone numbers, addresses, order payloads, or private commercial data.
 - **Secondary local fallback — [MCP Memory Service](https://github.com/doobidoo/mcp-memory-service):** Apache-2.0; local SQLite-vec storage and local ONNX embeddings are documented, so semantic retrieval can work without a hosted embedding API. Requires Python 3.11+ and a persistent local service; it is semantic memory, not a replacement for ProjectMem's typed issue/attempt/fix history. Keep it as a separate fallback and do not run both stores until data ownership and duplicate-write behavior are tested.
-- **Code-structure index — [Graphify](https://github.com/Graphify-Labs/graphify):** use the pinned, verified `graphifyy==0.9.108` CLI via the on-demand GitHub Actions workflow. The workflow indexes code only, explicitly disables model backends, and stores its generated graph as a 14-day artifact. The graph is regenerable and is not authoritative business-policy memory.
-- **Performance measurement — Lighthouse CI:** mobile baseline for the homepage, serum, campaign, and privacy pages. Reports stay in GitHub Actions artifacts; no hosted upload. The initial run has no score gates. Establish a measured baseline before adding budgets.
+- **Code-structure index — [Graphify](https://github.com/Graphify-Labs/graphify):** use the pinned offline CLI in the existing daily GitHub Actions workflow. Generated graphs are short-lived artifacts and can be rebuilt from source.
+- **Performance measurement — Lighthouse CI:** mobile baseline for key storefront pages. Reports stay in GitHub Actions artifacts; no hosted upload.
 - Promptfoo and Langfuse remain candidates for a later stage when there is a real model/agent pipeline to evaluate and observe. Sharp remains deferred until image references and visual equivalence are audited; do not batch-replace production imagery before that.
-- If optional tools or free hosted quotas are unavailable, this file, `AGENTS.md`, Git history, tests, and preserved recovery checkpoints remain the fallback. ProjectMem and Graphify are local/self-run tools with no vendor free-tier quota; the graph workflow is reproducible and can be rerun.
+- If optional tools or free hosted quotas are unavailable, this file, `AGENTS.md`, Git history, tests, and preserved recovery checkpoints remain the fallback. Local memory and Graphify are self-run tools with no vendor free-tier quota; the graph workflow is reproducible and can be rerun.
 
 ## Updating this memory
 
 Update only when a verified, durable fact changes (for example: owner-approved policy, architecture, deployment boundary, or validated recovery decision). Include a date and evidence link for material changes. Do not treat a proposal or an unverified assumption as an established fact.
+
+## Verified maintenance update — 2026-11-15
+
+- PR #36: daily Graphify 0.9.109 and measured Lighthouse gates merged.
+- PR #37: weekly Dependabot updates for npm and GitHub Actions merged.
+- PR #42: campaign noindex/sitemap policy correction merged.
+- PR #43: expanded `AGENTS.md` guidance for Antigravity and SEO/release safeguards merged.
+- Latest verified canonical store commit at this update: `c29b6e6a4f06fc936c0f9449ac72578a6c13c2f4`.
+- Latest checked production workflow run `43666416946`: canonical-main validation succeeded; the production-release job was skipped. This is **not** a production deployment.
+- Latest checked Graphify run `43666416972`: succeeded. The Lighthouse run `43666416941` was still in progress at the time of the check; do not record it as passed until a completed successful run is verified.
