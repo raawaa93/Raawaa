@@ -131,3 +131,8 @@ test('retires the final maintenance PR branch only after its exact head is merge
     [name],
   );
 });
+
+
+test('does not prune the closed documentation branch; it remains in the exact-SHA archive batch', () => {
+  assert.equal(MERGED_PR_BRANCHES.includes('docs/workspace-hygiene-2026-11-15'), false);
+});
