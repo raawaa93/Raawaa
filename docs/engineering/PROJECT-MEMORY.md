@@ -90,3 +90,32 @@ Update only when a verified, durable fact changes (for example: owner-approved p
 - The Pages project still has only `raawaa-store.pages.dev` attached. `rawaa.sy` is not attached yet.
 - OpenSEO project has 500 credits remaining. No Google Search Console accounts or GA4 properties are connected; connection is still an owner-side OAuth step. No GSC performance data is available until connection.
 - `package.json` declares `@playwright/test` as a version range and `package-lock.json` is absent. Reproducible dependency lock and OSV lockfile scan remain outstanding; do not claim vulnerability scanning complete.
+
+
+## Verified integration and release audit — 2026-11-15
+
+### Production and quality gates
+- Canonical `main` is `c1f3d2940d5507221cb22072a724987ede31ae13`; Cloudflare Pages production deployment `da962fbd-4e4f-496c-8338-dd5d5fea1345` completed successfully from that exact clean commit.
+- The latest Store checks, production release, and disaster-recovery backup workflow runs all completed successfully for that commit.
+- A fresh OpenSEO audit on 2026-11-15 crawled 7/7 pages with no crawl errors, critical issues, or warnings. The only findings are three informational canonicalization notices for product-selection query states that intentionally canonicalize to `/serum`.
+- Fresh Lighthouse sample: desktop performance/accessibility/best-practices/SEO all 100 for home, serum, and privacy; mobile scores were home 100 and serum/privacy 99, with accessibility/best-practices/SEO 100 on all three. Mobile LCP measured approximately 1.23s (home), 2.08s (serum), and 0.95s (privacy) in this run. Treat these as one measured audit, not a guarantee for every device/network.
+
+### Supabase boundary and backend readiness
+- Store backend project is `Ghaioooth-core` (`oyoyozdugicmnkfhjovo`), region `eu-west-1`, status `ACTIVE_HEALTHY`. It is shared with a separate council/control-plane system; do not treat its general activity as Store traffic or mix its resources with the separate Raawaa fallback project.
+- The database currently records 19 applied migrations. The current `main` tree does not contain a `supabase/` migration/function source directory. Restore and review the migration and Edge Function source into version control before further backend feature work or schema changes.
+- The `rawaa_store` and `commerce` schemas are not exposed to `anon` or `authenticated`; both roles lack schema USAGE and table SELECT privileges. All inspected Store/control-plane tables have RLS enabled and no policies. For the inspected roles this is a private service-role access model, not an open-table exposure; do not add public policies just to silence the informational advisor.
+- Current Edge Function metadata: `rawaa-owner-orders` v9 (JWT verification on), `rawaa-telegram-pair` v7 (on), `rawaa-telegram-test` v6 (on), `rawaa-outbox` v7 (off; scheduler/worker path), `rawaa-retention` v3 (off; scheduler path), and `commerce-api` v4 (off). The connector failed to retrieve deployed function source during this audit. Do not connect `commerce-api` to public checkout until its source, authentication, authorization, rate limiting, idempotency, and currency handling are reviewed.
+- The public storefront still prepares a reviewable WhatsApp handoff; it does not create a database order. The owner dashboard explicitly remains in test/staging mode and says direct website order intake is not enabled. Do not describe the Store as having live automated order intake or fulfillment.
+- The separate `commerce.orders` schema currently has a USD default currency, while the Store's approved currency is SYP. It has no Store orders at this audit. Treat this as a blocker before any use of the commerce spine; align currency and validate pricing/idempotency before connecting it.
+- Supabase advisors reported an informational no-policy RLS notice across 17 tables, a warning that leaked-password protection is disabled, and a duplicate-index warning for `rawaa_store.orders` (`orders_closed_at_idx` / `orders_retention_idx`). Do not loosen RLS. Review the auth setting with the owner before changing sign-in behavior; reconcile the duplicate index through a versioned, reversible migration after restoring migration sources.
+- The connected Supabase tool could list migration metadata and inspect catalog/grant metadata, but Edge Function source retrieval failed. Do not claim a full backend source audit until those deployed sources are recoverable.
+
+### Analytics and design integrations
+- Google Search Console remains connected to the verified URL-prefix property. The connected Google account currently exposes no GA4 properties to OpenSEO; GA4 is not connected, and Cloudflare Pages reports no Web Analytics tag. Do not invent a measurement ID or publish analytics code until a real property/stream is available and the privacy disclosure is reviewed.
+- Figma MCP is connected, but the current Figma team seat reports View access. No Figma file key is recorded in this repository. Use it for read-only inspection only when a specific shared file is identified; do not claim design-file editing access.
+- OpenSEO, GitHub, Cloudflare, Supabase, and Figma integrations are available in the current workspace. Prefer these existing integrations; do not add redundant paid analytics plugins before a concrete data/measurement requirement exists.
+
+### Dependency and repository hygiene
+- `package-lock.json` is still absent. Production validation currently installs Playwright without a committed lockfile, so the dependency tree is not reproducibly pinned and a complete lockfile-based vulnerability scan remains incomplete. Generate the lockfile in a real Node/npm environment, validate with `npm ci`, then add OSV scanning against the committed lockfile.
+- The repository currently has 62 branches, including immutable backup/recovery checkpoints and numerous historical feature/automation/preview branches. Do not bulk-delete them. Inventory ancestry and artifact dependencies before retiring any non-backup branch.
+- The GitHub integration could not read the main branch-protection endpoint during this audit (403); do not assume branch protection is enabled or disabled. Revisit with an authorized read path.
