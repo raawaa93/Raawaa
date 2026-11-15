@@ -325,3 +325,12 @@ body:not(.serum-page) .btn-outline:hover {
   background: var(--rawaa-cream);
   color: var(--rawaa-ink);
 }
+
+/* Keep the dropdown anchored to the sticky header even while the promo strip scrolls away. */
+body:not(.serum-page) .mobile-nav {
+  position: absolute;
+  inset: 100% 0 auto 0;
+  max-height: calc(100dvh - var(--header-h));
+  overflow-y: auto;
+  box-shadow: 0 16px 28px -24px rgba(46, 42, 38, .5);
+}
