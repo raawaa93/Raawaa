@@ -17,6 +17,7 @@ on:
       - 'tests/**'
       - 'scripts/check-site.mjs'
       - 'scripts/check-production-headers.mjs'
+      - 'scripts/branch-cleanup-policy.cjs'
   workflow_dispatch:
     inputs:
       confirm_production:
