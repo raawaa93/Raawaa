@@ -1,188 +1,73 @@
 # RAWAA Store branch inventory and cleanup record
 
-**Verified:** 2026-11-15 UTC, after PR #79 and PR #81, before PR #80 merge  
+**Snapshot:** 2026-11-15 UTC, after PR #100 and archive run #43680881436  
 **Repository:** `raawaa93/Raawaa`  
-**Canonical branch:** `main`  
-**Current consolidation PR:** #80 — https://github.com/raawaa93/Raawaa/pull/80  
-**Push-only release policy:** #81 merged  
-**Earlier safety fix:** #74 merged  
-**Current cleanup workflow:** `.github/workflows/cleanup-merged-branches.yml`
+**Canonical branch:** `main` — `edc49efe9b98f961fccef4554a2969a02d239b0e`  
+**Cleanup workflow:** `.github/workflows/cleanup-merged-branches.yml`  
+**Archive policy:** `scripts/branch-archive-policy.cjs`  
+**Archive manifest:** `docs/engineering/BRANCH-ARCHIVE-MANIFEST.md`  
+**Recovery index:** `docs/engineering/ARCHIVED-BRANCHES.md`
 
 ## Current snapshot
 
-- Branch refs: **39**.
-- Pull requests: **83** total — **66 merged**, **15 closed-unmerged**, **2 open.
-- Backup refs: **4**.
-- Recovery refs: **3**.
-- Reviewed merged-PR allowlist: **60** names.
-- Reviewed closed-unmerged allowlist: **11** names.
-- Reviewed no-PR temporary allowlist: **4** names.
+- Branch refs at this snapshot: **21** (20 immediately after archive run, plus this active maintenance branch).
+- Pull requests: **100** total — **72 merged**, **28 closed-unmerged**, **0 open** before opening the current hygiene PR.
+- Annotated recovery tags created by the first archive run: **29**.
+- Backups: **4**; recovery refs: **3**.
+- Operational namespaces retained: **2 deploy**, **4 preview-deploy**, **1 production-deploy**, **1 release**, **1 restore**.
+- Three remaining inactive refs are pinned for the next recovery-tag archive batch: `docs/workspace-hygiene-2026-11-15`, `fix/visual-audit-top-viewport-clean-2026-11-15`, and `maintenance/archive-inactive-branches-final-2026-11-15`.
+- `maintenance/final-workspace-hygiene-2026-11-15` is the active branch for this follow-up PR.
 
-## Cleanup execution history
+## Completed cleanup
 
-1. Run [#43676889692](https://github.com/raawaa93/Raawaa/actions/runs/43676889692): 84 refs inspected; 55 deleted (53 merged-PR heads plus two stale preview refs); zero failures.
-2. That run removed three operational merged refs: `restore/integrated-store-2026-11-14`, `release/clean-pages-payload-2026-11-14`, and `preview-deploy/visual-qa-current-2026-11-15`. They were restored to their exact original PR head commits.
-3. Run [#43676951048](https://github.com/raawaa93/Raawaa/actions/runs/43676951048): inspected the remaining refs and deleted zero.
-4. Run [#43677232271](https://github.com/raawaa93/Raawaa/actions/runs/43677232271): removed the same three operational refs before the namespace protection fix; they were restored again at the exact original SHAs.
-5. PR #74 merged and added permanent protection for `restore/*`, `release/*`, `production-deploy/*`, all `deploy/*`, active `preview-deploy/*`, `backup/*`, and `recovery/*`.
-6. Runs [#43677406307](https://github.com/raawaa93/Raawaa/actions/runs/43677406307) and [#43677570136](https://github.com/raawaa93/Raawaa/actions/runs/43677570136) completed with zero deletion candidates and zero failures.
-7. PR #79 merged. Run [#43678179625](https://github.com/raawaa93/Raawaa/actions/runs/43678179625) inspected 40 refs and 80 PRs, performed 15 ancestry comparisons, deleted **5** reviewed refs, and had **zero failures**:
-   - `docs/project-tooling-and-branch-inventory-2026-11-15`
-   - `docs/visual-qa-and-inventory-finalization-2026-11-15`
-   - `fix/visual-audit-csp-screenshots-2026-11-15`
-   - `fix/visual-audit-webkit-csp-2026-11-15`
-   - `maintenance/branch-cleanup-final-2026-11-15`
+- PR #70 introduced the ancestry-safe branch-pruning policy and passed CI.
+- PR #74 protected operational namespaces and recovery refs.
+- PR #100 introduced a second archival stage that creates an annotated recovery tag for an exact SHA, verifies the tag target, re-reads the branch head, and only then deletes the branch ref.
+- [Run #43680881436](https://github.com/raawaa93/Raawaa/actions/runs/43680881436) succeeded:
+  - Inspected 50 branches and 100 PRs.
+  - Prune stage deleted one reviewed merged ref: `maintenance/archive-inactive-branches-2026-11-15`.
+  - Archive stage created **29 verified annotated tags** and removed the corresponding branch refs.
+  - Zero failures.
+  - 20 branch refs remained immediately after the run.
+- The 29 archived tags and their exact original SHAs are listed in `docs/engineering/ARCHIVED-BRANCHES.md` and `docs/engineering/BRANCH-ARCHIVE-MANIFEST.md`.
 
-## Retention rules
+## Current branch-by-branch inventory
 
-1. Keep `main`, every protected ref, `backup/*`, `recovery/*`, `restore/*`, `release/*`, `production-deploy/*`, and every `deploy/*` branch.
-2. Keep every active `preview-deploy/*` branch. Only exact temporary preview refs in the stale allowlist are eligible, and only after `ahead_by = 0`.
-3. Keep every open-PR head.
-4. Merged PR heads are deleted only when the exact branch name is on the reviewed allowlist and the current head matches the merged PR head. If moved, require `ahead_by = 0`.
-5. Closed-unmerged refs require exact allowlist membership **and** `ahead_by = 0`. Reused refs also require ancestry proof.
-6. No-PR refs require exact stale allowlist membership and `ahead_by = 0`.
-7. Unknown refs, comparison failures, and branches with unique commits ahead of main are retained.
-8. The workflow deletes Git refs only; it never deletes repository files, recovery snapshots, deployments, DNS, secrets, external projects, or customer data.
-
-## Current full branch inventory
-
-| Branch | PR history | Classification | Decision |
+| Branch | Head SHA | Classification | Action |
 |---|---|---|---|
-| `automation/generate-lockfile-2026-11-15` | #60 closed | REVIEWED CLOSED-UNMERGED | Delete only if ahead_by = 0 |
-| `automation/graphify-and-lighthouse-2026-11-15` | #34 closed | REVIEWED CLOSED-UNMERGED | Delete only if ahead_by = 0 |
-| `automation/graphify-daily-refresh-2026-11-15` | #33 closed | REVIEWED CLOSED-UNMERGED | Delete only if ahead_by = 0 |
-| `backup/continuity-hardening-2026-11-15` | #22 merged | OPERATIONAL / BACKUP | Keep permanently |
-| `backup/site-2026-11-14-post-mobile-audit` | — | OPERATIONAL / BACKUP | Keep permanently |
-| `backup/site-2026-11-14-restored-main` | — | OPERATIONAL / BACKUP | Keep permanently |
-| `backup/site-2026-11-15-preproduction` | — | OPERATIONAL / BACKUP | Keep permanently |
-| `chore/google-site-verification` | #47 closed | CLOSED-UNMERGED | Retain |
-| `ci/restore-release-boundaries-2026-11-15` | #63 closed | REVIEWED CLOSED-UNMERGED | Delete only if ahead_by = 0 |
-| `ci/restore-release-boundaries-2026-11-15-rebased` | #66 closed | REVIEWED CLOSED-UNMERGED | Delete only if ahead_by = 0 |
-| `deploy/10-percent-2026-11-14` | — | OPERATIONAL / BACKUP | Keep permanently |
-| `deploy/10-percent-site-only` | — | OPERATIONAL / BACKUP | Keep permanently |
-| `feature/campaign-nitro-offer-2026-11-14` | #6 closed | REVIEWED CLOSED-UNMERGED | Delete only if ahead_by = 0 |
-| `fix/branch-hygiene-protect-operational-refs-2026-11-15` | #74 merged | REVIEWED MERGED | Delete exact merged head; moved head requires ahead_by = 0 |
-| `fix/manual-only-production-release` | #61 closed | REVIEWED CLOSED-UNMERGED | Delete only if ahead_by = 0 |
-| `fix/production-policy-site-check-2026-11-15` | #82 closed | CLOSED-UNMERGED | Retain |
-| `fix/production-release-push-only-2026-11-15` | #81 merged | REVIEWED MERGED | Delete exact merged head; moved head requires ahead_by = 0 |
-| `fix/visual-audit-top-viewport-2026-11-15` | #83 open | OPEN PR | Keep until PR resolves |
-| `fix/visual-qa-webkit-csp-regression-2026-11-15` | #78 merged | REVIEWED MERGED | Delete exact merged head; moved head requires ahead_by = 0 |
-| `main` | — | CANONICAL | Keep |
-| `maintenance/branch-cleanup-consolidated-2026-11-15` | #80 open | OPEN PR | Keep until PR resolves |
-| `maintenance/branch-hygiene-followup-2026-11-15` | #73 closed | CLOSED-UNMERGED | Retain |
-| `maintenance/finalize-branch-cleanup-2026-11-15` | — | NO PR / RETAIN | Retain pending review |
-| `maintenance/finish-branch-cleanup-2026-11-15` | #77 closed | CLOSED-UNMERGED | Retain |
-| `maintenance/repository-hygiene-2026-11-15` | #70 merged | REVIEWED MERGED | Delete exact merged head; moved head requires ahead_by = 0 |
-| `preview-deploy/2026-11-14` | — | ACTIVE / HISTORICAL PREVIEW | Keep |
-| `preview-deploy/2026-11-15-main-78ece71` | — | REVIEWED TEMP / NO PR | Delete only if ahead_by = 0 |
-| `preview-deploy/visual-qa-after-csp-fix-2026-11-15` | #72 merged | ACTIVE / HISTORICAL PREVIEW | Keep |
-| `preview-deploy/visual-qa-current-2026-11-15` | #69 merged | ACTIVE / HISTORICAL PREVIEW | Keep |
-| `production-deploy/release-2026-11-15` | — | OPERATIONAL / BACKUP | Keep permanently |
-| `qa/visual-audit-2026-11-15` | #27 closed, #26 merged | REUSED MERGED + UNMERGED | Require ancestry proof; retain if ahead_by > 0 |
-| `recovery/archive-store-supabase-migrations-2026-11-15` | #56 merged | OPERATIONAL / BACKUP | Keep permanently |
-| `recovery/cloudflare-manifest-2026-11-14` | #1 merged | OPERATIONAL / BACKUP | Keep permanently |
-| `recovery/inspect-edge-functions-2026-11-15` | — | OPERATIONAL / BACKUP | Keep permanently |
-| `release/clean-pages-payload-2026-11-14` | #12 merged | OPERATIONAL / BACKUP | Keep permanently |
-| `restore/integrated-store-2026-11-14` | #2 merged | OPERATIONAL / BACKUP | Keep permanently |
-| `seo/noindex-campaign-sitemap-2026-11-15` | #38 closed | REVIEWED CLOSED-UNMERGED | Delete only if ahead_by = 0 |
-| `seo/remove-noindex-campaign-from-sitemap-2026-11-15` | #35 closed | REVIEWED CLOSED-UNMERGED | Delete only if ahead_by = 0 |
-| `seo/sitemap-noindex-policy-2026-11-15` | #39 closed | REVIEWED CLOSED-UNMERGED | Delete only if ahead_by = 0 |
+| `backup/continuity-hardening-2026-11-15` | `d45bf1461c70cae07208f32dd09c7d66aefdab35` | Backup | Keep |
+| `backup/site-2026-11-14-post-mobile-audit` | `e86b349e6da63733ceb6f9849033a29dd71c0eb4` | Backup | Keep |
+| `backup/site-2026-11-14-restored-main` | `306865da8e168cf5847a68ea8bdb3fa448df8a9a` | Backup | Keep |
+| `backup/site-2026-11-15-preproduction` | `30ee1bbeda771c194fddc83c066d873ac02f1d81` | Backup | Keep |
+| `deploy/10-percent-2026-11-14` | `fb7a128a78b950c80a835162a178004fb7fbcf46` | Deployment checkpoint | Keep |
+| `deploy/10-percent-site-only` | `064815e643c25c4f2cfa707ecd032088a5f6e282` | Deployment checkpoint | Keep |
+| `docs/workspace-hygiene-2026-11-15` | `c11d94ec1ebd49ebfd8d9e508022859e34cbe7d9` | Closed PR #99; source changes salvaged into this follow-up | Archive with pinned recovery tag after merge |
+| `fix/visual-audit-top-viewport-clean-2026-11-15` | `c0ccb2db0657d414885e68f16b8b79c9f73b4531` | Merged PR #98; post-merge commits remain outside main ancestry | Archive with pinned recovery tag |
+| `main` | `edc49efe9b98f961fccef4554a2969a02d239b0e` | Canonical | Keep |
+| `maintenance/archive-inactive-branches-final-2026-11-15` | `ad3aaa80e47f2a4d823d85123f30c27726fb206d` | PR #100 merged; seven branch-only commits remain | Archive with pinned recovery tag |
+| `maintenance/final-workspace-hygiene-2026-11-15` | `98503e87022cbaa86392ef95b53a2b8db90d21cb` | Active follow-up implementation | Keep until PR resolves |
+| `preview-deploy/visual-qa-after-csp-fix-2026-11-15` | `2757a76415bd21cdd00fe7a256dfc52321f96b02` | Preview checkpoint | Keep |
+| `preview-deploy/visual-qa-current-2026-11-15` | `7ca62ffaaf2be5fd337255d66679621be399ddae` | Preview checkpoint | Keep |
+| `preview-deploy/2026-11-14` | `342eb994547f255bfc5226bc071d03719b4f8303` | Preview checkpoint | Keep |
+| `preview-deploy/2026-11-15-main-78ece71` | `2a01516e0c6256251a84f5a1c0e7a78f4ce2dec9` | Preview checkpoint | Keep |
+| `production-deploy/release-2026-11-15` | `cd71478c7ca3d4cb9b38a5afc5f226de57e5503a` | Production release checkpoint | Keep |
+| `recovery/archive-store-supabase-migrations-2026-11-15` | `fc963b9e559323bcd4cfca9d4ab26128fb844c52` | Recovery archive | Keep |
+| `recovery/cloudflare-manifest-2026-11-14` | `36d64f2b9ade7d7e7831c9a9bd756fdfa888c72a` | Recovery archive | Keep |
+| `recovery/inspect-edge-functions-2026-11-15` | `770a8beeef093dadd5f78fff0f7f157d050fe0c9` | Recovery archive | Keep |
+| `release/clean-pages-payload-2026-11-14` | `8cba6b94ce39282999d3c4c86ca2a60845c805a2` | Release checkpoint | Keep |
+| `restore/integrated-store-2026-11-14` | `b74fcf3dadecf52c0c40ce848ef67b104d7f73ec` | Restore checkpoint | Keep |
 
-## Reviewed allowlists
+## Safety rules
 
-### Merged PR refs (60)
-- `automation/agent-guidance-2026-11-15`
-- `automation/ai-memory-graph-performance`
-- `automation/graphify-lighthouse-baseline-2026-11-15`
-- `automation/validated-auto-production-release`
-- `chore/google-search-console-verification`
-- `chore/indexnow-key`
-- `chore/lockfile-npm-ci-2026-11-15`
-- `ci/allow-doc-only-main-updates`
-- `ci/automatic-production-release`
-- `ci/avoid-duplicate-main-checks-2026-11-15`
-- `ci/restore-release-boundaries-v2-2026-11-15`
-- `dependabot/github_actions/actions/setup-python-7`
-- `dependabot/github_actions/actions/upload-artifact-7`
-- `docs/branch-inventory-cleanup-2026-11-14`
-- `docs/integration-audit-2026-11-15`
-- `docs/owner-currency-alignment-2026-11-14`
-- `docs/preview-gate-and-legacy-cleanup-2026-11-14`
-- `docs/record-free-tooling-and-indexing-audit-2026-11-15`
-- `docs/refresh-project-memory-2026-11-15`
-- `docs/release-readiness-backend-audit-2026-11-14`
-- `docs/update-live-deployment-memory-2026-11-15`
-- `docs/update-project-memory-2026-11-15`
-- `feature/campaign-nitro-offer-2026-11-14-v2`
-- `fix/campaign-canonical-2026-11-15`
-- `fix/cart-dialog-mobile-2026-11-15`
-- `fix/owner-currency-syp-2026-11-14`
-- `fix/owner-pricing-safe-config-parse-2026-11-15`
-- `fix/preview-copy-consistency-2026-11-15`
-- `fix/product-structured-data`
-- `fix/serum-cart-estimate-sync-2026-11-15`
-- `fix/serum-estimate-copy-2026-11-15`
-- `maintenance/canonical-source-of-truth-2026-11-14`
-- `maintenance/policy-regression-guard-2026-11-14`
-- `ops/add-production-deploy-workflow-2026-11-15`
-- `ops/fix-production-release-guard-2026-11-15`
-- `ops/production-release-manual-gate-2026-11-15`
-- `ops/update-actions-node24-2026-11-15`
-- `polish/home-motion-accessibility-2026-11-15`
-- `qa/checkout-whatsapp-flow-2026-11-15`
-- `qa/visual-audit-2026-11-15`
-- `qa/visual-audit-preview-2026-11-15`
-- `qa/visual-audit-trigger-fix-2026-11-15`
-- `qa/visual-audit-webkit-guard`
-- `security/dependabot-weekly-2026-11-15`
-- `security/owner-pages-response-headers-2026-11-15`
-- `seo/link-privacy-from-home`
-- `seo/noindex-sitemap-cleanup-20261115`
-- `seo/refresh-sitemap-lastmod`
-- `tooling/design-skills-playwright-2026-11-15`
-- `tooling/playwright-webkit-iphone-2026-11-15`
-- `work/mobile-ux-audit-2026-11-14`
-- `fix/branch-hygiene-protect-operational-refs-2026-11-15`
-- `fix/visual-audit-csp-screenshots-2026-11-15`
-- `fix/visual-audit-webkit-csp-2026-11-15`
-- `docs/visual-qa-and-inventory-finalization-2026-11-15`
-- `maintenance/finish-branch-cleanup-2026-11-15`
-- `maintenance/repository-hygiene-2026-11-15`
-- `fix/visual-qa-webkit-csp-regression-2026-11-15`
-- `maintenance/branch-cleanup-consolidated-2026-11-15`
-- `fix/production-release-push-only-2026-11-15`
-
-### Closed-unmerged refs (11)
-- `ci/restore-release-boundaries-2026-11-15-rebased`
-- `ci/restore-release-boundaries-2026-11-15`
-- `fix/manual-only-production-release`
-- `automation/generate-lockfile-2026-11-15`
-- `seo/sitemap-noindex-policy-2026-11-15`
-- `seo/noindex-campaign-sitemap-2026-11-15`
-- `seo/remove-noindex-campaign-from-sitemap-2026-11-15`
-- `automation/graphify-and-lighthouse-2026-11-15`
-- `automation/graphify-daily-refresh-2026-11-15`
-- `qa/visual-audit-2026-11-15`
-- `feature/campaign-nitro-offer-2026-11-14`
-
-### Temporary no-PR refs (4)
-- `preview-deploy/visual-qa-2026-11-15`
-- `preview-deploy/2026-11-15-post-fix`
-- `preview-deploy/2026-11-15-main-78ece71`
-- `docs/project-tooling-and-branch-inventory-2026-11-15`
-
-## Remaining branches requiring review
-
-- `maintenance/finish-branch-cleanup-2026-11-15` is the closed/unmerged PR #77 branch. Its changes are superseded by PR #79/#80; keep until exact tree/head verification permits retirement.
-- `maintenance/branch-hygiene-followup-2026-11-15` is the closed/unmerged PR #73 branch. It contains historical documentation and cleanup changes; keep until file-by-file comparison confirms it is fully superseded.
-- `maintenance/repository-hygiene-2026-11-15` contains post-merge commits beyond PR #70; retain until its 12-file tree diff is reviewed.
-- `fix/branch-hygiene-protect-operational-refs-2026-11-15` has post-merge commits beyond PR #74; retain until its current tree is proven identical to main.
-- `fix/visual-qa-webkit-csp-regression-2026-11-15` is PR #78's merged branch but its current head moved after merge; retain until ancestry proof succeeds.
-- `fix/production-release-push-only-2026-11-15` is PR #81's merged branch; PR #80 adds it to the reviewed allowlist and will remove it only after ancestry proof.
-- PR #80 branch `maintenance/branch-cleanup-consolidated-2026-11-15` is open and protected until merge.
+1. Never delete `main`, protected refs, backups, recovery refs, restore/release/deploy checkpoints, production-deploy refs, active preview refs, or open-PR heads.
+2. Prune only reviewed merged/duplicate refs when ancestry or exact tree evidence proves the work is already in main.
+3. For unique or closed-unmerged work, create and verify an annotated tag to the exact SHA before deleting the branch ref.
+4. A changed branch head, open PR, missing ref, failed comparison, or mismatched tag target means retain the branch.
+5. Keep archive tags permanently unless the owner explicitly authorizes archive retention changes.
+6. No force deletion, history rewriting, DNS changes, billing changes, or customer-data changes.
 
 ## Next verification
 
-- Merge PR #80 only after Store checks and Graphify are green.
-- PR #80 enforces push-only production release after full validation and adds regression coverage; no manual `workflow_dispatch` release remains.
-- Verify the next cleanup run's deleted refs, retained operational checkpoints, and zero failures.
+- Merge the current follow-up only after Store checks, Playwright, Graphify, and mobile performance checks pass.
+- Run branch hygiene again; it should archive the three pinned inactive refs once the PR is closed and merged.
+- Verify the resulting branch count, tag count, and run summary before marking the repository fully clean.
