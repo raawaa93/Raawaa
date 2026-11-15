@@ -218,3 +218,17 @@ This is the latest live read-back and supersedes the earlier 06:44 snapshot abov
 ### Retained branch policy
 
 Keep the 17 operational/recovery refs. Continue to retire only individually reviewed merged branches or archive inactive refs after exact-SHA tag creation, tag-target read-back, and a fresh branch-head read. Never force-delete diverged refs or remove recovery tags during routine cleanup.
+
+
+## Live branch reconciliation after PR #142 — 2026-11-15 09:16 UTC
+
+This snapshot supersedes the earlier 08:02 inventory for current branch and pull-request state. Historical snapshots above are retained as an audit trail.
+
+- Canonical `main`: `dbfcd63271c2ce10de0f8eaf3a4da142edf8babe` after merged PR #142.
+- Live branch enumeration: **21 refs**. The 17 durable operational refs remain unchanged: 4 backup, 2 deploy checkpoints, main, 4 preview checkpoints, 1 production-deploy checkpoint, 3 recovery refs, 1 release checkpoint, and 1 restore checkpoint.
+- Four temporary refs were separately identified: merged PR #137 (`fix/require-explicit-production-release-approval-2026-11-15`), merged PR #141 (`maintenance/allowlist-verified-doc-branches-2026-11-15`), merged PR #142 (`fix/exclude-dev-files-from-pages-payload-rebased-2026-11-15`), and the closed-unmerged superseded PR #136 branch (`fix/exclude-dev-files-from-pages-payload-2026-11-15`).
+- PR #136 is closed without merge and its branch is deliberately retained. It is not eligible for merged-branch pruning; no branch deletion or archive-tag operation was performed for it.
+- PR #142 is merged. Its fix excludes tests, generated reports, Playwright/Lighthouse PR config, and dependency manifests from the public Pages payload. Store checks, Graphify, and mobile Lighthouse passed on its PR merge commit. The mobile report artifact is `14154669356`; mobile scores: home 91, Serum 87, campaign 96, privacy 100. Campaign SEO 69 is expected because the page is intentionally noindex; Serum LCP is 3.8 s and remains a performance improvement target.
+- PR #142 changed deployment tooling and audit documentation only; the explicit production workflow runs validation on main pushes but does not deploy without a manual `workflow_dispatch` approval input. No production deployment was requested or initiated by this merge.
+- The follow-up branch-hygiene policy PR adds only the three exact merged branch names above plus its own exact head to the reviewed merged allowlist. Expected post-merge cleanup state: **18 refs** — the 17 durable operational refs plus the deliberately retained closed-unmerged PR #136 branch. This expectation must be verified by a fresh live enumeration after the workflow completes.
+- Branch protection remains an administrative gap; do not claim it is enabled. Production DNS, customer/order data, pricing, payment configuration, secrets, and Supabase data were not changed.
