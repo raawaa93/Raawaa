@@ -202,3 +202,12 @@ Update only when a verified, durable fact changes (for example: owner-approved p
 - Workspace inventory: 801 tool definitions across 24 integration families and 151 available skills. The repository contains no project-local .agents/skills, skills/, or .claude/ packages. Global skills and integrations are shared across projects; do not uninstall them based only on RAWAA activity.
 - Current balances: OpenSEO 251 credits; Firecrawl 0/1,000 through 2026-11-29; Ahrefs Free API key 0/200,000 units, workspace quota 0; public Domain Rating endpoint costs zero and keyword endpoints are plan-restricted. Figma remains View-only; Notion's advanced connector search/data-source tools require Business/Enterprise. No billing enabled.
 - Store Supabase database remains unidentified among visible projects; no Supabase writes were made. Cloudflare Web Analytics remains configured with auto_install=false and no beacon. No DNS, customer data, secrets, prices, discounts, or shipping policy changed.
+
+
+## Operational release and visual QA invariants
+
+- Production releases are push-only: only a validated push to canonical `main` may deploy. Do not reintroduce `workflow_dispatch`, manual confirmation inputs, or direct manual production deploys.
+- Production workflow path filters must exclude `scripts/branch-cleanup-policy.cjs`, `scripts/visual-audit.mjs`, and `scripts/visual-audit-csp-policy.cjs` so maintenance/test changes do not release storefront assets.
+- Visual QA must load lazy images, then perform an instant scroll to the top and verify `window.scrollY === 0` and `visualViewport.offsetTop === 0` immediately before viewport screenshots. Record the captured scroll position and fail if nonzero.
+- Keep strict CSP; classify only the exact known WebKit select user-agent false-positive signature, and treat every other CSP event as a failure.
+- Branch cleanup protects operational namespaces and open PR heads. Closed-unmerged refs are deletable only when explicitly superseded and GitHub proves `ahead_by = 0`.
