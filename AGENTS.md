@@ -67,3 +67,16 @@ These upstream skills are not vendored into this repository. Install them in the
 - Cash on delivery receives no Sham Cash discount.
 - Current blends contain oils and fragrance; never claim fragrance-free.
 - Do not invent reviews, testimonials, stock images, credentials, prices, or unsupported customizations.
+
+
+## Repository and tooling hygiene
+
+- Read docs/engineering/BRANCH-INVENTORY.md before retiring branches and docs/engineering/TOOLING-REGISTRY.md before adding or replacing integrations.
+- The cleanup policy is implemented in scripts/branch-cleanup-policy.cjs and tested in tests/unit/branch-cleanup-policy.test.cjs.
+- The cleanup workflow removes only same-repository merged PR heads, exact reviewed superseded closed-PR refs, and exact stale preview/deploy refs in the policy. It always preserves main, protected branches, every backup/* and recovery/* branch, and all open-PR heads.
+- Never add a branch to a deletion allowlist without a separate inventory showing its replacement is already on main and no unresolved PR depends on it.
+- Run node --test tests/unit/*.test.cjs when changing branch cleanup rules. Store checks runs this automatically on PRs.
+- Record connected tools, skill status, and dated free-tier balances in docs/engineering/TOOLING-REGISTRY.md. A tool being available in ChatGPT does not mean it is connected to RAWAA or safe to mutate.
+- Prefer free quotas and open-source tools. Never activate billing or paid API usage, and never use TinyFish.
+- Keep Graphify as an offline code map and PROJECT-MEMORY.md as durable project context. Do not add overlapping memory services without a concrete persistence need.
+- Do not uninstall integrations or delete external workspace content (Notion pages, Supabase projects, Figma files, or customer data) based on inactivity. Exact target and service-specific permission/authorization are required.
