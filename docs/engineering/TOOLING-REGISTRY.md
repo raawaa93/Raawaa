@@ -122,6 +122,6 @@ The catalog being available in ChatGPT is not the same as vendoring a skill into
 ## Latest cleanup and visual QA automation — 2026-11-15
 
 - Current inventory: 37 branch refs; 77 PRs (63 merged, 13 closed-unmerged, 1 open).
-- PR #77 completes the reviewed allowlist for merged refs #71, #74, and #75, and adds the generated docs branch only after ancestry proof. Branches with unique commits ahead of main remain untouched.
+- PR #77 completes the reviewed allowlist for merged refs #70, #71, #72, #74, #75, and its own head; it also retires exact closed-unmerged branches whose replacements were verified in main, plus the docs inventory ref after ancestry proof. Reused QA work, unknown branches, and operational namespaces remain protected.
 - Visual QA workflow now runs on harness/workflow changes and after successful production releases; preview runs remain scoped to successful preview deployments. It chooses the live production URL for production-release runs.
 - The WebKit screenshot fix uses Playwright `caret: 'initial'` to avoid injected inline styles; the production CSP remains strict.
