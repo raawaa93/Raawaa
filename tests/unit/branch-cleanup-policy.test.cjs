@@ -64,15 +64,22 @@ test('keeps closed-unmerged work for the exact-SHA archive workflow', () => {
   assert.deepEqual(SUPERSEDED_CLOSED_PR_BRANCHES, []);
 });
 
-test('keeps every no-PR branch for explicit archive review, even when ahead_by is zero', () => {
-  const name = 'maintenance/unreviewed';
+test('prunes only the final no-PR maintenance pointer proven contained in main', () => {
+  const name = 'maintenance/retire-last-stale-refs-2026-11-15';
+  assert.deepEqual(STALE_NO_PR_BRANCHES, [name]);
+  assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
   assert.deepEqual(
     classifyBranches([branchRef(name)], [], repository, {
-      [name]: { ahead_by: 0, behind_by: 4 },
+      [name]: { ahead_by: 0, behind_by: 1 },
+    }).map(x => x.name),
+    [name],
+  );
+  assert.deepEqual(
+    classifyBranches([branchRef(name)], [], repository, {
+      [name]: { ahead_by: 1, behind_by: 0 },
     }),
     [],
   );
-  assert.deepEqual(STALE_NO_PR_BRANCHES, []);
 });
 
 test('keeps reused merged/closed refs when any unique commits remain', () => {
@@ -133,7 +140,7 @@ test('retires the final maintenance PR branch only after its exact head is merge
 });
 
 
-test('does not prune the closed documentation branch; it remains in the exact-SHA archive batch', () => {
+test('keeps the archived documentation branch out of the merged-ref prune list', () => {
   assert.equal(MERGED_PR_BRANCHES.includes('docs/workspace-hygiene-2026-11-15'), false);
 });
 
