@@ -39,14 +39,11 @@ const MERGED_PR_BRANCHES = Object.freeze([
   "ops/production-release-manual-gate-2026-11-15",
   "ops/update-actions-node24-2026-11-15",
   "polish/home-motion-accessibility-2026-11-15",
-  "preview-deploy/visual-qa-current-2026-11-15",
   "qa/checkout-whatsapp-flow-2026-11-15",
   "qa/visual-audit-2026-11-15",
   "qa/visual-audit-preview-2026-11-15",
   "qa/visual-audit-trigger-fix-2026-11-15",
   "qa/visual-audit-webkit-guard",
-  "release/clean-pages-payload-2026-11-14",
-  "restore/integrated-store-2026-11-14",
   "security/dependabot-weekly-2026-11-15",
   "security/owner-pages-response-headers-2026-11-15",
   "seo/link-privacy-from-home",
@@ -92,7 +89,9 @@ function classifyBranches(branches, pullRequests, repositoryFullName, comparison
   return branches.filter((branch) => {
     const name = branch?.name;
     if (!name || name === 'main' || branch.protected) return false;
-    if (name.startsWith('backup/') || name.startsWith('recovery/')) return false;
+    const alwaysProtectedPrefixes = ['backup/', 'recovery/', 'restore/', 'release/', 'production-deploy/'];
+    if (alwaysProtectedPrefixes.some((prefix) => name.startsWith(prefix))) return false;
+    if ((name.startsWith('preview-deploy/') || name.startsWith('deploy/')) && !staleNoPr.has(name)) return false;
 
     const related = relatedByHead.get(name) || [];
     if (related.some((pull) => pull.state === 'open')) return false;
