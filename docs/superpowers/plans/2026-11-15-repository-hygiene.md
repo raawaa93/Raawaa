@@ -35,7 +35,7 @@ Files: create scripts/branch-cleanup-policy.cjs; create .github/workflows/cleanu
 - [x] Implement classifyBranches(branches, pullRequests, repositoryFullName) with exact allowlists and `ahead_by = 0` proof.
 - [x] Add main-push, weekly, and manual triggers.
 - [x] Delete only policy-approved refs through supported GitHub API.
-- [ ] Verify final tests and Store checks after the safety-policy update.
+- [x] Verify namespace-protection tests and Store checks after PR #74; PR #77 adds six exact post-merge cleanup candidates.
 
 ### Task 3: Document
 Files: create docs/engineering/BRANCH-INVENTORY.md and TOOLING-REGISTRY.md; create this spec and plan; modify AGENTS.md and README.md.
@@ -44,9 +44,9 @@ Files: create docs/engineering/BRANCH-INVENTORY.md and TOOLING-REGISTRY.md; crea
 - [x] Date quota observations and distinguish available from active.
 
 ### Task 4: Merge and verify
-- [ ] Review the full diff.
-- [ ] Wait for PR checks; fix failures, never bypass them.
-- [ ] Merge after checks pass.
-- [ ] Verify cleanup run and enumerate remaining branches.
-- [ ] Update inventory with exact deletion and retention results.
+- [x] Review the full diff and correct the closed-unmerged ancestry condition.
+- [ ] Wait for PR #77 checks; fix failures, never bypass them.
+- [ ] Merge PR #77 after checks pass.
+- [ ] Verify the post-PR #77 cleanup run and enumerate remaining branches.
+- [x] Refresh the 37-ref inventory and record all remaining unique-work branches; append actual deletion results after the run.
 - [ ] Verify no production deployment was triggered.
