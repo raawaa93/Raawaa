@@ -34,7 +34,7 @@ test('deletes an exact merged head only when its branch is explicitly reviewed',
   );
 });
 
-test('deletes the ten newly reviewed merged heads only when their PR head matches', () => {
+test('deletes the eleven newly reviewed merged heads only when their PR head matches', () => {
   const names = [
     'fix/branch-hygiene-protect-operational-refs-2026-11-15',
     'fix/visual-audit-csp-screenshots-2026-11-15',
@@ -46,6 +46,7 @@ test('deletes the ten newly reviewed merged heads only when their PR head matche
     'maintenance/branch-cleanup-consolidated-2026-11-15',
     'fix/production-release-push-only-2026-11-15',
     'fix/visual-audit-top-viewport-clean-2026-11-15',
+    'maintenance/final-inventory-cleanup-2026-11-15',
   ];
   for (const name of names) {
     assert.ok(MERGED_PR_BRANCHES.includes(name));
@@ -171,13 +172,17 @@ test('never deletes a fork branch', () => {
 });
 
 test('prunes only explicitly reviewed stale no-PR refs after ancestry proof', () => {
-  const name = 'docs/project-tooling-and-branch-inventory-2026-11-15';
-  assert.ok(STALE_NO_PR_BRANCHES.includes(name));
-  assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
-  assert.deepEqual(
-    classifyBranches([branchRef(name)], [], repository, { [name]: { ahead_by: 0, behind_by: 3 } }).map(x => x.name),
-    [name],
-  );
+  for (const name of [
+    'docs/project-tooling-and-branch-inventory-2026-11-15',
+    'fix/raawaa-final-qa-release-policy-2026-11-15',
+  ]) {
+    assert.ok(STALE_NO_PR_BRANCHES.includes(name));
+    assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
+    assert.deepEqual(
+      classifyBranches([branchRef(name)], [], repository, { [name]: { ahead_by: 0, behind_by: 1 } }).map(x => x.name),
+      [name],
+    );
+  }
 });
 
 test('does not prune an arbitrary unreferenced branch, even if ahead_by is zero', () => {
