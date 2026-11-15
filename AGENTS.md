@@ -75,7 +75,7 @@ These upstream skills are not vendored into this repository. Install them in the
 
 - Read docs/engineering/BRANCH-INVENTORY.md before retiring branches and docs/engineering/TOOLING-REGISTRY.md before adding or replacing integrations.
 - The cleanup policy is implemented in scripts/branch-cleanup-policy.cjs and tested in tests/unit/branch-cleanup-policy.test.cjs.
-- The cleanup workflow never deletes merged PR heads by default. It deletes only exact allowlisted superseded closed-PR and stale no-PR refs after `ahead_by = 0`. It always preserves main, protected branches, every backup/* and recovery/* branch, and all open-PR heads.
+- The cleanup workflow deletes same-repository merged PR heads only when the current branch head still matches the merged PR head; if the head moved, it requires `ahead_by = 0` or an exact reviewed superseded allowlist. It also deletes exact reviewed superseded closed-PR and stale no-PR refs. It always preserves main, protected branches, every backup/* and recovery/* branch, and all open-PR heads.
 - Never add a branch to a deletion allowlist without a separate inventory showing its replacement is already on main and no unresolved PR depends on it.
 - Run node --test tests/unit/*.test.cjs when changing branch cleanup rules. Store checks runs this automatically on PRs.
 - Record connected tools, skill status, and dated free-tier balances in docs/engineering/TOOLING-REGISTRY.md. A tool being available in ChatGPT does not mean it is connected to RAWAA or safe to mutate.
