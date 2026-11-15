@@ -53,16 +53,17 @@ GitHub Actions runs these checks on pushes and pull requests. Make future edits 
 
 - Cloudflare Pages project: `raawaa-store`.
 - Production URL: https://raawaa-store.pages.dev
-- The existing Pages project uses **Direct Upload**, not Git integration. Merging code into `main` does not deploy it.
-- Keep production deployment separate from source changes. Use an isolated preview first, then explicitly approve any production deployment.
-- No production deployment, DNS change, Supabase write, migration, or secret change was made during source restoration.
+- The existing Pages project uses **Direct Upload**, not Git integration.
+- A push to `main` runs validation only. Production release is available only through the `RAWAA production CI and release` workflow, manually dispatched from `main` with `confirm_production=yes`.
+- The release job revalidates the exact current `main` commit, refuses stale or dirty source, and targets only the production Pages branch.
+- The isolated preview workflow remains separate and hard-limited to `raawaa-recovery-preview`.
+- No production deployment, DNS change, Supabase write, migration, or secret change is made by a normal merge.
 
 ## Recovery references
 
 - [Detailed recovery and preview reconciliation](recovery/PR-RECOVERY-2026-11-14.md)
 - [Snapshot index and completeness notes](recovery/snapshots/README.md)
 - [Current recovery status](recovery/RECOVERY-STATUS.md)
-
 
 ## Source-of-truth and cleanup rules
 
@@ -72,7 +73,6 @@ GitHub Actions runs these checks on pushes and pull requests. Make future edits 
 - Do not bulk-delete historical files, branches, or recovery evidence. Retire a specific item only after its replacement is verified and a separate inventory proves it is unused.
 - Cloudflare Pages is Direct Upload. A GitHub merge is not a deployment. Test an isolated preview and verify its full asset set before any production promotion.
 
-
 ## Current release status
 
-See [`recovery/RELEASE-READINESS-2026-11-14.md`](recovery/RELEASE-READINESS-2026-11-14.md) for the verified Cloudflare, PR #208, owner portal, Supabase backend, and remaining release gates. GitHub merges do not deploy this Direct Upload Pages project.
+See `recovery/RELEASE-READINESS-2026-11-14.md` for the release gates and backend audit. The latest operational audit is appended there with the current production/preview deployment IDs and the manual-release workflow change.
