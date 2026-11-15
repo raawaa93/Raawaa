@@ -182,3 +182,13 @@ The catalog being available in ChatGPT is not the same as vendoring a skill into
 - Keep Lovable, HubSpot, and Metricool dormant; they currently have no configured RAWAA Store project, CRM onboarding, or connected social channel.
 - Do not delete Supabase projects, Notion pages, Figma files, or account-wide plugins solely because they are inactive for RAWAA; they may serve other projects and require exact-target authorization.
 - Never send customer/order data, phone numbers, addresses, or secrets to external AI, memory, or indexing services.
+
+
+## Verified state — 2026-11-15 04:57 UTC
+
+- Repository branch refs: 42; PRs: 88 (68 merged, 16 closed-unmerged, 4 open).
+- Production release policy is now push-only: only validated pushes to canonical `main` can deploy. `workflow_dispatch` and the manual production confirmation input are removed. Site integrity checks assert this policy.
+- The production workflow excludes branch cleanup and visual QA helper scripts from production release triggers.
+- Visual QA run #43678053029 completed 16 browser/viewport cases with zero console errors, CSP events, failed requests, bad responses, broken images, or overflow. Review of its screenshots exposed a viewport scroll-position issue; PR #86 adds an instant top reset, waits for `scrollY=0`, records the captured position, and fails if it is not zero.
+- WebKit CSP handling is narrow and preserves strict CSP; no `unsafe-inline` was added.
+- Free-tier snapshot remains: OpenSEO 424 credits; Ahrefs 200,000 API units/month with 0 used; Firecrawl 0 credits until its 2026-11-29 renewal. Figma remains view-only; Supabase projects are not confirmed as the Store DB and must not be modified.
