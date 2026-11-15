@@ -19,17 +19,7 @@ on:
       - 'scripts/check-production-headers.mjs'
       - 'scripts/branch-cleanup-policy.cjs'
       - 'scripts/visual-audit.mjs'
-  workflow_dispatch:
-    inputs:
-      confirm_production:
-        description: "Deploy the validated main commit to Cloudflare production"
-        required: true
-        type: choice
-        options:
-          - "no"
-          - "yes"
-        default: "no"
-
+      - 'scripts/visual-audit-csp-policy.cjs'
 
 permissions:
   contents: read
@@ -94,7 +84,7 @@ jobs:
   deploy:
     name: Validated automatic production release
     needs: validate
-    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.confirm_production == 'yes'))
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     environment:
@@ -131,7 +121,7 @@ jobs:
             while IFS= read -r file; do
               [[ -z "$file" ]] && continue
               case "$file" in
-                *.md|docs/*|recovery/*|AGENTS.md|.agents/*|package.json|package-lock.json|playwright.config.mjs|tests/*|scripts/check-site.mjs|scripts/check-production-headers.mjs|scripts/branch-cleanup-policy.cjs|scripts/visual-audit.mjs|.github/*)
+                *.md|docs/*|recovery/*|AGENTS.md|.agents/*|package.json|package-lock.json|playwright.config.mjs|tests/*|scripts/check-site.mjs|scripts/check-production-headers.mjs|scripts/branch-cleanup-policy.cjs|scripts/visual-audit.mjs|scripts/visual-audit-csp-policy.cjs|.github/*)
                   ;;
                 *)
                   echo "::error::Production source changed after validation ($file); refusing stale deployment."
