@@ -247,3 +247,11 @@ This section supersedes the earlier manual-dispatch statements in the historical
 - The isolated fix excludes test directories, generated browser-test reports, Playwright configuration, Lighthouse PR configuration, and dependency manifests from the Pages payload, and adds explicit post-build assertions for these paths.
 - The original PR #136 passed Store checks, codebase graph, and mobile performance workflows on its head, but its branch was five commits behind canonical `main`. The fix was reapplied on a fresh branch from current `main` so the complete current release policy and tests can be revalidated before merge.
 - This change is not a production deployment. Keep production unchanged until the rebased PR's checks pass and release clearance is explicitly confirmed.
+
+
+## Current production release policy — 2026-11-15
+
+- Owner instruction: remove manual production-release confirmation and approval gates. Qualifying website-source pushes to canonical `main` deploy automatically after the complete validation suite succeeds.
+- The workflow has no `workflow_dispatch`, no `confirm_production` input, and no production GitHub Environment reviewer gate. PRs and non-main branches remain excluded.
+- Technical integrity gates remain mandatory: exact-SHA checkout, latest-main freshness, clean source, locked dependency audit, browser regression tests, store integrity checks, clean deployment payload, Cloudflare credential presence, and post-deploy header verification.
+- This instruction supersedes older manual-release statements retained in the historical audit timeline below.
