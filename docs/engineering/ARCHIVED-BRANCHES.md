@@ -112,3 +112,15 @@ Do not delete archive tags as part of routine cleanup. They preserve the origina
 - Archive workflow run: [#43685544073](https://github.com/raawaa93/Raawaa/actions/runs/43685544073) — tag creation step succeeded; exact target SHA is `1415d8dcac9ca2113626659d4454b2450b42b423`.
 - The temporary branch ref was retired after the tag target was verified.
 - This adds the 35th recovery tag. The archive allowlist is cleared so the same ref cannot be archived twice.
+
+
+## Additional verified merged visual-fix archive — 2026-11-15
+
+| Original branch | Preserved commit SHA | Recovery tag |
+|---|---|---|
+| `fix/mobile-header-buttons-colors-2026-11-15` | `6d9887c48cbbbd5eb9c0bf84a97acb6db2bfaf95` | `archive/branches/2026-11-15/fix/mobile-header-buttons-colors-2026-11-15` |
+
+- Source PR #132 was merged; its visual, browser, mobile-performance, Store-check, and code-graph workflows completed successfully.
+- The annotated recovery tag was resolved through GitHub and its commit target matched the exact captured branch head.
+- A fresh live branch enumeration no longer contains the archived branch; the repository returned to 17 retained operational refs and zero open PRs.
+- This brings the recorded recovery-tag total to 36 (the previously verified 35 plus this exact-SHA archive).
