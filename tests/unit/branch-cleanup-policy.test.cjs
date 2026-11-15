@@ -7,6 +7,7 @@ const {
   MERGED_PR_BRANCHES,
   SUPERSEDED_CLOSED_PR_BRANCHES,
   STALE_NO_PR_BRANCHES,
+  DUPLICATE_TREE_BRANCHES,
 } = require('../../scripts/branch-cleanup-policy.cjs');
 
 const repository = 'raawaa93/Raawaa';
@@ -46,7 +47,7 @@ test('deletes only the nine reviewed merged heads when their PR head matches', (
     'fix/production-release-push-only-2026-11-15',
     'fix/visual-audit-top-viewport-clean-2026-11-15',
   ];
-  names.push('fix/branch-cleanup-policy-final-2026-11-15');
+  names.push('fix/branch-cleanup-policy-final-2026-11-15', 'fix/branch-cleanup-policy-final-rebased-2026-11-15');
   assert.equal(new Set(MERGED_PR_BRANCHES).size, MERGED_PR_BRANCHES.length);
   for (const name of names) {
     assert.ok(MERGED_PR_BRANCHES.includes(name), name);
@@ -58,6 +59,36 @@ test('deletes only the nine reviewed merged heads when their PR head matches', (
   assert.equal(MERGED_PR_BRANCHES.includes('maintenance/finish-branch-cleanup-2026-11-15'), false);
   assert.equal(MERGED_PR_BRANCHES.includes('fix/final-visual-and-release-policy-2026-11-15'), false);
   assert.equal(MERGED_PR_BRANCHES.includes('fix/visual-audit-top-viewport-clean-2026-11-15'), true);
+});
+
+
+test('deletes reviewed closed PR refs only when their full Git tree matches main', () => {
+  for (const name of DUPLICATE_TREE_BRANCHES) {
+    assert.deepEqual(classifyBranches([branchRef(name)], [pr(name)], repository), []);
+    assert.deepEqual(
+      classifyBranches([branchRef(name)], [pr(name)], repository, { [name]: { tree_matches_main: false } }),
+      [],
+    );
+    assert.deepEqual(
+      classifyBranches([branchRef(name)], [pr(name)], repository, { [name]: { tree_matches_main: true } }).map(x => x.name),
+      [name],
+    );
+    assert.deepEqual(
+      classifyBranches([branchRef(name)], [pr(name, { state: 'open' })], repository, { [name]: { tree_matches_main: true } }),
+      [],
+    );
+  }
+});
+
+test('prunes the reviewed no-PR legacy ref only after GitHub proves it is contained in main', () => {
+  const name = 'fix/raawaa-final-qa-release-policy-2026-11-15';
+  assert.ok(STALE_NO_PR_BRANCHES.includes(name));
+  assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
+  assert.deepEqual(classifyBranches([branchRef(name)], [], repository, { [name]: { ahead_by: 1 } }), []);
+  assert.deepEqual(
+    classifyBranches([branchRef(name)], [], repository, { [name]: { ahead_by: 0, behind_by: 1 } }).map(x => x.name),
+    [name],
+  );
 });
 
 test('deletes a reviewed moved merged branch only after ancestry proof', () => {
@@ -239,4 +270,32 @@ test('retains refs when comparison data is missing or the branch is ahead of mai
     }),
     [],
   );
+});
+
+const cleanupWorkflow = require('node:fs').readFileSync(
+  require('node:path').join(process.cwd(), '.github/workflows/cleanup-merged-branches.yml'),
+  'utf8',
+);
+
+test('branch cleanup workflow uses Node 24 compatible github-script v9', () => {
+  assert.match(cleanupWorkflow, /actions\/github-script@v9/u);
+  assert.doesNotMatch(cleanupWorkflow, /actions\/github-script@v7/u);
+});
+
+test('superseded cleanup-policy drafts require ancestry proof before retirement', () => {
+  const names = [
+    'fix/branch-cleanup-allowlist-correction-2026-11-15',
+    'fix/branch-cleanup-policy-current-state-2026-11-15',
+  ];
+  for (const name of names) {
+    assert.ok(SUPERSEDED_CLOSED_PR_BRANCHES.includes(name));
+    assert.deepEqual(
+      classifyBranches([branchRef(name)], [pr(name)], repository, { [name]: { ahead_by: 8, behind_by: 2 } }),
+      [],
+    );
+    assert.deepEqual(
+      classifyBranches([branchRef(name)], [pr(name)], repository, { [name]: { ahead_by: 0, behind_by: 2 } }).map(x => x.name),
+      [name],
+    );
+  }
 });
