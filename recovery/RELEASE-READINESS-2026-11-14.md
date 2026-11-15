@@ -155,10 +155,10 @@ No branch was deleted. The connected GitHub toolset exposes branch reads and PR 
 ### CI/CD root cause and correction
 
 - Root cause confirmed: `.github/workflows/production-cicd.yml` was configured to deploy on every push to `main`, contradicting the documented Direct Upload approval boundary. A second workflow, `pages-production.yml`, also provided a separate branch-push production deployment route.
-- PR #24 was merged on 2026-11-15. Pushes to `main` now validate only; a production release requires a manual `workflow_dispatch` from `main` with `confirm_production=yes`. The deploy job is tied to the `production` GitHub Environment, rebuilds from the exact commit, verifies that `main` has not moved, and rejects dirty source.
+- PR #24 was merged on 2026-11-15. This was an intermediate release configuration and is superseded: qualifying pushes to canonical `main` now deploy automatically after full validation, with exact-commit, freshness, and clean-source checks.
 - The duplicate `pages-production.yml` trigger was removed in PR #24. The isolated preview workflow remains separate.
 - The workflow installs Playwright with `--package-lock=false` and uses a new `.gitignore` for local test/dependency output, preventing dependency installation from polluting the deploy working tree.
-- PR #24 is merged. The workflow run triggered by the merge still requires Actions read-back verification. GitHub Environment required reviewers must be configured in repository Settings → Environments → production if an additional human approval gate is desired; the workflow's manual confirmation is already required. GitHub Environment required reviewers must still be configured in repository Settings → Environments → production if an additional human approval gate is desired; the workflow's manual confirmation is already required.
+- PR #24 is merged. The workflow run triggered by the merge still requires Actions read-back verification. The former environment-reviewer recommendation is obsolete; the current production workflow has no approval-gated environment.
 
 ### Supabase advisor recheck (read-only)
 
@@ -205,8 +205,8 @@ The first post-merge backup has now been verified end-to-end:
 
 ## Automatic production release policy — adopted 2026-11-15
 
-- Owner decision: production deployment is automatic after successful validation of qualifying website-source pushes to canonical `main`. Documentation-only, workflow-only, dependency-only, and test-only changes are excluded. A controlled manual rerun remains available through `workflow_dispatch` with explicit `confirm_production=yes`.
-- The `RAWAA automatic production CI and release` workflow runs on qualifying website-source pushes to `main`, validates the exact commit (Chromium + WebKit browser regression, store-policy/page integrity, and clean Cloudflare Pages payload), then deploys that same SHA to `raawaa-store` production. Workflow-only, docs-only, dependency-only, and test-only changes are excluded; a controlled manual rerun remains available with `confirm_production=yes`.
+- Owner decision: production deployment is automatic after successful validation of qualifying website-source pushes to canonical `main`. Documentation-only, workflow-only, dependency-only, and test-only changes are excluded. No manual production dispatch or confirmation route is available or required.
+- The `RAWAA automatic production CI and release` workflow runs on qualifying website-source pushes to `main`, validates the exact commit (Chromium + WebKit browser regression, store-policy/page integrity, and clean Cloudflare Pages payload), then deploys that same SHA to `raawaa-store` production. Workflow-only, docs-only, dependency-only, and test-only changes are excluded; there is no manual production dispatch or confirmation route.
 - Any failed validation blocks the deploy job. The deploy stage rechecks that `main` still points to the validated SHA and that the checkout is clean before Wrangler Direct Upload.
 - Pull requests, feature branches, recovery branches, and preview workflows must never target production.
 - GitHub Actions secret `CLOUDFLARE_API_TOKEN` remains required with least-privilege Cloudflare Pages Edit scope. No DNS permissions are required.
@@ -237,8 +237,8 @@ This section supersedes the earlier manual-dispatch statements in the historical
 ## Release authorization correction — 2026-11-15 08:40 UTC
 
 - A fresh Cloudflare read-back showed that deployment `4b796357-63b2-47e1-8ad1-a2aad5c16626` was automatically published from `main` commit `f2f091f0c19a2d0948c592b6aba538aa56e0d873` at 08:17 UTC. The repository's automatic release trigger conflicts with the owner's explicit freeze boundary requiring validation and release approval before production changes.
-- A separate branch `fix/require-explicit-production-release-approval-2026-11-15` changes production release to a manual `workflow_dispatch` requiring `confirm_production=yes`. Ordinary main pushes continue validation only; they cannot deploy.
-- The release-policy regression tests and site integrity checks are updated to enforce the explicit approval gate. This is a proposed change only until its PR is reviewed and merged. No production action is performed by this change.
+- That temporary approval-gate proposal was superseded; production releases now run automatically after successful validation of qualifying `main` pushes.
+- The release-policy regression tests and site integrity checks enforce automatic validated-main deployment and reject manual confirmation gates.
 
 
 ## Development-artifact payload hardening — 2026-11-15
@@ -246,7 +246,7 @@ This section supersedes the earlier manual-dispatch statements in the historical
 - A review of the latest Cloudflare Pages deployment manifest found that top-level test files and internal Playwright/Lighthouse configuration were included in the public deployment payload.
 - The isolated fix excludes test directories, generated browser-test reports, Playwright configuration, Lighthouse PR configuration, and dependency manifests from the Pages payload, and adds explicit post-build assertions for these paths.
 - The original PR #136 passed Store checks, codebase graph, and mobile performance workflows on its head, but its branch was five commits behind canonical `main`. The fix was reapplied on a fresh branch from current `main` so the complete current release policy and tests can be revalidated before merge.
-- This change is not a production deployment. Keep production unchanged until the rebased PR's checks pass and release clearance is explicitly confirmed.
+- This change is not a production deployment. The former release-clearance condition is obsolete; the current workflow deploys automatically after all technical checks pass.
 
 
 ## Current production release policy — 2026-11-15
