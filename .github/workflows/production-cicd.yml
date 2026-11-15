@@ -82,7 +82,7 @@ jobs:
   deploy:
     name: Validated automatic production release
     needs: validate
-    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.confirm_production == 'yes'))
+    if: github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch' && inputs.confirm_production == 'yes'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     environment:
