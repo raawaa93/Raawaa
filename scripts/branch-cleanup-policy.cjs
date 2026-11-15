@@ -1,14 +1,26 @@
 'use strict';
 
-/**
- * Conservatively classify branch refs that are safe to delete.
- *
- * A ref is eligible only if its head is already reachable from main, or its
- * PR was merged and no later unmerged work reused that same ref. Open PRs,
- * backups, recovery refs, protected refs, main, forks, and unknown refs stay.
- *
- * comparisons is an object keyed by branch name, with GitHub compare results.
- */
+const SUPERSEDED_CLOSED_PR_BRANCHES = Object.freeze([
+  'ci/restore-release-boundaries-2026-11-15-rebased',
+  'ci/restore-release-boundaries-2026-11-15',
+  'fix/manual-only-production-release',
+  'automation/generate-lockfile-2026-11-15',
+  'seo/sitemap-noindex-policy-2026-11-15',
+  'seo/noindex-campaign-sitemap-2026-11-15',
+  'seo/remove-noindex-campaign-from-sitemap-2026-11-15',
+  'automation/graphify-and-lighthouse-2026-11-15',
+  'automation/graphify-daily-refresh-2026-11-15',
+  'qa/visual-audit-2026-11-15',
+  'feature/campaign-nitro-offer-2026-11-14',
+]);
+
+const STALE_NO_PR_BRANCHES = Object.freeze([
+  'preview-deploy/visual-qa-2026-11-15',
+  'preview-deploy/2026-11-15-post-fix',
+  'preview-deploy/2026-11-15-main-78ece71',
+  'deploy/10-percent-site-only',
+]);
+
 function classifyBranches(branches, pullRequests, repositoryFullName, comparisons = {}) {
   const relatedByHead = new Map();
   for (const pull of pullRequests) {
@@ -18,6 +30,9 @@ function classifyBranches(branches, pullRequests, repositoryFullName, comparison
     relatedByHead.get(ref).push(pull);
   }
 
+  const superseded = new Set(SUPERSEDED_CLOSED_PR_BRANCHES);
+  const staleNoPr = new Set(STALE_NO_PR_BRANCHES);
+
   return branches.filter((branch) => {
     const name = branch?.name;
     if (!name || name === 'main' || branch.protected) return false;
@@ -26,22 +41,31 @@ function classifyBranches(branches, pullRequests, repositoryFullName, comparison
     const related = relatedByHead.get(name) || [];
     if (related.some((pull) => pull.state === 'open')) return false;
 
+    const explicitlySuperseded = superseded.has(name);
+    const explicitlyStale = staleNoPr.has(name);
     const hasMergedPR = related.some((pull) => Boolean(pull.merged_at));
     const hasClosedUnmergedPR = related.some((pull) => pull.state === 'closed' && !pull.merged_at);
+    const mergedHeadMatchesCurrent = related.some((pull) =>
+      Boolean(pull.merged_at) && pull.head.sha && pull.head.sha === branch.commit?.sha
+    );
     const comparison = comparisons[name];
 
-    // An unmerged or unreferenced branch can be removed only if its commit
-    // history is already contained in main (ahead_by === 0).
-    if (hasClosedUnmergedPR || related.length === 0) {
-      return comparison?.ahead_by === 0;
-    }
+    // Explicitly reviewed superseded refs are safe after checking that no open PR uses them.
+    if (hasClosedUnmergedPR) return explicitlySuperseded || comparison?.ahead_by === 0;
 
-    // A merged PR is sufficient only if the branch was not subsequently
-    // reused for unmerged work (handled above).
-    if (hasMergedPR) return true;
+    // Temporary preview/deploy refs were individually reviewed; unknown refs still require proof.
+    if (related.length === 0) return explicitlyStale || comparison?.ahead_by === 0;
+
+    // A merged PR is sufficient only when the branch head has not moved since that merge.
+    if (hasMergedPR && mergedHeadMatchesCurrent) return true;
+    if (hasMergedPR) return explicitlySuperseded || comparison?.ahead_by === 0;
 
     return comparison?.ahead_by === 0;
   });
 }
 
-module.exports = { classifyBranches };
+module.exports = {
+  classifyBranches,
+  SUPERSEDED_CLOSED_PR_BRANCHES,
+  STALE_NO_PR_BRANCHES,
+};
