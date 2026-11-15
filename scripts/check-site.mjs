@@ -54,7 +54,7 @@ const config = JSON.parse(configMatch[1]);
 const publicCspPages = [index, serum, campaign, read('privacy.html')];
 for (const [position, html] of publicCspPages.entries()) {
   const pageName = ['index.html', 'serum.html', 'campaign.html', 'privacy.html'][position];
-  const csp = html.match(/<meta\\s+http-equiv=["']Content-Security-Policy["']\\s+content=["']([^"']*)["']/i)?.[1] || '';
+  const csp = html.match(/<meta\\s+http-equiv=["']Content-Security-Policy["']\\s+content="([^"]*)"/i)?.[1] || '';
   assert.ok(csp, pageName + ' must declare a Content Security Policy');
   assert.match(csp, /script-src\\s+'self'/u, pageName + ' scripts must be same-origin');
   assert.match(csp, /style-src\\s+'self'/u, pageName + ' styles must be same-origin');
