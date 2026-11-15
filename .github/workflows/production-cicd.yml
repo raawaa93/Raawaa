@@ -18,6 +18,7 @@ on:
       - 'scripts/check-site.mjs'
       - 'scripts/check-production-headers.mjs'
       - 'scripts/branch-cleanup-policy.cjs'
+      - 'scripts/visual-audit.mjs'
   workflow_dispatch:
     inputs:
       confirm_production:
