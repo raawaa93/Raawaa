@@ -201,3 +201,20 @@ Do not delete or consolidate any of these 17 refs without a new individual revie
 - The 17 retained refs are the purpose-specific `main`, backup, deploy, preview, production-deploy, recovery, release, and restore refs. No temporary maintenance branch remains in the live enumeration.
 - The 35 archive tags remain intact; no backup, recovery, release, preview, deployment, or restore ref was removed.
 - The earlier 19-branch / two-temporary-ref note above is a historical checkpoint and is superseded by this final live read-back.
+
+
+## Live state refresh after PR #133 — 2026-11-15 08:02 UTC
+
+This is the latest live read-back and supersedes the earlier 06:44 snapshot above.
+
+- Canonical `main`: `fd0e469e54ebea4732088fdd686ae4da6061e335`.
+- Live GitHub enumeration: **17 branch refs**; the exact 17 durable backup, deploy, preview, production-deploy, recovery, release, restore, and main refs remain. The stale merged mobile-header work branch and the PR #133 maintenance branch are absent.
+- Open pull requests: **0**.
+- Recovery tags: **36 recorded** — the prior 35 verified tags plus the new exact-SHA archive tag for the merged mobile-header fix. Its target was read back and matched the original branch head.
+- PR #132 mobile/header corrections are merged. Store checks, Playwright browser checks, mobile Lighthouse, Graphify, and 16-case Chromium/WebKit visual QA all passed. The visual report recorded zero issues, no broken images, no console/page/CSP errors, no failed requests, and no horizontal overflow.
+- PR #133 added the exact-SHA archive allowlist and regression tests; its Store checks and Graphify workflows passed. The archive was verified before the branch was retired.
+- This refresh is documentation-only. It does not establish a new production deployment or change DNS, branch protection, pricing, delivery, payment, backend, customer data, or secrets.
+
+### Retained branch policy
+
+Keep the 17 operational/recovery refs. Continue to retire only individually reviewed merged branches or archive inactive refs after exact-SHA tag creation, tag-target read-back, and a fresh branch-head read. Never force-delete diverged refs or remove recovery tags during routine cleanup.

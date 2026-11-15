@@ -367,3 +367,24 @@ No prices, discounts, delivery rules, payment settings, customer/order data, Sup
 - This brings the verified archive-tag count to **35**. The one-time archive allowlist is being cleared.
 - Two generated maintenance refs remain temporarily: `maintenance/finalize-archive-index-2026-11-15` and `maintenance/finalize-pr113-archive-2026-11-15`. Their unique changes are already represented in canonical main; they will be fast-forwarded to main and removed only after GitHub confirms `ahead_by=0`.
 - No open pull requests. Expected final inventory after cleanup: **17 branches, 35 tags, 0 open PRs**.
+
+
+## Execution checkpoint — 2026-11-15 08:02 UTC
+
+### Mobile visual corrections and validation
+- PR #132 merged as canonical main commit `9236a93b6afc225a0764e98954953ce07a0ea621`. It corrected the homepage promotion/header stacking, mobile hero spacing, menu alignment/positioning, 44px touch targets, and primary/secondary button states. It also added PR-scoped visual QA against an isolated local build.
+- All five associated workflows completed successfully: Store checks, Playwright browser checks, mobile Lighthouse, visual QA, and offline Graphify.
+- Visual QA artifact `14151948737` contains 16 route/engine/viewport cases (home, serum, campaign, privacy × Chromium/WebKit × iPhone 13/desktop). The inspected report records **zero issues**: all navigations HTTP 200; no broken images, console/page/CSP errors, failed requests, bad responses, or horizontal overflow. Screenshots were inspected for the mobile homepage and serum page. This is an isolated PR-source audit, not a fresh live-production crawl.
+- Mobile Lighthouse artifact `14152951106` reports performance scores: home 89, serum 87, campaign 96, privacy 100. Accessibility and best-practices are 100 on all four pages. Campaign SEO 69 is expected because campaign is intentionally `noindex,follow`. Serum LCP is 3.8s and home TBT is 450ms in this local build; image/JS delivery remains a performance follow-up, not a launch blocker from this visual QA.
+
+### Exact-SHA branch archive and repository hygiene
+- PR #133 merged as commit `fd0e469e54ebea4732088fdd686ae4da6061e335`; its Store checks and Graphify workflows passed.
+- The merged PR #132 branch was not ancestry-deleted because its squash-merged history diverged from main. Its exact live head `6d9887c48cbbbd5eb9c0bf84a97acb6db2bfaf95` was added to the reviewed archive allowlist, preserved as annotated tag `archive/branches/2026-11-15/fix/mobile-header-buttons-colors-2026-11-15`, and the tag target was read back and matched before branch retirement.
+- Fresh GitHub enumeration after cleanup: **17 retained branches, 0 open PRs**. The temporary PR #133 branch was also retired by the exact merged-head cleanup policy. The archive index and branch inventory were refreshed in the follow-up documentation PR.
+
+### Boundaries and remaining work
+- These checks validate the PR source on a local CI server; they do not independently prove that the latest main source is live in Cloudflare Pages. The current production deployment was not re-read in this checkpoint.
+- GitHub main branch protection remains unresolved; require branch protection and mandatory production checks through authorized repository settings. Do not infer protection from successful CI.
+- Keep the custom domain pending until the registrant/owner intent and DNS delegation are confirmed. No DNS changes were made.
+- Remaining owner-supplied operational inputs are unchanged: Sham Cash wallet number if that method is to be enabled; verified complete INCI/manufacturer/supplier documentation; genuine product photography; privacy-notice approval for the operating jurisdiction; and a decision on whether WhatsApp handoff remains the order flow or a separately designed backend/payment system is desired.
+- Neither connected Supabase project is confirmed as the Store database. Do not connect either one to checkout. Firecrawl quota remains exhausted until its stated renewal; TinyFish remains prohibited. No paid billing, customer/order data, secrets, pricing, discounts, or delivery rules were changed.

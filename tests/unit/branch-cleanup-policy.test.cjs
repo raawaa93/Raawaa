@@ -341,3 +341,13 @@ test('retires this exact mobile-fix archive-policy PR branch after its own merge
   assert.deepEqual(classifyBranches([branchRef(name, { sha: head })], [pr(name, { merged: true, sha: head })], repository).map(x => x.name), [name]);
   assert.deepEqual(classifyBranches([branchRef(name, { sha: 'moved-head' })], [pr(name, { merged: true, sha: head })], repository), []);
 });
+
+
+test('retires this exact mobile visual-QA documentation branch after merge', () => {
+  const name = 'docs/record-mobile-visual-qa-and-branch-archive-2026-11-15';
+  assert.ok(MERGED_PR_BRANCHES.includes(name));
+  const head = 'mobile-visual-qa-docs-merged-head';
+  assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
+  assert.deepEqual(classifyBranches([branchRef(name, { sha: head })], [pr(name, { merged: true, sha: head })], repository).map(x => x.name), [name]);
+  assert.deepEqual(classifyBranches([branchRef(name, { sha: 'moved-head' })], [pr(name, { merged: true, sha: head })], repository), []);
+});
