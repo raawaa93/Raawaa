@@ -1,6 +1,19 @@
 name: RAWAA codebase knowledge graph
 
 on:
+  push:
+    branches:
+      - main
+    paths:
+      - "**/*.html"
+      - "**/*.js"
+      - "**/*.mjs"
+      - "css/**"
+      - "scripts/**"
+      - "AGENTS.md"
+      - "docs/engineering/PROJECT-MEMORY.md"
+      - ".graphifyignore"
+      - ".github/workflows/codebase-graph.yml"
   workflow_dispatch:
 
 permissions:
