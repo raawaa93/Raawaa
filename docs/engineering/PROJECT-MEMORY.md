@@ -7,7 +7,7 @@ This file is the repository-backed memory that survives AI sessions, client chan
 - Repository: `raawaa93/Raawaa`; `main` is the only canonical website source.
 - Cloudflare Pages project: `raawaa-store`; current known URL: https://raawaa-store.pages.dev.
 - Pages uses Direct Upload, not Git integration. A merge to `main` is **not** a production deployment.
-- Production release is exclusively the existing `RAWAA production CI and release` workflow, manually dispatched from `main` with `confirm_production=yes`. It validates the exact current `main` SHA and refuses stale/dirty source.
+- Production release is automated by the existing `RAWAA production CI and release` workflow after the full validation job succeeds on a push to `main`; manual dispatch with `confirm_production=yes` remains available for controlled reruns. It validates the exact current `main` SHA, rebuilds the clean payload, and refuses stale/dirty source. Owner has granted standing authorization for routine releases after these gates pass.
 - Preview deployment is isolated from production. Never deploy a backup branch.
 - `backup/*` branches and `recovery/` snapshots are historical rollback/evidence; do not delete, overwrite, or deploy them.
 
@@ -34,8 +34,8 @@ This file is the repository-backed memory that survives AI sessions, client chan
 - `scripts/check-site.mjs` validates commercial policy, page integrity, metadata, cart completeness, and local asset references.
 - `scripts/build-deploy.mjs` creates the clean Cloudflare payload and excludes recovery/development material.
 - Playwright tests cover browser behavior, including Chromium and WebKit. Add deterministic regression coverage before changing cart, pricing, or WhatsApp behavior.
-- Keep the production workflow's manual approval gate. Never add an automatic production deploy to push/PR workflows.
-- Do not change DNS, secrets, Cloudflare account settings, Supabase data/schema, customer/order records, or security permissions without a demonstrated need and explicit authorization.
+- Production deploy runs automatically only after successful validation on pushes to `main`; pull-request events never deploy. Preserve exact-SHA checkout, latest-main freshness check, clean-source check, Cloudflare secret check, and the production environment. Never bypass a failed gate.
+- Do not change DNS/domain ownership, secrets, billing, Supabase data/schema, customer/order records, or security permissions unless technically necessary and within the owner's standing authority; irreversible/destructive data changes still require a recoverable plan and specific approval.
 - Do not confuse unrelated Supabase projects. Verify the project ID before any backend operation.
 
 ## SEO, performance, and source quality
@@ -81,9 +81,12 @@ Update only when a verified, durable fact changes (for example: owner-approved p
 - PR #37: weekly Dependabot updates for npm and GitHub Actions merged.
 - PR #42: campaign noindex/sitemap policy correction merged.
 - PR #43: expanded `AGENTS.md` guidance for Antigravity and SEO/release safeguards merged.
-- Latest verified canonical store commit at this update: `c29b6e6a4f06fc936c0f9449ac72578a6c13c2f4`.
-- Production validation run [#43666416946](https://github.com/raawaa93/Raawaa/actions/runs/43666416946) checked exactly that commit: all 15 Playwright tests passed, `scripts/check-site.mjs` passed, the clean Pages payload validated at 179 files, and source remained unchanged. The production-release job was skipped. This is **not** a production deployment.
-- Graphify run [#43666416972](https://github.com/raawaa93/Raawaa/actions/runs/43666416972) succeeded: 293 nodes, 617 edges, 22 communities, 28 code files scanned, and no model/API extraction.
-- Lighthouse run [#43666416941](https://github.com/raawaa93/Raawaa/actions/runs/43666416941) completed successfully on the same commit. Artifact [#14142224468](https://github.com/raawaa93/Raawaa/actions/runs/43666416941) contains 24 mobile report JSON/HTML files. Median category scores: homepage Performance 99, serum 86, campaign 96, privacy 100; Accessibility and Best Practices were 100 on all four pages. SEO was 100 except campaign at 69 because the campaign is intentionally noindex; retain that as a warning, not an indexing target. Median LCP: homepage 1.05s, serum 3.84s, campaign 2.70s, privacy 1.05s. Serum is the main performance opportunity: render-blocking requests estimated 750ms, unused CSS about 42KB, unused cart JS about 42KB, and cache/image-delivery savings are also reported. Do not change critical CSS/cart loading without regression tests.
-- Read-only Cloudflare Pages audit on 2026-11-15 found the latest production deployment was created at 01:26Z from commit `fb97756befb79f3ed078570ca0c0412661b63633`, while current main is `c29b6e6a4f06fc936c0f9449ac72578a6c13c2f4`. The production deployment is therefore behind main and still has the campaign URL in its sitemap. The latest `raawaa-recovery-preview` alias points to commit `78ece71f036d5fc98888bb881783b6f519a38e63`, not current main. Only `raawaa-store.pages.dev` is attached as a Pages domain; `rawaa.sy` is not attached. Do not deploy or change domains without the owner's explicit operation-specific approval.
-- PR #44 is a documentation-only refresh of this file and remains open pending GitHub mergeability/check status. Do not report it as merged.
+- PR #44: refreshed durable project memory merged (merge commit `36ef0a3fc4acd5e10cb9fd6ef9540493e98826e2`).
+- PR #45: enabled automatic production releases after successful canonical-main validation; merged as `c38c1f1a1ead58dec3af8b312e0b5a0c368e2887`.
+- Production run [#43667394554](https://github.com/raawaa93/Raawaa/actions/runs/43667394554) completed successfully: all 15 Playwright tests passed, store policy validation passed, the clean Pages payload validated at 179 files, source remained unchanged, and the deploy job succeeded.
+- Cloudflare Pages production deployment [1386853d](https://1386853d.raawaa-store.pages.dev) completed successfully at 2026-11-15 02:23:37Z from exact main commit `c38c1f1a1ead58dec3af8b312e0b5a0c368e2887`. The project domain `https://raawaa-store.pages.dev` is attached; latest production deployment is no longer the old `fb97756`.
+- Lighthouse run [#43666416941](https://github.com/raawaa93/Raawaa/actions/runs/43666416941) succeeded on the immediately preceding site-code commit: homepage Performance 99, serum 86, campaign 96, privacy 100; Accessibility and Best Practices 100 across all four pages. Campaign SEO score 69 is expected due to intentional noindex. Serum remains the main performance opportunity (LCP 3.84s, render-blocking estimate 750ms, unused CSS ~42KB, unused cart JS ~42KB).
+- Graphify run [#43666416972](https://github.com/raawaa93/Raawaa/actions/runs/43666416972) succeeded: 293 nodes, 617 edges, 22 communities, 28 code files scanned, with no model/API extraction.
+- The Pages project still has only `raawaa-store.pages.dev` attached. `rawaa.sy` is not attached yet.
+- OpenSEO project has 500 credits remaining. No Google Search Console accounts or GA4 properties are connected; connection is still an owner-side OAuth step. No GSC performance data is available until connection.
+- `package.json` declares `@playwright/test` as a version range and `package-lock.json` is absent. Reproducible dependency lock and OSV lockfile scan remain outstanding; do not claim vulnerability scanning complete.
