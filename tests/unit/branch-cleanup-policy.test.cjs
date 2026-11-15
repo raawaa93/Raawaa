@@ -61,17 +61,16 @@ test('keeps closed-unmerged work for the exact-SHA archive workflow', () => {
     }),
     [],
   );
-  assert.deepEqual(SUPERSEDED_CLOSED_PR_BRANCHES, []);
+  assert.deepEqual(SUPERSEDED_CLOSED_PR_BRANCHES, ['maintenance/retire-superseded-finalize-ref-2026-11-15']);
 });
 
 test('no closed-unmerged or no-PR maintenance refs remain individually eligible', () => {
-  assert.deepEqual(SUPERSEDED_CLOSED_PR_BRANCHES, []);
+  assert.deepEqual(SUPERSEDED_CLOSED_PR_BRANCHES, ['maintenance/retire-superseded-finalize-ref-2026-11-15']);
   assert.deepEqual(STALE_NO_PR_BRANCHES, []);
   const retired = [
     'maintenance/close-archive-closure-2026-11-15',
     'maintenance/archive-final-closure-ref-2026-11-15',
     'maintenance/finalize-pr113-archive-2026-11-15',
-    'maintenance/retire-superseded-finalize-ref-2026-11-15',
     'maintenance/finalize-archive-index-2026-11-15',
   ];
   for (const name of retired) {
@@ -246,7 +245,7 @@ test('does not delete retired no-PR refs after their allowlist is cleared', () =
 
 test('does not retain superseded closed-PR cleanup permissions after retirement', () => {
   const names = ['maintenance/close-archive-closure-2026-11-15', 'maintenance/archive-final-closure-ref-2026-11-15'];
-  assert.deepEqual(SUPERSEDED_CLOSED_PR_BRANCHES, []);
+  assert.deepEqual(SUPERSEDED_CLOSED_PR_BRANCHES, ['maintenance/retire-superseded-finalize-ref-2026-11-15']);
   for (const name of names) {
     assert.deepEqual(classifyBranches([branchRef(name)], [pr(name)], repository, { [name]: { ahead_by: 0, behind_by: 8 } }), []);
   }
@@ -255,6 +254,22 @@ test('does not retain superseded closed-PR cleanup permissions after retirement'
 
 test('retires this exact maintenance policy branch after merge', () => {
   const name = 'maintenance/finalize-branch-cleanup-policy-2026-11-15';
+  assert.ok(MERGED_PR_BRANCHES.includes(name));
+  assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
+  assert.deepEqual(classifyBranches([branchRef(name)], [pr(name, { merged: true })], repository).map(x => x.name), [name]);
+});
+
+
+test('retires the closed PR120 maintenance ref only after main contains its exact head', () => {
+  const name = 'maintenance/retire-superseded-finalize-ref-2026-11-15';
+  assert.ok(SUPERSEDED_CLOSED_PR_BRANCHES.includes(name));
+  assert.deepEqual(classifyBranches([branchRef(name)], [pr(name)], repository), []);
+  assert.deepEqual(classifyBranches([branchRef(name)], [pr(name)], repository, { [name]: { ahead_by: 0, behind_by: 4 } }).map(x => x.name), [name]);
+  assert.deepEqual(classifyBranches([branchRef(name)], [pr(name)], repository, { [name]: { ahead_by: 1, behind_by: 4 } }), []);
+});
+
+test('retires this exact final cleanup PR branch after merge', () => {
+  const name = 'maintenance/retire-final-closed-pr-ref-2026-11-15';
   assert.ok(MERGED_PR_BRANCHES.includes(name));
   assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
   assert.deepEqual(classifyBranches([branchRef(name)], [pr(name, { merged: true })], repository).map(x => x.name), [name]);

@@ -28,6 +28,7 @@ const MERGED_PR_BRANCHES = Object.freeze([
   "maintenance/final-branch-cleanup-2026-11-15",
   "maintenance/archive-pr113-branch-2026-11-15",
   "maintenance/finalize-branch-cleanup-policy-2026-11-15",
+  "maintenance/retire-final-closed-pr-ref-2026-11-15",
   "feature/campaign-nitro-offer-2026-11-14-v2",
   "fix/campaign-canonical-2026-11-15",
   "fix/cart-dialog-mobile-2026-11-15",
@@ -80,7 +81,9 @@ const MERGED_PR_BRANCHES = Object.freeze([
   "maintenance/prune-merged-crawler-branches",
   "feature/competitor-crawl-coverage-2026-11-15"
 ]);
-const SUPERSEDED_CLOSED_PR_BRANCHES = Object.freeze([]);
+const SUPERSEDED_CLOSED_PR_BRANCHES = Object.freeze([
+  "maintenance/retire-superseded-finalize-ref-2026-11-15",
+]);
 const STALE_NO_PR_BRANCHES = Object.freeze([]);
 
 function classifyBranches(branches, pullRequests, repositoryFullName, comparisons = {}) {
