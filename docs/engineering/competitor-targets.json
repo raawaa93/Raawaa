@@ -7,6 +7,13 @@
     "url": "https://theouai.co.uk/products/hair-oil"
   },
   {
+    "id": "ouai-scalp-serum",
+    "brand": "OUAI",
+    "market": "UK",
+    "kind": "adjacent-scalp-serum",
+    "url": "https://theouai.co.uk/products/scalp-serum"
+  },
+  {
     "id": "gisou-honey-hair-oil",
     "brand": "Gisou",
     "market": "Global/EU",
@@ -32,7 +39,7 @@
     "brand": "Kérastase",
     "market": "Global",
     "kind": "direct-hair-oil",
-    "url": "https://www.kerastase.com/products/elixir-ultime"
+    "url": "https://www.kerastase.co.uk/ranges/regimen/elixir-ultime/elixir-ultime-l%E2%80%99huile-originale-refillable-hair-oil-for-all-hair-types/KER_00303.html"
   },
   {
     "id": "the-ordinary-hair-scalp",
@@ -42,10 +49,24 @@
     "url": "https://theordinary.com/en-gb/category/body-hair/hair-scalp-solutions"
   },
   {
+    "id": "the-ordinary-multi-peptide-hair-density",
+    "brand": "The Ordinary",
+    "market": "UK",
+    "kind": "direct-scalp-serum",
+    "url": "https://theordinary.com/en-gb/multi-peptide-serum-for-hair-density-hair-scalp-treatment-100434.html"
+  },
+  {
     "id": "feel22-syria-hair-oils-serums",
     "brand": "Feel22",
     "market": "Syria",
     "kind": "local-retailer-category",
     "url": "https://syria.feel22.com/en/collections/face-serums?product_type=hair-oil-and-serum"
+  },
+  {
+    "id": "feel22-seapuri-scalpy-serum",
+    "brand": "Feel22 / Seapuri",
+    "market": "Syria",
+    "kind": "local-retailer-product",
+    "url": "https://syria.feel22.com/en/products/seapuri-scalpy-hair-serum"
   }
 ]
