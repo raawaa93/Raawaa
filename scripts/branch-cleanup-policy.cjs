@@ -51,7 +51,14 @@ const MERGED_PR_BRANCHES = Object.freeze([
   "seo/refresh-sitemap-lastmod",
   "tooling/design-skills-playwright-2026-11-15",
   "tooling/playwright-webkit-iphone-2026-11-15",
-  "work/mobile-ux-audit-2026-11-14"
+  "work/mobile-ux-audit-2026-11-14",
+  "fix/branch-hygiene-protect-operational-refs-2026-11-15",
+  "fix/visual-audit-csp-screenshots-2026-11-15",
+  "fix/visual-audit-webkit-csp-2026-11-15",
+  "docs/visual-qa-and-inventory-finalization-2026-11-15",
+  "maintenance/finish-branch-cleanup-2026-11-15",
+  "maintenance/repository-hygiene-2026-11-15",
+  "fix/visual-qa-webkit-csp-regression-2026-11-15"
 ]);
 const SUPERSEDED_CLOSED_PR_BRANCHES = Object.freeze([
   "ci/restore-release-boundaries-2026-11-15-rebased",
@@ -69,7 +76,8 @@ const SUPERSEDED_CLOSED_PR_BRANCHES = Object.freeze([
 const STALE_NO_PR_BRANCHES = Object.freeze([
   "preview-deploy/visual-qa-2026-11-15",
   "preview-deploy/2026-11-15-post-fix",
-  "preview-deploy/2026-11-15-main-78ece71"
+  "preview-deploy/2026-11-15-main-78ece71",
+  "docs/project-tooling-and-branch-inventory-2026-11-15"
 ]);
 
 function classifyBranches(branches, pullRequests, repositoryFullName, comparisons = {}) {
@@ -88,6 +96,7 @@ function classifyBranches(branches, pullRequests, repositoryFullName, comparison
   return branches.filter((branch) => {
     const name = branch?.name;
     if (!name || name === 'main' || branch.protected) return false;
+
     const alwaysProtectedPrefixes = ['backup/', 'recovery/', 'restore/', 'release/', 'production-deploy/'];
     if (alwaysProtectedPrefixes.some((prefix) => name.startsWith(prefix))) return false;
     if (name.startsWith('deploy/')) return false;
@@ -103,7 +112,8 @@ function classifyBranches(branches, pullRequests, repositoryFullName, comparison
     );
     const comparison = comparisons[name];
 
-    // Reused branch refs require ancestry proof, even if a prior PR merged.
+    // A reused ref with a closed-unmerged PR is retained unless it is explicitly
+    // reviewed AND GitHub proves every current commit is already contained in main.
     if (hasClosedUnmergedPR) {
       if (hasMergedPR) return mergedAllowlist.has(name) && comparison?.ahead_by === 0;
       return superseded.has(name) && comparison?.ahead_by === 0;
@@ -113,8 +123,8 @@ function classifyBranches(branches, pullRequests, repositoryFullName, comparison
     if (related.length === 0) return staleNoPr.has(name) && comparison?.ahead_by === 0;
 
     // Exact merged heads are removed only from the reviewed allowlist.
-    // A moved merged branch requires ancestry proof instead.
     if (hasMergedPR && mergedHeadMatchesCurrent) return mergedAllowlist.has(name);
+    // A moved merged branch requires ancestry proof.
     if (hasMergedPR) return mergedAllowlist.has(name) && comparison?.ahead_by === 0;
 
     return false;
