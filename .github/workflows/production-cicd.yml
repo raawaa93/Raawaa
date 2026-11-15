@@ -24,6 +24,17 @@ on:
       - 'lighthouserc.json'
       - 'lighthouserc.pr.json'
 
+  workflow_dispatch:
+    inputs:
+      confirm_production:
+        description: Explicit owner approval to release the validated main commit to production
+        required: true
+        type: choice
+        options:
+          - no
+          - yes
+        default: no
+
 permissions:
   contents: read
 
@@ -85,9 +96,9 @@ jobs:
           fi
 
   deploy:
-    name: Validated automatic production release
+    name: Explicitly approved production release
     needs: validate
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    if: github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch' && inputs.confirm_production == 'yes'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     environment:
