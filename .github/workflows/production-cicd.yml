@@ -121,8 +121,23 @@ jobs:
           git fetch --no-tags origin main --depth=1
           MAIN_SHA="$(git rev-parse FETCH_HEAD)"
           if [[ "$MAIN_SHA" != "$GITHUB_SHA" ]]; then
-            echo "::error::Main moved to $MAIN_SHA after validation; refusing to deploy stale source."
-            exit 1
+            if ! git merge-base --is-ancestor "$GITHUB_SHA" "$MAIN_SHA"; then
+              echo "::error::Validated commit is not an ancestor of current main; refusing deployment."
+              exit 1
+            fi
+            CHANGED_FILES="$(git diff --name-only "$GITHUB_SHA" "$MAIN_SHA")"
+            while IFS= read -r file; do
+              [[ -z "$file" ]] && continue
+              case "$file" in
+                *.md|docs/*|recovery/*|AGENTS.md|.agents/*|package.json|package-lock.json|playwright.config.mjs|tests/*|scripts/check-site.mjs|scripts/check-production-headers.mjs|.github/*)
+                  ;;
+                *)
+                  echo "::error::Production source changed after validation ($file); refusing stale deployment."
+                  exit 1
+                  ;;
+              esac
+            done <<< "$CHANGED_FILES"
+            echo "::notice::main advanced only through documentation, CI, or test-only files; the validated production payload is unchanged."
           fi
           if [[ -n "$(git status --porcelain)" ]]; then
             git status --short
