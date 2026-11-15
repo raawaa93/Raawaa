@@ -68,7 +68,8 @@ assert.match(ownerPricingTool, /let currencySymbol = 'ل\.س '/u, 'Owner pricing
 assert.match(campaign, /التوصيل مجاني إلى جميع المحافظات ولكل طرق الدفع/u, 'Campaign page must state free delivery for all payment methods');
 assert.doesNotMatch(campaign, /لا تشمل التوصيل|رسوم التوصيل|بلا عطر/u, 'Campaign page must not imply a delivery fee or scent-free base product');
 assert.ok(campaignScript.includes('product.image && product.image.src'), 'Campaign cards must display the configured product image');
-assert.ok(sitemap.includes('/campaign'), 'Campaign page must be present in sitemap');
+assert.match(campaign, /<meta name="robots" content="noindex,follow"/u, 'Campaign page must remain intentionally noindex');
+assert.ok(!sitemap.includes('/campaign'), 'Noindex campaign page must be excluded from sitemap');
 assert.ok(!sitemap.includes('/hama'), 'Legacy Hama route must be removed from sitemap');
 assert.ok(!serviceWorker.toLowerCase().includes('hama'), 'Service worker must not cache the retired Hama route');
 assert.ok(robots.includes('Disallow: /hama'), 'Robots must disallow the retired Hama route');
