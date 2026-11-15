@@ -68,7 +68,7 @@ test('deletes only the nine reviewed merged heads when their PR head matches', (
 
 
 test('deletes reviewed closed PR refs only when their full Git tree matches main', () => {
-  for (const name of DUPLICATE_TREE_BRANCHES) {
+  for (const name of DUPLICATE_TREE_BRANCHES.filter(name => name !== 'maintenance/final-inventory-cleanup-2026-11-15')) {
     assert.deepEqual(classifyBranches([branchRef(name)], [pr(name)], repository), []);
     assert.deepEqual(
       classifyBranches([branchRef(name)], [pr(name)], repository, { [name]: { tree_matches_main: false } }),
@@ -85,13 +85,14 @@ test('deletes reviewed closed PR refs only when their full Git tree matches main
   }
 });
 
-test('prunes the reviewed no-PR legacy ref only after GitHub proves it is contained in main', () => {
-  const name = 'fix/raawaa-final-qa-release-policy-2026-11-15';
+test('prunes the reviewed no-PR duplicate only when its full tree matches main', () => {
+  const name = 'maintenance/final-inventory-cleanup-2026-11-15';
   assert.ok(STALE_NO_PR_BRANCHES.includes(name));
+  assert.ok(DUPLICATE_TREE_BRANCHES.includes(name));
   assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
-  assert.deepEqual(classifyBranches([branchRef(name)], [], repository, { [name]: { ahead_by: 1 } }), []);
+  assert.deepEqual(classifyBranches([branchRef(name)], [], repository, { [name]: { tree_matches_main: false } }), []);
   assert.deepEqual(
-    classifyBranches([branchRef(name)], [], repository, { [name]: { ahead_by: 0, behind_by: 1 } }).map(x => x.name),
+    classifyBranches([branchRef(name)], [], repository, { [name]: { tree_matches_main: true } }).map(x => x.name),
     [name],
   );
 });
@@ -303,4 +304,15 @@ test('superseded cleanup-policy drafts require ancestry proof before retirement'
       [name],
     );
   }
+});
+
+test('repository memory branch is not eligible for merged-branch cleanup while it contains unique commits', () => {
+  const name = 'maintenance/repository-hygiene-2026-11-15';
+  assert.equal(MERGED_PR_BRANCHES.includes(name), false);
+  assert.deepEqual(
+    classifyBranches([branchRef(name, { sha: 'new-sha' })], [pr(name, { merged: true, sha: 'old-sha' })], repository, {
+      [name]: { ahead_by: 62, behind_by: 5 },
+    }),
+    [],
+  );
 });
