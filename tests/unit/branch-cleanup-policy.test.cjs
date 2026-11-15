@@ -61,11 +61,17 @@ test('keeps closed-unmerged work for the exact-SHA archive workflow', () => {
     }),
     [],
   );
-  assert.deepEqual(SUPERSEDED_CLOSED_PR_BRANCHES, []);
+  assert.deepEqual(SUPERSEDED_CLOSED_PR_BRANCHES, [
+    'maintenance/close-archive-closure-2026-11-15',
+    'maintenance/archive-final-closure-ref-2026-11-15',
+  ]);
 });
 
 test('no unreviewed no-PR branch remains eligible after final cleanup', () => {
-  assert.deepEqual(STALE_NO_PR_BRANCHES, []);
+  assert.deepEqual(STALE_NO_PR_BRANCHES, [
+    'maintenance/finalize-archive-index-2026-11-15',
+    'maintenance/finalize-pr113-archive-2026-11-15',
+  ]);
   const name = 'maintenance/retire-last-stale-refs-2026-11-15';
   assert.deepEqual(
     classifyBranches([branchRef(name)], [], repository, {
