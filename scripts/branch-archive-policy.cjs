@@ -1,8 +1,6 @@
 'use strict';
 
-const ARCHIVE_BRANCHES = Object.freeze({
-  "maintenance/retire-last-stale-refs-2026-11-15": "56bd0b22c9bd578d9739c01ab44b993c42f33a05",
-});
+const ARCHIVE_BRANCHES = Object.freeze({});
 const PROTECTED_PREFIXES = Object.freeze([
   'backup/',
   'recovery/',
