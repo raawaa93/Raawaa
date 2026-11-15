@@ -60,3 +60,22 @@ Last updated: 2026-11-14
 ## Provenance and limitations
 
 This repository is a reconstruction from Cloudflare Pages production and successful preview artifacts, not a clone of the original Git repository. It does not restore the original commit history, unpublished source files, or secrets. The original GitHub repository remains inaccessible through the connected old account.
+ 
+## Operational re-audit — 2026-11-15
+
+- Latest canonical main commit: `4754dc63fff0f6d38f34d777699d1a99a8a41473`.
+- Latest production deployment: `4222fbbf-5d51-423d-a309-a2cec96b2f78` (success; `commit_dirty=true`).
+- Latest isolated preview: `652d59e8-a3b0-42dd-bd44-10a59d4c3d08` (success; `commit_dirty=false`).
+- Production/preview deployment source commit is identical, but the dirty production provenance warning remains. Do not treat the production deployment as clean-source verified.
+- The current source had a real CI/CD contradiction: the production workflow deployed on every push to `main`, and a second workflow deployed from `production-deploy/**` branch pushes. A corrective PR branch is being prepared to make main pushes validation-only and require explicit manual production dispatch from main.
+- Cloudflare custom domain list still contains only `raawaa-store.pages.dev` plus pending `rawaa.eu.org`; no DNS changes were made. The intended `rawaa.sy` purchase remains pending with the seller.
+- Supabase read-only advisors: leaked-password protection disabled (WARN); 17 RLS-without-policy INFO notices on Ghaiooth-core; 10 unused indexes (INFO), one duplicate-index warning on `rawaa_store.orders`. No DB changes were made.
+- The backup workflow exists, but a completed artifact, checksum verification and restore drill could not be confirmed in this audit. Backup status remains unverified.
+- R2 remains deferred pending payment-card readiness. No billing, DNS, schema, Edge Function or production data changes were made.
+- Release gates remain: formula/INCI and supplier evidence, actual product photos, privacy-policy review, source-level review of order-related Edge Functions, and a tested order lifecycle before direct order intake.
+
+
+### Backup trigger improvement in this PR
+
+- The backup workflow now runs on every push to canonical `main`, in addition to its daily schedule and manual trigger. Once this PR is merged, the merge commit itself should start a backup run and produce a 90-day GitHub Actions artifact without requiring Cloudflare R2 or a paid service.
+- Artifact creation, SHA-256 verification and an isolated restore drill still require read-back evidence; the trigger change alone is not proof that a backup completed.
