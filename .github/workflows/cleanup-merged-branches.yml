@@ -115,7 +115,7 @@ jobs:
               .addHeading('Deleted refs')
               .addList(deleted.length ? deleted : ['No branch refs required deletion'])
               .addHeading('Safety rules')
-              .addList(['main and protected refs retained', 'all backup/*, recovery/*, restore/*, release/*, and production-deploy/* refs retained', 'all open-PR heads retained; active preview-deploy/* and deploy/* refs retained', 'merged refs deleted only from the 61-name reviewed allowlist', 'changed merged heads require ahead_by = 0', 'closed-unmerged refs deleted only from the exact superseded allowlist; reused refs require ahead_by = 0', 'temporary no-PR refs require explicit review and ahead_by = 0', 'comparison failures retained'])
+              .addList(['main and protected refs retained', 'all backup/*, recovery/*, restore/*, release/*, and production-deploy/* refs retained', 'all open-PR heads retained; active preview-deploy/* and deploy/* refs retained', 'merged refs deleted only from the 62-name reviewed allowlist', 'changed merged heads require ahead_by = 0', 'closed-unmerged refs require exact superseded allowlist membership and ahead_by = 0; reused refs also require ahead_by = 0', 'temporary no-PR refs require explicit review and ahead_by = 0', 'comparison failures retained'])
               .write();
 
             if (failed.length) core.setFailed(`Branch cleanup had ${failed.length} deletion failures.`);
