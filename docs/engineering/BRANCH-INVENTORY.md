@@ -134,11 +134,11 @@ Do not delete or consolidate any of these 17 refs without a new individual revie
 
 ## Live state refresh — 2026-11-15 06:19 UTC
 
-- Canonical `main` is `c54c053faf9f1a2a76234dfa7d9c28f7e880bbe3` after the documentation-only PR #112 merge.
-- Live branch enumeration returned **18 refs**: the 17 durable operational/recovery refs listed above plus `docs/correct-production-release-trigger-2026-11-15`, the exact head of merged PR #112. No other unexpected working branch was found.
-- Open pull requests: **0**.
-- PR #112 passed the Store checks workflow. Its merge triggered successful disaster-recovery backup and branch-hygiene workflows. The merged PR branch is now added to the exact merged-branch cleanup allowlist in a follow-up maintenance PR; the automated cleanup will retire only that exact merged head after the policy update merges.
+- Canonical `main` is `d5e2e816b6d84c1b610b61720186249520eeeeca` after the competitor snapshot documentation commit; PR #112 merged at 06:16:54 UTC and PR #113 is the sole open cleanup PR.
+- Live branch enumeration at 06:23 UTC returned **19 refs**: the 17 durable operational/recovery refs listed above plus `docs/correct-production-release-trigger-2026-11-15` (merged PR #112) and `maintenance/pr112-branch-hygiene-inventory-2026-11-15` (open PR #113).
+- Open pull requests: **1** (#113, this maintenance PR). Expected after merge and exact-head cleanup: 17 durable refs and 0 open PRs.
+- PR #112 passed the Store checks workflow. Its merge triggered successful disaster-recovery backup and branch-hygiene workflows. PR #113 adds both the merged PR #112 branch and its own exact branch head to the reviewed cleanup allowlist; after merge, the workflow can retire both without touching the 17 durable refs.
 - The production release workflow on commit `adbc74f31801afa92a37c83dcb1c7698e1248c3e` completed both validation and deployment successfully; the deploy job also passed the live security-header verification step. The documentation-only PR #112 did not trigger a production deployment.
-- Visual QA run `43684775744` is in progress; do not mark visual/mobile QA complete until its report is inspected.
+- Visual QA run `43684775744` completed successfully: 16 Chromium/WebKit × iPhone/desktop captures across home, serum, campaign, and privacy; report contains 0 issues. Artifact: https://github.com/raawaa93/Raawaa/actions/runs/43684775744.
 - GitHub API access for this connected integration returns 403 on the branch-protection endpoint and an empty rulesets collection. No rulesets were configured. Branch protection remains an unresolved account-administration task; do not claim it is enabled.
 - Cloudflare Pages custom domain `rawaa.eu.org` remains pending in the latest repository audit; CNAME setup is still outstanding. No DNS changes were made.
