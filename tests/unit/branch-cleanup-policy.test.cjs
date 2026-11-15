@@ -208,3 +208,13 @@ test('retires the merged release-fix, cleanup, and crawler-coverage branches aft
     );
   }
 });
+
+test('retires the merged PR112 branch-hygiene ref after its exact PR head is merged', () => {
+  const name = 'maintenance/pr112-branch-hygiene-inventory-2026-11-15';
+  assert.ok(MERGED_PR_BRANCHES.includes(name));
+  assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
+  assert.deepEqual(
+    classifyBranches([branchRef(name)], [pr(name, { merged: true })], repository).map(x => x.name),
+    [name],
+  );
+});
