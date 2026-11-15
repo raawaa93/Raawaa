@@ -17,43 +17,42 @@ const pull = (ref, state = 'open', owner = repository) => ({
   state, head: { ref, repo: { full_name: owner } },
 });
 
-test('archive allowlist is unique, explicit, SHA-pinned, and excludes operational namespaces', () => {
-  const names = Object.keys(ARCHIVE_BRANCHES);
-  assert.equal(new Set(names).size, names.length);
-  assert.equal(names.length, 29);
-  for (const name of names) {
+test('final archive allowlist contains only the two reviewed remaining refs', () => {
+  assert.deepEqual(ARCHIVE_BRANCHES, {
+    'fix/visual-audit-top-viewport-clean-2026-11-15': 'c0ccb2db0657d414885e68f16b8b79c9f73b4531',
+    'maintenance/archive-inactive-branches-final-2026-11-15': 'ad3aaa80e47f2a4d823d85123f30c27726fb206d',
+  });
+  for (const [name, sha] of Object.entries(ARCHIVE_BRANCHES)) {
     assert.equal(isProtectedBranch({ name, protected: false }), false, name);
-    assert.match(ARCHIVE_BRANCHES[name], /^[a-f0-9]{40}$/u, name + ' must have a fixed 40-character commit SHA');
-  }
-  for (const prefix of ['backup/', 'recovery/', 'restore/', 'release/', 'production-deploy/', 'deploy/', 'preview-deploy/']) {
-    assert.equal(names.some(name => name.startsWith(prefix)), false, prefix);
+    assert.match(sha, /^[a-f0-9]{40}$/u, name);
   }
 });
 
-test('selects only reviewed branches whose recorded SHA is unchanged', () => {
-  const reviewed = Object.keys(ARCHIVE_BRANCHES);
-  const branches = reviewed.map(name => branch(name, ARCHIVE_BRANCHES[name]));
-  const selected = selectArchiveCandidates(branches, [], repository);
-  assert.deepEqual(selected.map(x => x.name).sort(), reviewed.sort());
+test('selects only reviewed refs whose exact SHA is unchanged', () => {
+  const branches = Object.entries(ARCHIVE_BRANCHES).map(([name, sha]) => branch(name, sha));
+  assert.deepEqual(
+    selectArchiveCandidates(branches, [], repository).map(x => x.name).sort(),
+    Object.keys(ARCHIVE_BRANCHES).sort(),
+  );
 });
 
-test('preserves a branch when its head moved after the review snapshot', () => {
-  const name = 'automation/generate-lockfile-2026-11-15';
-  assert.equal(expectedArchiveShaMatches(branch(name, 'new-unreviewed-sha')), false);
-  assert.deepEqual(selectArchiveCandidates([branch(name, 'new-unreviewed-sha')], [], repository), []);
+test('preserves either reviewed branch if its head changes after review', () => {
+  for (const [name] of Object.entries(ARCHIVE_BRANCHES)) {
+    assert.equal(expectedArchiveShaMatches(branch(name, 'changed-after-review')), false);
+    assert.deepEqual(selectArchiveCandidates([branch(name, 'changed-after-review')], [], repository), []);
+  }
 });
 
-test('preserves a reviewed branch while any same-repository PR is open', () => {
-  const name = 'automation/generate-lockfile-2026-11-15';
-  assert.deepEqual(selectArchiveCandidates(
-    [branch(name, ARCHIVE_BRANCHES[name])],
-    [pull(name, 'open')],
-    repository,
-  ), []);
+test('preserves a reviewed branch while a same-repository PR is open', () => {
+  const name = 'fix/visual-audit-top-viewport-clean-2026-11-15';
+  assert.deepEqual(
+    selectArchiveCandidates([branch(name, ARCHIVE_BRANCHES[name])], [pull(name, 'open')], repository),
+    [],
+  );
 });
 
 test('does not treat a fork PR with the same head name as an active repository PR', () => {
-  const name = 'automation/generate-lockfile-2026-11-15';
+  const name = 'fix/visual-audit-top-viewport-clean-2026-11-15';
   const selected = selectArchiveCandidates(
     [branch(name, ARCHIVE_BRANCHES[name])],
     [pull(name, 'open', 'contributor/Raawaa')],
@@ -78,16 +77,6 @@ test('preserves main, protected refs, and every operational namespace', () => {
   assert.deepEqual(selectArchiveCandidates(branches, [], repository), []);
 });
 
-test('pins the moved no-PR inventory branch to its exact reviewed head', () => {
-  const name = 'maintenance/final-inventory-cleanup-2026-11-15';
-  const sha = 'f262cd055a5af74c1513efde0ff890a90941bb76';
-  assert.equal(ARCHIVE_BRANCHES[name], sha);
-  assert.equal(expectedArchiveShaMatches(branch(name, sha)), true);
-  assert.equal(expectedArchiveShaMatches(branch(name, 'changed-after-review')), false);
-});
-
-test('merged documentation and visual-QA refs are retired by the merged-ref policy, not archived twice', () => {
+test('does not archive the docs branch because the merged-ref policy removes it only after tree equality', () => {
   assert.equal(Object.prototype.hasOwnProperty.call(ARCHIVE_BRANCHES, 'docs/workspace-hygiene-2026-11-15'), false);
-  assert.equal(Object.prototype.hasOwnProperty.call(ARCHIVE_BRANCHES, 'fix/visual-audit-top-viewport-clean-2026-11-15'), false);
-  assert.equal(Object.prototype.hasOwnProperty.call(ARCHIVE_BRANCHES, 'maintenance/archive-inactive-branches-2026-11-15'), false);
 });
