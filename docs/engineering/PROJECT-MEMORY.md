@@ -42,11 +42,23 @@ This file is the repository-backed memory that survives AI sessions, client chan
 
 - Read this file and `AGENTS.md` before substantial repository work.
 - Keep decisions and lessons here when they are durable and useful across tools. Keep transient debugging details out; use an optional local memory tool for those.
-- If ProjectMem MCP is connected, it may record issues, attempts, fixes, and decisions. Never assume it is installed or connected.
-- Do not record secrets, API keys, customer names, phone numbers, addresses, order payloads, or private commercial data in memory tools.
-- ProjectMem's local event store should remain untracked and ignored. Do not install its git hooks, background watcher, global cross-project memory, or automatic git-history backfill for this repository without a separate review.
-- Graphify is a regenerable code-structure index, not the authoritative business-policy memory. Use code-only mode in CI; do not send repository files to a hosted LLM as part of automated indexing.
-- If optional tools are unavailable, this file, `AGENTS.md`, Git history, tests, and preserved recovery checkpoints remain the fallback.
+- **Primary optional event memory — [ProjectMem](https://github.com/riponcm/projectmem):** MIT, local-first, no cloud quota or API key. Pin the reviewed v0.3.5 rather than auto-upgrading. The project has one maintainer and its PyPI v0.3.5 artifacts did not show trusted-publishing provenance in the inspected release metadata; treat it as an opt-in trial, not a trusted dependency. Its changelog shows active bug fixing but also a young project with meaningful recent corrections.
+- On a developer machine with a local clone and a compatible MCP client, install in an isolated Python environment and initialize conservatively:
+
+  ```bash
+  python3 -m venv ~/.venvs/rawaa-projectmem
+  ~/.venvs/rawaa-projectmem/bin/python -m pip install 'projectmem==0.3.5'
+  cd /path/to/Raawaa
+  ~/.venvs/rawaa-projectmem/bin/pjm init --no-hooks --no-global --no-watch --no-backfill --no-claude-md --no-structure
+  ```
+
+  Then configure the MCP client using the configuration printed by `pjm init` and the official client-specific guide. This local MCP process is not automatically connected to ChatGPT's hosted environment. Keep `.projectmem/` untracked; this repository ignores it.
+- ProjectMem's security policy documents that its event log is append-only, its git hooks execute code on commits, and its generated summaries/maps may be sent to the connected AI provider. The conservative init flags above avoid hooks, watcher, global memory, automatic history ingestion, and generated project-structure cache. Never record secrets, API keys, customer names, phone numbers, addresses, order payloads, or private commercial data.
+- **Secondary local fallback — [MCP Memory Service](https://github.com/doobidoo/mcp-memory-service):** Apache-2.0; local SQLite-vec storage and local ONNX embeddings are documented, so semantic retrieval can work without a hosted embedding API. Requires Python 3.11+ and a persistent local service; it is semantic memory, not a replacement for ProjectMem's typed issue/attempt/fix history. Keep it as a separate fallback and do not run both stores until data ownership and duplicate-write behavior are tested.
+- **Code-structure index — [Graphify](https://github.com/Graphify-Labs/graphify):** use the pinned, verified `graphifyy==0.9.108` CLI via the on-demand GitHub Actions workflow. The workflow indexes code only, explicitly disables model backends, and stores its generated graph as a 14-day artifact. The graph is regenerable and is not authoritative business-policy memory.
+- **Performance measurement — Lighthouse CI:** mobile baseline for the homepage, serum, campaign, and privacy pages. Reports stay in GitHub Actions artifacts; no hosted upload. The initial run has no score gates. Establish a measured baseline before adding budgets.
+- Promptfoo and Langfuse remain candidates for a later stage when there is a real model/agent pipeline to evaluate and observe. Sharp remains deferred until image references and visual equivalence are audited; do not batch-replace production imagery before that.
+- If optional tools or free hosted quotas are unavailable, this file, `AGENTS.md`, Git history, tests, and preserved recovery checkpoints remain the fallback. ProjectMem and Graphify are local/self-run tools with no vendor free-tier quota; the graph workflow is reproducible and can be rerun.
 
 ## Updating this memory
 
