@@ -1,6 +1,6 @@
 # RAWAA Store tooling and skills registry
 
-**Last verified:** 2026-11-15 05:15 UTC  
+**Last verified:** 2026-11-15 05:50 UTC  
 **Policy:** use free tiers and included quotas; never activate billing or paid usage without a separate explicit instruction. Quota values below are dated snapshots, not permanent guarantees.
 
 ## Project source of truth
@@ -13,6 +13,7 @@
 - Agent rules: AGENTS.md
 - Branch rules: docs/engineering/BRANCH-INVENTORY.md
 - This registry is the inventory of connected tools and skills; update it when access, quota, or project architecture changes.
+- Complete Skills catalog: `docs/engineering/SKILL-REGISTRY.md` (151 entries).
 
 ## Connected tool families available in this ChatGPT workspace
 
@@ -46,6 +47,15 @@ The current workspace inventory exposes **801 tool definitions across 24 integra
 | User settings | 2 | Inspect/update ChatGPT appearance and personality settings only when requested |
 
 Other available skill/tool families include data analysis, user settings, and file-library operations. Availability in this workspace does not mean every service is connected to a RAWAA account.
+
+
+## Owned private plugin inventory
+
+- **Hostless** — private USER-scope plugin, version `0.1.0`, plugin ID `plugins_6ade8fe19de081919d932135b5b265b2`.
+- Its manifest points to the remote MCP endpoint `https://mcp.hostless.app/mcp`; the stored configuration contains no authentication headers. The current 801-action workspace tool inventory has no Hostless namespace, so an active Hostless connection is **not confirmed**.
+- Keep it as a dormant owned integration candidate; do not delete or claim it is connected until the account's Hostless authorization and available tools are verified.
+- Plugin Creator can enumerate owned personal plugins (one found). Plugin Management does not expose a complete account-wide installed-plugin listing in this session, so this audit does not claim to enumerate every workspace-installed plugin.
+- No global plugin, connector, or Skill was uninstalled. Destructive uninstall requires exact target IDs and a confirmed dependency/ownership review; broad removal would risk other projects.
 
 ## Free-tier balances observed on 2026-11-15
 
