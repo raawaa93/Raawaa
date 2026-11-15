@@ -3,8 +3,8 @@ import assert from 'node:assert/strict';
 const origin = process.env.RAWAA_PRODUCTION_ORIGIN || 'https://raawaa-store.pages.dev';
 const checks = [
   { path: '/', owner: false },
-  { path: '/owner/index.html', owner: true },
-  { path: '/owner/pricing.html', owner: true }
+  { path: '/owner/', owner: true },
+  { path: '/owner/pricing', owner: true }
 ];
 
 for (const item of checks) {
