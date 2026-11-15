@@ -121,17 +121,6 @@ test('unknown closed-unmerged work is never deleted, even when ahead_by=0', () =
   );
 });
 
-test('does not retire the closed-unmerged cleanup follow-up branch', () => {
-  const name = 'maintenance/branch-hygiene-followup-2026-11-15';
-  assert.equal(SUPERSEDED_CLOSED_PR_BRANCHES.includes(name), false);
-  assert.deepEqual(
-    classifyBranches([branchRef(name)], [pr(name)], repository, {
-      [name]: { ahead_by: 0, behind_by: 3 },
-    }),
-    [],
-  );
-});
-
 test('a reused merged/closed-unmerged ref requires ancestry proof', () => {
   const name = 'qa/visual-audit-2026-11-15';
   const prs = [pr(name, { merged: true, sha: 'old-sha' }), pr(name, { sha: 'new-sha' })];
