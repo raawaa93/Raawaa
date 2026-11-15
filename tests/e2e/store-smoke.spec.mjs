@@ -115,4 +115,9 @@ test('Homepage promotion strip, sticky header, and mobile menu stay correctly al
   const scrolledHeaderBottom = await header.evaluate(element => element.getBoundingClientRect().bottom);
   expect(scrolledMenuTop).toBeGreaterThanOrEqual(scrolledHeaderBottom - 1);
   await expect(toggle).toHaveAttribute('aria-expanded', 'true');
+
+  await toggle.click();
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await expect(toggle).toBeHidden();
+  await expect(page.locator('.nav-desktop')).toBeVisible();
 });
