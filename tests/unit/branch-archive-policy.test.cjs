@@ -17,10 +17,11 @@ const pull = (ref, state = 'open', owner = repository) => ({
   state, head: { ref, repo: { full_name: owner } },
 });
 
-test('archive allowlist is cleared after the exact PR113 recovery tag is verified', () => {
+test('archive allowlist is cleared after exact PR113 tag verification', () => {
   assert.deepEqual(ARCHIVE_BRANCHES, {});
-  assert.equal(expectedArchiveShaMatches(branch('maintenance/pr112-branch-hygiene-inventory-2026-11-15', '80e320e4b95138685ad10099c6087050d66b2b62')), false);
-  assert.deepEqual(selectArchiveCandidates([branch('maintenance/pr112-branch-hygiene-inventory-2026-11-15', '80e320e4b95138685ad10099c6087050d66b2b62')], [], repository), []);
+  const name = 'maintenance/pr112-branch-hygiene-inventory-2026-11-15';
+  assert.equal(expectedArchiveShaMatches(branch(name, '80e320e4b95138685ad10099c6087050d66b2b62')), false);
+  assert.deepEqual(selectArchiveCandidates([branch(name, '80e320e4b95138685ad10099c6087050d66b2b62')], [], repository), []);
 });
 
 test('does not re-archive any retired ref if a stale branch is recreated', () => {
