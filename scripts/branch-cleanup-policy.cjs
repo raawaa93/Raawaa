@@ -69,7 +69,6 @@ const SUPERSEDED_CLOSED_PR_BRANCHES = Object.freeze([
 const STALE_NO_PR_BRANCHES = Object.freeze([
   "preview-deploy/visual-qa-2026-11-15",
   "preview-deploy/2026-11-15-post-fix",
-  "preview-deploy/2026-11-15-main-78ece71",
   "preview-deploy/2026-11-15-main-78ece71"
 ]);
 
