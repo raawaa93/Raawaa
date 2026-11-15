@@ -27,6 +27,8 @@ on:
       - ".graphifyignore"
       - ".github/workflows/codebase-graph.yml"
   workflow_dispatch:
+  schedule:
+    - cron: "15 5 * * *"
 
 permissions:
   contents: read
@@ -53,7 +55,7 @@ jobs:
           python-version: "3.12"
 
       - name: Install pinned Graphify CLI
-        run: python -m pip install --disable-pip-version-check "graphifyy==0.9.108"
+        run: python -m pip install --disable-pip-version-check "graphifyy==0.9.109"
 
       - name: Build code-only graph without model/API calls
         env:
