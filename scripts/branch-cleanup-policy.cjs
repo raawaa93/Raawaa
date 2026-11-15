@@ -80,7 +80,10 @@ const MERGED_PR_BRANCHES = Object.freeze([
   "feature/competitor-crawl-coverage-2026-11-15"
 ]);
 const SUPERSEDED_CLOSED_PR_BRANCHES = Object.freeze([]);
-const STALE_NO_PR_BRANCHES = Object.freeze([]);
+const STALE_NO_PR_BRANCHES = Object.freeze([
+  "maintenance/finalize-archive-index-2026-11-15",
+  "maintenance/finalize-pr113-archive-2026-11-15"
+]);
 
 function classifyBranches(branches, pullRequests, repositoryFullName, comparisons = {}) {
   const relatedByHead = new Map();
