@@ -1,5 +1,5 @@
 import unittest
-from scripts.competitor_crawl import extract_products_from_jsonld, parse_jsonld_blocks, robots_allows
+from scripts.competitor_crawl import extract_page_metadata, extract_products_from_jsonld, parse_jsonld_blocks, robots_allows
 
 class CompetitorCrawlTests(unittest.TestCase):
     def test_extracts_product_offer_from_graph(self):
@@ -31,6 +31,22 @@ class CompetitorCrawlTests(unittest.TestCase):
     def test_product_arrays_are_deduplicated(self):
         product = {"@type": "Product", "name": "Oil", "url": "https://example.com/oil"}
         self.assertEqual(len(extract_products_from_jsonld([{"@graph": [product, product]}])), 1)
+
+
+class PageMetadataTests(unittest.TestCase):
+    def test_extracts_public_product_price_and_currency_meta(self):
+        html = """
+        <meta property="og:title" content="Hair Serum">
+        <meta property="product:price:amount" content="21.90">
+        <meta property="product:price:currency" content="GBP">
+        <meta property="product:availability" content="instock">
+        """
+        meta = extract_page_metadata(html)
+        self.assertEqual(meta["og:title"], "Hair Serum")
+        self.assertEqual(meta["product:price:amount"], "21.90")
+        self.assertEqual(meta["product:price:currency"], "GBP")
+        self.assertEqual(meta["product:availability"], "instock")
+
 
 if __name__ == "__main__":
     unittest.main()
