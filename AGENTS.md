@@ -2,6 +2,7 @@
 
 ## Source of truth
 - Treat this repository's current main branch and owner-confirmed policy as authoritative.
+- Read `docs/engineering/PROJECT-MEMORY.md` at the start of substantial work; update it only when a durable, verified decision changes.
 - Preserve the existing static-site architecture unless a measured need justifies a change.
 - Keep the 10% Sham Cash-only discount and free delivery for every payment method.
 - Never invent product photography, customer reviews, testimonials, prices, or business credentials.
@@ -24,3 +25,10 @@ These upstream skills are not vendored into this repository. Install them in the
 - Add tests for every user-visible critical journey before changing cart, pricing, or WhatsApp behavior.
 - Prefer deterministic Playwright assertions over AI-driven browser automation for repeatable checks.
 - Use Browser Use only for exploratory tasks that require agentic navigation; use Crawl4AI for public-page extraction. Neither replaces Playwright regression tests.
+
+## Optional agent memory
+- If ProjectMem MCP is explicitly connected in the active coding environment, use it for project issues, attempts, fixes, and decisions. Do not assume the server is installed or available.
+- Never store API keys, credentials, customer names, phone numbers, addresses, order payloads, or private customer/commercial data in memory tools.
+- Keep ProjectMem's `.projectmem/` directory local and untracked. Do not enable automatic git hooks, watcher, global cross-project memory, or git-history backfill for this repository without a separate review.
+- Graphify is a regenerable code-structure index, not the source of truth for business rules. Use its offline code-only workflow; do not send repository source to a hosted model for automated indexing.
+- If optional memory tools are unavailable, use `docs/engineering/PROJECT-MEMORY.md`, this file, Git history, tests, and preserved recovery checkpoints.
