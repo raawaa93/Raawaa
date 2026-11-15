@@ -19,11 +19,11 @@ function makeHarness(schedule) {
     RAWAA_CONFIG: {
       products: [
         { familyId: 'rosemary-caffeine', price: 2400 },
-        { familyId: 'rosemary-caffeine', price: 2000 },
+        { familyId: 'rosemary-caffeine', price: 2100 },
         { familyId: 'olive-panthenol', price: 2200 },
-        { familyId: 'olive-panthenol', price: 1800 },
+        { familyId: 'olive-panthenol', price: 1900 },
         { familyId: 'castor-blend', price: 2600 },
-        { familyId: 'castor-blend', price: 1800 },
+        { familyId: 'castor-blend', price: 1700 },
       ],
       currency: { symbol: 'ل.س ' },
     },
@@ -38,7 +38,7 @@ test('keeps HTML fallback prices visible until the browser is idle', () => {
   const h = makeHarness('idle');
   assert.deepEqual(h.nodes.map((n) => n.textContent), ['من ٢٬٠٠٠ ل.س', 'من ١٬٨٠٠ ل.س', 'من ١٬٨٠٠ ل.س']);
   h.runScheduled();
-  assert.deepEqual(h.nodes.map((n) => n.textContent), ['من ٢٬٠٠٠ ل.س', 'من ١٬٨٠٠ ل.س', 'من ١٬٨٠٠ ل.س']);
+  assert.deepEqual(h.nodes.map((n) => n.textContent), ['من ٢٬١٠٠ ل.س', 'من ١٬٩٠٠ ل.س', 'من ١٬٧٠٠ ل.س']);
 });
 
 test('uses a timer fallback when requestIdleCallback is unavailable', () => {
