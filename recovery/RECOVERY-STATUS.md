@@ -90,3 +90,11 @@ The first post-merge backup has now been verified end-to-end:
 - All three embedded SHA-256 checks passed. Git bundle verification passed; an isolated bare restore fetched all 34 refs and `git fsck --full --no-reflogs` found no missing or corrupt objects.
 - The source archive extracted successfully; `scripts/check-site.mjs`, `scripts/build-deploy.mjs` (178-file payload), and all JavaScript syntax checks passed under Node 22.16.0.
 - This verifies the GitHub artifact and an isolated restore. It does not yet create an independent R2/off-platform copy; R2 remains deferred until payment-card readiness.
+
+
+## Operational policy update — 2026-11-15
+
+- Owner decision: retire manual production dispatch and adopt automatic production deployment after successful CI validation on canonical `main`.
+- The updated production workflow validates the exact main commit using Chromium/WebKit regression tests, policy and asset-integrity checks, and a clean Pages payload build. Deployment runs only after validation succeeds, rechecks that `main` has not moved, and refuses dirty source.
+- PRs and non-main branches remain non-production. Preview remains isolated.
+- This is a repository policy change, not proof of a live production deployment. Activation must be confirmed from the first successful post-merge GitHub Actions run and its Cloudflare deployment record.
