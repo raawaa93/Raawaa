@@ -60,12 +60,29 @@ for (const engine of engines) {
         await page.evaluate(() => document.fonts?.ready);
         await page.waitForTimeout(900);
 
-        // Trigger lazy-loaded images before the full-page capture.
+        // Trigger each lazy image in view and wait for its real load result.
+        // A rapid page-wide scroll can outrun Safari's lazy-load threshold and
+        // produce false positives in the audit even when the page is healthy.
         await page.evaluate(async () => {
-          const step = Math.max(500, Math.floor(window.innerHeight * 0.75));
-          for (let y = 0; y < document.documentElement.scrollHeight; y += step) {
-            window.scrollTo(0, y);
-            await new Promise(resolve => setTimeout(resolve, 80));
+          const images = Array.from(document.images).filter(img => img.loading === 'lazy');
+          for (const img of images) {
+            img.scrollIntoView({ block: 'center', behavior: 'instant' });
+            if (!img.complete) {
+              await new Promise(resolve => {
+                let settled = false;
+                const finish = () => {
+                  if (settled) return;
+                  settled = true;
+                  clearTimeout(timer);
+                  img.removeEventListener('load', finish);
+                  img.removeEventListener('error', finish);
+                  resolve();
+                };
+                const timer = setTimeout(finish, 5000);
+                img.addEventListener('load', finish, { once: true });
+                img.addEventListener('error', finish, { once: true });
+              });
+            }
           }
           window.scrollTo(0, 0);
           await new Promise(resolve => setTimeout(resolve, 300));
