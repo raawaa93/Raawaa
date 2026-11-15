@@ -7,6 +7,7 @@ const {
   MERGED_PR_BRANCHES,
   SUPERSEDED_CLOSED_PR_BRANCHES,
   STALE_NO_PR_BRANCHES,
+  DUPLICATE_REF_ALIASES,
 } = require('../../scripts/branch-cleanup-policy.cjs');
 
 const repository = 'raawaa93/Raawaa';
@@ -58,6 +59,32 @@ test('deletes only the nine reviewed merged heads when their PR head matches', (
   assert.equal(MERGED_PR_BRANCHES.includes('maintenance/finish-branch-cleanup-2026-11-15'), false);
   assert.equal(MERGED_PR_BRANCHES.includes('fix/final-visual-and-release-policy-2026-11-15'), false);
   assert.equal(MERGED_PR_BRANCHES.includes('fix/visual-audit-top-viewport-clean-2026-11-15'), true);
+});
+
+
+test('removes a duplicate branch ref only while its exact retained alias exists', () => {
+  const alias = 'fix/final-visual-release-policy-verified-2026-11-15';
+  const retained = 'fix/final-visual-release-policy-consolidated-2026-11-15';
+  assert.equal(DUPLICATE_REF_ALIASES[alias], retained);
+  const sameHead = [branchRef(alias, { sha: 'same-sha' }), branchRef(retained, { sha: 'same-sha' })];
+  assert.deepEqual(classifyBranches(sameHead, [], repository).map(x => x.name), [alias]);
+  assert.deepEqual(classifyBranches([sameHead[0]], [], repository), []);
+  assert.deepEqual(
+    classifyBranches([sameHead[0], branchRef(retained, { sha: 'different-sha' })], [], repository),
+    [],
+  );
+  assert.deepEqual(classifyBranches(sameHead, [pr(alias, { state: 'open' })], repository), []);
+});
+
+test('prunes the reviewed no-PR legacy ref only after GitHub proves it is contained in main', () => {
+  const name = 'fix/raawaa-final-qa-release-policy-2026-11-15';
+  assert.ok(STALE_NO_PR_BRANCHES.includes(name));
+  assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
+  assert.deepEqual(classifyBranches([branchRef(name)], [], repository, { [name]: { ahead_by: 1 } }), []);
+  assert.deepEqual(
+    classifyBranches([branchRef(name)], [], repository, { [name]: { ahead_by: 0, behind_by: 1 } }).map(x => x.name),
+    [name],
+  );
 });
 
 test('deletes a reviewed moved merged branch only after ancestry proof', () => {
