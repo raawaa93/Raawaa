@@ -306,3 +306,8 @@ test('superseded cleanup-policy drafts require ancestry proof before retirement'
     );
   }
 });
+
+
+test('does not merge the closed documentation branch into the deletion allowlist', () => {
+  assert.equal(MERGED_PR_BRANCHES.includes('docs/workspace-hygiene-2026-11-15'), false);
+});
