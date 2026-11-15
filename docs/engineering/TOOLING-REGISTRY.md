@@ -47,8 +47,8 @@ Other available skill/tool families include data analysis, user settings, and fi
 
 | Service | Observed allowance / remaining | Decision |
 |---|---|---|
-| Ahrefs API | Free subscription; 200,000 API units; 0 used; reset 2026-12-04 | Available for research; monitor usage |
-| OpenSEO | 424 credits remaining | Active RAWAA SEO project; spend credits on high-value audits/research |
+| Ahrefs API | Free subscription shows 200,000 API units; 0 used; reset 2026-12-04 | Public Domain Rating endpoint works; Keywords Explorer and location-management endpoints returned `Insufficient plan`; do not assume the displayed unit quota unlocks those endpoints |
+| OpenSEO | 251 credits remaining after current audit and keyword research | Active RAWAA SEO project; prioritize high-value audits and regional keyword research |
 | Firecrawl | 0 remaining of 1,000 plan credits; period ends 2026-11-29 | Pause Firecrawl calls until renewal |
 | Cloudflare Web Analytics | Site configuration created for raawaa-store.pages.dev; auto_install=false | No beacon installed; no data collection active until privacy/CSP review |
 | GitHub Actions | Free included usage subject to account limits | Existing workflows are pinned and used selectively |
@@ -64,7 +64,7 @@ Other available skill/tool families include data analysis, user settings, and fi
 - Scheduled visual QA for mobile and desktop.
 - Search Console connected through OpenSEO; IndexNow successfully submitted home, serum, and privacy on 2026-11-15.
 - Automatic production release only after full validation of qualifying website-source changes on main; workflow-only/docs-only changes are excluded.
-- New branch hygiene workflow prunes merged PR branches and narrowly reviewed superseded refs; backups and recovery refs are preserved.
+- Branch hygiene workflow is being tightened to prune only 11 exact superseded closed-unmerged refs and four exact stale no-PR refs after `ahead_by = 0`; merged PR heads are retained by default.
 
 ## Skills available in the ChatGPT workspace
 
@@ -105,3 +105,15 @@ The catalog being available in ChatGPT is not the same as vendoring a skill into
 - Never send order payloads, phone numbers, addresses, customer data, or secrets to external AI/memory/indexing services.
 - Never install analytics beacons before privacy disclosure and CSP are reviewed together.
 - Keep external tool calls bounded by available quotas and log the remaining balance after significant research.
+
+
+## Latest live SEO and market checks — 2026-11-15
+
+- Fresh OpenSEO audit `5f5a4013-0115-4580-8d00-53615d3a71c1` crawled 7/7 pages on the live Pages URL. Home, serum, and privacy each scored 100 desktop; mobile scores were 100, 99, and 98 respectively. Accessibility, best practices, and SEO scored 100 on all three. Mobile LCP: home 1.16s, serum 2.16s, privacy 0.94s. The only audit issues were three informational query variants canonicalized to the base serum page.
+- Search Console reports zero clicks/impressions in the last three months and URL Inspection reports home, serum, privacy, and campaign as unknown to Google. The sitemap exists in the repository and is referenced by robots.txt, but Google sitemap submission and indexing requests remain unverified through the connected read-only path. IndexNow successfully submitted home, serum, and privacy to supported engines; this does not submit to Google.
+- Syria is not available as a location in the connected keyword providers. OpenSEO returned regional proxy estimates for the Arabic seed `سيروم شعر`: 22,200/month in Saudi Arabia and 12,100/month in Egypt. These are not Syrian search volumes and must not be presented as such. Ahrefs keyword/location endpoints returned `Insufficient plan`; its free Domain Rating endpoint is available.
+- Global product-page benchmark: Mielle Rosemary Mint Oil (2 oz, published $9.99), The INKEY List Caffeine Scalp Treatment (150 ml, published £15), Kérastase Genesis Serum (90 ml), and Moroccanoil Treatment Original (100 ml, published £38.50). Competitor pages consistently provide detailed ingredient sections, usage instructions, FAQs, routine guidance, and customer reviews. RAWAA's 30/50/100 ml size ladder is competitive in format; complete INCI, verified product photography, product-specific usage, and real reviews remain the key content gaps.
+- Free Ahrefs Domain Rating snapshot: raawaa-store.pages.dev 0; Mielle 72; The Ordinary 79; The INKEY List 54; Kérastase 72; Moroccanoil 79; Briogeo 70. DR is a third-party comparative metric, not a Google ranking factor; the pages.dev hostname score is not a measure of product quality.
+- Current visual audit run `43675783829` tested the isolated preview built from canonical main. No HTTP errors, JavaScript page errors, failed requests, broken visible images, missing fonts, or horizontal overflow were reported. It failed only because Playwright's screenshot `animations: 'disabled'` option triggers a CSP-blocked inline stylesheet in WebKit (20 console errors, one per screenshot); the site CSP must remain strict. A test-harness fix is in review and must be rerun before marking visual QA complete.
+- Latest Graphify run produced 299 nodes, 626 edges, and 23 communities across 29 code files; generated recovery archives and workflows remain intentionally excluded. The latest disaster-recovery artifact is 12.96 MB with 90-day retention.
+- Cloudflare Web Analytics site configuration exists with `auto_install=false`; no beacon is installed and no analytics data is collected. Do not enable it until privacy disclosure and CSP are reviewed together.
