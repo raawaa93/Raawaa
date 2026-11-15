@@ -1,11 +1,14 @@
 # Archived branch recovery index
 
 **First archive batch:** [GitHub Actions run #43680881436](https://github.com/raawaa93/Raawaa/actions/runs/43680881436)  
-**Result:** Success — 29 branch refs archived, 29 annotated tags verified, zero failures, zero skipped candidates.
+**Final archive batch:** [GitHub Actions run #43682035975](https://github.com/raawaa93/Raawaa/actions/runs/43682035975)  
+**Verified result:** 32 archived branch refs, 32 recovery tags, zero cleanup failures.
 
-Every archived tag resolves to the exact original branch-head SHA. These are durable recovery points, not disposable cleanup debris.
+Every recovery tag resolves to the exact original branch-head SHA. These are durable recovery points, not disposable cleanup debris.
 
-## Archived refs
+## First archive batch — 29 refs
+
+The following 29 refs were archived in run #43680881436. Their exact preserved SHAs and recovery tag names remain listed in the first-batch table below.
 
 | Original branch | Preserved commit SHA | Recovery tag |
 |---|---|---|
@@ -39,22 +42,15 @@ Every archived tag resolves to the exact original branch-head SHA. These are dur
 | `seo/remove-noindex-campaign-from-sitemap-2026-11-15` | `59057a487580be4b13b24a99f0812eb1fb936138` | `archive/branches/2026-11-15/seo/remove-noindex-campaign-from-sitemap-2026-11-15` |
 | `seo/sitemap-noindex-policy-2026-11-15` | `e01e7be06307910bf2978888ef5837e7c6db4566` | `archive/branches/2026-11-15/seo/sitemap-noindex-policy-2026-11-15` |
 
-## Final archive batch — completed
+## Final archive batch — 3 refs
 
-**Run:** [#43682035975](https://github.com/raawaa93/Raawaa/actions/runs/43682035975)  
-**Result:** Success — 3 exact-SHA tags created and verified, 3 branch refs deleted, zero failures.
+Run #43682035975 completed both prune and archive jobs successfully. Each tag target was checked against the captured branch SHA before the branch ref was retired.
 
 | Original branch | Preserved commit SHA | Recovery tag |
 |---|---|---|
 | `docs/workspace-hygiene-2026-11-15` | `10e76ec9ed8de51cca6aad0451281f18513615b0` | `archive/branches/2026-11-15/docs/workspace-hygiene-2026-11-15` |
 | `fix/visual-audit-top-viewport-clean-2026-11-15` | `c0ccb2db0657d414885e68f16b8b79c9f73b4531` | `archive/branches/2026-11-15/fix/visual-audit-top-viewport-clean-2026-11-15` |
 | `maintenance/archive-inactive-branches-final-2026-11-15` | `ad3aaa80e47f2a4d823d85123f30c27726fb206d` | `archive/branches/2026-11-15/maintenance/archive-inactive-branches-final-2026-11-15` |
-
-**Final repository state after run #43682035975:** 17 branch refs remain; all 32 recovery tags are verified; no unprotected inactive working branch refs remain. The archive allowlist is cleared in the follow-up cleanup PR so these refs cannot be re-archived accidentally.
-
-## Tag format
-
-`archive/branches/YYYY-MM-DD/<original-branch-name>`
 
 ## Restore a branch
 
@@ -70,7 +66,7 @@ To inspect available archives:
 git tag --list 'archive/branches/*'
 ```
 
-Do not delete archive tags as part of routine cleanup. They preserve the original commit objects, including work from closed-unmerged PRs. The workflow run summary and this index are the recovery record.
+Do not delete archive tags as part of routine cleanup. They preserve original commit objects, including work from closed-unmerged PRs.
 
 ## Safety guarantees
 
