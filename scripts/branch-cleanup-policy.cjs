@@ -56,8 +56,6 @@ const MERGED_PR_BRANCHES = Object.freeze([
   "fix/visual-audit-csp-screenshots-2026-11-15",
   "fix/visual-audit-webkit-csp-2026-11-15",
   "docs/visual-qa-and-inventory-finalization-2026-11-15",
-  "maintenance/finish-branch-cleanup-2026-11-15",
-  "maintenance/repository-hygiene-2026-11-15",
   "fix/visual-qa-webkit-csp-regression-2026-11-15",
   "maintenance/branch-cleanup-consolidated-2026-11-15",
   "fix/production-release-push-only-2026-11-15"
