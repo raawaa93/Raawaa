@@ -3,8 +3,16 @@ name: RAWAA visual QA audit
 on:
   push:
     branches:
-      - main
       - 'qa/visual-audit-*'
+  workflow_run:
+    workflows:
+      - RAWAA production CI and release
+    types:
+      - completed
+    branches:
+      - main
+  schedule:
+    - cron: '17 3 * * 1'
   workflow_dispatch:
 
 permissions:
@@ -16,6 +24,7 @@ concurrency:
 
 jobs:
   visual-audit:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     name: Capture production pages on iPhone and desktop
     runs-on: ubuntu-latest
     timeout-minutes: 25
