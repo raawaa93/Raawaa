@@ -1,11 +1,10 @@
 # RAWAA Store branch inventory and cleanup record
 
-**Snapshot:** 2026-11-15 UTC, after PR #100 and archive run #43680881436  
+**Snapshot:** 2026-11-15 05:38 UTC, after PR #100 and archive run #43680881436; PR #101 is the only open review  
 **Repository:** `raawaa93/Raawaa`  
 **Canonical branch:** `main` — `edc49efe9b98f961fccef4554a2969a02d239b0e`  
 **Cleanup workflow:** `.github/workflows/cleanup-merged-branches.yml`  
 **Archive policy:** `scripts/branch-archive-policy.cjs`  
-**Archive manifest:** `docs/engineering/BRANCH-ARCHIVE-MANIFEST.md`  
 **Recovery index:** `docs/engineering/ARCHIVED-BRANCHES.md`
 
 ## Current snapshot
@@ -29,7 +28,7 @@
   - Archive stage created **29 verified annotated tags** and removed the corresponding branch refs.
   - Zero failures.
   - 20 branch refs remained immediately after the run.
-- The 29 archived tags and their exact original SHAs are listed in `docs/engineering/ARCHIVED-BRANCHES.md` and `docs/engineering/BRANCH-ARCHIVE-MANIFEST.md`.
+- The 29 archived tags and their exact original SHAs are listed in `docs/engineering/ARCHIVED-BRANCHES.md`.
 
 ## Current branch-by-branch inventory
 
@@ -45,7 +44,7 @@
 | `fix/visual-audit-top-viewport-clean-2026-11-15` | `c0ccb2db0657d414885e68f16b8b79c9f73b4531` | Merged PR #98; post-merge commits remain outside main ancestry | Archive with pinned recovery tag |
 | `main` | `edc49efe9b98f961fccef4554a2969a02d239b0e` | Canonical | Keep |
 | `maintenance/archive-inactive-branches-final-2026-11-15` | `ad3aaa80e47f2a4d823d85123f30c27726fb206d` | PR #100 merged; seven branch-only commits remain | Archive with pinned recovery tag |
-| `maintenance/final-workspace-hygiene-2026-11-15` | `1942364f00a9bd1fcb6584cba3feb78f9a288924` | Active follow-up implementation | Keep until PR resolves |
+| `maintenance/final-workspace-hygiene-2026-11-15` | `PR #101 head` | Active follow-up implementation | Keep until PR merges |
 | `preview-deploy/visual-qa-after-csp-fix-2026-11-15` | `2757a76415bd21cdd00fe7a256dfc52321f96b02` | Preview checkpoint | Keep |
 | `preview-deploy/visual-qa-current-2026-11-15` | `7ca62ffaaf2be5fd337255d66679621be399ddae` | Preview checkpoint | Keep |
 | `preview-deploy/2026-11-14` | `342eb994547f255bfc5226bc071d03719b4f8303` | Preview checkpoint | Keep |
@@ -68,6 +67,6 @@
 
 ## Next verification
 
-- Merge the current follow-up only after Store checks, Playwright, Graphify, and mobile performance checks pass.
-- Run branch hygiene again; it should archive the three pinned inactive refs once the PR is closed and merged.
+- Merge PR #101 only after Store checks, Playwright, Graphify, and mobile performance checks pass.
+- Run branch hygiene again; it should archive the three pinned inactive refs and prune the merged PR #101 branch.
 - Verify the resulting branch count, tag count, and run summary before marking the repository fully clean.
