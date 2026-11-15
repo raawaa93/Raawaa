@@ -8,12 +8,11 @@ const path = require('node:path');
 const workflowPath = path.join(process.cwd(), '.github/workflows/production-cicd.yml');
 const workflow = fs.readFileSync(workflowPath, 'utf8');
 
-test('main pushes validate but cannot deploy; production requires explicit confirmed dispatch', () => {
+test('validated pushes to canonical main deploy automatically without manual approval', () => {
   assert.match(workflow, /^on:\s*\n\s+push:/m);
-  assert.match(workflow, /^\s*workflow_dispatch:/m);
-  assert.match(workflow, /confirm_production:[\s\S]*?required: true[\s\S]*?options:[\s\S]*?- no[\s\S]*?- yes/);
-  assert.match(workflow, /if: github\.ref == 'refs\/heads\/main' && github\.event_name == 'workflow_dispatch' && inputs\.confirm_production == 'yes'/);
-  assert.doesNotMatch(workflow, /if: github\.ref == 'refs\/heads\/main' && github\.event_name == 'push'/);
+  assert.doesNotMatch(workflow, /workflow_dispatch|confirm_production/);
+  assert.doesNotMatch(workflow, /environment:\s*\n\s+name:\s*production/);
+  assert.match(workflow, /if: github\.ref == 'refs\/heads\/main' && github\.event_name == 'push'/);
 });
 
 test('maintenance and visual-audit helpers are ignored by production release triggers', () => {
@@ -29,7 +28,7 @@ test('maintenance and visual-audit helpers are ignored by production release tri
 });
 
 test('stale-source guard recognizes all maintenance and visual-audit helpers', () => {
-  const guard = workflow.match(/case "\$file" in([\s\S]*?)esac/)?.[1] || '';
+  const guard = workflow.match(/case "\$file" in([\s\\S]*?)esac/)?.[1] || '';
   for (const file of [
     'scripts/branch-cleanup-policy.cjs',
     'scripts/branch-archive-policy.cjs',
@@ -40,11 +39,11 @@ test('stale-source guard recognizes all maintenance and visual-audit helpers', (
   }
 });
 
-test('site integrity policy agrees with the explicit production approval gate', () => {
+test('site integrity policy agrees with automatic validated production releases', () => {
   const siteCheck = fs.readFileSync(path.join(process.cwd(), 'scripts/check-site.mjs'), 'utf8');
-  assert.match(siteCheck, /Production release must require an explicit yes\/no owner confirmation/u);
-  assert.match(siteCheck, /Production deploy must require an explicit confirmed dispatch from canonical main/u);
-  assert.match(siteCheck, /A main push must never deploy to production automatically/u);
+  assert.match(siteCheck, /Production deploy must run automatically after validated canonical main push/u);
+  assert.match(siteCheck, /A main push must deploy to production after successful validation/u);
+  assert.doesNotMatch(siteCheck, /explicit yes\/no owner confirmation|explicit confirmed dispatch/u);
 });
 
 test('stale-source guard fetches full main history before ancestry comparison', () => {
