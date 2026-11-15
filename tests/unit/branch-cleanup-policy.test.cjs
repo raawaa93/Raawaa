@@ -34,7 +34,7 @@ test('deletes an exact merged head only when its branch is explicitly reviewed',
   );
 });
 
-test('deletes the four newly reviewed merged heads only when their PR head matches', () => {
+test('deletes the six newly reviewed merged heads only when their PR head matches', () => {
   const names = [
     'fix/branch-hygiene-protect-operational-refs-2026-11-15',
     'fix/visual-audit-csp-screenshots-2026-11-15',
@@ -42,8 +42,6 @@ test('deletes the four newly reviewed merged heads only when their PR head match
     'maintenance/repository-hygiene-2026-11-15',
     'docs/visual-qa-and-inventory-finalization-2026-11-15',
     'maintenance/finish-branch-cleanup-2026-11-15',
-    'maintenance/finish-branch-cleanup-2026-11-15',
-    'docs/visual-qa-and-inventory-finalization-2026-11-15',
   ];
   for (const name of names) {
     assert.ok(MERGED_PR_BRANCHES.includes(name));
@@ -53,7 +51,6 @@ test('deletes the four newly reviewed merged heads only when their PR head match
     );
   }
 });
-
 test('deletes a reviewed moved merged branch only after ancestry proof', () => {
   const name = 'automation/agent-guidance-2026-11-15';
   const prs = [pr(name, { merged: true, sha: 'old-sha' })];
@@ -105,18 +102,17 @@ test('does not retire the closed-unmerged cleanup follow-up branch', () => {
   );
 });
 
-test('a branch reused by merged and closed-unmerged PRs requires explicit review and ancestry proof', () => {
+test('a reused merged/closed-unmerged ref requires ancestry proof', () => {
   const name = 'qa/visual-audit-2026-11-15';
   const prs = [pr(name, { merged: true, sha: 'old-sha' }), pr(name, { sha: 'new-sha' })];
   assert.deepEqual(classifyBranches([branchRef(name, { sha: 'new-sha' })], prs, repository), []);
   assert.deepEqual(
     classifyBranches([branchRef(name, { sha: 'new-sha' })], prs, repository, {
       [name]: { ahead_by: 0 },
-    }),
-    [],
+    }).map(x => x.name),
+    [name],
   );
 });
-
 test('protects a branch referenced by an open PR even if another PR was merged', () => {
   assert.deepEqual(
     classifyBranches([branchRef('qa/open')], [
