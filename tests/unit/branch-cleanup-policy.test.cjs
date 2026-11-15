@@ -147,3 +147,14 @@ test('retires the final inventory PR branch after its exact head is merged', () 
     [name],
   );
 });
+
+
+test('retires the final tooling-state PR branch only after its exact head is merged', () => {
+  const name = 'docs/final-tooling-state-2026-11-15';
+  assert.ok(MERGED_PR_BRANCHES.includes(name));
+  assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
+  assert.deepEqual(
+    classifyBranches([branchRef(name)], [pr(name, { merged: true })], repository).map(x => x.name),
+    [name],
+  );
+});
