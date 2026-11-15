@@ -30,6 +30,7 @@ const MERGED_PR_BRANCHES = Object.freeze([
   "maintenance/finalize-branch-cleanup-policy-2026-11-15",
   "maintenance/retire-final-closed-pr-ref-2026-11-15",
   "maintenance/retire-last-closed-ref-2026-11-15",
+  "maintenance/fix-merged-head-cleanup-logic-2026-11-15",
   "fix/privacy-navigation-current-home-2026-11-15",
   "feature/campaign-nitro-offer-2026-11-14-v2",
   "fix/campaign-canonical-2026-11-15",
@@ -123,6 +124,7 @@ function classifyBranches(branches, pullRequests, repositoryFullName, comparison
     // A reused ref with a closed-unmerged PR is retained unless it is explicitly
     // reviewed AND GitHub proves every current commit is already contained in main.
     if (hasClosedUnmergedPR) {
+      if (hasMergedPR && mergedHeadMatchesCurrent) return mergedAllowlist.has(name);
       if (hasMergedPR) return mergedAllowlist.has(name) && comparison?.ahead_by === 0;
       return superseded.has(name) && comparison?.ahead_by === 0;
     }
