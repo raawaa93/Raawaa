@@ -65,6 +65,7 @@ assert.doesNotMatch(ownerPricing, /الدولار الأمريكي|بالدول�
 assert.match(ownerSettings, /currency: 'SYP'/u, 'Owner dashboard currency default must be SYP');
 assert.match(ownerApp, /Intl\.NumberFormat/u, 'Owner dashboard must format order totals by currency');
 assert.match(ownerPricingTool, /let currencySymbol = 'ل\.س '/u, 'Owner pricing editor fallback currency must be SYP');
+assert.doesNotMatch(ownerPricingTool, /new Function\s*\(/u, 'Owner pricing editor must parse configuration data instead of evaluating source code');
 assert.match(campaign, /التوصيل مجاني إلى جميع المحافظات ولكل طرق الدفع/u, 'Campaign page must state free delivery for all payment methods');
 assert.doesNotMatch(campaign, /لا تشمل التوصيل|رسوم التوصيل|بلا عطر/u, 'Campaign page must not imply a delivery fee or scent-free base product');
 assert.ok(campaignScript.includes('product.image && product.image.src'), 'Campaign cards must display the configured product image');

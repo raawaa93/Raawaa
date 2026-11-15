@@ -49,9 +49,10 @@ async function loadConfig() {
   const response = await fetch(CONFIG_URL, { cache: 'no-store', credentials: 'omit' });
   if (!response.ok) throw new Error('تعذّر تحميل الإعدادات (' + response.status + ')');
   sourceText = await response.text();
-  // eval داخل دالة: نفس تقييم المتصفح للملف الثابت، بلا وصول إلى شبكة أو تخزين.
-  const factory = new Function('window', sourceText + '\n;return window.RAWAA_CONFIG;');
-  const loaded = factory({});
+  // config.js contains a JSON-compatible object; parse data instead of executing source code.
+  const match = sourceText.match(/window\.RAWAA_CONFIG\s*=\s*deepFreeze\((\{[\s\S]*?\})\s*\);/);
+  if (!match) throw new Error('ملف الإعدادات غير صالح');
+  const loaded = JSON.parse(match[1]);
   if (!loaded || !Array.isArray(loaded.products)) throw new Error('ملف الإعدادات لا يحتوي منتجات');
   if (loaded.currency && loaded.currency.symbol) currencySymbol = loaded.currency.symbol;
   return loaded;
