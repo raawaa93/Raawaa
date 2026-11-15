@@ -106,3 +106,24 @@ test('public pages satisfy the restrictive CSP without browser violations', asyn
     expect(violations).toEqual([]);
   }
 });
+
+
+test('serum page skips homepage-only CSS and keeps narrow mobile refinements', async ({ page }) => {
+  const requestedStylesheets = [];
+  page.on('request', request => {
+    if (request.resourceType() === 'stylesheet') requestedStylesheets.push(request.url());
+  });
+
+  await page.setViewportSize({ width: 320, height: 640 });
+  await page.goto('/serum.html', { waitUntil: 'domcontentloaded' });
+
+  expect(requestedStylesheets.some(url => url.includes('rawaa-design-system.css'))).toBe(false);
+  const card = page.locator('.serum-card');
+  await expect(card).toBeVisible();
+  const padding = await card.evaluate(element => ({
+    top: getComputedStyle(element).paddingTop,
+    bottom: getComputedStyle(element).paddingBottom,
+  }));
+  expect(padding).toEqual({ top: '3.2px', bottom: '3.2px' });
+  await expect(page.locator('[data-add-current]')).toBeVisible();
+});
