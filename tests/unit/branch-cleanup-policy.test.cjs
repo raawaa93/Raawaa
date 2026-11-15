@@ -64,15 +64,19 @@ test('keeps closed-unmerged work for the exact-SHA archive workflow', () => {
   assert.deepEqual(SUPERSEDED_CLOSED_PR_BRANCHES, []);
 });
 
-test('no unreviewed no-PR branch remains eligible after final cleanup', () => {
-  assert.deepEqual(STALE_NO_PR_BRANCHES, []);
-  const name = 'maintenance/retire-last-stale-refs-2026-11-15';
-  assert.deepEqual(
-    classifyBranches([branchRef(name)], [], repository, {
-      [name]: { ahead_by: 0, behind_by: 1 },
-    }),
-    [],
-  );
+test('only the two individually reviewed no-PR refs remain cleanup-eligible', () => {
+  assert.deepEqual(STALE_NO_PR_BRANCHES, [
+    'maintenance/finalize-archive-index-2026-11-15',
+    'maintenance/finalize-pr113-archive-2026-11-15',
+  ]);
+  for (const name of STALE_NO_PR_BRANCHES) {
+    assert.deepEqual(
+      classifyBranches([branchRef(name)], [], repository, { [name]: { ahead_by: 0, behind_by: 1 } }).map(x => x.name),
+      [name],
+    );
+  }
+  const unknown = 'maintenance/retire-last-stale-refs-2026-11-15';
+  assert.deepEqual(classifyBranches([branchRef(unknown)], [], repository, { [unknown]: { ahead_by: 0, behind_by: 1 } }), []);
 });
 
 test('keeps reused merged/closed refs when any unique commits remain', () => {
