@@ -82,3 +82,4 @@ These upstream skills are not vendored into this repository. Install them in the
 - Prefer free quotas and open-source tools. Never activate billing or paid API usage, and never use TinyFish.
 - Keep Graphify as an offline code map and PROJECT-MEMORY.md as durable project context. Do not add overlapping memory services without a concrete persistence need.
 - Do not uninstall integrations or delete external workspace content (Notion pages, Supabase projects, Figma files, or customer data) based on inactivity. Exact target and service-specific permission/authorization are required.
+- Inactive branch cleanup must preserve history: never delete a branch with unique commits directly. Use the reviewed archival policy to create and verify an annotated `archive/branches/YYYY-MM-DD/<branch>` tag before deleting the original ref; retain open-PR, backup, recovery, deploy, release, and preview refs.

@@ -202,3 +202,11 @@ Update only when a verified, durable fact changes (for example: owner-approved p
 - Workspace inventory: 801 tool definitions across 24 integration families and 151 available skills. The repository contains no project-local .agents/skills, skills/, or .claude/ packages. Global skills and integrations are shared across projects; do not uninstall them based only on RAWAA activity.
 - Current balances: OpenSEO 251 credits; Firecrawl 0/1,000 through 2026-11-29; Ahrefs Free API key 0/200,000 units, workspace quota 0; public Domain Rating endpoint costs zero and keyword endpoints are plan-restricted. Figma remains View-only; Notion's advanced connector search/data-source tools require Business/Enterprise. No billing enabled.
 - Store Supabase database remains unidentified among visible projects; no Supabase writes were made. Cloudflare Web Analytics remains configured with auto_install=false and no beacon. No DNS, customer data, secrets, prices, discounts, or shipping policy changed.
+
+## Repository and integration hygiene — 2026-11-15 (pre-archive snapshot)
+
+- GitHub repository hygiene now separates ancestry-safe merged-ref pruning from recoverable archival of reviewed inactive refs. The archive workflow writes annotated tags before deleting branch refs; open PR heads and backup/recovery/deploy/preview namespaces are retained.
+- Pre-archive inventory: 49 branch refs, 32 reviewed inactive refs in the archive allowlist, and 17 canonical/operational/protected refs intended to remain. The actual post-run branch count and tag results must be recorded in `BRANCH-INVENTORY.md` and `BRANCH-ARCHIVE-MANIFEST.md` after the workflow completes.
+- Cloudflare Store Worker `raawaa-store` had no routes, custom domains, bindings, or schedules and recorded zero invocations over the previous 30 days. Its `workers.dev` subdomain was disabled; the Worker script and deployment metadata remain as rollback material because source export was unavailable.
+- Cloudflare Pages remains the Store production host. No DNS, custom-domain, Supabase database, queue, secret, customer, or order data was changed.
+- The account-wide tooling catalog is not equivalent to Store integrations. Keep shared-project resources intact unless ownership and dependencies are confirmed; use the Tooling Registry as the current connection/quota/permission inventory.

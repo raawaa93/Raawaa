@@ -62,7 +62,9 @@ const MERGED_PR_BRANCHES = Object.freeze([
   "fix/production-release-push-only-2026-11-15",
   "fix/visual-audit-top-viewport-clean-2026-11-15",
   "fix/branch-cleanup-policy-final-2026-11-15",
-  "fix/branch-cleanup-policy-final-rebased-2026-11-15"
+  "fix/branch-cleanup-policy-final-rebased-2026-11-15",
+  "docs/workspace-hygiene-2026-11-15",
+  "maintenance/archive-inactive-branches-2026-11-15"
 ]);
 const SUPERSEDED_CLOSED_PR_BRANCHES = Object.freeze([
   "ci/restore-release-boundaries-2026-11-15-rebased",
@@ -83,7 +85,8 @@ const SUPERSEDED_CLOSED_PR_BRANCHES = Object.freeze([
   "fix/branch-cleanup-policy-current-state-2026-11-15"
 ]);
 const DUPLICATE_TREE_BRANCHES = Object.freeze([
-  "fix/production-policy-site-check-2026-11-15"
+  "fix/production-policy-site-check-2026-11-15",
+  "fix/visual-audit-top-viewport-clean-2026-11-15"
 ]);
 
 const STALE_NO_PR_BRANCHES = Object.freeze([

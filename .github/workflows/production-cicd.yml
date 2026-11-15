@@ -18,6 +18,7 @@ on:
       - 'scripts/check-site.mjs'
       - 'scripts/check-production-headers.mjs'
       - 'scripts/branch-cleanup-policy.cjs'
+      - 'scripts/branch-archive-policy.cjs'
       - 'scripts/visual-audit.mjs'
       - 'scripts/visual-audit-csp-policy.cjs'
 
@@ -121,7 +122,7 @@ jobs:
             while IFS= read -r file; do
               [[ -z "$file" ]] && continue
               case "$file" in
-                *.md|docs/*|recovery/*|AGENTS.md|.agents/*|package.json|package-lock.json|playwright.config.mjs|tests/*|scripts/check-site.mjs|scripts/check-production-headers.mjs|scripts/branch-cleanup-policy.cjs|scripts/visual-audit.mjs|scripts/visual-audit-csp-policy.cjs|.github/*)
+                *.md|docs/*|recovery/*|AGENTS.md|.agents/*|package.json|package-lock.json|playwright.config.mjs|tests/*|scripts/check-site.mjs|scripts/check-production-headers.mjs|scripts/branch-cleanup-policy.cjs|scripts/branch-archive-policy.cjs|scripts/visual-audit.mjs|scripts/visual-audit-csp-policy.cjs|.github/*)
                   ;;
                 *)
                   echo "::error::Production source changed after validation ($file); refusing stale deployment."
