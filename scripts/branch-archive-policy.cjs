@@ -1,6 +1,8 @@
 'use strict';
 
-const ARCHIVE_BRANCHES = Object.freeze({});
+const ARCHIVE_BRANCHES = Object.freeze({
+  "maintenance/close-archive-closure-2026-11-15": "22a1f2abbe89b2712461541424a5f4329d9ca9c6",
+});
 const PROTECTED_PREFIXES = Object.freeze([
   'backup/',
   'recovery/',
