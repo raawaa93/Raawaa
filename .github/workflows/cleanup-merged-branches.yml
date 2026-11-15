@@ -55,7 +55,8 @@ jobs:
               if (name === 'main' || branch.protected) return false;
               const alwaysProtectedPrefixes = ['backup/', 'recovery/', 'restore/', 'release/', 'production-deploy/'];
               if (alwaysProtectedPrefixes.some(prefix => name.startsWith(prefix))) return false;
-              if ((name.startsWith('preview-deploy/') || name.startsWith('deploy/')) && !staleNoPr.has(name)) return false;
+              if (name.startsWith('deploy/')) return false;
+              if (name.startsWith('preview-deploy/') && !staleNoPr.has(name)) return false;
               const related = pullRequests.filter(pull => sameRepo(pull) && pull.head.ref === name);
               if (related.some(pull => pull.state === 'open')) return false;
 
