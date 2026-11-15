@@ -262,3 +262,15 @@ Update only when a verified, durable fact changes (for example: owner-approved p
 - Cloudflare Pages `raawaa-store` latest production deployment remains `b2923438-ad03-4c5a-816d-240fa6b5bbfd`, source `db1e0b131f596208b10e2e9c951d1f22c9beb916`, deployment stage success. The Pages custom domain `rawaa.eu.org` is still pending because its CNAME is absent; DNS was not changed.
 - GitHub `main` branch protection remains unresolved. The repository's recorded audit found no protection/rulesets and the connected app was denied permission to configure them (403). Configure required checks through an authorized GitHub settings session; do not infer success from empty commit-status results.
 - No production source, prices, discounts, delivery policy, customer/order data, Supabase data, secrets, billing, or DNS was changed in this follow-up.
+
+
+## Order, payment, and backend audit — 2026-11-15
+
+- Read-only source review confirms the storefront builds a WhatsApp handoff link from the cart; the customer reviews and sends the message. This does not create a server-side order record, payment transaction, stock reservation, or automated order confirmation.
+- Payment options in the storefront are Sham Cash (10% discount only) and cash on delivery (no Sham Cash discount). Delivery is configured as free across both delivery zones and both payment methods. Preserve these rules exactly.
+- The Sham Cash wallet number is blank in the current configuration; do not invent or insert a wallet number. The transfer receipt is verified manually after the customer contacts the store.
+- Product ingredient descriptions explicitly state they are summaries, not complete INCI lists. Do not invent an INCI declaration, formula percentages, manufacturing credentials, or supplier provenance. Actual supplier/manufacturer documents are required before publishing those details.
+- Product imagery is explicitly described as conceptual packaging artwork, not verified physical-product photography. Keep that disclosure until genuine product photos are supplied.
+- Privacy page is still marked as a draft requiring review for the Syrian market. The current code path has no online payment gateway, customer accounts, store database, or server-side order storage; WhatsApp is an external handoff chosen by the customer.
+- Supabase read-only inspection of both connected projects confirms neither is the Store database: `raawaa-engine-fallback` (`xuwtuhfqjjwszxqkmivj`) has no public tables; `Ghaioooth-core` (`oyoyozdugicmnkfhjovo`) contains council/provider/task tables unrelated to storefront orders. Do not write to either project or connect them to checkout.
+- Next implementation boundary: only add order storage/payment integration after the owner selects the intended backend and a recoverable schema/security design is approved. Until then, keep the existing WhatsApp handoff and manual confirmation model.
