@@ -95,7 +95,7 @@ Update only when a verified, durable fact changes (for example: owner-approved p
 ## Verified integration and release audit — 2026-11-15
 
 ### Production and quality gates
-- Canonical `main` is `c1f3d2940d5507221cb22072a724987ede31ae13`; Cloudflare Pages production deployment `da962fbd-4e4f-496c-8338-dd5d5fea1345` completed successfully from that exact clean commit.
+- Canonical `main` is `506dd272517108e2751ea78b01ba3e8ee9857968`; Cloudflare Pages production deployment `bc6f615a` completed successfully from that exact clean commit at 2026-11-15 03:45:24Z.
 - The latest Store checks, production release, and disaster-recovery backup workflow runs all completed successfully for that commit.
 - Cloudflare Pages is deployed by GitHub Actions using Wrangler Direct Upload (deployment trigger `ad_hoc`; no Pages build command is configured). The deployment API showed 538 total historical deployment records across 22 pages; this is not a monthly usage meter and must not be interpreted as 538 builds in the current month. Keep preview uploads deliberate and avoid redundant production releases.
 - A fresh OpenSEO audit on 2026-11-15 crawled 7/7 pages with no crawl errors, critical issues, or warnings. The only findings are three informational canonicalization notices for product-selection query states that intentionally canonicalize to `/serum`.
@@ -132,3 +132,5 @@ Update only when a verified, durable fact changes (for example: owner-approved p
 - Security advisor also reports Supabase Auth leaked-password protection disabled on `Ghaioooth-core`. Do not alter sign-in settings until the owner-auth flow and impact are reviewed.
 
 - Cloudflare Web Analytics was checked through the account API on 2026-11-15: no Web Analytics sites are configured. Cloudflare documents the service as free and privacy-first, with no collection/use of visitor personal data, and Pages supports a one-click enablement. It is a candidate to replace the missing GA4 measurement for basic traffic/RUM, but it has not been enabled and the privacy notice must be reviewed before adding any analytics beacon.
+
+- PR #55 is merged and deployed. Cloudflare Pages production smoke tests passed against the live site: global clickjacking/MIME/referrer/permissions protections are present; owner routes additionally return restrictive same-origin CSP, `Cache-Control: no-store`, and `X-Robots-Tag: noindex`. The site currently uses no Pages Functions, so the static `_headers` rules cover the site's responses.
