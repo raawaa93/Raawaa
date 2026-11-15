@@ -34,27 +34,53 @@ test('deletes an exact merged head only when its branch is explicitly reviewed',
   );
 });
 
-test('deletes the ten newly reviewed merged heads only when their PR head matches', () => {
+test('deletes only the nine reviewed merged heads when their PR head matches', () => {
   const names = [
     'fix/branch-hygiene-protect-operational-refs-2026-11-15',
     'fix/visual-audit-csp-screenshots-2026-11-15',
     'fix/visual-audit-webkit-csp-2026-11-15',
-    'maintenance/repository-hygiene-2026-11-15',
     'docs/visual-qa-and-inventory-finalization-2026-11-15',
-    'maintenance/finish-branch-cleanup-2026-11-15',
     'fix/visual-qa-webkit-csp-regression-2026-11-15',
+    'maintenance/repository-hygiene-2026-11-15',
     'maintenance/branch-cleanup-consolidated-2026-11-15',
     'fix/production-release-push-only-2026-11-15',
     'fix/visual-audit-top-viewport-clean-2026-11-15',
   ];
+  assert.equal(new Set(MERGED_PR_BRANCHES).size, MERGED_PR_BRANCHES.length);
   for (const name of names) {
-    assert.ok(MERGED_PR_BRANCHES.includes(name));
+    assert.ok(MERGED_PR_BRANCHES.includes(name), name);
     assert.deepEqual(
       classifyBranches([branchRef(name)], [pr(name, { merged: true })], repository).map(x => x.name),
       [name],
     );
   }
+  assert.equal(MERGED_PR_BRANCHES.includes('maintenance/finish-branch-cleanup-2026-11-15'), false);
 });
+
+test('superseded closed-unmerged refs require full ancestry proof before deletion', () => {
+  const names = [
+    'fix/visual-audit-top-viewport-2026-11-15',
+    'fix/final-visual-and-release-policy-2026-11-15',
+    'fix/final-visual-release-policy-consolidated-2026-11-15',
+    'maintenance/finalize-branch-cleanup-2026-11-15',
+    'fix/production-policy-site-check-2026-11-15',
+    'maintenance/finish-branch-cleanup-2026-11-15',
+    'maintenance/branch-hygiene-followup-2026-11-15',
+  ];
+  for (const name of names) {
+    assert.ok(SUPERSEDED_CLOSED_PR_BRANCHES.includes(name), name);
+    assert.deepEqual(classifyBranches([branchRef(name)], [pr(name)], repository), []);
+    assert.deepEqual(
+      classifyBranches([branchRef(name)], [pr(name)], repository, { [name]: { ahead_by: 5, behind_by: 0 } }),
+      [],
+    );
+    assert.deepEqual(
+      classifyBranches([branchRef(name)], [pr(name)], repository, { [name]: { ahead_by: 0, behind_by: 5 } }).map(x => x.name),
+      [name],
+    );
+  }
+});
+
 test('deletes a reviewed moved merged branch only after ancestry proof', () => {
   const name = 'automation/agent-guidance-2026-11-15';
   const prs = [pr(name, { merged: true, sha: 'old-sha' })];
