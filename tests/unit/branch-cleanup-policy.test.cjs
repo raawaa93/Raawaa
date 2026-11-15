@@ -192,3 +192,19 @@ test('retires the merged crawler implementation branches after their exact PR he
     );
   }
 });
+
+test('retires the merged release-fix, cleanup, and crawler-coverage branches after exact PR merge', () => {
+  const names = [
+    'fix/production-release-ancestry-fetch',
+    'maintenance/prune-merged-crawler-branches',
+    'feature/competitor-crawl-coverage-2026-11-15',
+  ];
+  for (const name of names) {
+    assert.ok(MERGED_PR_BRANCHES.includes(name));
+    assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
+    assert.deepEqual(
+      classifyBranches([branchRef(name)], [pr(name, { merged: true })], repository).map(x => x.name),
+      [name],
+    );
+  }
+});
