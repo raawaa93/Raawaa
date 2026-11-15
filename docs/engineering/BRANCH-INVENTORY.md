@@ -1,86 +1,87 @@
-# RAWAA Store branch inventory and cleanup policy
+# RAWAA Store branch inventory and cleanup record
 
-**Snapshot:** 2026-11-15 04:42 UTC  
+**Verified:** 2026-11-15 04:42 UTC  
 **Repository:** `raawaa93/Raawaa`  
 **Canonical branch:** `main`  
-**Branch cleanup:** PR #70 merged  
-**Operational namespace protection:** PR #74 merged  
-**Visual QA harness fix:** PR #75 merged  
-**Visual QA/inventory documentation:** PR #76 merged  
-**Current cleanup and tooling audit:** PR #77 open
+**Cleanup PR:** #70 merged  
+**Operational safety PR:** #74 merged  
+**Visual QA workflow PR:** #76 merged  
+**WebKit CSP false-positive handling PR:** #78 merged  
+**Current branch-cleanup PR:** #77 open
 
-## Current counts
+## Current snapshot
 
-- **37** branch refs and **77** pull requests: **63 merged**, **13 closed without merge**, **1 open** (#77).
-- The initial cleanup run #43676889692 inspected 84 refs and deleted 55 reviewed refs.
-- A later pre-fix run #43677232271 deleted three operational checkpoints; all three were restored at their exact original commit IDs.
-- PR #74 protects `backup/*`, `recovery/*`, `restore/*`, `release/*`, `production-deploy/*`, `deploy/*`, and active `preview-deploy/*` namespaces.
-- Post-PR #74 cleanup run #43677406307 inspected 35 refs, completed 12 ancestry comparisons, found zero deletion candidates, and succeeded.
-- Current protected operational/archive refs: 4 backup, 3 recovery, 1 restore, 1 release, 1 production-deploy, 4 preview, and 2 deploy.
-- PR #77 now reviews five current cleanup candidates: four exact merged PR heads (#71, #74, #75, #76) and one no-PR documentation ref proven `ahead_by=0`, `behind_by=3`.
-- PR #77's own branch is also allowlisted for cleanup after merge, but the open-PR guard prevents deletion while it is open. This avoids leaving a merged maintenance branch behind.
+- Branch refs: **39**.
+- Pull requests: **78** — **64 merged**, **13 closed-unmerged**, **1 open**.
+- Backup refs: **4**.
+- Recovery refs: **3**.
 
-## Retention rules
+## Cleanup history
 
-1. Keep `main`, protected refs, and all backup, recovery, restore, release, and production-deploy namespaces.
-2. Keep every `deploy/*` ref and every active `preview-deploy/*` ref. Only exact reviewed stale names can be considered.
-3. Keep all open-PR heads.
-4. Delete merged PR heads only when the exact branch name is reviewed and the current SHA matches the merged PR head. Moved refs require GitHub ancestry proof.
-5. Delete closed-unmerged refs only when individually reviewed AND GitHub proves `ahead_by=0`.
-6. Delete no-PR refs only when individually reviewed AND GitHub proves `ahead_by=0`.
-7. Any comparison failure retains the branch. Never force-delete or rewrite main history.
+1. Run #43676889692 inspected 84 refs and deleted 55 reviewed refs with zero failures.
+2. Run #43677232271 deleted three operational refs before namespace protection was fixed. The original restore/release checkpoint refs were recreated at their exact merged-PR head commits; the active preview ref was also restored.
+3. PR #74 permanently protected `restore/*`, `release/*`, `production-deploy/*`, all backup/recovery refs, and active preview/deploy refs. Run #43677406307 completed with zero deletion candidates and zero failures.
+4. PR #73 was closed unmerged by the repository owner; its proposed allowlist changes were not applied.
+5. PR #77 completes the reviewed allowlist for merged refs #70, #71, #74, #75, #76 and itself, plus the docs-only no-PR branch after GitHub confirmed `ahead_by = 0`, `behind_by = 3`. It retains all operational namespaces and unmerged work.
 
-## Full current inventory
+## Current branch-by-branch inventory
 
-| Branch | PR history | Compare with main | Classification / action |
-|---|---|---:|---|
-| `automation/generate-lockfile-2026-11-15` | #60 closed unmerged | ahead 5 / behind 19 | Retain unique dependency/workflow commits |
-| `automation/graphify-and-lighthouse-2026-11-15` | #34 closed unmerged | ahead 5 / behind 36 | Retain unique workflow/config commits |
-| `automation/graphify-daily-refresh-2026-11-15` | #33 closed unmerged | ahead 6 / behind 36 | Retain unique workflow/config commits |
-| `backup/continuity-hardening-2026-11-15` | #22 merged | protected | Keep rollback checkpoint |
-| `backup/site-2026-11-14-post-mobile-audit` | none | not compared | Keep rollback checkpoint |
-| `backup/site-2026-11-14-restored-main` | none | not compared | Keep rollback checkpoint |
-| `backup/site-2026-11-15-preproduction` | none | not compared | Keep rollback checkpoint |
-| `chore/google-site-verification` | #47 closed unmerged | ahead 1 / behind 27 | Retain unique verification file |
-| `ci/restore-release-boundaries-2026-11-15-rebased` | #66 closed unmerged | ahead 4 / behind 10 | Retain unique release-boundary commits |
-| `ci/restore-release-boundaries-2026-11-15` | #63 closed unmerged | ahead 9 / behind 15 | Retain unique release-boundary commits |
-| `deploy/10-percent-2026-11-14` | none | not compared | Keep operational deployment checkpoint |
-| `deploy/10-percent-site-only` | none | not compared | Keep operational deployment checkpoint |
-| `docs/project-tooling-and-branch-inventory-2026-11-15` | none | ahead 0 / behind 3 | Reviewed no-PR cleanup candidate |
-| `docs/visual-qa-and-inventory-finalization-2026-11-15` | #76 merged | exact merged head | Reviewed merged-ref cleanup candidate |
-| `feature/campaign-nitro-offer-2026-11-14` | #6 closed unmerged | ahead 5 / behind 68 | Retain unique campaign work |
-| `fix/branch-hygiene-protect-operational-refs-2026-11-15` | #74 merged | exact merged head | Reviewed merged-ref cleanup candidate |
-| `fix/manual-only-production-release` | #61 closed unmerged | ahead 11 / behind 17 | Retain unique release-policy commits |
-| `fix/visual-audit-csp-screenshots-2026-11-15` | #75 merged | exact merged head | Reviewed merged-ref cleanup candidate |
-| `fix/visual-audit-webkit-csp-2026-11-15` | #71 merged | exact merged head | Reviewed merged-ref cleanup candidate |
-| `main` | canonical | — | Sole source of truth |
-| `maintenance/branch-hygiene-followup-2026-11-15` | #73 closed unmerged | ahead 5 / behind 2 | Retain unique cleanup follow-up work |
-| `maintenance/finish-branch-cleanup-2026-11-15` | #77 open | — | Keep while PR is open; delete after merge |
-| `maintenance/repository-hygiene-2026-11-15` | #70 merged | ahead 62 / behind 5 | Retain pending manual review; moved branch contains additional commits |
-| `preview-deploy/visual-qa-after-csp-fix-2026-11-15` | operational preview | protected | Retain until visual evidence archived |
-| `preview-deploy/visual-qa-current-2026-11-15` | operational preview | protected | Retain until visual evidence archived |
-| `preview-deploy/2026-11-14` | operational preview | protected | Retain pending preview lifecycle review |
-| `preview-deploy/2026-11-15-main-78ece71` | no PR | protected by active-prefix rule | Retain pending preview lifecycle review |
-| `production-deploy/release-2026-11-15` | operational release | protected | Keep production deployment checkpoint |
-| `qa/visual-audit-2026-11-15` | #26 merged + #27 closed unmerged | ahead 11 / behind 42 | Retain; reused branch still has unique unmerged commits |
-| `recovery/archive-store-supabase-migrations-2026-11-15` | recovery archive | protected | Keep; migrations are not disposable |
-| `recovery/cloudflare-manifest-2026-11-14` | recovery archive | protected | Keep |
-| `recovery/inspect-edge-functions-2026-11-15` | recovery archive | protected | Keep |
-| `release/clean-pages-payload-2026-11-14` | operational release | protected | Keep exact original commit |
-| `restore/integrated-store-2026-11-14` | restore checkpoint | protected | Keep exact original commit |
-| `seo/noindex-campaign-sitemap-2026-11-15` | #38 closed unmerged | ahead 3 / behind 34 | Retain unique SEO policy changes |
-| `seo/remove-noindex-campaign-from-sitemap-2026-11-15` | #35 closed unmerged | ahead 3 / behind 36 | Retain unique SEO policy changes |
-| `seo/sitemap-noindex-policy-2026-11-15` | #39 closed unmerged | ahead 3 / behind 34 | Retain unique SEO policy changes |
+| Branch | Classification | Decision |
+|---|---|---|
+| `automation/generate-lockfile-2026-11-15` | Closed unmerged #60 | Retain; unresolved work not proven obsolete |
+| `automation/graphify-and-lighthouse-2026-11-15` | Closed unmerged #34 | Retain; unresolved work not proven obsolete |
+| `automation/graphify-daily-refresh-2026-11-15` | Closed unmerged #33 | Retain; unresolved work not proven obsolete |
+| `backup/continuity-hardening-2026-11-15` | Backup archive | Keep permanently |
+| `backup/site-2026-11-14-post-mobile-audit` | Backup archive | Keep permanently |
+| `backup/site-2026-11-14-restored-main` | Backup archive | Keep permanently |
+| `backup/site-2026-11-15-preproduction` | Backup archive | Keep permanently |
+| `chore/google-site-verification` | Closed unmerged #47 | Retain; unresolved work not proven obsolete |
+| `ci/restore-release-boundaries-2026-11-15-rebased` | Closed unmerged #66 | Retain; unresolved work not proven obsolete |
+| `ci/restore-release-boundaries-2026-11-15` | Closed unmerged #63 | Retain; unresolved work not proven obsolete |
+| `deploy/10-percent-2026-11-14` | No PR | Retain until individual review and ahead_by=0 proof |
+| `deploy/10-percent-site-only` | No PR | Retain until individual review and ahead_by=0 proof |
+| `docs/project-tooling-and-branch-inventory-2026-11-15` | No PR | Retain until individual review and ahead_by=0 proof |
+| `docs/visual-qa-and-inventory-finalization-2026-11-15` | Merged #76 | Delete only if explicitly allowlisted and namespace policy permits |
+| `feature/campaign-nitro-offer-2026-11-14` | Closed unmerged #6 | Retain; unresolved work not proven obsolete |
+| `fix/branch-hygiene-protect-operational-refs-2026-11-15` | Merged #74 | Delete only if explicitly allowlisted and namespace policy permits |
+| `fix/manual-only-production-release` | Closed unmerged #61 | Retain; unresolved work not proven obsolete |
+| `fix/visual-audit-csp-screenshots-2026-11-15` | Merged #75 | Delete only if explicitly allowlisted and namespace policy permits |
+| `fix/visual-audit-webkit-csp-2026-11-15` | Merged #71 | Delete only if explicitly allowlisted and namespace policy permits |
+| `fix/visual-qa-webkit-csp-regression-2026-11-15` | Merged #78 | Delete only if explicitly allowlisted and namespace policy permits |
+| `main` | Canonical | Keep |
+| `maintenance/branch-cleanup-final-2026-11-15` | No PR | Retain until individual review and ahead_by=0 proof |
+| `maintenance/branch-hygiene-followup-2026-11-15` | Closed unmerged #73 | Retain; unresolved work not proven obsolete |
+| `maintenance/finish-branch-cleanup-2026-11-15` | Open PR #77 | Keep until resolved |
+| `maintenance/repository-hygiene-2026-11-15` | Merged #70 | Delete only if explicitly allowlisted and namespace policy permits |
+| `preview-deploy/visual-qa-after-csp-fix-2026-11-15` | Merged #72 | Delete only if explicitly allowlisted and namespace policy permits |
+| `preview-deploy/visual-qa-current-2026-11-15` | Merged #69 | Delete only if explicitly allowlisted and namespace policy permits |
+| `preview-deploy/2026-11-14` | No PR | Retain until individual review and ahead_by=0 proof |
+| `preview-deploy/2026-11-15-main-78ece71` | No PR | Retain until individual review and ahead_by=0 proof |
+| `production-deploy/release-2026-11-15` | Operational/recovery checkpoint | Keep permanently |
+| `qa/visual-audit-2026-11-15` | Merged + closed-unmerged reuse | Retain unless exact reviewed ancestry proof permits cleanup |
+| `recovery/archive-store-supabase-migrations-2026-11-15` | Operational/recovery checkpoint | Keep permanently |
+| `recovery/cloudflare-manifest-2026-11-14` | Operational/recovery checkpoint | Keep permanently |
+| `recovery/inspect-edge-functions-2026-11-15` | Operational/recovery checkpoint | Keep permanently |
+| `release/clean-pages-payload-2026-11-14` | Operational/recovery checkpoint | Keep permanently |
+| `restore/integrated-store-2026-11-14` | Operational/recovery checkpoint | Keep permanently |
+| `seo/noindex-campaign-sitemap-2026-11-15` | Closed unmerged #38 | Retain; unresolved work not proven obsolete |
+| `seo/remove-noindex-campaign-from-sitemap-2026-11-15` | Closed unmerged #35 | Retain; unresolved work not proven obsolete |
+| `seo/sitemap-noindex-policy-2026-11-15` | Closed unmerged #39 | Retain; unresolved work not proven obsolete |
 
-## Expected result after PR #77
+## Deletion policy
 
-After PR #77 merges, six refs are eligible for deletion: four exact merged PR heads, the verified no-PR docs ref, and PR #77's own merged head. If the workflow confirms those exact conditions and no comparison errors, the expected count is **31**. The actual post-run inventory is authoritative.
+- Never delete `main`, protected refs, `backup/*`, `recovery/*`, `restore/*`, `release/*`, or `production-deploy/*`.
+- Preserve every `deploy/*` ref and active `preview-deploy/*` ref. Only exact reviewed stale preview refs may be considered.
+- Merged PR heads require exact allowlisting; moved heads require `ahead_by = 0`.
+- Closed-unmerged and reused refs require explicit review and `ahead_by = 0`.
+- No-PR refs require exact allowlisting and `ahead_by = 0`.
+- Unknown refs, comparison failures, and unmerged work are retained.
 
-## Workflow and tests
+## Automation
 
 - Policy: `scripts/branch-cleanup-policy.cjs`
 - Tests: `tests/unit/branch-cleanup-policy.test.cjs`
 - Workflow: `.github/workflows/cleanup-merged-branches.yml`
-- Runs on main pushes, weekly, and manual dispatch.
 - Store checks execute `node --test tests/unit/*.test.cjs`.
-- Production release ignores cleanup policy and visual-audit scripts; maintenance-only changes must not deploy storefront source.
+- Cleanup runs on main pushes, weekly, or manually.
+
