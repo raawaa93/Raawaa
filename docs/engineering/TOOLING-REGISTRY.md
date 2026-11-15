@@ -64,7 +64,7 @@ Other available skill/tool families include data analysis, user settings, and fi
 - Scheduled visual QA for mobile and desktop.
 - Search Console connected through OpenSEO; IndexNow successfully submitted home, serum, and privacy on 2026-11-15.
 - Automatic production release only after full validation of qualifying website-source changes on main; workflow-only/docs-only changes are excluded.
-- Branch hygiene PR #70 merged. Run #43676889692 deleted 55 refs (54 merged-PR heads plus one closed-unmerged branch); three operational checkpoints (`restore/`, `release/`, active `preview-deploy/`) were recreated at exact original PR heads. No backup/recovery refs were deleted. PR #74 adds regression coverage and explicit namespace protection before another cleanup pass.
+- Branch hygiene PR #70 merged. Run #43676889692 inspected 84 refs and deleted 55: 53 merged-PR heads plus two stale preview refs. It also deleted three operational merged refs; all three were restored at their exact original PR head SHAs. No backup/recovery refs were deleted. PR #74 merged with regression tests and permanent protection for `backup/`, `recovery/`, `restore/`, `release/`, `production-deploy/`, `deploy/`, and active `preview-deploy/` refs.
 
 ## Skills available in the ChatGPT workspace
 
@@ -121,9 +121,11 @@ The catalog being available in ChatGPT is not the same as vendoring a skill into
 
 ## Verified cleanup and visual QA state — 2026-11-15
 
-- Branch hygiene PR #70 merged. Run #43676889692 deleted 55 reviewed refs successfully.
-- Safety hardening PR #74 merged after run #43677232271 exposed accidental deletion of three operational checkpoint refs. Two historical refs were restored at their exact original PR head commits; the policy now permanently protects restore/*, release/*, production-deploy/* and active preview/deploy refs.
-- Run #43677406307 validated the hardened policy: 35 refs inspected, zero deletion candidates, zero failures.
-- PR #73 was closed unmerged by the repository owner. Its additional deletion allowlist was not adopted; the affected merged refs remain retained.
-- PR #75 fixed Playwright WebKit screenshot CSP noise using caret: initial; strict CSP remains unchanged.
-- Visual QA previously failed because Playwright's screenshot caret-hiding stylesheet was blocked by strict CSP. The next visual QA workflow update makes the audit run against production after successful production releases and against the preview host after successful preview deployments.
+- Run #43676889692: 84 refs inspected; 55 deleted (53 merged-PR refs and two stale preview refs); zero deletion failures.
+- The three operational refs accidentally deleted by that run were `restore/integrated-store-2026-11-14`, `release/clean-pages-payload-2026-11-14`, and `preview-deploy/visual-qa-current-2026-11-15`. They were restored at exact original PR head SHAs. Run #43677232271 repeated the deletion before the protection fix; the same three refs were restored again.
+- PR #74 merged. The cleanup policy now protects `backup/*`, `recovery/*`, `restore/*`, `release/*`, `production-deploy/*`, all `deploy/*`, active `preview-deploy/*`, and all open-PR heads.
+- Runs #43677406307 (35 refs) and #43677570136 (37 refs) completed with zero deletion candidates and zero failures.
+- PR #79 finalizes the allowlists, adds the fully integrated docs-only branch only after GitHub proves `ahead_by = 0`, and requires `ahead_by = 0` for every closed-unmerged cleanup candidate.
+- PR #77 is a duplicate cleanup PR and will be closed as superseded after PR #79 merges; its branch will remain until exact-head retirement is verified.
+- PRs #71, #72, #75, #76, and #78 merged visual-QA improvements. The strict CSP policy remains unchanged.
+- The latest Graphify and visual-QA artifacts remain in GitHub Actions; do not mark visual QA complete until the final screenshots and report are inspected.
