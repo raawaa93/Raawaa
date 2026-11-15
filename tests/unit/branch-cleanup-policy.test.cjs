@@ -65,6 +65,7 @@ test('keeps closed-unmerged work for the exact-SHA archive workflow', () => {
     'maintenance/close-archive-closure-2026-11-15',
     'maintenance/archive-final-closure-ref-2026-11-15',
     'maintenance/finalize-pr113-archive-2026-11-15',
+    'maintenance/retire-superseded-finalize-ref-2026-11-15',
   ]);
 });
 
