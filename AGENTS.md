@@ -20,7 +20,9 @@ Use these upstream skills as specialist references when a Codex environment has 
 These upstream skills are not vendored into this repository. Install them in the Codex workspace using the commands above; do not claim they are active merely because this file references them. Taste Skill's full checks expect its accompanying assets/scripts, Node 22+, and Chrome/Chromium. Do not copy only its SKILL.md and pretend the bundle is complete.
 
 ## Browser testing
-- Run `npm install` once, then `npx playwright install chromium webkit`.
+- Install exactly the committed dependency tree with `npm ci --ignore-scripts --no-audit --no-fund`; do not use mutable `npm install` in CI.
+- Run `npm audit --audit-level=high`; the OSV Scanner workflow also scans dependency PRs and runs weekly.
+- Install browsers with `npx playwright install chromium webkit`.
 - Run `npm run test:e2e` for route and responsive-overflow smoke tests in Chromium, desktop Safari (WebKit), and iPhone WebKit.
 - Add tests for every user-visible critical journey before changing cart, pricing, or WhatsApp behavior.
 - Prefer deterministic Playwright assertions over AI-driven browser automation for repeatable checks.
