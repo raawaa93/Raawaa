@@ -156,7 +156,7 @@ test('deletes only the nine newly reviewed merged heads after merge', () => {
     'fix/visual-qa-webkit-csp-regression-2026-11-15',
     'maintenance/repository-hygiene-2026-11-15',
     'fix/production-release-push-only-2026-11-15',
-    'fix/final-visual-and-release-policy-2026-11-15',
+    'fix/final-visual-release-policy-consolidated-2026-11-15',
   ];
   for (const name of names) {
     assert.ok(MERGED_PR_BRANCHES.includes(name), name + ' must be reviewed for merged-head cleanup');
