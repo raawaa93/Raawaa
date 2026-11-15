@@ -44,3 +44,9 @@ test('site integrity policy agrees with push-only production release workflow', 
   assert.match(siteCheck, /Manual production dispatch must remain disabled/u);
   assert.match(siteCheck, /Production releases must not depend on a manual confirmation input/u);
 });
+
+test('stale-source guard fetches full main history before ancestry comparison', () => {
+  assert.match(workflow, /git fetch --no-tags origin main\n/);
+  assert.doesNotMatch(workflow, /git fetch --no-tags origin main --depth=1/);
+  assert.match(workflow, /git merge-base --is-ancestor/);
+});
