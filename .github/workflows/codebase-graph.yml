@@ -1,0 +1,52 @@
+name: RAWAA codebase knowledge graph
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: raawaa-codebase-graph
+  cancel-in-progress: true
+
+jobs:
+  graph:
+    name: Build offline source graph
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout canonical source
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install pinned Graphify CLI
+        run: python -m pip install --disable-pip-version-check "graphifyy==0.9.108"
+
+      - name: Build code-only graph without model/API calls
+        env:
+          GRAPHIFY_BACKEND: none
+          GRAPHIFY_QUERY_LOG_DISABLE: "1"
+        run: |
+          set -euo pipefail
+          graphify extract . --code-only --backend none --max-workers 2 --out "$RUNNER_TEMP/raawaa-graph"
+          test -s "$RUNNER_TEMP/raawaa-graph/graphify-out/graph.json"
+          test -s "$RUNNER_TEMP/raawaa-graph/graphify-out/GRAPH_REPORT.md"
+
+      - name: Preserve graph as a short-lived downloadable artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: raawaa-codebase-graph-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/raawaa-graph/graphify-out/graph.json
+            ${{ runner.temp }}/raawaa-graph/graphify-out/GRAPH_REPORT.md
+            ${{ runner.temp }}/raawaa-graph/graphify-out/graph.html
+          if-no-files-found: error
+          retention-days: 14
