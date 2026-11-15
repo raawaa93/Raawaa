@@ -79,3 +79,15 @@ test('Product variant URLs preselect the exact formula and size', async ({ page 
   await expect(page).toHaveURL(/size=30/);
   await expect(page.locator('[data-add-current]')).toHaveAttribute('data-add-to-cart', 'rosemary-caffeine-30');
 });
+
+
+test('Owner pricing editor parses the published config and renders all products', async ({ page }) => {
+  const pageErrors = [];
+  page.on('pageerror', error => pageErrors.push(error.message));
+  await page.goto('/owner/pricing.html', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('[data-price-for]')).toHaveCount(9);
+  await expect(page.locator('#discount-input')).toHaveValue('10');
+  await expect(page.locator('#always-free')).toBeChecked();
+  await expect(page.locator('#impact tbody tr')).toHaveCount(36);
+  expect(pageErrors).toEqual([]);
+});
