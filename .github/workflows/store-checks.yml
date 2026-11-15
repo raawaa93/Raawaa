@@ -27,6 +27,8 @@ jobs:
         run: node scripts/check-site.mjs
       - name: Build and validate clean Pages payload
         run: node scripts/build-deploy.mjs "$RUNNER_TEMP/raawaa-pages"
+      - name: Test repository cleanup policy
+        run: node --test tests/unit/*.test.cjs
       - name: Check JavaScript syntax
         shell: bash
         run: |
