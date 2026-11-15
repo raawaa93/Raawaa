@@ -87,6 +87,7 @@ try {
             complete: img.complete,
             naturalWidth: img.naturalWidth,
             naturalHeight: img.naturalHeight,
+            visible: !img.closest('picture')?.hidden && getComputedStyle(img).display !== 'none' && getComputedStyle(img).visibility !== 'hidden' && rect.width > 0 && rect.height > 0,
           }));
           return {
             title: document.title,
@@ -99,7 +100,8 @@ try {
             bodyFont: getComputedStyle(document.body).fontFamily,
             fontsStatus: document.fonts?.status || 'unknown',
             headings: Array.from(document.querySelectorAll('h1,h2')).slice(0, 15).map(h => h.innerText.trim()),
-            brokenImages: images.filter(img => img.complete && img.naturalWidth === 0),
+            brokenImages: images.filter(img => img.visible && img.complete && img.naturalWidth === 0),
+            incompleteVisibleImages: images.filter(img => img.visible && !img.complete),
             images,
             overflow,
           };
@@ -108,6 +110,21 @@ try {
         const prefix = route.name + '--' + viewport.name;
         await page.screenshot({ path: path.join(outDir, prefix + '--viewport.png'), fullPage: false, animations: 'disabled' });
         await page.screenshot({ path: path.join(outDir, prefix + '--full.png'), fullPage: true, animations: 'disabled' });
+
+        const interactiveScreenshots = [];
+        if (route.name === 'serum') {
+          for (const view of ['sizes', 'ritual']) {
+            const selector = '[data-serum-view="' + view + '"] img';
+            await page.locator('[data-serum-control="' + view + '"]').click();
+            await page.waitForFunction((imageSelector) => {
+              const img = document.querySelector(imageSelector);
+              return img && img.complete && img.naturalWidth > 0 && img.getBoundingClientRect().width > 0;
+            }, selector, { timeout: 15000 });
+            const imageName = prefix + '--view-' + view + '.png';
+            await page.locator('.serum-photo').screenshot({ path: path.join(outDir, imageName), animations: 'disabled' });
+            interactiveScreenshots.push(imageName);
+          }
+        }
 
         const result = {
           route: route.path,
@@ -121,6 +138,7 @@ try {
           failedRequests,
           badResponses,
           screenshots: [prefix + '--viewport.png', prefix + '--full.png'],
+          interactiveScreenshots,
         };
         results.push(result);
         await fs.promises.writeFile(path.join(outDir, prefix + '.json'), JSON.stringify(result, null, 2));
@@ -141,8 +159,11 @@ const issues = [];
 for (const r of results) {
   if (r.navigationStatus !== 200) issues.push(r.page + '/' + r.viewport + ': HTTP status ' + r.navigationStatus + (r.navigationError ? ' — ' + r.navigationError : ''));
   if (r.metrics?.documentWidth > r.metrics?.viewportWidth + 1) issues.push(r.page + '/' + r.viewport + ': horizontal page overflow ' + r.metrics.documentWidth + 'px > ' + r.metrics.viewportWidth + 'px');
-  if (r.metrics?.brokenImages?.length) issues.push(r.page + '/' + r.viewport + ': ' + r.metrics.brokenImages.length + ' broken images');
+  if (r.metrics?.brokenImages?.length) issues.push(r.page + '/' + r.viewport + ': ' + r.metrics.brokenImages.length + ' broken visible images');
+  if (r.metrics?.incompleteVisibleImages?.length) issues.push(r.page + '/' + r.viewport + ': ' + r.metrics.incompleteVisibleImages.length + ' visible images did not finish loading');
   if (r.pageErrors?.length) issues.push(r.page + '/' + r.viewport + ': JavaScript page errors: ' + r.pageErrors.join(' | '));
+  const sameOriginBadResponses = (r.badResponses || []).filter(item => item.url.startsWith(baseURL));
+  if (sameOriginBadResponses.length) issues.push(r.page + '/' + r.viewport + ': same-origin HTTP errors: ' + JSON.stringify(sameOriginBadResponses));
 }
 await fs.promises.writeFile(path.join(outDir, 'report.json'), JSON.stringify({ baseURL, generatedAt: new Date().toISOString(), results, issues }, null, 2));
 
