@@ -1,44 +1,48 @@
 # RAWAA Store branch inventory and cleanup record
 
-**Verified:** 2026-11-15 UTC, after PR #76  
+**Verified:** 2026-11-15 UTC, after PR #79 and PR #81, before PR #80 merge  
 **Repository:** `raawaa93/Raawaa`  
 **Canonical branch:** `main`  
-**Current cleanup PR:** #79 — https://github.com/raawaa93/Raawaa/pull/79  
-**Previous cleanup PR:** #70 merged  
-**Operational namespace protection:** #74 merged  
-**Visual QA fixes:** #71, #72, #75, #76, #78 merged
+**Current consolidation PR:** #80 — https://github.com/raawaa93/Raawaa/pull/80  
+**Push-only release policy:** #81 merged  
+**Earlier safety fix:** #74 merged  
+**Current cleanup workflow:** `.github/workflows/cleanup-merged-branches.yml`
 
 ## Current snapshot
 
-- Branch refs: **40**.
-- Pull requests: **79** total — **64 merged**, **13 closed-unmerged**, **2 open.
+- Branch refs: **39**.
+- Pull requests: **83** total — **66 merged**, **15 closed-unmerged**, **2 open.
 - Backup refs: **4**.
 - Recovery refs: **3**.
-- Reviewed merged-PR allowlist: **57** names.
+- Reviewed merged-PR allowlist: **60** names.
 - Reviewed closed-unmerged allowlist: **11** names.
 - Reviewed no-PR temporary allowlist: **4** names.
 
 ## Cleanup execution history
 
-1. Run [#43676889692](https://github.com/raawaa93/Raawaa/actions/runs/43676889692) inspected 84 refs and deleted **55** with zero failures: **53 merged-PR heads plus two stale preview refs**. No closed-unmerged PR branch was deleted.
-2. That run also removed three operational merged refs: `restore/integrated-store-2026-11-14`, `release/clean-pages-payload-2026-11-14`, and `preview-deploy/visual-qa-current-2026-11-15`. They were restored to their exact original PR head commits: `b74fcf3dadecf52c0c40ce848ef67b104d7f73ec`, `8cba6b94ce39282999d3c4c86ca2a60845c805a2`, and `7ca62ffaaf2be5fd337255d66679621be399ddae`.
-3. Run [#43676951048](https://github.com/raawaa93/Raawaa/actions/runs/43676951048) inspected the remaining refs and deleted zero.
-4. Run [#43677232271](https://github.com/raawaa93/Raawaa/actions/runs/43677232271) exposed the missing operational namespace protection and deleted the same three refs again. They were restored to the same exact original PR head commits.
-5. PR #74 added protection for `restore/*`, `release/*`, `production-deploy/*`, all `deploy/*`, active `preview-deploy/*`, and all backup/recovery namespaces.
-6. Run [#43677406307](https://github.com/raawaa93/Raawaa/actions/runs/43677406307) completed with **zero deletion candidates and zero failures** after the safety fix.
-7. Run [#43677570136](https://github.com/raawaa93/Raawaa/actions/runs/43677570136) inspected 37 refs and also completed with **zero deletion candidates and zero failures**.
-8. PR #79 tightens one more gap: every closed-unmerged branch on the superseded allowlist must also be proven contained in `main` (`ahead_by = 0`) before deletion. The earlier implementation did not enforce this consistently.
+1. Run [#43676889692](https://github.com/raawaa93/Raawaa/actions/runs/43676889692): 84 refs inspected; 55 deleted (53 merged-PR heads plus two stale preview refs); zero failures.
+2. That run removed three operational merged refs: `restore/integrated-store-2026-11-14`, `release/clean-pages-payload-2026-11-14`, and `preview-deploy/visual-qa-current-2026-11-15`. They were restored to their exact original PR head commits.
+3. Run [#43676951048](https://github.com/raawaa93/Raawaa/actions/runs/43676951048): inspected the remaining refs and deleted zero.
+4. Run [#43677232271](https://github.com/raawaa93/Raawaa/actions/runs/43677232271): removed the same three operational refs before the namespace protection fix; they were restored again at the exact original SHAs.
+5. PR #74 merged and added permanent protection for `restore/*`, `release/*`, `production-deploy/*`, all `deploy/*`, active `preview-deploy/*`, `backup/*`, and `recovery/*`.
+6. Runs [#43677406307](https://github.com/raawaa93/Raawaa/actions/runs/43677406307) and [#43677570136](https://github.com/raawaa93/Raawaa/actions/runs/43677570136) completed with zero deletion candidates and zero failures.
+7. PR #79 merged. Run [#43678179625](https://github.com/raawaa93/Raawaa/actions/runs/43678179625) inspected 40 refs and 80 PRs, performed 15 ancestry comparisons, deleted **5** reviewed refs, and had **zero failures**:
+   - `docs/project-tooling-and-branch-inventory-2026-11-15`
+   - `docs/visual-qa-and-inventory-finalization-2026-11-15`
+   - `fix/visual-audit-csp-screenshots-2026-11-15`
+   - `fix/visual-audit-webkit-csp-2026-11-15`
+   - `maintenance/branch-cleanup-final-2026-11-15`
 
 ## Retention rules
 
 1. Keep `main`, every protected ref, `backup/*`, `recovery/*`, `restore/*`, `release/*`, `production-deploy/*`, and every `deploy/*` branch.
-2. Keep every active `preview-deploy/*` branch. Only exact temporary preview refs listed in the stale allowlist are eligible for cleanup, and only after `ahead_by = 0`.
+2. Keep every active `preview-deploy/*` branch. Only exact temporary preview refs in the stale allowlist are eligible, and only after `ahead_by = 0`.
 3. Keep every open-PR head.
 4. Merged PR heads are deleted only when the exact branch name is on the reviewed allowlist and the current head matches the merged PR head. If moved, require `ahead_by = 0`.
 5. Closed-unmerged refs require exact allowlist membership **and** `ahead_by = 0`. Reused refs also require ancestry proof.
 6. No-PR refs require exact stale allowlist membership and `ahead_by = 0`.
-7. Unknown refs, comparison failures, and any branch with unique commits ahead of main are retained.
-8. The workflow deletes Git refs only; it never deletes Git objects manually, repository files, recovery snapshots, deployments, DNS, secrets, external projects, or customer data.
+7. Unknown refs, comparison failures, and branches with unique commits ahead of main are retained.
+8. The workflow deletes Git refs only; it never deletes repository files, recovery snapshots, deployments, DNS, secrets, external projects, or customer data.
 
 ## Current full branch inventory
 
@@ -56,20 +60,19 @@
 | `ci/restore-release-boundaries-2026-11-15-rebased` | #66 closed | REVIEWED CLOSED-UNMERGED | Delete only if ahead_by = 0 |
 | `deploy/10-percent-2026-11-14` | — | OPERATIONAL / BACKUP | Keep permanently |
 | `deploy/10-percent-site-only` | — | OPERATIONAL / BACKUP | Keep permanently |
-| `docs/project-tooling-and-branch-inventory-2026-11-15` | — | REVIEWED TEMP / NO PR | Delete only if ahead_by = 0 |
-| `docs/visual-qa-and-inventory-finalization-2026-11-15` | #76 merged | REVIEWED MERGED | Delete exact merged head; moved head requires ahead_by = 0 |
 | `feature/campaign-nitro-offer-2026-11-14` | #6 closed | REVIEWED CLOSED-UNMERGED | Delete only if ahead_by = 0 |
 | `fix/branch-hygiene-protect-operational-refs-2026-11-15` | #74 merged | REVIEWED MERGED | Delete exact merged head; moved head requires ahead_by = 0 |
 | `fix/manual-only-production-release` | #61 closed | REVIEWED CLOSED-UNMERGED | Delete only if ahead_by = 0 |
-| `fix/visual-audit-csp-screenshots-2026-11-15` | #75 merged | REVIEWED MERGED | Delete exact merged head; moved head requires ahead_by = 0 |
-| `fix/visual-audit-webkit-csp-2026-11-15` | #71 merged | REVIEWED MERGED | Delete exact merged head; moved head requires ahead_by = 0 |
+| `fix/production-policy-site-check-2026-11-15` | #82 closed | CLOSED-UNMERGED | Retain |
+| `fix/production-release-push-only-2026-11-15` | #81 merged | REVIEWED MERGED | Delete exact merged head; moved head requires ahead_by = 0 |
+| `fix/visual-audit-top-viewport-2026-11-15` | #83 open | OPEN PR | Keep until PR resolves |
 | `fix/visual-qa-webkit-csp-regression-2026-11-15` | #78 merged | REVIEWED MERGED | Delete exact merged head; moved head requires ahead_by = 0 |
 | `main` | — | CANONICAL | Keep |
-| `maintenance/branch-cleanup-consolidated-2026-11-15` | — | NO PR / RETAIN | Retain pending review |
-| `maintenance/branch-cleanup-final-2026-11-15` | #79 open | OPEN PR | Keep until PR resolves |
+| `maintenance/branch-cleanup-consolidated-2026-11-15` | #80 open | OPEN PR | Keep until PR resolves |
 | `maintenance/branch-hygiene-followup-2026-11-15` | #73 closed | CLOSED-UNMERGED | Retain |
-| `maintenance/finish-branch-cleanup-2026-11-15` | #77 open | OPEN PR | Keep until PR resolves |
-| `maintenance/repository-hygiene-2026-11-15` | #70 merged | MERGED / NOT ALLOWLISTED | Retain |
+| `maintenance/finalize-branch-cleanup-2026-11-15` | — | NO PR / RETAIN | Retain pending review |
+| `maintenance/finish-branch-cleanup-2026-11-15` | #77 closed | CLOSED-UNMERGED | Retain |
+| `maintenance/repository-hygiene-2026-11-15` | #70 merged | REVIEWED MERGED | Delete exact merged head; moved head requires ahead_by = 0 |
 | `preview-deploy/2026-11-14` | — | ACTIVE / HISTORICAL PREVIEW | Keep |
 | `preview-deploy/2026-11-15-main-78ece71` | — | REVIEWED TEMP / NO PR | Delete only if ahead_by = 0 |
 | `preview-deploy/visual-qa-after-csp-fix-2026-11-15` | #72 merged | ACTIVE / HISTORICAL PREVIEW | Keep |
@@ -87,7 +90,7 @@
 
 ## Reviewed allowlists
 
-### Merged PR refs (57)
+### Merged PR refs (60)
 - `automation/agent-guidance-2026-11-15`
 - `automation/ai-memory-graph-performance`
 - `automation/graphify-lighthouse-baseline-2026-11-15`
@@ -143,8 +146,11 @@
 - `fix/visual-audit-csp-screenshots-2026-11-15`
 - `fix/visual-audit-webkit-csp-2026-11-15`
 - `docs/visual-qa-and-inventory-finalization-2026-11-15`
-- `maintenance/branch-cleanup-final-2026-11-15`
+- `maintenance/finish-branch-cleanup-2026-11-15`
+- `maintenance/repository-hygiene-2026-11-15`
 - `fix/visual-qa-webkit-csp-regression-2026-11-15`
+- `maintenance/branch-cleanup-consolidated-2026-11-15`
+- `fix/production-release-push-only-2026-11-15`
 
 ### Closed-unmerged refs (11)
 - `ci/restore-release-boundaries-2026-11-15-rebased`
@@ -165,18 +171,18 @@
 - `preview-deploy/2026-11-15-main-78ece71`
 - `docs/project-tooling-and-branch-inventory-2026-11-15`
 
-## Operational checkpoint notes
+## Remaining branches requiring review
 
-- The three refs deleted by the first and third cleanup runs are restored at the original PR head SHAs listed above.
-- `deploy/10-percent-site-only` remains protected under `deploy/*`; it is not in the stale allowlist.
-- `preview-deploy/2026-11-15-main-78ece71` remains one commit ahead and is not deleted.
-- `chore/google-site-verification` remains as an unmerged Search Console verification fallback.
-- `maintenance/repository-hygiene-2026-11-15` and `maintenance/branch-hygiene-followup-2026-11-15` retain post-merge/unmerged changes and are not in deletion allowlists.
-- `docs/project-tooling-and-branch-inventory-2026-11-15` is behind main with `ahead_by = 0`; PR #79 adds it to the reviewed stale list for safe removal.
+- `maintenance/finish-branch-cleanup-2026-11-15` is the closed/unmerged PR #77 branch. Its changes are superseded by PR #79/#80; keep until exact tree/head verification permits retirement.
+- `maintenance/branch-hygiene-followup-2026-11-15` is the closed/unmerged PR #73 branch. It contains historical documentation and cleanup changes; keep until file-by-file comparison confirms it is fully superseded.
+- `maintenance/repository-hygiene-2026-11-15` contains post-merge commits beyond PR #70; retain until its 12-file tree diff is reviewed.
+- `fix/branch-hygiene-protect-operational-refs-2026-11-15` has post-merge commits beyond PR #74; retain until its current tree is proven identical to main.
+- `fix/visual-qa-webkit-csp-regression-2026-11-15` is PR #78's merged branch but its current head moved after merge; retain until ancestry proof succeeds.
+- `fix/production-release-push-only-2026-11-15` is PR #81's merged branch; PR #80 adds it to the reviewed allowlist and will remove it only after ancestry proof.
+- PR #80 branch `maintenance/branch-cleanup-consolidated-2026-11-15` is open and protected until merge.
 
 ## Next verification
 
-- Wait for PR #79 Store checks and Graphify to pass.
-- Merge only after the complete check set is green.
-- Verify the next cleanup run's deleted list, remaining branch count, and zero failures.
-- Resolve or close superseded PR #77 after PR #79 is merged; do not force-delete its branch without exact-head verification.
+- Merge PR #80 only after Store checks and Graphify are green.
+- PR #80 enforces push-only production release after full validation and adds regression coverage; no manual `workflow_dispatch` release remains.
+- Verify the next cleanup run's deleted refs, retained operational checkpoints, and zero failures.
