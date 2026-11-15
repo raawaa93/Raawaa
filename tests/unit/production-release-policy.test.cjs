@@ -8,10 +8,12 @@ const path = require('node:path');
 const workflowPath = path.join(process.cwd(), '.github/workflows/production-cicd.yml');
 const workflow = fs.readFileSync(workflowPath, 'utf8');
 
-test('production releases are push-only after canonical main validation', () => {
+test('main pushes validate but cannot deploy; production requires explicit confirmed dispatch', () => {
   assert.match(workflow, /^on:\s*\n\s+push:/m);
-  assert.doesNotMatch(workflow, /^\s*workflow_dispatch:/m);
-  assert.match(workflow, /if: github\.ref == 'refs\/heads\/main' && github\.event_name == 'push'/);
+  assert.match(workflow, /^\s*workflow_dispatch:/m);
+  assert.match(workflow, /confirm_production:[\s\S]*?required: true[\s\S]*?options:[\s\S]*?- no[\s\S]*?- yes/);
+  assert.match(workflow, /if: github\.ref == 'refs\/heads\/main' && github\.event_name == 'workflow_dispatch' && inputs\.confirm_production == 'yes'/);
+  assert.doesNotMatch(workflow, /if: github\.ref == 'refs\/heads\/main' && github\.event_name == 'push'/);
 });
 
 test('maintenance and visual-audit helpers are ignored by production release triggers', () => {
@@ -38,11 +40,11 @@ test('stale-source guard recognizes all maintenance and visual-audit helpers', (
   }
 });
 
-test('site integrity policy agrees with push-only production release workflow', () => {
+test('site integrity policy agrees with the explicit production approval gate', () => {
   const siteCheck = fs.readFileSync(path.join(process.cwd(), 'scripts/check-site.mjs'), 'utf8');
-  assert.match(siteCheck, /Production deploy must run only on validated main pushes/u);
-  assert.match(siteCheck, /Manual production dispatch must remain disabled/u);
-  assert.match(siteCheck, /Production releases must not depend on a manual confirmation input/u);
+  assert.match(siteCheck, /Production release must require an explicit yes\/no owner confirmation/u);
+  assert.match(siteCheck, /Production deploy must require an explicit confirmed dispatch from canonical main/u);
+  assert.match(siteCheck, /A main push must never deploy to production automatically/u);
 });
 
 test('stale-source guard fetches full main history before ancestry comparison', () => {
