@@ -1,70 +1,206 @@
-# RAWAA Store branch inventory
+# RAWAA Store branch inventory and cleanup policy
 
-**Snapshot:** 2026-11-15, refreshed before PR #70 merge  
-**Canonical base:** main at fafe5c7d9ed21fd6597b7bf8964f8105fe91b99e  
-**Branch refs:** 82 including main  
-**Pull requests:** 71 total; 57 merged, 12 closed-unmerged, 2 open (PR #70 repository hygiene and PR #71 WebKit CSP visual-QA fix).
+**Snapshot:** 2026-11-15 UTC  
+**Repository:** `raawaa93/Raawaa`  
+**Canonical branch:** `main`  
+**Open cleanup PR:** #70 — https://github.com/raawaa93/Raawaa/pull/70  
+**Other active PR:** #71 — https://github.com/raawaa93/Raawaa/pull/71
 
-## Cleanup policy
+## Snapshot counts
 
-The automated policy in scripts/branch-cleanup-policy.cjs is authoritative and tested by tests/unit/branch-cleanup-policy.test.cjs.
+- **83** branch refs currently present.
+- **72** PRs in the repository-wide history: 58 merged, 12 closed without merge, 2 open.
+- **54** merged-PR refs individually reviewed for cleanup.
+- **11** closed-unmerged refs individually reviewed for cleanup.
+- **4** temporary no-PR refs individually reviewed for cleanup.
+- **4** backup refs and **3** recovery refs are protected.
 
-- Delete a same-repository merged PR head only when its current head still matches the merged PR head, or a later current head is proven contained in main, or the exact ref is in the reviewed superseded allowlist.
-- Preserve main, protected refs, every backup/* and recovery/* ref, and every open-PR head.
-- A closed-unmerged branch is retained unless its exact name is in the reviewed superseded list below or its commit history is proven contained in main.
-- An unreferenced branch is retained unless it is one of the exact stale preview/deploy refs below or its commit history is proven contained in main.
-- Comparison/API errors retain the branch; they never authorize deletion.
-- No recovery snapshots, source files, customer data, secrets, DNS, Cloudflare resources, Supabase projects, or Notion pages are deleted.
+The list below is a live snapshot taken before merging PR #70. The workflow run must append the actual post-cleanup counts and exact remaining refs after execution.
 
-## Closed-unmerged work reviewed as superseded
+## Non-negotiable retention rules
 
-| PR | Branch | Why safe to retire |
-|---:|---|---|
-| 66 | ci/restore-release-boundaries-2026-11-15-rebased | Superseded by merged PR #65 and current release workflow |
-| 63 | ci/restore-release-boundaries-2026-11-15 | Superseded by merged PR #65 |
-| 61 | fix/manual-only-production-release | Superseded by merged automatic release PRs #62 and #65 |
-| 60 | automation/generate-lockfile-2026-11-15 | Lockfile, OSV scan, and npm ci workflow already exist on main |
-| 39 | seo/sitemap-noindex-policy-2026-11-15 | Superseded by merged sitemap cleanup PR #42 |
-| 38 | seo/noindex-campaign-sitemap-2026-11-15 | Superseded by merged sitemap cleanup PR #42 |
-| 35 | seo/remove-noindex-campaign-from-sitemap-2026-11-15 | Superseded by merged sitemap cleanup PR #42 |
-| 34 | automation/graphify-and-lighthouse-2026-11-15 | Superseded by merged Graphify/Lighthouse workflow PR #36 |
-| 33 | automation/graphify-daily-refresh-2026-11-15 | Superseded by merged Graphify/Lighthouse workflow PR #36 |
-| 27 | qa/visual-audit-2026-11-15 | Reused branch; its older visual audit is superseded by the current Chromium+WebKit implementation on main |
-| 6 | feature/campaign-nitro-offer-2026-11-14 | Superseded by merged campaign v2 PR #7 |
+1. Keep `main`, protected refs, every `backup/*` branch, every `recovery/*` branch, and every open-PR head.
+2. Keep merged-PR heads by default. Delete only exact reviewed merged refs in the allowlist below. If a reviewed branch moved after merge, require GitHub comparison `ahead_by = 0`.
+3. A closed-unmerged branch is eligible only if explicitly reviewed below and GitHub confirms `ahead_by = 0`. If a branch was reused by both merged and closed-unmerged PRs, it also requires ancestry proof.
+4. A no-PR branch is eligible only if it is one of the four reviewed temporary refs below and `ahead_by = 0`.
+5. Unknown refs, comparison failures, and any branch with unmerged commits are retained.
+6. No force-delete, branch rewrite, file deletion, or change to main history.
 
-PR #47 branch chore/google-site-verification is deliberately retained as an alternative Google Search Console HTML verification fallback. The connected Search Console property works, but that unique file was not merged into main.
+## Reviewed merged-PR allowlist (54)
 
-## Exact no-PR refs eligible for retirement
+- `automation/agent-guidance-2026-11-15`
+- `automation/ai-memory-graph-performance`
+- `automation/graphify-lighthouse-baseline-2026-11-15`
+- `automation/validated-auto-production-release`
+- `chore/google-search-console-verification`
+- `chore/indexnow-key`
+- `chore/lockfile-npm-ci-2026-11-15`
+- `ci/allow-doc-only-main-updates`
+- `ci/automatic-production-release`
+- `ci/avoid-duplicate-main-checks-2026-11-15`
+- `ci/restore-release-boundaries-v2-2026-11-15`
+- `dependabot/github_actions/actions/setup-python-7`
+- `dependabot/github_actions/actions/upload-artifact-7`
+- `docs/branch-inventory-cleanup-2026-11-14`
+- `docs/integration-audit-2026-11-15`
+- `docs/owner-currency-alignment-2026-11-14`
+- `docs/preview-gate-and-legacy-cleanup-2026-11-14`
+- `docs/record-free-tooling-and-indexing-audit-2026-11-15`
+- `docs/refresh-project-memory-2026-11-15`
+- `docs/release-readiness-backend-audit-2026-11-14`
+- `docs/update-live-deployment-memory-2026-11-15`
+- `docs/update-project-memory-2026-11-15`
+- `feature/campaign-nitro-offer-2026-11-14-v2`
+- `fix/campaign-canonical-2026-11-15`
+- `fix/cart-dialog-mobile-2026-11-15`
+- `fix/owner-currency-syp-2026-11-14`
+- `fix/owner-pricing-safe-config-parse-2026-11-15`
+- `fix/preview-copy-consistency-2026-11-15`
+- `fix/product-structured-data`
+- `fix/serum-cart-estimate-sync-2026-11-15`
+- `fix/serum-estimate-copy-2026-11-15`
+- `maintenance/canonical-source-of-truth-2026-11-14`
+- `maintenance/policy-regression-guard-2026-11-14`
+- `ops/add-production-deploy-workflow-2026-11-15`
+- `ops/fix-production-release-guard-2026-11-15`
+- `ops/production-release-manual-gate-2026-11-15`
+- `ops/update-actions-node24-2026-11-15`
+- `polish/home-motion-accessibility-2026-11-15`
+- `preview-deploy/visual-qa-current-2026-11-15`
+- `qa/checkout-whatsapp-flow-2026-11-15`
+- `qa/visual-audit-2026-11-15`
+- `qa/visual-audit-preview-2026-11-15`
+- `qa/visual-audit-trigger-fix-2026-11-15`
+- `qa/visual-audit-webkit-guard`
+- `release/clean-pages-payload-2026-11-14`
+- `restore/integrated-store-2026-11-14`
+- `security/dependabot-weekly-2026-11-15`
+- `security/owner-pages-response-headers-2026-11-15`
+- `seo/link-privacy-from-home`
+- `seo/noindex-sitemap-cleanup-20261115`
+- `seo/refresh-sitemap-lastmod`
+- `tooling/design-skills-playwright-2026-11-15`
+- `tooling/playwright-webkit-iphone-2026-11-15`
+- `work/mobile-ux-audit-2026-11-14`
 
-- preview-deploy/visual-qa-2026-11-15 — fully behind main.
-- preview-deploy/2026-11-15-post-fix — fully behind main.
-- preview-deploy/2026-11-15-main-78ece71 — temporary preview trigger marker.
-- deploy/10-percent-site-only — old site-only snapshot removed recovery/validation material; production now deploys from canonical main.
+## Reviewed closed-unmerged allowlist (11)
 
-## Retained refs
+- `automation/generate-lockfile-2026-11-15`
+- `automation/graphify-and-lighthouse-2026-11-15`
+- `automation/graphify-daily-refresh-2026-11-15`
+- `ci/restore-release-boundaries-2026-11-15`
+- `ci/restore-release-boundaries-2026-11-15-rebased`
+- `feature/campaign-nitro-offer-2026-11-14`
+- `fix/manual-only-production-release`
+- `qa/visual-audit-2026-11-15`
+- `seo/noindex-campaign-sitemap-2026-11-15`
+- `seo/remove-noindex-campaign-from-sitemap-2026-11-15`
+- `seo/sitemap-noindex-policy-2026-11-15`
 
-The following are intentionally preserved:
+## Reviewed temporary no-PR allowlist (4)
 
-- main
-- All backup/* refs, including the three site checkpoints and continuity-hardening backup.
-- All recovery/* refs, including cloudflare-manifest, archived Store migrations, and the Edge Function inspection/recovery branch.
-- deploy/10-percent-2026-11-14 — historical deployment manifest.
-- preview-deploy/2026-11-14 — historical preview source with distinct code changes; retain until a separate recovery review.
-- production-deploy/release-2026-11-15 — release checkpoint; retain until its purpose is independently verified.
-- chore/google-site-verification — unmerged Google verification fallback.
-- PR #71 branch fix/visual-audit-webkit-csp-2026-11-15 until its checks complete and it is merged or closed.
-- PR #70 branch maintenance/repository-hygiene-2026-11-15 until the cleanup workflow is merged and executed; its branch is then eligible for deletion.
-- Any future open-PR head or protected branch.
+- `deploy/10-percent-site-only`
+- `preview-deploy/2026-11-15-main-78ece71`
+- `preview-deploy/2026-11-15-post-fix`
+- `preview-deploy/visual-qa-2026-11-15`
 
-## Expected cleanup
+## Full branch-by-branch inventory
 
-The refreshed dry-run inventory found 68 safe deletion candidates before PR #70 merges:
-- 53 merged-PR branch refs, excluding all backup/recovery namespaces.
-- 10 additional closed-unmerged refs in the explicit superseded list (the reused visual-QA branch is already counted among merged heads).
-- Four exact stale no-PR preview/deploy refs.
+| Branch | PR history | Classification | Action |
+|---|---|---|---|
+| `automation/agent-guidance-2026-11-15` | #43 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
+| `automation/ai-memory-graph-performance` | #32 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
+| `automation/generate-lockfile-2026-11-15` | #60 closed | REVIEWED CLOSED-UNMERGED | Delete only if ahead_by=0 |
+| `automation/graphify-and-lighthouse-2026-11-15` | #34 closed | REVIEWED CLOSED-UNMERGED | Delete only if ahead_by=0 |
+| `automation/graphify-daily-refresh-2026-11-15` | #33 closed | REVIEWED CLOSED-UNMERGED | Delete only if ahead_by=0 |
+| `automation/graphify-lighthouse-baseline-2026-11-15` | #36 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
+| `automation/validated-auto-production-release` | #45 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
+| `backup/continuity-hardening-2026-11-15` | #22 merged | PROTECTED ARCHIVE | Keep permanently |
+| `backup/site-2026-11-14-post-mobile-audit` | — | PROTECTED ARCHIVE | Keep permanently |
+| `backup/site-2026-11-14-restored-main` | — | PROTECTED ARCHIVE | Keep permanently |
+| `backup/site-2026-11-15-preproduction` | — | PROTECTED ARCHIVE | Keep permanently |
+| `chore/google-search-console-verification` | #48 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
+| `chore/google-site-verification` | #47 closed | CLOSED-UNMERGED | Keep |
+| `chore/indexnow-key` | #49 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
+| `chore/lockfile-npm-ci-2026-11-15` | #59 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
+| `ci/allow-doc-only-main-updates` | #64 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
+| `ci/automatic-production-release` | #62 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
+| `ci/avoid-duplicate-main-checks-2026-11-15` | #57 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
+| `ci/restore-release-boundaries-2026-11-15` | #63 closed | REVIEWED CLOSED-UNMERGED | Delete only if ahead_by=0 |
+| `ci/restore-release-boundaries-2026-11-15-rebased` | #66 closed | REVIEWED CLOSED-UNMERGED | Delete only if ahead_by=0 |
+| `ci/restore-release-boundaries-v2-2026-11-15` | #65 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
+| `dependabot/github_actions/actions/setup-python-7` | #40 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
+| `dependabot/github_actions/actions/upload-artifact-7` | #41 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
+| `deploy/10-percent-2026-11-14` | — | NO PR / RETAIN | Keep unless future reviewed |
+| `deploy/10-percent-site-only` | — | REVIEWED TEMP REF | Delete only if ahead_by=0 |
+| `docs/branch-inventory-cleanup-2026-11-14` | #11 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
+| `docs/integration-audit-2026-11-15` | #53 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
+| `docs/owner-currency-alignment-2026-11-14` | #10 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
+| `docs/preview-gate-and-legacy-cleanup-2026-11-14` | #13 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
+| `docs/record-free-tooling-and-indexing-audit-2026-11-15` | #68 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
+| `docs/refresh-project-memory-2026-11-15` | #44 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
+| `docs/release-readiness-backend-audit-2026-11-14` | #8 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
+| `docs/update-live-deployment-memory-2026-11-15` | #46 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
+| `docs/update-project-memory-2026-11-15` | #67 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
+| `feature/campaign-nitro-offer-2026-11-14` | #6 closed | REVIEWED CLOSED-UNMERGED | Delete only if ahead_by=0 |
+| `feature/campaign-nitro-offer-2026-11-14-v2` | #7 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
+| `fix/campaign-canonical-2026-11-15` | #16 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
+| `fix/cart-dialog-mobile-2026-11-15` | #17 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
+| `fix/manual-only-production-release` | #61 closed | REVIEWED CLOSED-UNMERGED | Delete only if ahead_by=0 |
+| `fix/owner-currency-syp-2026-11-14` | #9 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
+| `fix/owner-pricing-safe-config-parse-2026-11-15` | #54 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
+| `fix/preview-copy-consistency-2026-11-15` | #14 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
+| `fix/product-structured-data` | #51 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
+| `fix/serum-cart-estimate-sync-2026-11-15` | #23 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
+| `fix/serum-estimate-copy-2026-11-15` | #15 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
+| `fix/visual-audit-webkit-csp-2026-11-15` | #71 merged | MERGED NOT ALLOWLISTED | Keep |
+| `main` | — | CANONICAL | Keep |
+| `maintenance/canonical-source-of-truth-2026-11-14` | #4 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
+| `maintenance/policy-regression-guard-2026-11-14` | #5 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
+| `maintenance/repository-hygiene-2026-11-15` | #70 open | OPEN PR | Keep until PR resolves |
+| `ops/add-production-deploy-workflow-2026-11-15` | #18 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
+| `ops/fix-production-release-guard-2026-11-15` | #19 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
+| `ops/production-release-manual-gate-2026-11-15` | #24 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
+| `ops/update-actions-node24-2026-11-15` | #25 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
+| `polish/home-motion-accessibility-2026-11-15` | #58 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
+| `preview-deploy/2026-11-14` | — | NO PR / RETAIN | Keep unless future reviewed |
+| `preview-deploy/2026-11-15-main-78ece71` | — | REVIEWED TEMP REF | Delete only if ahead_by=0 |
+| `preview-deploy/2026-11-15-post-fix` | — | REVIEWED TEMP REF | Delete only if ahead_by=0 |
+| `preview-deploy/visual-qa-2026-11-15` | — | REVIEWED TEMP REF | Delete only if ahead_by=0 |
+| `preview-deploy/visual-qa-after-csp-fix-2026-11-15` | #72 open | OPEN PR | Keep until PR resolves |
+| `preview-deploy/visual-qa-current-2026-11-15` | #69 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
+| `production-deploy/release-2026-11-15` | — | NO PR / RETAIN | Keep unless future reviewed |
+| `qa/checkout-whatsapp-flow-2026-11-15` | #31 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
+| `qa/visual-audit-2026-11-15` | #27 closed, #26 merged | REUSED MERGED + CLOSED | Compare with main; delete only if approved and ahead_by=0 |
+| `qa/visual-audit-preview-2026-11-15` | #30 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
+| `qa/visual-audit-trigger-fix-2026-11-15` | #28 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
+| `qa/visual-audit-webkit-guard` | #29 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
+| `recovery/archive-store-supabase-migrations-2026-11-15` | #56 merged | PROTECTED ARCHIVE | Keep permanently |
+| `recovery/cloudflare-manifest-2026-11-14` | #1 merged | PROTECTED ARCHIVE | Keep permanently |
+| `recovery/inspect-edge-functions-2026-11-15` | — | PROTECTED ARCHIVE | Keep permanently |
+| `release/clean-pages-payload-2026-11-14` | #12 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
+| `restore/integrated-store-2026-11-14` | #2 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
+| `security/dependabot-weekly-2026-11-15` | #37 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
+| `security/owner-pages-response-headers-2026-11-15` | #55 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
+| `seo/link-privacy-from-home` | #50 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
+| `seo/noindex-campaign-sitemap-2026-11-15` | #38 closed | REVIEWED CLOSED-UNMERGED | Delete only if ahead_by=0 |
+| `seo/noindex-sitemap-cleanup-20261115` | #42 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
+| `seo/refresh-sitemap-lastmod` | #52 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
+| `seo/remove-noindex-campaign-from-sitemap-2026-11-15` | #35 closed | REVIEWED CLOSED-UNMERGED | Delete only if ahead_by=0 |
+| `seo/sitemap-noindex-policy-2026-11-15` | #39 closed | REVIEWED CLOSED-UNMERGED | Delete only if ahead_by=0 |
+| `tooling/design-skills-playwright-2026-11-15` | #20 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
+| `tooling/playwright-webkit-iphone-2026-11-15` | #21 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
+| `work/mobile-ux-audit-2026-11-14` | #3 merged | REVIEWED MERGED | Delete if exact merged head or moved head ahead_by=0 |
 
-PR #70's branch is currently protected because its PR is open. After PR #70 merges, that one ref becomes eligible too: expected total 69 deletions. PR #71 remains protected while open. The expected retained set after PR #70 cleanup is 13 refs: main, all four backup refs, all three recovery refs, the Google verification fallback, the 10% deployment manifest, the older distinct preview source, the production release checkpoint, and the open PR #71 head.
+## Automation and verification
 
-## Verified post-run result
+- Policy: `scripts/branch-cleanup-policy.cjs`
+- Tests: `tests/unit/branch-cleanup-policy.test.cjs`
+- Workflow: `.github/workflows/cleanup-merged-branches.yml`
+- Store checks run `node --test tests/unit/*.test.cjs`.
+- Cleanup runs on main pushes, weekly, or manually. Comparison failures retain refs; deletion failures fail the run and are reported.
+- `production-cicd.yml` excludes the branch policy and visual-audit scripts so maintenance-only changes do not trigger a storefront deployment.
 
-Pending GitHub Actions execution after PR #70 merges. Record exact deleted names, remaining branch names, run URL, and any failures here.
+## Post-cleanup result
+
+Pending PR #70 merge and first successful cleanup run. Append the run URL, exact deleted names, exact retained names, and any errors from GitHub Actions. Do not infer completion from the workflow definition alone.
