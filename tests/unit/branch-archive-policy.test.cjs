@@ -17,15 +17,10 @@ const pull = (ref, state = 'open', owner = repository) => ({
   state, head: { ref, repo: { full_name: owner } },
 });
 
-test('archives only the exact reviewed PR113 maintenance branch head', () => {
-  assert.deepEqual(ARCHIVE_BRANCHES, {
-    "maintenance/pr112-branch-hygiene-inventory-2026-11-15": "80e320e4b95138685ad10099c6087050d66b2b62",
-  });
-  assert.equal(expectedArchiveShaMatches(branch("maintenance/pr112-branch-hygiene-inventory-2026-11-15", "80e320e4b95138685ad10099c6087050d66b2b62")), true);
-  assert.deepEqual(selectArchiveCandidates([branch("maintenance/pr112-branch-hygiene-inventory-2026-11-15", "80e320e4b95138685ad10099c6087050d66b2b62")], [], repository).map(x => x.name), ["maintenance/pr112-branch-hygiene-inventory-2026-11-15"]);
-  assert.equal(expectedArchiveShaMatches(branch("maintenance/pr112-branch-hygiene-inventory-2026-11-15", "changed-head")), false);
-  assert.deepEqual(selectArchiveCandidates([branch("maintenance/pr112-branch-hygiene-inventory-2026-11-15", "changed-head")], [], repository), []);
-  assert.deepEqual(selectArchiveCandidates([branch("maintenance/pr112-branch-hygiene-inventory-2026-11-15", "80e320e4b95138685ad10099c6087050d66b2b62")], [pull("maintenance/pr112-branch-hygiene-inventory-2026-11-15")], repository), []);
+test('archive allowlist is cleared after the exact PR113 recovery tag is verified', () => {
+  assert.deepEqual(ARCHIVE_BRANCHES, {});
+  assert.equal(expectedArchiveShaMatches(branch('maintenance/pr112-branch-hygiene-inventory-2026-11-15', '80e320e4b95138685ad10099c6087050d66b2b62')), false);
+  assert.deepEqual(selectArchiveCandidates([branch('maintenance/pr112-branch-hygiene-inventory-2026-11-15', '80e320e4b95138685ad10099c6087050d66b2b62')], [], repository), []);
 });
 
 test('does not re-archive any retired ref if a stale branch is recreated', () => {
