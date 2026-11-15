@@ -21,6 +21,7 @@ on:
       - 'scripts/visual-audit-csp-policy.cjs'
       - 'lighthouserc.json'
       - 'lighthouserc.pr.json'
+      - '.github/workflows/**'
 
 
 permissions:
