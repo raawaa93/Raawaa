@@ -230,3 +230,22 @@ test('retires the final PR113 and PR114 maintenance refs only after exact heads 
     );
   }
 });
+
+test('deletes only the two reviewed no-PR archive-finalization refs after fast-forward to main', () => {
+  const names = [
+    'maintenance/finalize-archive-index-2026-11-15',
+    'maintenance/finalize-pr113-archive-2026-11-15',
+  ];
+  for (const name of names) {
+    assert.ok(STALE_NO_PR_BRANCHES.includes(name));
+    assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
+    assert.deepEqual(
+      classifyBranches([branchRef(name)], [], repository, { [name]: { ahead_by: 0, behind_by: 0 } }).map(x => x.name),
+      [name],
+    );
+    assert.deepEqual(
+      classifyBranches([branchRef(name)], [], repository, { [name]: { ahead_by: 1, behind_by: 0 } }),
+      [],
+    );
+  }
+});
