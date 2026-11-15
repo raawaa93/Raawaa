@@ -61,23 +61,21 @@ test('deletes a reviewed merged branch that moved only after ancestry proof', ()
   );
 });
 
-test('preserves closed-unmerged work unless explicitly superseded and contained in main', () => {
+test('deletes only explicitly superseded closed-unmerged refs and keeps unknown work', () => {
   const unknown = classifyBranches([branchRef('feature/unresolved')], [pr('feature/unresolved')], repository, {
     'feature/unresolved': { ahead_by: 0, behind_by: 3 },
   });
   const name = 'ci/restore-release-boundaries-2026-11-15-rebased';
-  const noProof = classifyBranches([branchRef(name)], [pr(name)], repository);
   const ahead = classifyBranches([branchRef(name)], [pr(name)], repository, {
     [name]: { ahead_by: 4, behind_by: 8 },
   });
-  const contained = classifyBranches([branchRef(name)], [pr(name)], repository, {
-    [name]: { ahead_by: 0, behind_by: 8 },
-  });
+  const followup = 'maintenance/branch-hygiene-followup-2026-11-15';
+  const followupResult = classifyBranches([branchRef(followup)], [pr(followup)], repository);
   assert.deepEqual(unknown, []);
-  assert.deepEqual(noProof, []);
-  assert.deepEqual(ahead, []);
-  assert.deepEqual(contained.map(x => x.name), [name]);
+  assert.deepEqual(ahead.map(x => x.name), [name]);
+  assert.deepEqual(followupResult.map(x => x.name), [followup]);
   assert.ok(SUPERSEDED_CLOSED_PR_BRANCHES.includes(name));
+  assert.ok(SUPERSEDED_CLOSED_PR_BRANCHES.includes(followup));
 });
 
 test('a branch reused by merged and closed-unmerged PRs requires ancestry proof', () => {
@@ -128,6 +126,23 @@ test('prunes only explicitly reviewed stale no-PR refs after ancestry proof', ()
     [name]: { ahead_by: 0, behind_by: 4 },
   });
   assert.deepEqual(result.map(x => x.name), [name]);
+});
+
+test('prunes the reviewed documentation inventory ref when its history is contained in main', () => {
+  const name = 'docs/project-tooling-and-branch-inventory-2026-11-15';
+  assert.ok(STALE_NO_PR_BRANCHES.includes(name));
+  const result = classifyBranches([branchRef(name)], [], repository, {
+    [name]: { ahead_by: 0, behind_by: 2 },
+  });
+  assert.deepEqual(result.map(x => x.name), [name]);
+});
+
+test('reviews the latest merged maintenance PR heads for automatic retirement', () => {
+  for (const name of [
+    'maintenance/repository-hygiene-2026-11-15',
+    'fix/visual-audit-webkit-csp-2026-11-15',
+    'fix/branch-hygiene-protect-operational-refs-2026-11-15',
+  ]) assert.ok(MERGED_PR_BRANCHES.includes(name));
 });
 
 test('does not prune an arbitrary unreferenced branch, even if ahead_by is zero', () => {
