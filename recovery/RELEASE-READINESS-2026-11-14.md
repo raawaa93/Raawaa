@@ -232,3 +232,10 @@ This section supersedes the earlier manual-dispatch statements in the historical
 - GitHub branch-protection configuration remains unverified/unconfigured: the connected integration receives HTTP 403 for the branch-protection endpoint and no repository rulesets are returned. This requires an authorized repository-administration session; no security setting was changed.
 - Visual QA run `43684775744` remains in progress at the time of this read-back. Mobile/visual release readiness is not complete until its screenshots and report are inspected.
 - Cloudflare custom domain `rawaa.eu.org` remains pending because its CNAME is not configured. No DNS changes were made.
+
+
+## Release authorization correction — 2026-11-15 08:40 UTC
+
+- A fresh Cloudflare read-back showed that deployment `4b796357-63b2-47e1-8ad1-a2aad5c16626` was automatically published from `main` commit `f2f091f0c19a2d0948c592b6aba538aa56e0d873` at 08:17 UTC. The repository's automatic release trigger conflicts with the owner's explicit freeze boundary requiring validation and release approval before production changes.
+- A separate branch `fix/require-explicit-production-release-approval-2026-11-15` changes production release to a manual `workflow_dispatch` requiring `confirm_production=yes`. Ordinary main pushes continue validation only; they cannot deploy.
+- The release-policy regression tests and site integrity checks are updated to enforce the explicit approval gate. This is a proposed change only until its PR is reviewed and merged. No production action is performed by this change.
