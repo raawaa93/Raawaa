@@ -135,3 +135,6 @@ jobs:
           fi
           SOURCE_MESSAGE="$(git log -1 --format=%s "$SOURCE_SHA")"
           npx --yes wrangler@4 pages deploy "$RUNNER_TEMP/raawaa-pages" --project-name=raawaa-store --branch=main --commit-hash="$SOURCE_SHA" --commit-message="Automatically released after successful main validation: $SOURCE_MESSAGE"
+ 
+      - name: Verify published security headers
+        run: node scripts/check-production-headers.mjs
