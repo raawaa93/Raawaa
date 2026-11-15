@@ -14,7 +14,7 @@
  * وإلا سيبقى الزائر يرى النسخة القديمة من الذاكرة.
  */
 
-const CACHE_VERSION = 'v20261114-clean-pages-10pct';
+const CACHE_VERSION = 'v20261115-retired-route-purge';
 // استبدال الذاكرة القديمة يمسح مفاتيحها التي ربما احتوت استعلامات روابط.
 const RUNTIME = 'rawaa-runtime-v7';
 
@@ -112,6 +112,20 @@ self.addEventListener('fetch', (event) => {
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
+  // Retired routes must never fall back to an old offline page cached by a previous worker.
+  if (url.pathname === '/hama' || url.pathname === '/hama/') {
+    event.respondWith(
+      caches.match('./404.html').then((page) => {
+        const fallback = page || fetch('./404.html');
+        return fallback.then((response) => new Response(response.body, {
+          status: 404,
+          statusText: 'Not Found',
+          headers: response.headers
+        }));
+      })
+    );
+    return;
+  }
   // اللوحة ومسارات API لا تُخزَّن أو تُعرض من الذاكرة، بما فيها مسارات الطلب المستقبلية.
   if (url.pathname === '/owner' || url.pathname.startsWith('/owner/') ||
       url.pathname === '/api' || url.pathname.startsWith('/api/')) return;
