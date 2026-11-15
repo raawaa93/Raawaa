@@ -39,12 +39,12 @@ test('deletes only the nine reviewed merged heads when their PR head matches', (
     'fix/branch-hygiene-protect-operational-refs-2026-11-15',
     'fix/visual-audit-csp-screenshots-2026-11-15',
     'fix/visual-audit-webkit-csp-2026-11-15',
+    'maintenance/repository-hygiene-2026-11-15',
     'docs/visual-qa-and-inventory-finalization-2026-11-15',
     'fix/visual-qa-webkit-csp-regression-2026-11-15',
-    'maintenance/repository-hygiene-2026-11-15',
     'maintenance/branch-cleanup-consolidated-2026-11-15',
     'fix/production-release-push-only-2026-11-15',
-    'fix/final-visual-and-release-policy-2026-11-15',
+    'fix/visual-audit-top-viewport-clean-2026-11-15',
   ];
   assert.equal(new Set(MERGED_PR_BRANCHES).size, MERGED_PR_BRANCHES.length);
   for (const name of names) {
@@ -55,27 +55,8 @@ test('deletes only the nine reviewed merged heads when their PR head matches', (
     );
   }
   assert.equal(MERGED_PR_BRANCHES.includes('maintenance/finish-branch-cleanup-2026-11-15'), false);
-  assert.equal(MERGED_PR_BRANCHES.includes('fix/visual-audit-top-viewport-clean-2026-11-15'), false);
-});
-
-test('closed-unmerged visual audit work is retained until all commits are in main', () => {
-  const name = 'fix/visual-audit-top-viewport-2026-11-15';
-  assert.ok(SUPERSEDED_CLOSED_PR_BRANCHES.includes(name));
-  assert.deepEqual(classifyBranches([branchRef(name)], [pr(name)], repository), []);
-  assert.deepEqual(
-    classifyBranches([branchRef(name)], [pr(name)], repository, { [name]: { ahead_by: 13, behind_by: 0 } }),
-    [],
-  );
-  assert.deepEqual(
-    classifyBranches([branchRef(name)], [pr(name)], repository, { [name]: { ahead_by: 0, behind_by: 13 } }).map(x => x.name),
-    [name],
-  );
-});
-
-test('unreviewed no-PR visual audit work is never pruned', () => {
-  const name = 'fix/visual-audit-top-viewport-clean-2026-11-15';
-  assert.equal(MERGED_PR_BRANCHES.includes(name), false);
-  assert.deepEqual(classifyBranches([branchRef(name)], [], repository, { [name]: { ahead_by: 0 } }), []);
+  assert.equal(MERGED_PR_BRANCHES.includes('fix/final-visual-and-release-policy-2026-11-15'), false);
+  assert.equal(MERGED_PR_BRANCHES.includes('fix/visual-audit-top-viewport-clean-2026-11-15'), true);
 });
 
 test('deletes a reviewed moved merged branch only after ancestry proof', () => {
@@ -93,6 +74,7 @@ test('deletes a reviewed moved merged branch only after ancestry proof', () => {
 test('closed-unmerged refs require exact review AND ahead_by=0', () => {
   const name = 'ci/restore-release-boundaries-2026-11-15-rebased';
   assert.ok(SUPERSEDED_CLOSED_PR_BRANCHES.includes(name));
+  assert.ok(SUPERSEDED_CLOSED_PR_BRANCHES.includes('fix/visual-audit-top-viewport-2026-11-15'));
   assert.deepEqual(classifyBranches([branchRef(name)], [pr(name)], repository), []);
   assert.deepEqual(
     classifyBranches([branchRef(name)], [pr(name)], repository, {
@@ -127,6 +109,24 @@ test('does not retire the closed-unmerged cleanup follow-up branch', () => {
     }),
     [],
   );
+});
+
+
+test('closed unmerged branches excluded from both allowlists are never deleted', () => {
+  const names = [
+    'maintenance/finish-branch-cleanup-2026-11-15',
+    'fix/final-visual-and-release-policy-2026-11-15',
+  ];
+  for (const name of names) {
+    assert.equal(MERGED_PR_BRANCHES.includes(name), false);
+    assert.equal(SUPERSEDED_CLOSED_PR_BRANCHES.includes(name), false);
+    assert.deepEqual(
+      classifyBranches([branchRef(name)], [pr(name)], repository, {
+        [name]: { ahead_by: 0, behind_by: 20 },
+      }),
+      [],
+    );
+  }
 });
 
 test('a reused merged/closed-unmerged ref requires ancestry proof', () => {
