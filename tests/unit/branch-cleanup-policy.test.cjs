@@ -45,6 +45,7 @@ test('deletes the nine newly reviewed merged heads only when their PR head match
     'fix/visual-qa-webkit-csp-regression-2026-11-15',
     'maintenance/branch-cleanup-consolidated-2026-11-15',
     'fix/production-release-push-only-2026-11-15',
+    'fix/visual-audit-top-viewport-2026-11-15',
   ];
   for (const name of names) {
     assert.ok(MERGED_PR_BRANCHES.includes(name));
@@ -192,6 +193,26 @@ test('retains refs when comparison data is missing or the branch is ahead of mai
   assert.deepEqual(
     classifyBranches([branchRef('work/unknown')], [], repository, {
       'work/unknown': { ahead_by: 2, behind_by: 4 },
+    }),
+    [],
+  );
+});
+
+test('cleanup allowlists are unique and moved maintenance refs require ancestry proof', () => {
+  assert.equal(new Set(MERGED_PR_BRANCHES).size, MERGED_PR_BRANCHES.length);
+  assert.equal(new Set(SUPERSEDED_CLOSED_PR_BRANCHES).size, SUPERSEDED_CLOSED_PR_BRANCHES.length);
+  assert.equal(new Set(STALE_NO_PR_BRANCHES).size, STALE_NO_PR_BRANCHES.length);
+  const moved = 'maintenance/repository-hygiene-2026-11-15';
+  assert.deepEqual(
+    classifyBranches([branchRef(moved, { sha: 'new-sha' })], [pr(moved, { merged: true, sha: 'old-sha' })], repository, {
+      [moved]: { ahead_by: 62, behind_by: 5 },
+    }),
+    [],
+  );
+  const closed = 'maintenance/finish-branch-cleanup-2026-11-15';
+  assert.deepEqual(
+    classifyBranches([branchRef(closed)], [pr(closed)], repository, {
+      [closed]: { ahead_by: 0, behind_by: 3 },
     }),
     [],
   );
