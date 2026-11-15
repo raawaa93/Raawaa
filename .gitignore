@@ -5,4 +5,6 @@ blob-report/
 .wrangler/
 dist/
 coverage/
+.lighthouseci/
+.projectmem/
 .DS_Store
