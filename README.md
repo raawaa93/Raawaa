@@ -57,7 +57,7 @@ GitHub Actions runs these checks on pushes and pull requests. Make future edits 
 - Website-source/configuration pushes to `main` run the full validation pipeline and then deploy that same validated commit automatically. Documentation, recovery archives, workflow-only, dependency-only, test-only, and validation-script-only changes are excluded from production releases.
 - Failed validation blocks deployment. The release job refuses stale or dirty source and targets only the production Pages branch.
 - Pull requests and non-main branches do not deploy to production. Preview deployments remain isolated from production.
-- A controlled manual rerun remains available from `main` through `workflow_dispatch`, but requires the explicit `confirm_production=yes` input.
+- Production releases are push-triggered only: qualifying website-source/configuration changes on `main` run validation and deploy automatically after all gates pass. There is no manual production dispatch; documentation, workflow-only, dependency-only, test-only, and validation-script-only changes do not trigger a release.
 
 ## Recovery references
 
