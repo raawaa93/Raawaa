@@ -56,7 +56,6 @@ const MERGED_PR_BRANCHES = Object.freeze([
   "fix/visual-audit-csp-screenshots-2026-11-15",
   "fix/visual-audit-webkit-csp-2026-11-15",
   "docs/visual-qa-and-inventory-finalization-2026-11-15",
-  "maintenance/repository-hygiene-2026-11-15",
   "fix/visual-qa-webkit-csp-regression-2026-11-15",
   "maintenance/branch-cleanup-consolidated-2026-11-15",
   "fix/production-release-push-only-2026-11-15",
@@ -83,15 +82,24 @@ const SUPERSEDED_CLOSED_PR_BRANCHES = Object.freeze([
   "fix/branch-cleanup-policy-current-state-2026-11-15"
 ]);
 const DUPLICATE_TREE_BRANCHES = Object.freeze([
-  "fix/production-policy-site-check-2026-11-15"
+  "fix/production-policy-site-check-2026-11-15",
+  "fix/branch-cleanup-allowlist-correction-2026-11-15",
+  "fix/branch-cleanup-policy-current-state-2026-11-15",
+  "fix/final-visual-and-release-policy-2026-11-15",
+  "fix/final-visual-release-policy-consolidated-2026-11-15",
+  "fix/visual-audit-top-viewport-2026-11-15",
+  "maintenance/finalize-branch-cleanup-2026-11-15",
+  "maintenance/finish-branch-cleanup-2026-11-15",
+  "maintenance/branch-cleanup-consolidated-2026-11-15",
+  "fix/production-release-push-only-2026-11-15",
+  "maintenance/final-inventory-cleanup-2026-11-15"
 ]);
 
 const STALE_NO_PR_BRANCHES = Object.freeze([
   "preview-deploy/visual-qa-2026-11-15",
   "preview-deploy/2026-11-15-post-fix",
   "preview-deploy/2026-11-15-main-78ece71",
-  "docs/project-tooling-and-branch-inventory-2026-11-15",
-  "fix/raawaa-final-qa-release-policy-2026-11-15"
+  "maintenance/final-inventory-cleanup-2026-11-15"
 ]);
 
 function classifyBranches(branches, pullRequests, repositoryFullName, comparisons = {}) {
@@ -130,9 +138,9 @@ function classifyBranches(branches, pullRequests, repositoryFullName, comparison
     // Reviewed closed PR refs are removable only when their entire Git tree is
     // byte-for-byte identical to main. Commit-count divergence alone is not enough.
     if (duplicateTreeBranches.has(name)) {
-      return related.length > 0 &&
-        related.every((pull) => pull.state === 'closed') &&
-        comparison?.tree_matches_main === true;
+      const reviewedClosed = related.length > 0 && related.every((pull) => pull.state === 'closed');
+      const reviewedNoPr = related.length === 0 && staleNoPr.has(name);
+      return (reviewedClosed || reviewedNoPr) && comparison?.tree_matches_main === true;
     }
 
     // A reused ref with a closed-unmerged PR is retained unless it is explicitly
