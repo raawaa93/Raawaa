@@ -120,3 +120,13 @@ Update only when a verified, durable fact changes (for example: owner-approved p
 - `package-lock.json` is still absent. Production validation currently installs Playwright without a committed lockfile, so the dependency tree is not reproducibly pinned and a complete lockfile-based vulnerability scan remains incomplete. Generate the lockfile in a real Node/npm environment, validate with `npm ci`, then add OSV scanning against the committed lockfile.
 - The repository currently has 62 branches, including immutable backup/recovery checkpoints and numerous historical feature/automation/preview branches. Do not bulk-delete them. Inventory ancestry and artifact dependencies before retiring any non-backup branch.
 - The GitHub integration could not read the main branch-protection endpoint during this audit (403); do not assume branch protection is enabled or disabled. Revisit with an authorized read path.
+
+### Second Supabase project — isolated fallback audit — 2026-11-15
+- A second active project exists: `raawaa-engine-fallback` (`xuwtuhfqjjwszxqkmivj`, `us-east-1`). It is not the same database as `Ghaioooth-core`.
+- Its applied migration history is four entries: three `engine_fallback` ledger migrations and one `commerce_multi_store_spine` migration. It contains no `rawaa_store` schema.
+- Function metadata: `engine-fallback` v5 (`verify_jwt=false`) and `commerce-api` v4 (`verify_jwt=false`). The Supabase connector's `get_edge_function` operation returned an internal protocol error for both functions, so deployed source and application-level authentication could not be verified.
+- Read-only counts: `engine_fallback.tasks` 0, `audit_log` 0, `task_process_dispatches` 0, `heartbeat` 1; `commerce.orders`, `order_events`, and `rate_limits` all 0.
+- `commerce.orders.currency` defaults to `USD`; unit cost defaults to 0 cents, courier cost to 200 cents, refusal cost to 100 cents. These are placeholders, not approved Raawaa values. Do not connect checkout to this schema or rely on these defaults.
+- No `commerce-api` invocations appeared in the last-24-hour edge-log query on either Supabase project. This is not proof that an endpoint is safe or unused beyond that window.
+- Decision: keep both projects isolated. `Ghaioooth-core` is actively used by the separate council/control-plane system; `raawaa-engine-fallback` is a separate fallback ledger with a dormant commerce spine. Neither is approved as the live Store order system until deployed function source, auth, currency, costs, and operational ownership are reviewed.
+- Security advisor also reports Supabase Auth leaked-password protection disabled on `Ghaioooth-core`. Do not alter sign-in settings until the owner-auth flow and impact are reviewed.
