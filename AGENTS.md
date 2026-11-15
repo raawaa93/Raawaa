@@ -1,7 +1,7 @@
 # RAWAA Store agent guidance
 
 ## Source of truth
-- Branch hygiene: merged PR heads are retained by default. Retire only exact allowlisted superseded closed-unmerged refs and stale no-PR preview/deploy refs after GitHub comparison confirms `ahead_by = 0`; preserve `main`, all `backup/*` and `recovery/*` refs, protected refs, and open-PR heads. See `docs/engineering/BRANCH-INVENTORY.md`.
+- Branch hygiene: retire unchanged same-repository merged PR heads, plus exact reviewed superseded closed-unmerged and stale no-PR refs. If a branch head moved after merge, require GitHub comparison to confirm `ahead_by = 0` unless the exact branch is in the reviewed superseded allowlist. Preserve `main`, all `backup/*` and `recovery/*` refs, protected refs, open-PR heads, and unreviewed work. See `docs/engineering/BRANCH-INVENTORY.md`.
 - Do not delete global ChatGPT plugins or Skills as part of repository cleanup; they may be shared by other projects. Curate project relevance in `docs/engineering/TOOLING-REGISTRY.md`.
 - Treat this repository's current main branch and owner-confirmed policy as authoritative.
 - Read `docs/engineering/PROJECT-MEMORY.md` at the start of substantial work; update it only when a durable, verified decision changes.
