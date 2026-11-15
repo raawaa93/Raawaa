@@ -55,9 +55,7 @@ const MERGED_PR_BRANCHES = Object.freeze([
   "fix/branch-hygiene-protect-operational-refs-2026-11-15",
   "fix/visual-audit-csp-screenshots-2026-11-15",
   "fix/visual-audit-webkit-csp-2026-11-15",
-  "maintenance/repository-hygiene-2026-11-15",
-  "docs/visual-qa-and-inventory-finalization-2026-11-15",
-  "maintenance/finish-branch-cleanup-2026-11-15"
+  "docs/visual-qa-and-inventory-finalization-2026-11-15"
 ]);
 const SUPERSEDED_CLOSED_PR_BRANCHES = Object.freeze([
   "ci/restore-release-boundaries-2026-11-15-rebased",
@@ -70,8 +68,7 @@ const SUPERSEDED_CLOSED_PR_BRANCHES = Object.freeze([
   "automation/graphify-and-lighthouse-2026-11-15",
   "automation/graphify-daily-refresh-2026-11-15",
   "qa/visual-audit-2026-11-15",
-  "feature/campaign-nitro-offer-2026-11-14",
-  "maintenance/branch-hygiene-followup-2026-11-15"
+  "feature/campaign-nitro-offer-2026-11-14"
 ]);
 const STALE_NO_PR_BRANCHES = Object.freeze([
   "preview-deploy/visual-qa-2026-11-15",
@@ -97,8 +94,9 @@ function classifyBranches(branches, pullRequests, repositoryFullName, comparison
     const name = branch?.name;
     if (!name || name === 'main' || branch.protected) return false;
 
-    const protectedPrefixes = ['backup/', 'recovery/', 'restore/', 'release/', 'production-deploy/', 'deploy/'];
-    if (protectedPrefixes.some((prefix) => name.startsWith(prefix))) return false;
+    const alwaysProtectedPrefixes = ['backup/', 'recovery/', 'restore/', 'release/', 'production-deploy/'];
+    if (alwaysProtectedPrefixes.some((prefix) => name.startsWith(prefix))) return false;
+    if (name.startsWith('deploy/')) return false;
     if (name.startsWith('preview-deploy/') && !staleNoPr.has(name)) return false;
 
     const related = relatedByHead.get(name) || [];
@@ -111,18 +109,19 @@ function classifyBranches(branches, pullRequests, repositoryFullName, comparison
     );
     const comparison = comparisons[name];
 
+    // A reused ref with a closed-unmerged PR is retained unless it is explicitly
+    // reviewed AND GitHub proves every current commit is already contained in main.
     if (hasClosedUnmergedPR) {
-      // A branch reused after a merge may contain later unmerged work; require ancestry proof.
       if (hasMergedPR) return mergedAllowlist.has(name) && comparison?.ahead_by === 0;
-      // Only exact, reviewed closed-unmerged refs are retired; unknown work is retained.
-      return superseded.has(name);
+      return superseded.has(name) && comparison?.ahead_by === 0;
     }
 
-    // Stale no-PR refs require both an exact allowlist entry and ancestry proof.
+    // No-PR refs are eligible only when individually reviewed and proven contained in main.
     if (related.length === 0) return staleNoPr.has(name) && comparison?.ahead_by === 0;
 
     // Exact merged heads are removed only from the reviewed allowlist.
     if (hasMergedPR && mergedHeadMatchesCurrent) return mergedAllowlist.has(name);
+    // A moved merged branch requires ancestry proof.
     if (hasMergedPR) return mergedAllowlist.has(name) && comparison?.ahead_by === 0;
 
     return false;
