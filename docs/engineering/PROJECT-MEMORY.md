@@ -8,7 +8,7 @@ This file is the repository-backed memory that survives AI sessions, client chan
 - Repository: `raawaa93/Raawaa`; `main` is the only canonical website source.
 - Cloudflare Pages project: `raawaa-store`; current known URL: https://raawaa-store.pages.dev.
 - Pages uses Direct Upload, not Git integration. A merge to `main` is **not** a production deployment.
-- Production release is automated by the existing `RAWAA production CI and release` workflow after the full validation job succeeds on a push to `main`; manual dispatch with `confirm_production=yes` remains available for controlled reruns. It validates the exact current `main` SHA, rebuilds the clean payload, and refuses stale/dirty source. Owner has granted standing authorization for routine releases after these gates pass.
+- Production release is automated by the existing `RAWAA production CI and release` workflow after the full validation job succeeds on a push to `main`. Manual dispatch is disabled. It validates the exact current `main` SHA, rebuilds the clean payload, and refuses stale/dirty source. Owner has granted standing authorization for routine releases after these gates pass.
 - Preview deployment is isolated from production. Never deploy a backup branch.
 - `backup/*` branches and `recovery/` snapshots are historical rollback/evidence; do not delete, overwrite, or deploy them.
 
@@ -155,7 +155,7 @@ Update only when a verified, durable fact changes (for example: owner-approved p
 - PR #56 migration archive and its recovery-only workflow changes are in main; the backup artifact after merge includes the archive. No SQL was executed.
 
 - PR #64 strengthened the stale-release guard: a validated release can tolerate only intervening documentation, recovery, workflow, dependency, test, or validation-only commits; any changed production source/configuration/build file still blocks deployment. The earlier run for PR #62's SHA was correctly blocked when main moved, and the subsequent validated run for `032a6260` deployed successfully.
-- PR #65 is merged. The production workflow now excludes workflow-only changes from deployment triggers and retains the controlled manual rerun with `confirm_production=yes`. Automatic releases for qualifying website-source changes remain the default; pull requests and non-main branches remain excluded.
+- PR #65 is a historical workflow state: it excluded workflow-only changes but retained a controlled manual rerun. PR #70 later regressed this by reintroducing workflow_dispatch and changing trigger paths; PR #81 restores push-only production releases and excludes all visual-audit helper scripts.
 
 
 ## Verified tooling and discovery update — 2026-11-15
@@ -191,3 +191,10 @@ Update only when a verified, durable fact changes (for example: owner-approved p
 - Ten other closed-unmerged refs and all four stale no-PR refs were retained because their current heads contain commits ahead of main. Net refs retired after restoration: 52. Current inventory: 35 branch refs, 75 PRs (61 merged, 13 closed-unmerged, one open PR #74).
 - PR #73, which would have re-added restored/active refs to the deletion allowlist, was closed without merge. PR #74 adds regression tests and protects restore/*, release/*, production-deploy/*, and active preview-deploy/*/deploy/* refs. It also removes maintenance/test scripts from production release triggers. Do not run another cleanup pass until PR #74 is merged and validated.
 - PR #71 fixed the visual audit harness by removing Playwright screenshot animations: disabled, which caused 20 WebKit CSP console errors. The site CSP remains strict. Run #43677078729 is the fresh visual audit against canonical main SHA d4e6c066; its report still requires inspection.
+
+## Production release trigger correction — 2026-11-15 04:50 UTC
+
+- PR #70 reintroduced workflow_dispatch and changed the production path filter. PR #78 added scripts/visual-audit-csp-policy.cjs, which was not yet ignored, so its merge triggered production run #43677941627 and a redundant Pages deployment at https://637be0b7.raawaa-store.pages.dev.
+- The Pages payload builder explicitly excludes the entire scripts/ directory, so the audit helper was not published to the storefront. The redundant deployment completed validation and security-header checks; no storefront source, prices, discounts, delivery rules, DNS, Supabase data, secrets, or customer records were changed.
+- PR #81 restores the push-only release policy: no workflow_dispatch, deploy job only for a validated push to main, and branch-cleanup/visual-audit helpers are excluded from paths-ignore and the stale-source guard. scripts/check-site.mjs now enforces this policy, with a dedicated unit test.
+- After PR #81 merges, docs/tooling/test/visual-audit changes will not trigger production deployment. A production release requires a website-source/configuration change on main and full successful validation.
