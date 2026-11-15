@@ -6,7 +6,7 @@
 - Preserve the existing static-site architecture unless a measured need justifies a change.
 - Keep the 10% Sham Cash-only discount and free delivery for every payment method.
 - Never invent product photography, customer reviews, testimonials, prices, or business credentials.
-- Do not publish or deploy production changes from a feature branch. Use a preview and explicit approval.
+- Never publish production from a feature or recovery branch. Production releases are authorized automatically from canonical `main` only after the production workflow's complete validation succeeds. Feature branches use isolated previews for QA.
 
 ## Design and implementation skills
 Use these upstream skills as specialist references when a Codex environment has them installed:
@@ -53,10 +53,10 @@ These upstream skills are not vendored into this repository. Install them in the
 ## Exact release boundary
 
 - Cloudflare Pages project: `raawaa-store`; deployment mode: Direct Upload.
-- A normal push or merge to `main` triggers validation only. Production deployment is a separate manual workflow dispatch and requires `confirm_production=yes`.
-- Never dispatch production deployment, change DNS, secrets, billing, Workers, D1, queues, Supabase data, or migrations unless the user explicitly approves that specific operation.
+- A push to `main` that changes website source triggers full validation and then an automatic production deployment. Documentation-only and workflow-only pushes are excluded from production release. Manual workflow dispatch with `confirm_production=yes` remains available for controlled reruns.
+- The owner has granted standing authorization for routine validated production releases, repository changes, merges, and no-cost tooling. Never bypass exact-SHA validation, latest-main freshness, clean-source, Cloudflare secret, or production environment gates. Do not spend money, link billing, expose secrets, or perform irreversible/destructive customer-data/database actions. DNS/domain ownership changes and destructive migrations require a specific recoverable plan and operation-specific confirmation.
 - The isolated preview target must remain `raawaa-recovery-preview`; never use a preview as a production alias.
-- Run `node scripts/check-site.mjs` and the build validator before proposing a release. For browser changes, run the Playwright suite. For SEO/performance changes, inspect Lighthouse artifacts.
+- Run `node scripts/check-site.mjs` and the build validator before release. For browser changes, run the Playwright suite. For SEO/performance changes, inspect Lighthouse artifacts. Merge after required checks pass; production deploy follows automatically only for website-source changes on `main`.
 
 ## Commercial policy remains immutable without owner instruction
 
