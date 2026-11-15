@@ -45,9 +45,13 @@ const robots = read('robots.txt');
 const serviceWorker = read('sw.js');
 const configSource = read('js/config.js');
 const responseHeaders = read('_headers');
+const productionWorkflow = read('.github/workflows/production-cicd.yml');
 const homeCss = read('css/home-inline.css');
 const cart = read('js/cart.js');
 const views = read('js/serum-views.js');
+
+assert.match(productionWorkflow, /if: github\\.ref == 'refs\\/heads\\/main' && github\\.event_name == 'workflow_dispatch' && inputs\\.confirm_production == 'yes'/u, 'Production deployment must require a manual main-branch dispatch with explicit confirmation');
+assert.doesNotMatch(productionWorkflow, /github\\.event_name == 'push'.*confirm_production/su, 'A main push must never satisfy the production deploy condition');
 
 const configMatch = configSource.match(/window\.RAWAA_CONFIG\s*=\s*deepFreeze\((\{[\s\S]*?\})\s*\);/);
 assert.ok(configMatch, 'RAWAA_CONFIG must be a JSON-compatible object');
