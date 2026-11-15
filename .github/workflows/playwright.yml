@@ -10,6 +10,7 @@ on:
       - 'tests/e2e/**'
       - 'playwright.config.mjs'
       - 'package.json'
+      - 'package-lock.json'
       - '.github/workflows/playwright.yml'
   push:
     # Main pushes run the full production validation pipeline; retain recovery/restore branch coverage.
@@ -37,8 +38,10 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: 22
-      - name: Install dependencies
-        run: npm install
+      - name: Install locked dependencies
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Audit locked dependencies
+        run: npm audit --audit-level=high
       - name: Install Chromium and WebKit
         run: npx playwright install --with-deps chromium webkit
       - name: Generate ephemeral HTTPS certificate

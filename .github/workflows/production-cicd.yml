@@ -11,6 +11,12 @@ on:
       - '.agents/**'
       - '.github/workflows/**'
       - 'recovery/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'playwright.config.mjs'
+      - 'tests/**'
+      - 'scripts/check-site.mjs'
+      - 'scripts/check-production-headers.mjs'
   workflow_dispatch:
     inputs:
       confirm_production:
@@ -47,8 +53,11 @@ jobs:
         with:
           node-version: 22
 
-      - name: Install test dependencies without mutating the lockfile
-        run: npm install --package-lock=false --no-save --no-audit --no-fund
+      - name: Install locked test dependencies
+        run: npm ci --ignore-scripts --no-audit --no-fund
+
+      - name: Audit locked dependencies
+        run: npm audit --audit-level=high
 
       - name: Install Chromium and WebKit
         run: npx playwright install --with-deps chromium webkit
