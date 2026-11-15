@@ -244,3 +244,11 @@ This is an account-level inventory. Only resources positively identified as belo
 - ChatGPT exposes 801 tool definitions across 24 integration families and 151 Skills in the current catalog. The catalog interface is read-only for global Skills; no uninstall action is available. No global Skills were bulk-imported or removed.
 - Notion's enabled-Skills endpoint reports zero enabled Notion Skills. Keep the repository's `AGENTS.md`, `PROJECT-MEMORY.md`, and Graphify index as the durable project guidance/memory stack.
 - **TinyFish remains explicitly prohibited** and is not used, installed, or reintroduced.
+
+### Branch lifecycle and recovery
+
+- PR #100 merged the branch archive workflow.
+- [Archive run #43680881436](https://github.com/raawaa93/Raawaa/actions/runs/43680881436) completed successfully: 29 exact-SHA annotated tags created and verified, 29 branch refs removed, zero failures.
+- The remaining archive allowlist is now limited to three reviewed refs: the closed documentation branch, the merged visual-QA branch whose tree changed after maintenance, and a superseded archive-workflow draft. Each is pinned to its exact current SHA.
+- The branch archive workflow is part of the repository's maintenance stack; it preserves commit history before removing refs. Recovery steps are in `docs/engineering/ARCHIVED-BRANCHES.md`.
+- No global ChatGPT plugin, workspace connector, or Skill was disabled or uninstalled. The integration catalog is shared and the audit found no safe, complete dependency map for destructive workspace-wide cleanup.
