@@ -351,7 +351,7 @@ No prices, discounts, delivery rules, payment settings, customer/order data, Sup
 ## Final repository and release confirmation — 2026-11-15 06:25 UTC
 
 - Canonical main after final maintenance merge: `b6c50075dae95179ea430a60b6dbdf92946b5f56`.
-- Final GitHub inventory: **17 branches, 34 tags, 0 open pull requests**. The 17 branches are the retained main, backup, deploy, preview, production-deploy, recovery, release, and restore refs.
+- Final GitHub inventory after the first archive cleanup: **17 branches, 34 tags, 0 open pull requests**; a second archive tag has since been verified, and two generated archive-finalization refs are being retired with exact ancestry checks. The 17 branches are the retained main, backup, deploy, preview, production-deploy, recovery, release, and restore refs.
 - Branch hygiene run `43685324709` completed successfully. The one diverged post-merge maintenance branch was not force-deleted: it was preserved at exact commit `80e320e4b95138685ad10099c6087050d66b2b62` as annotated tag `archive/branches/2026-11-15/maintenance/pr112-branch-hygiene-inventory-2026-11-15`; tag target was read back and matched, then the temporary branch was deleted.
 - No temporary work branches or open PRs remain. All durable operational/recovery refs remain.
 - Latest successful production deployment remains Cloudflare Pages deployment `44ff2ce7-0379-4311-86aa-43be465fdb75`, source `adbc74f31801afa92a37c83dcb1c7698e1248c3e`. Subsequent main commits were documentation/maintenance only.
@@ -359,3 +359,11 @@ No prices, discounts, delivery rules, payment settings, customer/order data, Sup
 - Visual QA remains successful: run `43684775744`, 16 browser/viewport/page combinations, zero reported issues.
 - Remaining external controls are unchanged: GitHub `main.protected=false`, repository rulesets count 0 (connected integration received 403 for administrative settings); `rawaa.eu.org` remains pending/unresolvable despite its store-specific CNAME and Pages binding. No DNS or nameserver changes were made.
 - Store owner inputs still required before full order/payment operation: Sham Cash wallet number, approved INCI/formula data, real product photographs, privacy notice review, and confirmation of whether WhatsApp-only order handoff remains the intended workflow. No connected Supabase project has been attached or modified.
+
+
+## Additional archive and final branch cleanup — 2026-11-15 06:29 UTC
+
+- Second exact-SHA recovery tag: `archive/branches/2026-11-15/maintenance/record-pr113-archive-2026-11-15`, targeting commit `1415d8dcac9ca2113626659d4454b2450b42b423`. Tag target read-back matched.
+- This brings the verified archive-tag count to **35**. The one-time archive allowlist is being cleared.
+- Two generated maintenance refs remain temporarily: `maintenance/finalize-archive-index-2026-11-15` and `maintenance/finalize-pr113-archive-2026-11-15`. Their unique changes are already represented in canonical main; they will be fast-forwarded to main and removed only after GitHub confirms `ahead_by=0`.
+- No open pull requests. Expected final inventory after cleanup: **17 branches, 35 tags, 0 open PRs**.
