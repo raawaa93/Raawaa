@@ -89,3 +89,14 @@ Do not delete archive tags as part of routine cleanup. They preserve the origina
 - The workflow creates or verifies the annotated tag, checks the tag target SHA, re-reads the live branch head, and only then deletes the branch ref.
 - Any changed head, tag mismatch, API failure, or deletion failure is retained/reported rather than silently discarded.
 - `main`, backups, recovery, restore, release, production-deploy, deploy, and preview-deploy namespaces are never archived.
+
+
+## Additional verified maintenance archive — 2026-11-15
+
+| Original branch | Preserved commit SHA | Recovery tag |
+|---|---|---|
+| `maintenance/pr112-branch-hygiene-inventory-2026-11-15` | `80e320e4b95138685ad10099c6087050d66b2b62` | `archive/branches/2026-11-15/maintenance/pr112-branch-hygiene-inventory-2026-11-15` |
+
+- Archive workflow run: [#43685324709](https://github.com/raawaa93/Raawaa/actions/runs/43685324709) — success.
+- The annotated tag target was read back and verified to equal the captured branch SHA. The live branch head was re-read before branch deletion.
+- This adds one verified recovery tag. Current archive count: **34 verified tags**.
