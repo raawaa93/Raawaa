@@ -26,7 +26,7 @@ test('archive allowlist is unique, explicit, and excludes operational namespaces
   for (const prefix of ['backup/', 'recovery/', 'restore/', 'release/', 'production-deploy/', 'deploy/', 'preview-deploy/']) {
     assert.equal(names.some(name => name.startsWith(prefix)), false, prefix);
   }
-  assert.equal(Object.keys(ARCHIVE_BRANCHES).length, 31);
+  assert.equal(Object.keys(ARCHIVE_BRANCHES).length, 32);
 });
 
 test('selects only reviewed branches whose recorded SHA is unchanged', () => {
