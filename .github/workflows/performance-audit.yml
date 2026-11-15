@@ -1,0 +1,74 @@
+name: RAWAA mobile performance audit
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "**/*.html"
+      - "css/**"
+      - "js/**"
+      - "assets/**"
+      - "lighthouserc.json"
+      - ".github/workflows/performance-audit.yml"
+      - ".github/workflows/codebase-graph.yml"
+      - ".graphifyignore"
+      - "AGENTS.md"
+      - "docs/engineering/PROJECT-MEMORY.md"
+      - "scripts/build-deploy.mjs"
+      - "scripts/check-site.mjs"
+  pull_request:
+    paths:
+      - "**/*.html"
+      - "css/**"
+      - "js/**"
+      - "assets/**"
+      - "lighthouserc.json"
+      - ".github/workflows/performance-audit.yml"
+      - ".github/workflows/codebase-graph.yml"
+      - ".graphifyignore"
+      - "AGENTS.md"
+      - "docs/engineering/PROJECT-MEMORY.md"
+      - "scripts/build-deploy.mjs"
+      - "scripts/check-site.mjs"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: raawaa-mobile-performance-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  lighthouse:
+    name: Collect mobile performance baseline
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout exact change
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+
+      - name: Set up Python static server
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Run Lighthouse CI without hosted upload
+        run: npx --yes @lhci/cli@0.16.0 autorun --config=lighthouserc.json
+
+      - name: Upload reports for review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: raawaa-lighthouse-mobile-${{ github.sha }}
+          path: .lighthouseci/
+          if-no-files-found: warn
+          retention-days: 14

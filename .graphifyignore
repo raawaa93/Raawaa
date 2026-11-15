@@ -1,0 +1,12 @@
+# Keep generated graphs focused on source and maintained documentation.
+# Recovery snapshots and media are historical/reference assets, not source code.
+recovery/
+assets/
+node_modules/
+.projectmem/
+.wrangler/
+dist/
+coverage/
+playwright-report/
+test-results/
+blob-report/

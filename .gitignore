@@ -5,4 +5,7 @@ blob-report/
 .wrangler/
 dist/
 coverage/
+.lighthouseci/
+.projectmem/
+graphify-out/
 .DS_Store
