@@ -288,3 +288,21 @@ test('retires the merged privacy-navigation branch after its exact PR merge', ()
   assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
   assert.deepEqual(classifyBranches([branchRef(name)], [pr(name, { merged: true })], repository).map(x => x.name), [name]);
 });
+
+test('deletes a reused branch when its current head exactly matches a merged PR despite an older closed-unmerged PR', () => {
+  const name = 'maintenance/retire-last-closed-ref-2026-11-15';
+  const pulls = [
+    pr(name, { state: 'closed', merged: false, sha: 'old-closed-head' }),
+    pr(name, { state: 'closed', merged: true, sha: 'current-merged-head' }),
+  ];
+  assert.ok(MERGED_PR_BRANCHES.includes(name));
+  assert.deepEqual(classifyBranches([branchRef(name, { sha: 'current-merged-head' })], pulls, repository).map(x => x.name), [name]);
+  assert.deepEqual(classifyBranches([branchRef(name, { sha: 'newer-unmerged-head' })], pulls, repository), []);
+});
+
+test('retires this exact merged cleanup-policy PR branch after merge', () => {
+  const name = 'maintenance/fix-merged-head-cleanup-logic-2026-11-15';
+  assert.ok(MERGED_PR_BRANCHES.includes(name));
+  assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
+  assert.deepEqual(classifyBranches([branchRef(name)], [pr(name, { merged: true })], repository).map(x => x.name), [name]);
+});
