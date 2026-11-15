@@ -54,10 +54,10 @@ GitHub Actions runs these checks on pushes and pull requests. Make future edits 
 - Cloudflare Pages project: `raawaa-store`.
 - Production URL: https://raawaa-store.pages.dev
 - The existing Pages project uses **Direct Upload**, not Git integration. GitHub Actions builds the clean payload and deploys it with Wrangler.
-- Website-source/configuration pushes to `main` run the full validation pipeline and then deploy that same validated commit automatically. Documentation, recovery archives, workflow-only, dependency-only, test-only, and validation-script-only changes are excluded from production releases.
-- Failed validation blocks deployment. The release job refuses stale or dirty source and targets only the production Pages branch.
+- Changes to `main` run validation; they do **not** deploy to production automatically. Production deployment requires a manual `workflow_dispatch` from `main` with `confirm_production=yes`.
+- The production job deploys only the exact validated commit, refuses stale or dirty source, and targets only the production Pages branch. A failed validation blocks deployment.
 - Pull requests and non-main branches do not deploy to production. Preview deployments remain isolated from production.
-- Production releases are push-triggered only: qualifying website-source/configuration changes on `main` run validation and deploy automatically after all gates pass. There is no manual production dispatch; documentation, workflow-only, dependency-only, test-only, and validation-script-only changes do not trigger a release.
+- Documentation, recovery archives, workflow-only, dependency-only, test-only, and validation-script-only changes are excluded from production release triggers.
 
 ## Recovery references
 
@@ -73,7 +73,7 @@ GitHub Actions runs these checks on pushes and pull requests. Make future edits 
 - The automated branch hygiene workflow retires same-repository merged PR heads only when the current branch head still matches the merged PR head; if a branch moved, GitHub comparison must prove `ahead_by = 0` or the exact branch must be in the reviewed superseded allowlist. It also retires exact superseded closed-PR and stale no-PR refs documented in docs/engineering/BRANCH-INVENTORY.md. It preserves main, protected refs, every backup/*, recovery/*, restore/*, release/*, and production-deploy/* ref, all active preview-deploy/* and deploy/* refs, open-PR heads, and unreviewed branches. Only the exact stale no-PR preview/deploy allowlist is eligible for retirement after ancestry proof.
 - Never bulk-delete historical files, recovery snapshots, or external project data. A specific item may be retired only after its replacement is verified and the inventory proves it is unused.
 - Keep docs/engineering/TOOLING-REGISTRY.md current for integrations, skills, and free-tier balances. Do not assume a connected ChatGPT tool is linked to the Store account.
-- Cloudflare Pages uses Direct Upload through GitHub Actions. Eligible storefront-source changes merged to main are automatically deployed after full validation; docs/tooling-only changes do not release. Isolated previews are for QA only and never alias production.
+- Cloudflare Pages uses Direct Upload through GitHub Actions. Merging eligible storefront-source changes to `main` runs validation only; a production release still requires the explicit manual `confirm_production=yes` dispatch. Isolated previews are for QA only and never alias production.
 
 ## Current release status
 
