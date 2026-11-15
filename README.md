@@ -75,4 +75,4 @@ GitHub Actions runs these checks on pushes and pull requests. Make future edits 
 
 ## Current release status
 
-See `recovery/RELEASE-READINESS-2026-11-14.md` for the release gates and backend audit. The latest operational audit is appended there with the current production/preview deployment IDs and the manual-release workflow change.
+See `recovery/RELEASE-READINESS-2026-11-14.md` for the release gates and backend audit. The latest operational audit is appended there with the current production/preview deployment IDs and the automatic-release workflow change.
