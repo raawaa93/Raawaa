@@ -1,10 +1,6 @@
 'use strict';
 
-const ARCHIVE_BRANCHES = Object.freeze({
-  "docs/workspace-hygiene-2026-11-15": "10e76ec9ed8de51cca6aad0451281f18513615b0",
-  "fix/visual-audit-top-viewport-clean-2026-11-15": "c0ccb2db0657d414885e68f16b8b79c9f73b4531",
-  "maintenance/archive-inactive-branches-final-2026-11-15": "ad3aaa80e47f2a4d823d85123f30c27726fb206d",
-});
+const ARCHIVE_BRANCHES = Object.freeze({});
 const PROTECTED_PREFIXES = Object.freeze([
   'backup/',
   'recovery/',
