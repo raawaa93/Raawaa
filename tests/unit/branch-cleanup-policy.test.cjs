@@ -196,3 +196,11 @@ test('retains refs when comparison data is missing or the branch is ahead of mai
     [],
   );
 });
+
+test('cleanup allowlists contain no duplicate names or misplaced closed branches', () => {
+  assert.equal(new Set(MERGED_PR_BRANCHES).size, MERGED_PR_BRANCHES.length);
+  assert.equal(new Set(SUPERSEDED_CLOSED_PR_BRANCHES).size, SUPERSEDED_CLOSED_PR_BRANCHES.length);
+  assert.equal(new Set(STALE_NO_PR_BRANCHES).size, STALE_NO_PR_BRANCHES.length);
+  assert.equal(MERGED_PR_BRANCHES.includes('maintenance/finish-branch-cleanup-2026-11-15'), false);
+  assert.equal(MERGED_PR_BRANCHES.includes('maintenance/repository-hygiene-2026-11-15'), false);
+});
