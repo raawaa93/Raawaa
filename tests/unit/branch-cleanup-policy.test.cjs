@@ -46,23 +46,21 @@ test('deletes a reviewed merged branch that moved only after ancestry proof', ()
   );
 });
 
-test('preserves closed-unmerged work unless explicitly superseded and contained in main', () => {
+test('deletes only exact reviewed superseded closed-unmerged refs and keeps unknown work', () => {
   const unknown = classifyBranches([branchRef('feature/unresolved')], [pr('feature/unresolved')], repository, {
     'feature/unresolved': { ahead_by: 0, behind_by: 3 },
   });
   const name = 'ci/restore-release-boundaries-2026-11-15-rebased';
-  const noProof = classifyBranches([branchRef(name)], [pr(name)], repository);
   const ahead = classifyBranches([branchRef(name)], [pr(name)], repository, {
     [name]: { ahead_by: 4, behind_by: 8 },
   });
-  const contained = classifyBranches([branchRef(name)], [pr(name)], repository, {
-    [name]: { ahead_by: 0, behind_by: 8 },
-  });
+  const followup = 'maintenance/branch-hygiene-followup-2026-11-15';
+  const followupResult = classifyBranches([branchRef(followup)], [pr(followup)], repository);
   assert.deepEqual(unknown, []);
-  assert.deepEqual(noProof, []);
-  assert.deepEqual(ahead, []);
-  assert.deepEqual(contained.map(x => x.name), [name]);
+  assert.deepEqual(ahead.map(x => x.name), [name]);
+  assert.deepEqual(followupResult.map(x => x.name), [followup]);
   assert.ok(SUPERSEDED_CLOSED_PR_BRANCHES.includes(name));
+  assert.ok(SUPERSEDED_CLOSED_PR_BRANCHES.includes(followup));
 });
 
 test('a branch reused by merged and closed-unmerged PRs requires ancestry proof', () => {
