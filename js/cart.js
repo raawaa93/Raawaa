@@ -209,7 +209,9 @@
     var restored = selectedSize && getProduct(selectedSize);
     if (CONFIG.formulas.some(function (f) { return f.id === requested; })) {
       selectedFamily = requested;
-      selectedSize = familyProducts()[1].id;
+      var requestedSize = new URLSearchParams(window.location.search).get('size');
+      var matchingVariant = familyProducts().filter(function (p) { return String(p.sizeMl) === requestedSize; })[0];
+      selectedSize = matchingVariant ? matchingVariant.id : familyProducts()[1].id;
     } else if (restored && restored.familyId) selectedFamily = restored.familyId;
     var host = document.querySelector('[data-formula-options]');
     if (!host) return;
@@ -222,7 +224,7 @@
         var previous = selectedProduct(); var size = previous && previous.sizeMl;
         selectedFamily = formula.id;
         selectedSize = (familyProducts().filter(function (p) { return p.sizeMl === size; })[0] || familyProducts()[1]).id;
-        renderSizePicker(); syncFormula(); saveChoices();
+        renderSizePicker(); syncFormula(); saveChoices(); syncProductVariantUrl(selectedProduct());
       });
       host.appendChild(button);
     });
@@ -350,6 +352,16 @@
     syncSizeUI();
   }
 
+  function syncProductVariantUrl(product) {
+    if (!product || !window.history || !window.history.replaceState) return;
+    try {
+      var url = new URL(window.location.href);
+      url.searchParams.set('product', product.familyId);
+      url.searchParams.set('size', String(product.sizeMl));
+      window.history.replaceState(window.history.state, '', url.pathname + url.search + url.hash);
+    } catch { /* اختيار المنتج لا يعتمد على دعم تعديل الرابط */ }
+  }
+
   function selectSize(id) {
     if (!getProduct(id)) return;
     selectedSize = id;
@@ -357,6 +369,7 @@
     syncFormula();
     saveChoices();
     syncSizeUI();
+    syncProductVariantUrl(selectedProduct());
   }
 
   function syncSizeUI() {
