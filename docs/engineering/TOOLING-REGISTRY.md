@@ -1,6 +1,6 @@
 # RAWAA Store tooling and skills registry
 
-**Last verified:** 2026-11-15 04:42 UTC  
+**Last verified:** 2026-11-15 05:15 UTC  
 **Policy:** use free tiers and included quotas; never activate billing or paid usage without a separate explicit instruction. Quota values below are dated snapshots, not permanent guarantees.
 
 ## Project source of truth
@@ -182,3 +182,65 @@ The catalog being available in ChatGPT is not the same as vendoring a skill into
 - Keep Lovable, HubSpot, and Metricool dormant; they currently have no configured RAWAA Store project, CRM onboarding, or connected social channel.
 - Do not delete Supabase projects, Notion pages, Figma files, or account-wide plugins solely because they are inactive for RAWAA; they may serve other projects and require exact-target authorization.
 - Never send customer/order data, phone numbers, addresses, or secrets to external AI, memory, or indexing services.
+
+
+## Workspace-wide tooling refresh — 2026-11-15 05:15 UTC
+
+This section supersedes earlier workspace snapshots where values conflict. It distinguishes tools available in ChatGPT from services actually connected/configured for RAWAA.
+
+### Current inventory and active project fit
+
+- ChatGPT exposes **801 tool definitions across 24 integration families** and **151 Skills** in the workspace catalog. These are workspace-wide capabilities, not 801 RAWAA integrations.
+- The Notion enabled-Skills endpoint currently returns **zero enabled Notion skills**. Keep the repository's `AGENTS.md` and `docs/engineering/PROJECT-MEMORY.md` as the durable project instructions and memory.
+- Lovable is a **Free** workspace with **zero projects**, **zero workspace Skills**, and **zero connected MCP connectors**. Its standard/seamless integration catalog is available, but catalog availability is not an authenticated connection. No Lovable project or connector needs deleting.
+- Figma remains read-only (View seat). Metricool has one brand but no connected social network. HubSpot remains un-onboarded for RAWAA. These are dormant, not broken.
+- Supabase exposes `raawaa-engine-fallback` and `Ghaioooth-core`; neither is confirmed as the Store database. Do not write to either.
+- GitHub and Cloudflare remain the core execution path. OpenSEO and Search Console remain the primary SEO path; Ahrefs is supplementary only where the Free endpoint supports the requested data.
+
+### Verified quota snapshot
+
+| Service | Current observed state | Operating decision |
+|---|---|---|
+| OpenSEO | **251 credits remaining** | Continue high-value audits and keyword/competitor checks; log balance after material research |
+| Ahrefs | Free API-key allowance: **200,000 monthly units, 0 used**, next reset 2026-12-04; workspace units are not included | Use only endpoints that work on Free; keyword/location endpoints previously returned Insufficient plan |
+| Firecrawl | **0 / 1,000 credits**; current period ends 2026-11-29 | Keep idle until renewal; do not spend or upgrade |
+| Cloudflare | Connected; Web Analytics config exists with `auto_install=false` | No beacon, no collection; revisit only with privacy/CSP review |
+| GitHub Actions | Store checks and Graphify available; cleanup runs automatically after main pushes and weekly | Prefer repository-native automation; no external paid runner |
+
+### Tooling roles — keep the stack lean
+
+- **Core:** GitHub Actions, Playwright (Chromium + WebKit), Graphify, Lighthouse CI, Cloudflare Pages, OpenSEO, Search Console, Ahrefs Free endpoints, repository-backed project memory.
+- **Specialist/read-only:** Figma (View seat), Notion search, Context7, Exa, Consensus. Use only when they add evidence or implementation value.
+- **Dormant until configured:** Lovable (no projects), Metricool (no connected social account), HubSpot (not onboarded), Supabase (Store DB identity unconfirmed).
+- **Quota-paused:** Firecrawl until 2026-11-29.
+- **Excluded:** TinyFish — explicitly prohibited; never call, install, or reintroduce.
+- Do not add a second browser automation stack or a second memory database. Existing Playwright and `PROJECT-MEMORY.md` + Graphify already cover those roles.
+
+### Global connector and Skill cleanup boundary
+
+- No account-wide plugin, connector, Skill, workspace, or project was uninstalled or deleted in this refresh. The integrations are shared across projects, and the available plugin manager does not expose a reliable complete inventory of all cross-project dependencies.
+- Lovable's large connector catalog is a list of available integrations, not evidence that each one is connected. Leave unused catalog entries alone; do not disconnect or disable an integration that is not actually connected.
+- No paid plan, billing, credits, API key, DNS, customer data, Supabase schema, or Figma/Notion content was changed.
+- No global Skills were bulk-imported. External skill repositories remain selectively reviewed references; do not duplicate their bundles into this project without a concrete use case.
+
+## Cloudflare resource audit — 2026-11-15
+
+This is an account-level inventory. Only resources positively identified as belonging to the Store were changed; other project namespaces and their dependencies remain untouched.
+
+- **Pages:** `raawaa-store` is the active Store project. Production remains `https://raawaa-store.pages.dev`. The legacy custom-domain attachment `rawaa.eu.org` remains pending validation; no DNS was changed. The requested `rawaa.sy` domain remains a separate owner-side registration process.
+- **Store Worker:** the separate `raawaa-store` Worker had no route, custom domain, D1/KV/Queue binding, or schedule, and recorded **0 invocations in the previous 30 days**. Its `workers.dev` subdomain was disabled on 2026-11-15. The Worker script and deployment metadata were retained because the API returned no exportable source content; do not delete them until a recoverable source export is available.
+- **Other Workers:** seven Worker scripts exist in the account. Non-Store project workers were left untouched.
+- **D1:** three databases exist and all currently report zero tables. `raawaa-engine-staging` and `raawaa-autonomous-engine` each have one Worker binding. `waa-engine-staging` has no Worker binding; it was retained because external consumers were not ruled out.
+- **Queues:** two queues exist; one currently has a consumer. Both were retained because queue/dead-letter dependencies were not fully ruled out.
+- **KV / R2:** zero KV namespaces and no R2 buckets are configured for this account.
+- **Web Analytics:** the `raawaa-store.pages.dev` site configuration exists with automatic installation disabled. No beacon is injected and no analytics collection is active.
+- **Secrets:** Worker binding names/counts were inspected only to establish dependencies; secret values were not read, rotated, or changed.
+
+### App-specific permission audit
+
+- App-specific elevated access is configured for **GitHub, Cloudflare, Notion, OpenSEO, and Firecrawl**. Other reviewed apps inherit the global low-risk setting.
+- These permissions were not relaxed because the user explicitly delegated repository and integration work; narrowing them mid-task would interrupt authorized operations. No new app connection or permission grant was created in this audit.
+- Plugin Management can search and manage a specifically identified integration, but does not expose a reliable complete cross-project inventory-and-prune operation. Therefore no broad account-wide plugin uninstall was attempted.
+- ChatGPT exposes 801 tool definitions across 24 integration families and 151 Skills in the current catalog. The catalog interface is read-only for global Skills; no uninstall action is available. No global Skills were bulk-imported or removed.
+- Notion's enabled-Skills endpoint reports zero enabled Notion Skills. Keep the repository's `AGENTS.md`, `PROJECT-MEMORY.md`, and Graphify index as the durable project guidance/memory stack.
+- **TinyFish remains explicitly prohibited** and is not used, installed, or reintroduced.
