@@ -47,7 +47,8 @@ test('deletes only the nine reviewed merged heads when their PR head matches', (
     'fix/production-release-push-only-2026-11-15',
     'fix/visual-audit-top-viewport-clean-2026-11-15',
   ];
-  names.push('fix/branch-cleanup-policy-final-2026-11-15', 'fix/branch-cleanup-policy-final-rebased-2026-11-15');
+  names.push('fix/branch-cleanup-policy-final-rebased-2026-11-15');
+  assert.ok(MERGED_PR_BRANCHES.includes('fix/branch-cleanup-policy-final-2026-11-15'));
   assert.equal(new Set(MERGED_PR_BRANCHES).size, MERGED_PR_BRANCHES.length);
   for (const name of names) {
     assert.ok(MERGED_PR_BRANCHES.includes(name), name);
