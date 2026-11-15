@@ -142,3 +142,14 @@ Do not delete or consolidate any of these 17 refs without a new individual revie
 - Visual QA run `43684775744` is in progress; do not mark visual/mobile QA complete until its report is inspected.
 - GitHub API access for this connected integration returns 403 on the branch-protection endpoint and an empty rulesets collection. No rulesets were configured. Branch protection remains an unresolved account-administration task; do not claim it is enabled.
 - Cloudflare Pages custom domain `rawaa.eu.org` remains pending in the latest repository audit; CNAME setup is still outstanding. No DNS changes were made.
+
+
+## Final maintenance-ref closure — 2026-11-15 06:21 UTC
+
+- Canonical `main`: `a1ccb3c58dd0988f70172bf4693ba7b809a049e5`.
+- Branch hygiene workflow run `43684964173` succeeded and removed the exact merged PR #112 branch after its reviewed allowlist entry was merged.
+- The live branch list now contains **18 refs**: the 17 durable operational/recovery refs above plus the merged PR #113 maintenance branch `maintenance/pr112-branch-hygiene-inventory-2026-11-15`. No open PRs remain.
+- This final closure PR adds the exact PR #113 maintenance branch and its own exact branch to the merged-branch cleanup allowlist. After merge, the same ancestry-safe cleanup workflow should return the repository to the 17 durable refs, without touching any backup, deployment, preview, recovery, release, or restore checkpoint.
+- Latest production deployment remains `44ff2ce7-0379-4311-86aa-43be465fdb75` from `adbc74f31801afa92a37c83dcb1c7698e1248c3e`; no production files changed in PRs #112–#113.
+- Visual QA run `43684775744` completed successfully: 16 route/engine/viewport combinations, zero reported issues, and 58 report/screenshot files saved in artifact `14149818943`.
+- Post-merge backup run `43684964177` completed successfully.
