@@ -317,3 +317,32 @@ Update only when a verified, durable fact changes (for example: owner-approved p
 7. Optionally improve serum first-screen image delivery using responsive AVIF/WebP variants and a matching preload, then rerun Playwright, Lighthouse, and visual QA before release.
 
 No branch, DNS record, Pages domain binding, Supabase data, secret, customer/order data, price, discount, delivery rule, or billing setting was changed during this checkpoint.
+
+
+## Execution checkpoint — 2026-11-15 06:23 UTC
+
+### Deployment and quality
+- Latest successful Cloudflare Pages production deployment: `44ff2ce7-0379-4311-86aa-43be465fdb75`, URL `https://44ff2ce7.raawaa-store.pages.dev`, source `adbc74f31801afa92a37c83dcb1c7698e1248c3e`, production branch `main`. Validation and deploy jobs both passed; the final live Security Headers verification step passed.
+- Visual QA run `43684775744` completed successfully against `https://raawaa-store.pages.dev`: 16 Chromium/WebKit × iPhone 13/desktop captures across home, serum, campaign, and privacy; zero issues, no reported console/page/CSP/network errors, broken images, or horizontal overflow. Artifact: https://github.com/raawaa93/Raawaa/actions/runs/43684775744.
+- Lighthouse CI remains a local-built-site benchmark, not a direct live-production measurement: accessibility and best-practices 100; home performance around 99 with one outlier; serum 85–86; campaign 96 (intentional `noindex,follow`); privacy 100. Serum first-screen image optimization is optional follow-up; the measured TTFB outlier was from the CI runner, not verified live TTFB.
+
+### Competitor crawl
+- The free Crawl4AI 0.9.5 workflow is merged and runs on GitHub-hosted runners; 10 exact public URLs, Monday 05:17 UTC schedule, manual dispatch, robots checks, 3-second sequential pacing, no LLM/API key, no paid crawler service, no proxy/stealth/CAPTCHA bypass. Artifacts retained 30 days.
+- Latest run `43684667793` succeeded: **9/10 pages HTTP 200**. The official Kérastase UK URL returned HTTP 307 with a Cloudflare JavaScript challenge; it was not bypassed. Artifact: https://github.com/raawaa93/Raawaa/actions/runs/43684667793.
+- Dated benchmark and marketing-positioning notes are saved in `docs/engineering/COMPETITOR-CRAWL-SNAPSHOT-2026-11-15.md`. Treat page metadata prices as selected-variant hints: OUAI/Gisou/Moroccanoil metadata returned smaller/default variants; Feel22's visible page showed SYP 2,460 while its Open Graph metadata said USD 16.40. Prefer rendered page/variant data over metadata alone.
+- Firecrawl remains connected but its available credits are 0 through 2026-11-29. TinyFish remains excluded.
+
+### Repository hygiene and remaining controls
+- Before PR #114 cleanup, live branch enumeration returned 19 refs: 17 durable backup/deploy/preview/recovery/release/restore refs plus two temporary merged-maintenance refs. PR #114 is the sole open PR; it adds both exact temporary heads to the reviewed cleanup allowlist. Expected after merge and cleanup: **17 durable refs, 0 open PRs**.
+- GitHub main branch protection is still not enabled: `main.protected=false`, repository rulesets count 0. The connected GitHub integration returns 403 for the administrative branch-protection endpoint; this needs an authorized repository Settings session.
+- Cloudflare custom domain `rawaa.eu.org` remains pending/unresolvable. It is explicitly bound to `raawaa-store` and its CNAME points to `raawaa-store.pages.dev`; preserve it until the domain owner confirms it is not intended for this store. No DNS changes were made.
+
+### Store operations still awaiting owner-supplied decisions/data
+1. Real Sham Cash wallet number if that payment route is to be enabled; the current field remains blank.
+2. Complete, approved ingredient/INCI and manufacturer/supplier information.
+3. Genuine product photographs to replace conceptual packaging artwork.
+4. Privacy notice review for the actual business jurisdiction and order-handling process.
+5. Confirm whether WhatsApp handoff remains the intended order flow or whether server-side order storage/payment should be designed. Neither connected Supabase project has been connected to this store; no Supabase data was changed.
+6. Confirm whether `rawaa.eu.org` is controlled by the store owner; detach the Pages binding/CNAME only if the owner confirms it is not for Raawaa.
+
+No prices, discounts, delivery rules, payment settings, customer/order data, Supabase records, DNS records, or secrets were changed during this checkpoint.
