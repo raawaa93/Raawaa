@@ -206,8 +206,16 @@ The first post-merge backup has now been verified end-to-end:
 ## Automatic production release policy — adopted 2026-11-15
 
 - Owner decision: production deployment is automatic after successful validation of qualifying website-source pushes to canonical `main`. Documentation-only, workflow-only, dependency-only, and test-only changes are excluded. A controlled manual rerun remains available through `workflow_dispatch` with explicit `confirm_production=yes`.
-- The `RAWAA automatic production CI and release` workflow runs on pushes to `main`, validates the exact commit (Chromium + WebKit browser regression, store-policy/page integrity, and clean Cloudflare Pages payload), then deploys that same SHA to `raawaa-store` production.
+- The `RAWAA automatic production CI and release` workflow runs on qualifying website-source pushes to `main`, validates the exact commit (Chromium + WebKit browser regression, store-policy/page integrity, and clean Cloudflare Pages payload), then deploys that same SHA to `raawaa-store` production. Workflow-only, docs-only, dependency-only, and test-only changes are excluded; a controlled manual rerun remains available with `confirm_production=yes`.
 - Any failed validation blocks the deploy job. The deploy stage rechecks that `main` still points to the validated SHA and that the checkout is clean before Wrangler Direct Upload.
 - Pull requests, feature branches, recovery branches, and preview workflows must never target production.
 - GitHub Actions secret `CLOUDFLARE_API_TOKEN` remains required with least-privilege Cloudflare Pages Edit scope. No DNS permissions are required.
 - This policy change updates the repository workflow and documentation only; it does not itself deploy the website. The first successful post-merge main run is the evidence of activation.
+
+
+## First activation check — 2026-11-15
+
+- Automatic-release policy merged to canonical `main` in commit `96b5766ab436f9bb754cca6b57280187a724d1b8` (PR #62).
+- Production-affecting pushes to `main` trigger validation and then automatic Direct Upload; documentation/recovery/test-only changes are excluded by workflow path filters.
+- Latest Cloudflare production deployment checked after the merge remains `3967c264-587c-4576-a7c9-b7f9f6864b2d`, source SHA `b37f20fd005024d587df8191414cc80064ff5f47`, created 2026-11-15 03:51:50 UTC. No deployment for commit `96b5766...` is recorded yet.
+- GitHub Actions run state for the merge push is not exposed by the connected workflow-run reader (it only returns PR-triggered runs); therefore the first automatic validation/release is not yet independently confirmed. Do not claim the production site has been updated by PR #62.
