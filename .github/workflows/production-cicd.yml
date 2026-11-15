@@ -14,7 +14,6 @@ on:
       - 'package-lock.json'
       - 'playwright.config.mjs'
       - 'tests/**'
-      - 'scripts/check-site.mjs'
       - 'scripts/check-production-headers.mjs'
       - 'scripts/branch-cleanup-policy.cjs'
       - 'scripts/branch-archive-policy.cjs'
