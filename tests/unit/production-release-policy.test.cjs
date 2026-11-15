@@ -28,7 +28,7 @@ test('maintenance and visual-audit helpers are ignored by production release tri
 });
 
 test('stale-source guard recognizes all maintenance and visual-audit helpers', () => {
-  const guard = workflow.match(/case "\$file" in([\s\\S]*?)esac/)?.[1] || '';
+  const guard = workflow.match(/case "\$file" in([\s\S]*?)esac/)?.[1] || '';
   for (const file of [
     'scripts/branch-cleanup-policy.cjs',
     'scripts/branch-archive-policy.cjs',
