@@ -51,7 +51,12 @@ const MERGED_PR_BRANCHES = Object.freeze([
   "seo/refresh-sitemap-lastmod",
   "tooling/design-skills-playwright-2026-11-15",
   "tooling/playwright-webkit-iphone-2026-11-15",
-  "work/mobile-ux-audit-2026-11-14"
+  "work/mobile-ux-audit-2026-11-14",
+  "fix/branch-hygiene-protect-operational-refs-2026-11-15",
+  "fix/visual-audit-csp-screenshots-2026-11-15",
+  "fix/visual-audit-webkit-csp-2026-11-15",
+  "docs/visual-qa-and-inventory-finalization-2026-11-15",
+  "maintenance/branch-cleanup-final-2026-11-15"
 ]);
 const SUPERSEDED_CLOSED_PR_BRANCHES = Object.freeze([
   "ci/restore-release-boundaries-2026-11-15-rebased",
@@ -69,7 +74,8 @@ const SUPERSEDED_CLOSED_PR_BRANCHES = Object.freeze([
 const STALE_NO_PR_BRANCHES = Object.freeze([
   "preview-deploy/visual-qa-2026-11-15",
   "preview-deploy/2026-11-15-post-fix",
-  "preview-deploy/2026-11-15-main-78ece71"
+  "preview-deploy/2026-11-15-main-78ece71",
+  "docs/project-tooling-and-branch-inventory-2026-11-15"
 ]);
 
 function classifyBranches(branches, pullRequests, repositoryFullName, comparisons = {}) {
@@ -88,9 +94,9 @@ function classifyBranches(branches, pullRequests, repositoryFullName, comparison
   return branches.filter((branch) => {
     const name = branch?.name;
     if (!name || name === 'main' || branch.protected) return false;
-    const alwaysProtectedPrefixes = ['backup/', 'recovery/', 'restore/', 'release/', 'production-deploy/'];
+
+    const alwaysProtectedPrefixes = ['backup/', 'recovery/', 'restore/', 'release/', 'production-deploy/', 'deploy/'];
     if (alwaysProtectedPrefixes.some((prefix) => name.startsWith(prefix))) return false;
-    if (name.startsWith('deploy/')) return false;
     if (name.startsWith('preview-deploy/') && !staleNoPr.has(name)) return false;
 
     const related = relatedByHead.get(name) || [];
@@ -103,17 +109,16 @@ function classifyBranches(branches, pullRequests, repositoryFullName, comparison
     );
     const comparison = comparisons[name];
 
-    // Reused branch refs require ancestry proof, even if a prior PR merged.
+    // A reused branch must be fully contained in main before it can be removed.
     if (hasClosedUnmergedPR) {
       if (hasMergedPR) return mergedAllowlist.has(name) && comparison?.ahead_by === 0;
       return superseded.has(name) && comparison?.ahead_by === 0;
     }
 
-    // No-PR refs are eligible only when individually reviewed and proven contained in main.
+    // No-PR refs are removed only from the reviewed temporary list and only after ancestry proof.
     if (related.length === 0) return staleNoPr.has(name) && comparison?.ahead_by === 0;
 
-    // Exact merged heads are removed only from the reviewed allowlist.
-    // A moved merged branch requires ancestry proof instead.
+    // Exact merged heads require an explicit allowlist. Moved heads require ancestry proof.
     if (hasMergedPR && mergedHeadMatchesCurrent) return mergedAllowlist.has(name);
     if (hasMergedPR) return mergedAllowlist.has(name) && comparison?.ahead_by === 0;
 
@@ -121,9 +126,4 @@ function classifyBranches(branches, pullRequests, repositoryFullName, comparison
   });
 }
 
-module.exports = {
-  classifyBranches,
-  MERGED_PR_BRANCHES,
-  SUPERSEDED_CLOSED_PR_BRANCHES,
-  STALE_NO_PR_BRANCHES,
-};
+module.exports = { classifyBranches, MERGED_PR_BRANCHES, SUPERSEDED_CLOSED_PR_BRANCHES, STALE_NO_PR_BRANCHES };
