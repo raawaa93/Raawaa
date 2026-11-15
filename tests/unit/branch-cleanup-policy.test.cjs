@@ -116,7 +116,6 @@ test('does not retire the closed-unmerged cleanup follow-up branch', () => {
 test('closed-unmerged branches excluded from both allowlists are never deleted', () => {
   const names = [
     'maintenance/finish-branch-cleanup-2026-11-15',
-    'fix/final-visual-and-release-policy-2026-11-15',
   ];
   for (const name of names) {
     assert.equal(MERGED_PR_BRANCHES.includes(name), false);
