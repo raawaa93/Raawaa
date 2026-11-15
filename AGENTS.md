@@ -82,3 +82,6 @@ These upstream skills are not vendored into this repository. Install them in the
 - Prefer free quotas and open-source tools. Never activate billing or paid API usage, and never use TinyFish.
 - Keep Graphify as an offline code map and PROJECT-MEMORY.md as durable project context. Do not add overlapping memory services without a concrete persistence need.
 - Do not uninstall integrations or delete external workspace content (Notion pages, Supabase projects, Figma files, or customer data) based on inactivity. Exact target and service-specific permission/authorization are required.
+
+- Production releases remain push-only after validated main pushes; do not add manual production dispatch.
+- Visual QA viewport screenshots must be taken after an instant top reset and verified `scrollY=0`; see `scripts/visual-audit.mjs`.
