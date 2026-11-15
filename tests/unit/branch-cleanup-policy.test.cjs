@@ -281,3 +281,10 @@ test('retires this exact final cleanup branch after merge', () => {
   assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
   assert.deepEqual(classifyBranches([branchRef(name)], [pr(name, { merged: true })], repository).map(x => x.name), [name]);
 });
+
+test('retires the merged privacy-navigation branch after its exact PR merge', () => {
+  const name = 'fix/privacy-navigation-current-home-2026-11-15';
+  assert.ok(MERGED_PR_BRANCHES.includes(name));
+  assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
+  assert.deepEqual(classifyBranches([branchRef(name)], [pr(name, { merged: true })], repository).map(x => x.name), [name]);
+});
