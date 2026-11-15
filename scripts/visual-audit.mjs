@@ -164,14 +164,16 @@ for (const r of results) {
   if (r.pageErrors?.length) issues.push(r.page + '/' + r.viewport + ': JavaScript page errors: ' + r.pageErrors.join(' | '));
   const sameOriginBadResponses = (r.badResponses || []).filter(item => item.url.startsWith(baseURL));
   if (sameOriginBadResponses.length) issues.push(r.page + '/' + r.viewport + ': same-origin HTTP errors: ' + JSON.stringify(sameOriginBadResponses));
+  const sameOriginFailedRequests = (r.failedRequests || []).filter(item => item.url.startsWith(baseURL));
+  if (sameOriginFailedRequests.length) issues.push(r.page + '/' + r.viewport + ': same-origin failed requests: ' + JSON.stringify(sameOriginFailedRequests));
 }
 await fs.promises.writeFile(path.join(outDir, 'report.json'), JSON.stringify({ baseURL, generatedAt: new Date().toISOString(), results, issues }, null, 2));
 
 const cards = results.map(r => {
   const title = r.page + ' / ' + r.viewport;
-  const imgs = (r.screenshots || []).map(s => '<a href="' + s + '"><img src="' + s + '" alt="' + s + '"></a>').join('');
+  const imgs = [...(r.screenshots || []), ...(r.interactiveScreenshots || [])].map(s => '<a href="' + s + '"><img src="' + s + '" alt="' + s + '"></a>').join('');
   const state = r.navigationStatus === 200 && !r.navigationError ? 'Captured' : 'FAILED';
-  const detail = r.metrics ? '<p>HTTP ' + r.navigationStatus + ' · viewport ' + r.metrics.viewportWidth + 'px · document ' + r.metrics.documentWidth + 'px · ' + r.metrics.documentHeight + 'px tall · ' + r.metrics.images.length + ' images · ' + r.metrics.brokenImages.length + ' broken</p>' : '<p>' + (r.navigationError || 'No metrics') + '</p>';
+  const detail = r.metrics ? '<p>HTTP ' + r.navigationStatus + ' · viewport ' + r.metrics.viewportWidth + 'px · document ' + r.metrics.documentWidth + 'px · ' + r.metrics.documentHeight + 'px tall · ' + r.metrics.images.length + ' images · ' + r.metrics.brokenImages.length + ' broken · ' + (r.metrics.incompleteVisibleImages || []).length + ' incomplete visible</p>' : '<p>' + (r.navigationError || 'No metrics') + '</p>';
   return '<section><h2>' + title + ' — ' + state + '</h2>' + detail + '<div class="shots">' + imgs + '</div></section>';
 }).join('');
 const html = '<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>RAWAA Visual QA</title><style>body{font:16px system-ui;margin:24px;background:#f5f4f0;color:#222}h1{margin-bottom:4px}section{background:white;border:1px solid #ddd;border-radius:12px;padding:18px;margin:18px 0}h2{font-size:18px}.shots{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}.shots img{width:100%;height:auto;border:1px solid #ddd;border-radius:8px}pre{white-space:pre-wrap}</style><h1>RAWAA Visual QA</h1><p>Base URL: ' + baseURL + '</p><p>Generated: ' + new Date().toISOString() + '</p><h2>Findings (' + issues.length + ')</h2><pre>' + (issues.length ? issues.join('\n') : 'No critical automated findings.') + '</pre>' + cards + '</html>';
