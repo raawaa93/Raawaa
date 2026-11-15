@@ -2,9 +2,6 @@
 
 const MERGED_PR_BRANCHES = Object.freeze([
   "automation/agent-guidance-2026-11-15",
-  "fix/branch-hygiene-protect-operational-refs-2026-11-15",
-  "fix/visual-audit-csp-screenshots-2026-11-15",
-  "fix/visual-audit-webkit-csp-2026-11-15",
   "automation/ai-memory-graph-performance",
   "automation/graphify-lighthouse-baseline-2026-11-15",
   "automation/validated-auto-production-release",
@@ -57,13 +54,10 @@ const MERGED_PR_BRANCHES = Object.freeze([
   "work/mobile-ux-audit-2026-11-14",
   "fix/branch-hygiene-protect-operational-refs-2026-11-15",
   "fix/visual-audit-csp-screenshots-2026-11-15",
-  "fix/visual-audit-webkit-csp-2026-11-15"
-  "maintenance/repository-hygiene-2026-11-15",
   "fix/visual-audit-webkit-csp-2026-11-15",
+  "maintenance/repository-hygiene-2026-11-15",
   "docs/visual-qa-and-inventory-finalization-2026-11-15",
-  "fix/branch-hygiene-protect-operational-refs-2026-11-15",
-  "fix/visual-audit-csp-screenshots-2026-11-15",
-  "maintenance/finish-branch-cleanup-2026-11-15",
+  "maintenance/finish-branch-cleanup-2026-11-15"
 ]);
 const SUPERSEDED_CLOSED_PR_BRANCHES = Object.freeze([
   "ci/restore-release-boundaries-2026-11-15-rebased",
@@ -76,15 +70,14 @@ const SUPERSEDED_CLOSED_PR_BRANCHES = Object.freeze([
   "automation/graphify-and-lighthouse-2026-11-15",
   "automation/graphify-daily-refresh-2026-11-15",
   "qa/visual-audit-2026-11-15",
-  "feature/campaign-nitro-offer-2026-11-14"
-  "maintenance/branch-hygiene-followup-2026-11-15",
+  "feature/campaign-nitro-offer-2026-11-14",
+  "maintenance/branch-hygiene-followup-2026-11-15"
 ]);
 const STALE_NO_PR_BRANCHES = Object.freeze([
   "preview-deploy/visual-qa-2026-11-15",
   "preview-deploy/2026-11-15-post-fix",
   "preview-deploy/2026-11-15-main-78ece71",
   "docs/project-tooling-and-branch-inventory-2026-11-15"
-  "docs/project-tooling-and-branch-inventory-2026-11-15",
 ]);
 
 function classifyBranches(branches, pullRequests, repositoryFullName, comparisons = {}) {
@@ -103,9 +96,9 @@ function classifyBranches(branches, pullRequests, repositoryFullName, comparison
   return branches.filter((branch) => {
     const name = branch?.name;
     if (!name || name === 'main' || branch.protected) return false;
-    const alwaysProtectedPrefixes = ['backup/', 'recovery/', 'restore/', 'release/', 'production-deploy/'];
-    if (alwaysProtectedPrefixes.some((prefix) => name.startsWith(prefix))) return false;
-    if (name.startsWith('deploy/')) return false;
+
+    const protectedPrefixes = ['backup/', 'recovery/', 'restore/', 'release/', 'production-deploy/', 'deploy/'];
+    if (protectedPrefixes.some((prefix) => name.startsWith(prefix))) return false;
     if (name.startsWith('preview-deploy/') && !staleNoPr.has(name)) return false;
 
     const related = relatedByHead.get(name) || [];
@@ -118,19 +111,17 @@ function classifyBranches(branches, pullRequests, repositoryFullName, comparison
     );
     const comparison = comparisons[name];
 
-    // Reused branch refs require ancestry proof, even if a prior PR merged.
     if (hasClosedUnmergedPR) {
-      // Reused refs have later unmerged work and require ancestry proof.
+      // A branch reused after a merge may contain later unmerged work; require ancestry proof.
       if (hasMergedPR) return mergedAllowlist.has(name) && comparison?.ahead_by === 0;
-      // Only exact reviewed closed-unmerged refs are retired; their replacements are already on main.
+      // Only exact, reviewed closed-unmerged refs are retired; unknown work is retained.
       return superseded.has(name);
     }
 
-    // No-PR refs are eligible only when individually reviewed and proven contained in main.
+    // Stale no-PR refs require both an exact allowlist entry and ancestry proof.
     if (related.length === 0) return staleNoPr.has(name) && comparison?.ahead_by === 0;
 
     // Exact merged heads are removed only from the reviewed allowlist.
-    // A moved merged branch requires ancestry proof instead.
     if (hasMergedPR && mergedHeadMatchesCurrent) return mergedAllowlist.has(name);
     if (hasMergedPR) return mergedAllowlist.has(name) && comparison?.ahead_by === 0;
 
