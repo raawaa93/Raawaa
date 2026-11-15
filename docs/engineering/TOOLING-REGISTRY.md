@@ -117,3 +117,13 @@ The catalog being available in ChatGPT is not the same as vendoring a skill into
 - Visual QA harness fix PR #71 merged: Playwright screenshot `animations: 'disabled'` was removed to avoid CSP-blocked inline stylesheet injection in WebKit, and viewport-height diagnostics were added. Fresh visual audit run #43677078729 is running against the isolated preview from main SHA `d4e6c066`; do not mark visual QA complete until its report and screenshots are inspected.
 - Latest Graphify run produced 299 nodes, 626 edges, and 23 communities across 29 code files; generated recovery archives and workflows remain intentionally excluded. The latest disaster-recovery artifact is 12.96 MB with 90-day retention.
 - Cloudflare Web Analytics site configuration exists with `auto_install=false`; no beacon is installed and no analytics data is collected. Do not enable it until privacy disclosure and CSP are reviewed together.
+
+
+## Verified cleanup and visual QA state — 2026-11-15
+
+- Branch hygiene PR #70 merged. Run #43676889692 deleted 55 reviewed refs successfully.
+- Safety hardening PR #74 merged after run #43677232271 exposed accidental deletion of three operational checkpoint refs. Two historical refs were restored at their exact original PR head commits; the policy now permanently protects restore/*, release/*, production-deploy/* and active preview/deploy refs.
+- Run #43677406307 validated the hardened policy: 35 refs inspected, zero deletion candidates, zero failures.
+- PR #73 was closed unmerged by the repository owner. Its additional deletion allowlist was not adopted; the affected merged refs remain retained.
+- PR #75 fixed Playwright WebKit screenshot CSP noise using caret: initial; strict CSP remains unchanged.
+- Visual QA previously failed because Playwright's screenshot caret-hiding stylesheet was blocked by strict CSP. The next visual QA workflow update makes the audit run against production after successful production releases and against the preview host after successful preview deployments.
