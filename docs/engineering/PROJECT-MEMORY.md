@@ -238,3 +238,18 @@ Update only when a verified, durable fact changes (for example: owner-approved p
 - Cloudflare: seven Worker scripts, three D1 databases (zero tables reported), two Queues, zero KV namespaces. R2 is not enabled; its buckets endpoint returns HTTP 403, so bucket count is unknown. The Store Worker has no routes/bindings/schedules or recent invocations; its workers.dev subdomain is disabled. Web Analytics remains configured with `auto_install=false`; no beacon is installed.
 - GitHub reports `main.protected=false` and no repository rulesets. The connected app cannot configure protection (403); enable required status checks and branch protection in repository Settings.
 - No DNS, custom-domain, Supabase schema, secrets, customer/order data, pricing, discounts, shipping policy, or billing settings were changed.
+
+## Final repository and tooling state — 2026-11-15 05:53 UTC
+
+- Canonical main: `41a37816b3e491cfa38bf8f8c81af9092f3b586a` (PR #105 merged).
+- [Final branch-hygiene run #43682885648](https://github.com/raawaa93/Raawaa/actions/runs/43682885648) succeeded. The final superseded maintenance branch was preserved at its exact SHA and retired.
+- Final steady state: **17 branch refs**, **33 annotated recovery tags**, **105 PRs total (76 merged, 29 closed-unmerged)**, **zero open PRs**, and no inactive unprotected working refs.
+- The 17 remaining refs are the canonical `main`, four backups, three recovery refs, two deploy checkpoints, four preview checkpoints, one production-deploy checkpoint, one release checkpoint, and one restore checkpoint.
+- Production release after PR #101: deployment `b2923438-ad03-4c5a-816d-240fa6b5bbfd`, source `db1e0b131f596208b10e2e9c951d1f22c9beb916`, URL `https://b2923438.raawaa-store.pages.dev`. Payload contained 188 files; post-deploy security-header checks passed.
+- Visual QA run #43682151818 completed 16 Chromium/WebKit × iPhone/desktop page captures across home, serum, campaign, and privacy: all navigations 200, zero console errors, zero page errors, zero CSP violations, zero failed requests, zero bad responses, zero horizontal overflow, and zero broken images.
+- Mobile Lighthouse audit passed with advisory findings: home 99 median (one 77 outlier), serum 86–87, campaign 96–97, privacy 100. Accessibility and best-practices scores were 100 throughout; campaign SEO 69 is expected because that page is intentionally noindex.
+- Search Console URL-prefix property `https://raawaa-store.pages.dev/` remains `siteOwner`; domain property `sc-domain:raawaa-store.pages.dev` is unverified.
+- Workspace catalog: 801 tool definitions across 24 integration families and 151 Skills across 15 packages. Canonical inventories: `TOOLING-REGISTRY.md` and `SKILL-REGISTRY.md`. TinyFish remains prohibited. No global plugin, connector, or Skill was removed because they are shared resources and no complete cross-project dependency map is available.
+- Free quota snapshot: OpenSEO 251 credits; Firecrawl 0/1,000 until 2026-11-29; Ahrefs API allowance 200,000 units with 0 used and workspace quota 0. Figma remains View-only; Supabase Store database is still unidentified; no paid billing was enabled.
+- **Security follow-up:** GitHub reports `main.protected=false` and no repository rulesets. The connected GitHub app cannot configure branch protection (403). Enable required status checks and branch protection in repository Settings or provide an authorized GitHub connection. No security control was bypassed.
+- No DNS, custom-domain, Supabase schema, secrets, customer/order data, pricing, discounts, shipping policy, or billing settings were changed.
