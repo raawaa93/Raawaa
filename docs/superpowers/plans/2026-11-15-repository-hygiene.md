@@ -10,8 +10,9 @@
 ## Global Constraints
 - Zero-cost only; no billing or paid API.
 - Preserve backup/* and recovery/*.
-- Never delete merged PR heads by default, open-PR, protected, or unreviewed closed-unmerged branches.
-- Delete only the exact 11 superseded closed-unmerged and four stale no-PR refs when `ahead_by = 0`.
+- Delete merged PR heads only when their current head matches the merged PR head; moved heads require `ahead_by = 0` or an exact reviewed superseded allowlist.
+- Never delete open-PR, protected, backup/recovery, or unreviewed closed-unmerged branches.
+- Delete only the exact reviewed superseded and stale no-PR refs listed in the inventory.
 - Never change DNS, secrets, Supabase data/schema, customer records, commercial policy, or production source.
 - Never use TinyFish.
 - Only validated main may deploy production.
@@ -33,14 +34,14 @@ Files: create tests/unit/branch-cleanup-policy.test.cjs; modify .github/workflow
 Files: create scripts/branch-cleanup-policy.cjs; create .github/workflows/cleanup-merged-branches.yml.
 - [x] Implement classifyBranches(branches, pullRequests, repositoryFullName) with exact allowlists and `ahead_by = 0` proof.
 - [x] Add main-push, weekly, and manual triggers.
-- [x] Delete only exact allowlisted refs through supported GitHub API.
+- [x] Delete only policy-approved refs through supported GitHub API.
 - [ ] Verify final tests and Store checks after the safety-policy update.
 
 ### Task 3: Document
 Files: create docs/engineering/BRANCH-INVENTORY.md and TOOLING-REGISTRY.md; create this spec and plan; modify AGENTS.md and README.md.
 - [x] Record retained namespaces, superseded branches, connected tools, quotas, and blockers.
 - [x] Align repository guidance with tested cleanup policy and automatic validated releases.
-- [ ] Date quota observations and distinguish available from active.
+- [x] Date quota observations and distinguish available from active.
 
 ### Task 4: Merge and verify
 - [ ] Review the full diff.
