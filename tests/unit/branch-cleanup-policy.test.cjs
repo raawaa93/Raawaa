@@ -277,3 +277,21 @@ test('branch cleanup workflow uses Node 24 compatible github-script v9', () => {
   assert.match(cleanupWorkflow, /actions\/github-script@v9/u);
   assert.doesNotMatch(cleanupWorkflow, /actions\/github-script@v7/u);
 });
+
+test('superseded cleanup-policy drafts require ancestry proof before retirement', () => {
+  const names = [
+    'fix/branch-cleanup-allowlist-correction-2026-11-15',
+    'fix/branch-cleanup-policy-current-state-2026-11-15',
+  ];
+  for (const name of names) {
+    assert.ok(SUPERSEDED_CLOSED_PR_BRANCHES.includes(name));
+    assert.deepEqual(
+      classifyBranches([branchRef(name)], [pr(name)], repository, { [name]: { ahead_by: 8, behind_by: 2 } }),
+      [],
+    );
+    assert.deepEqual(
+      classifyBranches([branchRef(name)], [pr(name)], repository, { [name]: { ahead_by: 0, behind_by: 2 } }).map(x => x.name),
+      [name],
+    );
+  }
+});
