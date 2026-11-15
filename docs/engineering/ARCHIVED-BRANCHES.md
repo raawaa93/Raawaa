@@ -53,16 +53,14 @@ Every archived tag resolves to the exact original branch-head SHA. These are dur
 **Final repository state after run #43682035975:** 17 branch refs remain; all 32 recovery tags are verified; no unprotected inactive working branch refs remain. The archive allowlist is cleared in the follow-up cleanup PR so these refs cannot be re-archived accidentally.
 
 
-## Last superseded maintenance branch — pending final archive
+## Last maintenance pointer — safe ancestry prune
 
 - Branch: `maintenance/retire-last-stale-refs-2026-11-15`.
-- Captured head: `56bd0b22c9bd578d9739c01ab44b993c42f33a05`.
-- This branch contains only superseded archive-policy/documentation edits; the authoritative final state is already merged in PR #104.
-- The exact recovery tag below is created and verified before the branch ref is deleted.
-
-| Original branch | Preserved commit SHA | Recovery tag |
-|---|---|---|
-| `maintenance/retire-last-stale-refs-2026-11-15` | `56bd0b22c9bd578d9739c01ab44b993c42f33a05` | `archive/branches/2026-11-15/maintenance/retire-last-stale-refs-2026-11-15` |
+- Current branch head: `88404f1c02dcc3db3768ab615d4a175f836d398c`.
+- GitHub comparison against `main`: `ahead_by = 0`, `behind_by = 1`. Every commit on this ref is already reachable from main.
+- No recovery tag is necessary; the exact commit is already preserved in the canonical history.
+- The final cleanup PR adds this exact no-PR ref to the ancestry-safe prune allowlist. The active cleanup branch is separately allowlisted for deletion after its merge.
+- Expected steady state after the cleanup run: **17 branch refs, 32 recovery tags, 0 open PRs**.
 
 ## Tag format
 
