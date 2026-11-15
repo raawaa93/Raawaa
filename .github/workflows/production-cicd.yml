@@ -20,17 +20,6 @@ on:
       - 'scripts/branch-cleanup-policy.cjs'
       - 'scripts/visual-audit.mjs'
       - 'scripts/visual-audit-csp-policy.cjs'
-  workflow_dispatch:
-    inputs:
-      confirm_production:
-        description: "Deploy the validated main commit to Cloudflare production"
-        required: true
-        type: choice
-        options:
-          - "no"
-          - "yes"
-        default: "no"
-
 
 permissions:
   contents: read
@@ -95,7 +84,7 @@ jobs:
   deploy:
     name: Validated automatic production release
     needs: validate
-    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.confirm_production == 'yes'))
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     environment:
