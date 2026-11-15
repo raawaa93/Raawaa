@@ -10,6 +10,8 @@ on:
       - "js/**"
       - "assets/**"
       - "lighthouserc.json"
+      - "lighthouserc.pr.json"
+      - ".github/workflows/performance-audit.yml"
       - "scripts/build-deploy.mjs"
   pull_request:
     paths:
@@ -50,7 +52,13 @@ jobs:
           python-version: "3.12"
 
       - name: Run Lighthouse CI without hosted upload
-        run: npx --yes @lhci/cli@0.16.0 autorun --config=lighthouserc.json
+        shell: bash
+        run: |
+          if [[ "${GITHUB_EVENT_NAME}" == "pull_request" ]]; then
+            npx --yes @lhci/cli@0.16.0 autorun --config=lighthouserc.pr.json
+          else
+            npx --yes @lhci/cli@0.16.0 autorun --config=lighthouserc.json
+          fi
 
       - name: Upload reports for review
         if: always()
