@@ -57,7 +57,7 @@ GitHub Actions runs these checks on pushes and pull requests. Make future edits 
 - Every push to `main` runs the production validation pipeline; after all browser, policy, integrity, and clean-build checks pass, the same validated commit is deployed automatically to Cloudflare Pages production.
 - Failed validation blocks deployment. The release job refuses stale or dirty source and targets only the production Pages branch.
 - Pull requests and non-main branches do not deploy to production. Preview deployments remain isolated from production.
-- A merge to `main` authorizes automatic production release once all required validation succeeds.
+- A controlled manual rerun remains available from `main` through `workflow_dispatch`, but requires the explicit `confirm_production=yes` input.
 
 ## Recovery references
 
