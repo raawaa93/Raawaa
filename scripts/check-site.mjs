@@ -93,7 +93,9 @@ assert.ok(campaignScript.includes('product.image && product.image.src'), 'Campai
 assert.match(campaign, /<meta name="robots" content="noindex,follow">/u, 'Campaign landing page must remain noindex');
 assert.ok(!sitemap.includes('/campaign'), 'Noindex campaign page must be excluded from sitemap');
 assert.ok(!sitemap.includes('/hama'), 'Legacy Hama route must be removed from sitemap');
-assert.ok(!serviceWorker.toLowerCase().includes('hama'), 'Service worker must not cache the retired Hama route');
+assert.match(serviceWorker, /const CACHE_VERSION = 'v20261115-retired-route-purge'/u, 'Service worker cache version must advance to remove stale offline pages');
+assert.match(serviceWorker, /url\.pathname === '\/hama' \|\| url\.pathname === '\/hama\/'/u, 'Retired Hama route must be intercepted before cache fallback');
+assert.match(serviceWorker, /new Response\(response\.body, \{[\s\S]*?status: 404/u, 'Retired Hama route must return a real 404 response');
 assert.ok(robots.includes('Disallow: /hama'), 'Robots must disallow the retired Hama route');
 for (const legacy of ['hama.html', 'setup.html', 'check.html', 'css/hama.css', 'css/setup.css', 'css/check.css', 'js/setup-inline.js', 'js/check-inline.js']) {
   assert.ok(!fs.existsSync(path.join(root, legacy)), legacy + ' must be retired from the active source root');
