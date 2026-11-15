@@ -57,7 +57,7 @@ These upstream skills are not vendored into this repository. Install them in the
 ## Exact release boundary
 
 - Cloudflare Pages project: `raawaa-store`; deployment mode: Direct Upload.
-- A push to `main` that changes website source triggers full validation and then an automatic production deployment. Documentation-only and workflow-only pushes are excluded from production release. Manual workflow dispatch with `confirm_production=yes` remains available for controlled reruns.
+- A push to `main` that changes website source triggers full validation and then an automatic production deployment. Documentation-only, workflow-only, test-only, and validation-script-only pushes are excluded. Manual production dispatch is disabled; there is no `workflow_dispatch` release path.
 - The owner has granted standing authorization for routine validated production releases, repository changes, merges, and no-cost tooling. Never bypass exact-SHA validation, latest-main freshness, clean-source, Cloudflare secret, or production environment gates. Do not spend money, link billing, expose secrets, or perform irreversible/destructive customer-data/database actions. DNS/domain ownership changes and destructive migrations require a specific recoverable plan and operation-specific confirmation.
 - The isolated preview target must remain `raawaa-recovery-preview`; never use a preview as a production alias.
 - Run `node scripts/check-site.mjs` and the build validator before release. For browser changes, run the Playwright suite. For SEO/performance changes, inspect Lighthouse artifacts. Merge after required checks pass; production deploy follows automatically only for website-source changes on `main`.
