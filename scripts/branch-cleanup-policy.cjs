@@ -60,7 +60,7 @@ const MERGED_PR_BRANCHES = Object.freeze([
   "fix/visual-qa-webkit-csp-regression-2026-11-15",
   "maintenance/repository-hygiene-2026-11-15",
   "fix/production-release-push-only-2026-11-15",
-  "fix/final-visual-and-release-policy-2026-11-15"
+  "fix/final-visual-release-policy-consolidated-2026-11-15"
 ]);
 const SUPERSEDED_CLOSED_PR_BRANCHES = Object.freeze([
   "ci/restore-release-boundaries-2026-11-15-rebased",
