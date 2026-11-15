@@ -219,3 +219,16 @@ The first post-merge backup has now been verified end-to-end:
 - Production-affecting pushes to `main` trigger validation and then automatic Direct Upload; documentation/recovery/test-only changes are excluded by workflow path filters.
 - Latest Cloudflare production deployment checked after the merge remains `3967c264-587c-4576-a7c9-b7f9f6864b2d`, source SHA `b37f20fd005024d587df8191414cc80064ff5f47`, created 2026-11-15 03:51:50 UTC. No deployment for commit `96b5766...` is recorded yet.
 - GitHub Actions run state for the merge push is not exposed by the connected workflow-run reader (it only returns PR-triggered runs); therefore the first automatic validation/release is not yet independently confirmed. Do not claim the production site has been updated by PR #62.
+
+
+## Superseding production-release read-back — 2026-11-15 06:20 UTC
+
+This section supersedes the earlier manual-dispatch statements in the historical audit above. Those statements describe a prior workflow revision and are no longer current.
+
+- Current canonical policy: production releases are push-triggered only by qualifying website-source/configuration changes on `main`; there is no `workflow_dispatch` or `confirm_production` production route. Documentation, workflow-only, dependency-only, test-only, and validation-script-only changes are excluded.
+- The current `.github/workflows/production-cicd.yml` was read back from `main`. The latest completed production run observed in this audit is workflow run `43684667684`, for source SHA `adbc74f31801afa92a37c83dcb1c7698e1248c3e`. Both validation and deploy jobs succeeded; the deploy job's final live security-header verification step also succeeded.
+- Cloudflare Pages confirms latest production deployment `44ff2ce7-0379-4311-86aa-43be465fdb75`, URL `https://44ff2ce7.raawaa-store.pages.dev`, branch `main`, source SHA `adbc74f31801afa92a37c83dcb1c7698e1248c3e`, created 2026-11-15 06:17:33 UTC. This is newer than the earlier deployment references above.
+- PR #112 was documentation-only and did not trigger production deployment. Its checks, backup, and branch-hygiene runs succeeded.
+- GitHub branch-protection configuration remains unverified/unconfigured: the connected integration receives HTTP 403 for the branch-protection endpoint and no repository rulesets are returned. This requires an authorized repository-administration session; no security setting was changed.
+- Visual QA run `43684775744` remains in progress at the time of this read-back. Mobile/visual release readiness is not complete until its screenshots and report are inspected.
+- Cloudflare custom domain `rawaa.eu.org` remains pending because its CNAME is not configured. No DNS changes were made.
