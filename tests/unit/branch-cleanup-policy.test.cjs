@@ -83,3 +83,23 @@ test('retains refs when comparison data is missing or the branch is ahead of mai
   );
   assert.deepEqual(result, []);
 });
+
+test('does not auto-delete merged PR heads without an exact reviewed allowlist', () => {
+  const result = classifyBranches(
+    [branch('fix/merged')],
+    [pr('fix/merged', { merged: true })],
+    repository,
+    { 'fix/merged': { ahead_by: 0, behind_by: 3 } },
+  );
+  assert.deepEqual(result, []);
+});
+
+test('retains a merged branch if its current head contains commits not merged to main', () => {
+  const result = classifyBranches(
+    [branch('fix/reused-after-merge')],
+    [pr('fix/reused-after-merge', { merged: true })],
+    repository,
+    { 'fix/reused-after-merge': { ahead_by: 2, behind_by: 3 } },
+  );
+  assert.deepEqual(result, []);
+});
