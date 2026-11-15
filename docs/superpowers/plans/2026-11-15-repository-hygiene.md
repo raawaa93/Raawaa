@@ -1,0 +1,50 @@
+# Repository Hygiene Implementation Plan
+
+> REQUIRED SUB-SKILL: superpowers:executing-plans. Steps use checkbox syntax.
+
+**Goal:** Reduce RAWAA repository clutter to a justified canonical, backup, recovery, and investigation branch set, and document tools and free quotas.
+**Architecture:** Pure Node.js branch classifier; GitHub Action invokes it after main pushes and weekly; unit tests guard deletion rules; repository registry records integrations and skills.
+**Tech Stack:** GitHub Actions, GitHub REST via actions/github-script, Node built-in test runner, Markdown.
+**Spec:** docs/superpowers/specs/2026-11-15-repository-hygiene-design.md
+
+## Global Constraints
+- Zero-cost only; no billing or paid API.
+- Preserve backup/* and recovery/*.
+- Never delete open-PR, protected, or unreviewed closed-unmerged branches.
+- Never change DNS, secrets, Supabase data/schema, customer records, commercial policy, or production source.
+- Never use TinyFish.
+- Only validated main may deploy production.
+
+## Review Focus
+- A branch reused by merged and unmerged PRs must be preserved unless explicitly superseded.
+- Fork branches must never be deleted from this repository.
+- Slash-containing branch names must reach the GitHub delete-ref API intact.
+- Backups/recovery remain protected even if their PR merged.
+- A partial cleanup run must be safe to rerun.
+
+### Task 1: Test the policy
+Files: create tests/unit/branch-cleanup-policy.test.cjs; modify .github/workflows/store-checks.yml.
+- [ ] Test merged heads, superseded closed work, open PRs, reused refs, protected refs, backup/recovery namespaces, forks, stale previews.
+- [ ] Add node --test tests/unit/*.test.cjs to Store checks.
+- [ ] Observe expected RED before classifier exists.
+
+### Task 2: Implement and automate
+Files: create scripts/branch-cleanup-policy.cjs; create .github/workflows/cleanup-merged-branches.yml.
+- [ ] Implement classifyBranches(branches, pullRequests, repositoryFullName).
+- [ ] Add main-push, weekly, and manual triggers.
+- [ ] Delete only policy-approved refs through supported GitHub API.
+- [ ] Verify tests and Store checks.
+
+### Task 3: Document
+Files: create docs/engineering/BRANCH-INVENTORY.md and TOOLING-REGISTRY.md; create this spec and plan; modify AGENTS.md and README.md.
+- [ ] Record retained namespaces, superseded branches, connected tools, quotas, and blockers.
+- [ ] Align repository guidance with tested cleanup policy.
+- [ ] Date quota observations and distinguish available from active.
+
+### Task 4: Merge and verify
+- [ ] Review the full diff.
+- [ ] Wait for PR checks; fix failures, never bypass them.
+- [ ] Merge after checks pass.
+- [ ] Verify cleanup run and enumerate remaining branches.
+- [ ] Update inventory with exact deletion and retention results.
+- [ ] Verify no production deployment was triggered.
