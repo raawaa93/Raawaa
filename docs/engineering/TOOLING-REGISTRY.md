@@ -1,6 +1,6 @@
 # RAWAA Store tooling and skills registry
 
-**Last verified:** 2026-11-15  
+**Last verified:** 2026-11-15 04:42 UTC  
 **Policy:** use free tiers and included quotas; never activate billing or paid usage without a separate explicit instruction. Quota values below are dated snapshots, not permanent guarantees.
 
 ## Project source of truth
@@ -15,6 +15,8 @@
 - This registry is the inventory of connected tools and skills; update it when access, quota, or project architecture changes.
 
 ## Connected tool families available in this ChatGPT workspace
+
+The current workspace inventory exposes **801 tool definitions across 24 integration families**, plus **151 skills**. This is a workspace-wide count, not a claim that every tool is connected to the RAWAA production account.
 
 | Integration | Available tools | Project use / status |
 |---|---:|---|
@@ -40,6 +42,8 @@
 | OpenAI Platform | 2 | API key/platform setup; do not create keys or incur spend without request |
 | Automations | 7 | Scheduled checks and reminders |
 | Files | 11 | Conversation and Library file operations |
+| Skills | 2 | Discover and read workspace skills |
+| User settings | 2 | Inspect/update ChatGPT appearance and personality settings only when requested |
 
 Other available skill/tool families include data analysis, user settings, and file-library operations. Availability in this workspace does not mean every service is connected to a RAWAA account.
 
@@ -47,9 +51,9 @@ Other available skill/tool families include data analysis, user settings, and fi
 
 | Service | Observed allowance / remaining | Decision |
 |---|---|---|
-| Ahrefs API | Free subscription shows 200,000 API units; 0 used; reset 2026-12-04 | Public Domain Rating endpoint works; Keywords Explorer and location-management endpoints returned `Insufficient plan`; do not assume the displayed unit quota unlocks those endpoints |
+| Ahrefs API | Free subscription: API-key limit 200,000 units, 0 used; workspace limit 0; reset 2026-12-04 | Public Domain Rating endpoint works at zero unit cost. Keyword/location endpoints returned `Insufficient plan`; the 200,000 API-key allowance is not a general workspace quota |
 | OpenSEO | 251 credits remaining after current audit and keyword research | Active RAWAA SEO project; prioritize high-value audits and regional keyword research |
-| Firecrawl | 0 remaining of 1,000 plan credits; period ends 2026-11-29 | Pause Firecrawl calls until renewal |
+| Firecrawl | 0 remaining of 1,000 plan credits; current period 2026-10-29 to 2026-11-29 | Pause Firecrawl calls until renewal; verify balance before resuming |
 | Cloudflare Web Analytics | Site configuration created for raawaa-store.pages.dev; auto_install=false | No beacon installed; no data collection active until privacy/CSP review |
 | GitHub Actions | Free included usage subject to account limits | Existing workflows are pinned and used selectively |
 | Supabase | Two active healthy projects visible | Do not mutate either until the Store database is positively identified |
@@ -64,11 +68,11 @@ Other available skill/tool families include data analysis, user settings, and fi
 - Scheduled visual QA for mobile and desktop.
 - Search Console connected through OpenSEO; IndexNow successfully submitted home, serum, and privacy on 2026-11-15.
 - Automatic production release only after full validation of qualifying website-source changes on main; workflow-only/docs-only changes are excluded.
-- Branch hygiene PR #70 merged. Run #43676889692 deleted 55 refs (54 merged-PR heads plus one closed-unmerged branch); three operational checkpoints (`restore/`, `release/`, active `preview-deploy/`) were recreated at exact original PR heads. No backup/recovery refs were deleted. PR #74 adds regression coverage and explicit namespace protection before another cleanup pass.
+- Branch hygiene PR #70 and namespace-protection PR #74 are merged. Post-protection cleanup run #43677406307 inspected 35 refs, completed 12 ancestry comparisons, found zero candidates, and succeeded. PR #77 adds exact reviewed candidates for merged PR heads #71, #74, #75, #76, the no-PR docs ref, and its own head after merge.
 
 ## Skills available in the ChatGPT workspace
 
-The current skill catalog lists 151 skills. Relevant installed/available skills include:
+The current skill catalog lists 151 skills across the workspace. The RAWAA repository currently contains no `.agents/skills`, `skills/`, or `.claude/` skill packages; project-local skill packages are not installed or vendored. Relevant installed/available skills include:
 
 - Superpowers: brainstorming, writing-plans, executing-plans, test-driven-development, systematic-debugging, verification-before-completion, finishing-a-development-branch.
 - OpenSEO: SEO audit, SEO project setup, keyword research, competitive landscape, competitor analysis, keyword clustering, AI visibility audit, SEO reporting.
@@ -77,6 +81,14 @@ The current skill catalog lists 151 skills. Relevant installed/available skills 
 - Data: data quality, product/business analysis, market sizing, KPI design, reports, dashboards, and visualization.
 
 The catalog being available in ChatGPT is not the same as vendoring a skill into the repository or activating it in Codex/Antigravity.
+
+### RAWAA project selection and cleanup policy
+
+- Active core: GitHub, Cloudflare Pages, Playwright, Graphify, Lighthouse CI, OpenSEO/Search Console, Ahrefs public Domain Rating endpoint, and repository-backed project memory.
+- Specialist-only: Figma (read-only), Notion (documentation), Supabase (blocked until the correct Store DB is identified), Metricool (only when publishing/analytics is required), Runway (only for requested creative assets), Ads Manager (only with explicit campaign/budget approval), and HubSpot (not configured for RAWAA).
+- Paused: Firecrawl until credits renew. TinyFish is permanently excluded.
+- Not required now: overlapping memory services, duplicate browser automation stacks, extra SEO crawlers, or paid analytics aggregators. Do not connect Windsor.ai/Supermetrics merely to increase connector count.
+- Global ChatGPT apps and Skills are shared across projects. This audit curates RAWAA usage; it does not uninstall shared apps or delete global Skills. The repository has no vendored project-local skill bundles to prune.
 
 ## External skills reviewed, not bulk-imported
 
@@ -91,10 +103,11 @@ The catalog being available in ChatGPT is not the same as vendoring a skill into
 - Google Search Console is connected; no GA4 property is visible in the connected Google account.
 - Windsor.ai and Supermetrics appeared in plugin discovery but are not installed; they are not required for current work and their free allowances were not verified.
 - Google Drive connector is disabled by the workspace administrator.
-- Figma MCP is read-only with the current View seat.
+- Figma MCP is read-only with the current View seat; the account is a Starter team member with Admin role metadata, but the seat itself is View and cannot edit files.
 - Supabase account exposes raawaa-engine-fallback and Ghaioooth-core only; neither is confirmed as the Store database.
-- Notion search surfaced the recovery record, development history, operating model, and sales operating pages. Preserve these until a page-by-page consolidation proves a specific page redundant.
+- Notion search surfaced the recovery record, development history, Arabic/English operating models, and sales operating page. Keep separate recovery and operating records; two AAE pages belong to another project and are out of RAWAA scope. Page search/fetch are available; connector-wide search and advanced data-source queries require Business/Enterprise, so do not upgrade for this project.
 - TinyFish is explicitly prohibited; do not call, install, or reintroduce it.
+- No ChatGPT plugin/app was uninstalled: the available manager cannot safely infer which global integrations are unused by other projects from RAWAA activity alone. Unconfigured or specialist-only integrations remain documented as such.
 - ProjectMem and MCP Memory Service are not connected to this hosted session. Keep PROJECT-MEMORY.md as the durable source of truth and Graphify as a regenerable code map.
 - Do not uninstall or delete broad ChatGPT integrations, Notion pages, Figma files, or external projects based only on inactivity. Connection management requires an exact target and explicit user action.
 
@@ -119,11 +132,17 @@ The catalog being available in ChatGPT is not the same as vendoring a skill into
 - Cloudflare Web Analytics site configuration exists with `auto_install=false`; no beacon is installed and no analytics data is collected. Do not enable it until privacy disclosure and CSP are reviewed together.
 
 
-## Verified cleanup and visual QA state — 2026-11-15
+## Latest cleanup and visual QA automation — 2026-11-15
 
-- Branch hygiene PR #70 merged. Run #43676889692 deleted 55 reviewed refs successfully.
-- Safety hardening PR #74 merged after run #43677232271 exposed accidental deletion of three operational checkpoint refs. Two historical refs were restored at their exact original PR head commits; the policy now permanently protects restore/*, release/*, production-deploy/* and active preview/deploy refs.
-- Run #43677406307 validated the hardened policy: 35 refs inspected, zero deletion candidates, zero failures.
-- PR #73 was closed unmerged by the repository owner. Its additional deletion allowlist was not adopted; the affected merged refs remain retained.
-- PR #75 fixed Playwright WebKit screenshot CSP noise using caret: initial; strict CSP remains unchanged.
-- Visual QA previously failed because Playwright's screenshot caret-hiding stylesheet was blocked by strict CSP. The next visual QA workflow update makes the audit run against production after successful production releases and against the preview host after successful preview deployments.
+- Current inventory: 37 branch refs; 77 PRs (63 merged, 13 closed-unmerged, 1 open).
+- PR #77 completes the reviewed allowlist for merged refs #70, #71, #72, #74, #75, and its own head; it also retires exact closed-unmerged branches whose replacements were verified in main, plus the docs inventory ref after ancestry proof. Reused QA work, unknown branches, and operational namespaces remain protected.
+- Visual QA workflow now runs on harness/workflow changes and after successful production releases; preview runs remain scoped to successful preview deployments. It chooses the live production URL for production-release runs.
+- The WebKit screenshot fix uses Playwright `caret: 'initial'` to avoid injected inline styles; the production CSP remains strict.
+
+
+## Visual QA WebKit regression — 2026-11-15
+
+- PR #75's screenshot-caret option did not resolve the CSP console errors; the root cause is a documented Playwright/WebKit 27.2 regression affecting native `<select>` user-agent shadow styling: https://github.com/microsoft/playwright/issues/43497.
+- PR #78 adds a narrowly scoped filter only for the exact `style-src-attr` / inline / empty-source / line-1 / SELECT / no-author-style signature. All other CSP events and console errors remain failures. Strict CSP is unchanged; no `unsafe-inline` added.
+- Visual QA now runs on audit-harness changes and after successful production releases, using the production URL; preview deployments use the isolated preview host.
+- Production CI excludes `scripts/visual-audit-csp-policy.cjs` from release triggers so test-harness changes do not deploy the storefront.
