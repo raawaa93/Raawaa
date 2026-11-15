@@ -70,7 +70,7 @@ const STALE_NO_PR_BRANCHES = Object.freeze([
   "preview-deploy/visual-qa-2026-11-15",
   "preview-deploy/2026-11-15-post-fix",
   "preview-deploy/2026-11-15-main-78ece71",
-  "deploy/10-percent-site-only"
+  "preview-deploy/2026-11-15-main-78ece71"
 ]);
 
 function classifyBranches(branches, pullRequests, repositoryFullName, comparisons = {}) {
@@ -91,7 +91,8 @@ function classifyBranches(branches, pullRequests, repositoryFullName, comparison
     if (!name || name === 'main' || branch.protected) return false;
     const alwaysProtectedPrefixes = ['backup/', 'recovery/', 'restore/', 'release/', 'production-deploy/'];
     if (alwaysProtectedPrefixes.some((prefix) => name.startsWith(prefix))) return false;
-    if ((name.startsWith('preview-deploy/') || name.startsWith('deploy/')) && !staleNoPr.has(name)) return false;
+    if (name.startsWith('deploy/')) return false;
+    if (name.startsWith('preview-deploy/') && !staleNoPr.has(name)) return false;
 
     const related = relatedByHead.get(name) || [];
     if (related.some((pull) => pull.state === 'open')) return false;
