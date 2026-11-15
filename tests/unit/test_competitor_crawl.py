@@ -24,7 +24,7 @@ class CompetitorCrawlTests(unittest.TestCase):
         self.assertEqual(extract_products_from_jsonld(parse_jsonld_blocks(html)), [])
 
     def test_robots_rules_are_applied(self):
-        rules = "User-agent: *\\nDisallow: /private/\\nAllow: /products/"
+        rules = "User-agent: *\nDisallow: /private/\nAllow: /products/"
         self.assertTrue(robots_allows(rules, "https://example.com/products/oil"))
         self.assertFalse(robots_allows(rules, "https://example.com/private/account"))
 
