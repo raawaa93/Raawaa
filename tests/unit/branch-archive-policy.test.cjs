@@ -17,10 +17,22 @@ const pull = (ref, state = 'open', owner = repository) => ({
   state, head: { ref, repo: { full_name: owner } },
 });
 
-test('archive allowlist is cleared after the PR116 exact-SHA tag is verified', () => {
-  assert.deepEqual(ARCHIVE_BRANCHES, {});
-  assert.equal(expectedArchiveShaMatches(branch("maintenance/record-pr113-archive-2026-11-15", "1415d8dcac9ca2113626659d4454b2450b42b423")), false);
-  assert.deepEqual(selectArchiveCandidates([branch("maintenance/record-pr113-archive-2026-11-15", "1415d8dcac9ca2113626659d4454b2450b42b423")], [], repository), []);
+test('archives the two merged performance refs only at their reviewed exact SHAs', () => {
+  const reviewed = {
+    'performance/fix-serum-image-preload-2026-11-15': '9368c47535062ad147bafba2632a899adac2c2fe',
+    'performance/trim-serum-css-2026-11-15': '1449c8579d43b5535ef90d956daa8917c4e860a3',
+  };
+  assert.deepEqual(ARCHIVE_BRANCHES, reviewed);
+  const branches = Object.entries(reviewed).map(([name, sha]) => branch(name, sha));
+  assert.deepEqual(selectArchiveCandidates(branches, [], repository).map(x => x.name), Object.keys(reviewed));
+  for (const [name, sha] of Object.entries(reviewed)) {
+    assert.equal(expectedArchiveShaMatches(branch(name, sha)), true);
+    assert.equal(expectedArchiveShaMatches(branch(name, 'changed-sha')), false);
+  }
+  assert.deepEqual(
+    selectArchiveCandidates(branches, [pull('performance/fix-serum-image-preload-2026-11-15')], repository).map(x => x.name),
+    ['performance/trim-serum-css-2026-11-15'],
+  );
 });
 
 test('does not re-archive any retired ref if a stale branch is recreated', () => {
