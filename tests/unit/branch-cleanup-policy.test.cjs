@@ -2,19 +2,42 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { classifyBranches } = require('../../scripts/branch-cleanup-policy.cjs');
+const {
+  classifyBranches,
+  SUPERSEDED_CLOSED_PR_BRANCHES,
+  STALE_NO_PR_BRANCHES,
+} = require('../../scripts/branch-cleanup-policy.cjs');
 
 const repository = 'raawaa93/Raawaa';
-const branch = (name, protectedBranch = false) => ({ name, protected: protectedBranch });
-const pr = (ref, { state = 'closed', merged = false, owner = repository } = {}) => ({
+const branch = (name, { protectedBranch = false, sha = 'branch-head' } = {}) => ({
+  name,
+  protected: protectedBranch,
+  commit: { sha },
+});
+const pr = (ref, { state = 'closed', merged = false, owner = repository, sha = 'branch-head' } = {}) => ({
   state,
   merged_at: merged ? '2026-11-15T00:00:00Z' : null,
-  head: { ref, repo: { full_name: owner } },
+  head: { ref, sha, repo: { full_name: owner } },
 });
 
-test('prunes a merged same-repository feature branch', () => {
-  const result = classifyBranches([branch('fix/merged')], [pr('fix/merged', { merged: true })], repository);
+test('prunes a merged branch only when its current head is the merged PR head', () => {
+  const result = classifyBranches(
+    [branch('fix/merged', { sha: 'same-sha' })],
+    [pr('fix/merged', { merged: true, sha: 'same-sha' })],
+    repository,
+  );
   assert.deepEqual(result.map(x => x.name), ['fix/merged']);
+});
+
+test('preserves a branch updated after its merged PR unless the new head is in main', () => {
+  const prs = [pr('fix/reused', { merged: true, sha: 'old-sha' })];
+  assert.deepEqual(classifyBranches([branch('fix/reused', { sha: 'new-sha' })], prs, repository), []);
+  assert.deepEqual(
+    classifyBranches([branch('fix/reused', { sha: 'new-sha' })], prs, repository, {
+      'fix/reused': { ahead_by: 0, behind_by: 4 },
+    }).map(x => x.name),
+    ['fix/reused'],
+  );
 });
 
 test('preserves closed-unmerged work unless its head is already in main', () => {
@@ -26,16 +49,27 @@ test('preserves closed-unmerged work unless its head is already in main', () => 
   assert.deepEqual(remove.map(x => x.name), ['feature/in-main']);
 });
 
-test('preserves a branch reused by both a merged and closed-unmerged PR unless fully contained in main', () => {
-  const prs = [pr('qa/reused', { merged: true }), pr('qa/reused')];
-  assert.deepEqual(classifyBranches([branch('qa/reused')], prs, repository), []);
+test('prunes only explicitly reviewed superseded closed-unmerged branches', () => {
+  const name = 'ci/restore-release-boundaries-2026-11-15-rebased';
+  assert.ok(SUPERSEDED_CLOSED_PR_BRANCHES.includes(name));
+  const result = classifyBranches([branch(name)], [pr(name)], repository, {
+    [name]: { ahead_by: 4, behind_by: 8 },
+  });
+  assert.deepEqual(result.map(x => x.name), [name]);
+});
+
+test('preserves a branch reused by merged and closed-unmerged PRs unless explicitly superseded or contained in main', () => {
+  const prs = [pr('qa/reused', { merged: true, sha: 'old-sha' }), pr('qa/reused', { sha: 'new-sha' })];
+  assert.deepEqual(classifyBranches([branch('qa/reused', { sha: 'new-sha' })], prs, repository), []);
   assert.deepEqual(
-    classifyBranches([branch('qa/reused')], prs, repository, { 'qa/reused': { ahead_by: 0 } }).map(x => x.name),
+    classifyBranches([branch('qa/reused', { sha: 'new-sha' })], prs, repository, {
+      'qa/reused': { ahead_by: 0 },
+    }).map(x => x.name),
     ['qa/reused'],
   );
 });
 
-test('preserves a branch referenced by an open PR even if another PR was merged', () => {
+test('protects a branch referenced by an open PR even if another PR was merged', () => {
   const result = classifyBranches([branch('qa/open')], [
     pr('qa/open', { merged: true }),
     pr('qa/open', { state: 'open' }),
@@ -51,7 +85,7 @@ test('preserves backup and recovery namespaces even when contained in main', () 
 });
 
 test('preserves protected branches and main', () => {
-  const result = classifyBranches([branch('fix/protected', true), branch('main')], [
+  const result = classifyBranches([branch('fix/protected', { protectedBranch: true }), branch('main')], [
     pr('fix/protected', { merged: true }), pr('main', { merged: true }),
   ], repository);
   assert.deepEqual(result, []);
@@ -64,42 +98,23 @@ test('never deletes a fork branch', () => {
   assert.deepEqual(result, []);
 });
 
+test('prunes only the explicitly reviewed stale no-PR refs', () => {
+  const name = 'preview-deploy/2026-11-15-post-fix';
+  assert.ok(STALE_NO_PR_BRANCHES.includes(name));
+  const result = classifyBranches([branch(name)], [], repository);
+  assert.deepEqual(result.map(x => x.name), [name]);
+});
+
+test('does not prune an arbitrary unreferenced branch without ancestry proof', () => {
+  const result = classifyBranches([branch('work/unknown')], [], repository, {
+    'work/unknown': { ahead_by: 2, behind_by: 4 },
+  });
+  assert.deepEqual(result, []);
+});
+
 test('prunes an unreferenced branch only when its head is contained in main', () => {
-  const result = classifyBranches(
-    [branch('old/ancestor'), branch('work/unknown')],
-    [],
-    repository,
-    { 'old/ancestor': { ahead_by: 0 }, 'work/unknown': { ahead_by: 2 } },
-  );
+  const result = classifyBranches([branch('old/ancestor')], [], repository, {
+    'old/ancestor': { ahead_by: 0, behind_by: 10 },
+  });
   assert.deepEqual(result.map(x => x.name), ['old/ancestor']);
-});
-
-test('retains refs when comparison data is missing or the branch is ahead of main', () => {
-  const result = classifyBranches(
-    [branch('preview/current'), branch('work/unknown')],
-    [],
-    repository,
-    { 'work/unknown': { ahead_by: 1 } },
-  );
-  assert.deepEqual(result, []);
-});
-
-test('does not auto-delete merged PR heads without an exact reviewed allowlist', () => {
-  const result = classifyBranches(
-    [branch('fix/merged')],
-    [pr('fix/merged', { merged: true })],
-    repository,
-    { 'fix/merged': { ahead_by: 0, behind_by: 3 } },
-  );
-  assert.deepEqual(result, []);
-});
-
-test('retains a merged branch if its current head contains commits not merged to main', () => {
-  const result = classifyBranches(
-    [branch('fix/reused-after-merge')],
-    [pr('fix/reused-after-merge', { merged: true })],
-    repository,
-    { 'fix/reused-after-merge': { ahead_by: 2, behind_by: 3 } },
-  );
-  assert.deepEqual(result, []);
 });
