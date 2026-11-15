@@ -1,6 +1,16 @@
 name: RAWAA mobile performance audit
 
 on:
+  push:
+    branches:
+      - main
+    paths:
+      - "**/*.html"
+      - "css/**"
+      - "js/**"
+      - "assets/**"
+      - "lighthouserc.json"
+      - ".github/workflows/performance-audit.yml"
   pull_request:
     paths:
       - "**/*.html"
