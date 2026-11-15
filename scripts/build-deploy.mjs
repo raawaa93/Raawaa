@@ -41,7 +41,7 @@ const paths = files.map((path) => relative(out, path).split(sep).join('/'));
 const has = (path) => paths.includes(path);
 for (const required of [
   'index.html', 'serum.html', 'campaign.html', 'privacy.html', '404.html',
-  'robots.txt', 'sitemap.xml', 'sw.js', 'manifest.webmanifest',
+  'robots.txt', 'sitemap.xml', 'sw.js', 'manifest.webmanifest', '_headers',
   'owner/index.html', 'owner/pricing.html', 'owner/settings.mjs',
   'js/config.js', 'js/pricing-policy.js', 'js/cart.js', 'js/campaign.js', 'css/campaign.css'
 ]) assert.ok(has(required), 'Missing required deployment asset: ' + required);
