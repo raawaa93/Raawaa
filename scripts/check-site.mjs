@@ -45,6 +45,7 @@ const robots = read('robots.txt');
 const serviceWorker = read('sw.js');
 const configSource = read('js/config.js');
 const responseHeaders = read('_headers');
+const homeCss = read('css/home-inline.css');
 const cart = read('js/cart.js');
 const views = read('js/serum-views.js');
 
@@ -67,6 +68,9 @@ assert.match(ownerSettings, /currency: 'SYP'/u, 'Owner dashboard currency defaul
 assert.match(ownerApp, /Intl\.NumberFormat/u, 'Owner dashboard must format order totals by currency');
 assert.match(ownerPricingTool, /let currencySymbol = 'ل\.س '/u, 'Owner pricing editor fallback currency must be SYP');
 assert.doesNotMatch(ownerPricingTool, /new Function\s*\(/u, 'Owner pricing editor must parse configuration data instead of evaluating source code');
+assert.doesNotMatch(homeCss, /transition\s*:\s*all\b/iu, 'Home page transitions must name the properties they animate');
+assert.match(homeCss, /prefers-reduced-motion\s*:\s*reduce/iu, 'Home page must respect reduced-motion preferences');
+assert.match(homeCss, /:focus-visible/u, 'Home page must provide visible keyboard focus styles');
 assert.match(responseHeaders, /X-Frame-Options:\s*DENY/u, 'Pages must prevent clickjacking');
 assert.match(responseHeaders, /Permissions-Policy:.*camera=\(\).*microphone=\(\).*geolocation=\(\)/u, 'Unused sensitive browser features must be disabled');
 assert.match(responseHeaders, /\/owner\/\*[\s\S]*Cache-Control:\s*no-store/u, 'Owner pages must not be cached');
