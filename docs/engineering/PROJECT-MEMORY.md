@@ -3,6 +3,7 @@
 This file is the repository-backed memory that survives AI sessions, client changes, and expired hosted quotas. Keep it concise, factual, and updated when a material decision changes. It contains no credentials, customer records, or private order data.
 
 ## Canonical project
+- Branch hygiene: the repository policy deletes merged PR heads and stale refs only when their commit history is verified as contained in `main`; all `backup/*`, `recovery/*`, protected, and open-PR refs are retained. See `docs/engineering/BRANCH-INVENTORY.md` and `docs/engineering/TOOLING-REGISTRY.md`.
 
 - Repository: `raawaa93/Raawaa`; `main` is the only canonical website source.
 - Cloudflare Pages project: `raawaa-store`; current known URL: https://raawaa-store.pages.dev.
