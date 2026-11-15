@@ -26,6 +26,6 @@ Do not delete archive tags as part of routine branch cleanup. They preserve the 
 
 ## First archive run
 
-<badge>Pending</badge>
+**Status:** Pending
 
 The initial reviewed archive batch is pinned to 29 explicit branch-head SHAs. Branches with open PRs, protected namespaces, changed heads, or missing tags are retained. Append the successful workflow run URL and exact archived tag list here after the first run; never mark a branch archived based on the workflow definition alone.
