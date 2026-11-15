@@ -17,30 +17,36 @@ test('prunes a merged same-repository feature branch', () => {
   assert.deepEqual(result.map(x => x.name), ['fix/merged']);
 });
 
-test('preserves closed-unmerged work', () => {
-  const result = classifyBranches([branch('feature/unresolved')], [pr('feature/unresolved')], repository);
-  assert.deepEqual(result, []);
+test('preserves closed-unmerged work unless its head is already in main', () => {
+  const keep = classifyBranches([branch('feature/unresolved')], [pr('feature/unresolved')], repository);
+  const remove = classifyBranches([branch('feature/in-main')], [pr('feature/in-main')], repository, {
+    'feature/in-main': { ahead_by: 0, behind_by: 3 },
+  });
+  assert.deepEqual(keep, []);
+  assert.deepEqual(remove.map(x => x.name), ['feature/in-main']);
 });
 
-test('preserves a branch reused by both a merged and closed-unmerged PR', () => {
-  const result = classifyBranches([branch('qa/reused')], [
-    pr('qa/reused', { merged: true }),
-    pr('qa/reused'),
-  ], repository);
-  assert.deepEqual(result, []);
+test('preserves a branch reused by both a merged and closed-unmerged PR unless fully contained in main', () => {
+  const prs = [pr('qa/reused', { merged: true }), pr('qa/reused')];
+  assert.deepEqual(classifyBranches([branch('qa/reused')], prs, repository), []);
+  assert.deepEqual(
+    classifyBranches([branch('qa/reused')], prs, repository, { 'qa/reused': { ahead_by: 0 } }).map(x => x.name),
+    ['qa/reused'],
+  );
 });
 
 test('preserves a branch referenced by an open PR even if another PR was merged', () => {
   const result = classifyBranches([branch('qa/open')], [
     pr('qa/open', { merged: true }),
     pr('qa/open', { state: 'open' }),
-  ], repository);
+  ], repository, { 'qa/open': { ahead_by: 0 } });
   assert.deepEqual(result, []);
 });
 
-test('preserves backup and recovery namespaces even after merge', () => {
+test('preserves backup and recovery namespaces even when contained in main', () => {
   const names = ['backup/checkpoint', 'recovery/source'];
-  const result = classifyBranches(names.map(name => branch(name)), names.map(name => pr(name, { merged: true })), repository);
+  const result = classifyBranches(names.map(name => branch(name)), [], repository,
+    Object.fromEntries(names.map(name => [name, { ahead_by: 0 }])));
   assert.deepEqual(result, []);
 });
 
@@ -58,7 +64,22 @@ test('never deletes a fork branch', () => {
   assert.deepEqual(result, []);
 });
 
-test('does not prune an arbitrary unreferenced branch, including previews', () => {
-  const result = classifyBranches([branch('work/unknown'), branch('preview-deploy/current')], [], repository);
+test('prunes an unreferenced branch only when its head is contained in main', () => {
+  const result = classifyBranches(
+    [branch('old/ancestor'), branch('work/unknown')],
+    [],
+    repository,
+    { 'old/ancestor': { ahead_by: 0 }, 'work/unknown': { ahead_by: 2 } },
+  );
+  assert.deepEqual(result.map(x => x.name), ['old/ancestor']);
+});
+
+test('retains refs when comparison data is missing or the branch is ahead of main', () => {
+  const result = classifyBranches(
+    [branch('preview/current'), branch('work/unknown')],
+    [],
+    repository,
+    { 'work/unknown': { ahead_by: 1 } },
+  );
   assert.deepEqual(result, []);
 });
