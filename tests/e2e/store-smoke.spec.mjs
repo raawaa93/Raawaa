@@ -78,3 +78,46 @@ for (const route of routes) {
     }
   });
 }
+
+
+test('Homepage promotion strip, sticky header, and mobile menu stay correctly aligned', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/', { waitUntil: 'domcontentloaded' });
+
+  const buttonMetrics = await page.locator('.hero-actions .btn').evaluateAll(elements => elements.map(element => {
+    const style = getComputedStyle(element);
+    return { minHeight: parseFloat(style.minHeight), color: style.color, background: style.backgroundColor };
+  }));
+  expect(buttonMetrics).toHaveLength(2);
+  expect(buttonMetrics.every(button => button.minHeight >= 44)).toBe(true);
+  expect(buttonMetrics[0].background).toBe('rgb(46, 42, 38)');
+  expect(buttonMetrics[0].color).toBe('rgb(255, 253, 250)');
+
+  const promo = page.locator('.offer-bar');
+  const header = page.locator('.site-header');
+  const promoBottom = await promo.evaluate(element => element.getBoundingClientRect().bottom);
+  const headerTop = await header.evaluate(element => element.getBoundingClientRect().top);
+  expect(headerTop).toBeGreaterThanOrEqual(promoBottom - 1);
+
+  const toggle = page.locator('#navToggle');
+  const menu = page.locator('#mobileNav');
+  await toggle.click();
+  await expect(toggle).toHaveAttribute('aria-expanded', 'true');
+  await expect(menu).toBeVisible();
+  const firstMenuTop = await menu.evaluate(element => element.getBoundingClientRect().top);
+  const firstHeaderBottom = await header.evaluate(element => element.getBoundingClientRect().bottom);
+  expect(firstMenuTop).toBeGreaterThanOrEqual(firstHeaderBottom - 1);
+
+  await toggle.click();
+  await page.evaluate(() => window.scrollTo(0, 500));
+  await toggle.click();
+  const scrolledMenuTop = await menu.evaluate(element => element.getBoundingClientRect().top);
+  const scrolledHeaderBottom = await header.evaluate(element => element.getBoundingClientRect().bottom);
+  expect(scrolledMenuTop).toBeGreaterThanOrEqual(scrolledHeaderBottom - 1);
+  await expect(toggle).toHaveAttribute('aria-expanded', 'true');
+
+  await toggle.click();
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await expect(toggle).toBeHidden();
+  await expect(page.locator('.nav-desktop')).toBeVisible();
+});
