@@ -117,3 +117,11 @@ The catalog being available in ChatGPT is not the same as vendoring a skill into
 - Visual QA harness fix PR #71 merged: Playwright screenshot `animations: 'disabled'` was removed to avoid CSP-blocked inline stylesheet injection in WebKit, and viewport-height diagnostics were added. Fresh visual audit run #43677078729 is running against the isolated preview from main SHA `d4e6c066`; do not mark visual QA complete until its report and screenshots are inspected.
 - Latest Graphify run produced 299 nodes, 626 edges, and 23 communities across 29 code files; generated recovery archives and workflows remain intentionally excluded. The latest disaster-recovery artifact is 12.96 MB with 90-day retention.
 - Cloudflare Web Analytics site configuration exists with `auto_install=false`; no beacon is installed and no analytics data is collected. Do not enable it until privacy disclosure and CSP are reviewed together.
+
+
+## Latest cleanup and visual QA automation — 2026-11-15
+
+- Current inventory: 37 branch refs; 77 PRs (63 merged, 13 closed-unmerged, 1 open).
+- PR #77 completes the reviewed allowlist for merged refs #71, #74, and #75, and adds the generated docs branch only after ancestry proof. Branches with unique commits ahead of main remain untouched.
+- Visual QA workflow now runs on harness/workflow changes and after successful production releases; preview runs remain scoped to successful preview deployments. It chooses the live production URL for production-release runs.
+- The WebKit screenshot fix uses Playwright `caret: 'initial'` to avoid injected inline styles; the production CSP remains strict.
