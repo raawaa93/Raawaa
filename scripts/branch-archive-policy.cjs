@@ -1,6 +1,8 @@
 'use strict';
 
-const ARCHIVE_BRANCHES = Object.freeze({});
+const ARCHIVE_BRANCHES = Object.freeze({
+  "maintenance/pr112-branch-hygiene-inventory-2026-11-15": "80e320e4b95138685ad10099c6087050d66b2b62",
+});
 const PROTECTED_PREFIXES = Object.freeze([
   'backup/',
   'recovery/',
