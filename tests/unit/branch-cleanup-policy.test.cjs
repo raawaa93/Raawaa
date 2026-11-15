@@ -249,3 +249,18 @@ test('deletes only the two reviewed no-PR archive-finalization refs after fast-f
     );
   }
 });
+
+test('retires the superseded archive-closure PR branch only after exact ancestry proof', () => {
+  const name = 'maintenance/close-archive-closure-2026-11-15';
+  const closed = [pr(name, { state: 'closed', merged: false })];
+  assert.ok(SUPERSEDED_CLOSED_PR_BRANCHES.includes(name));
+  assert.deepEqual(classifyBranches([branchRef(name)], closed, repository), []);
+  assert.deepEqual(
+    classifyBranches([branchRef(name)], closed, repository, { [name]: { ahead_by: 0, behind_by: 8 } }).map(x => x.name),
+    [name],
+  );
+  assert.deepEqual(
+    classifyBranches([branchRef(name)], closed, repository, { [name]: { ahead_by: 1, behind_by: 8 } }),
+    [],
+  );
+});
