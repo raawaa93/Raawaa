@@ -70,7 +70,7 @@ This repository is a reconstruction from Cloudflare Pages production and success
 - The current source had a real CI/CD contradiction: the production workflow deployed on every push to `main`, and a second workflow deployed from `production-deploy/**` branch pushes. PR #24 is now merged: main pushes validate only and production deployment requires manual dispatch from main with explicit confirmation.
 - Cloudflare custom domain list still contains only `raawaa-store.pages.dev` plus pending `rawaa.eu.org`; no DNS changes were made. The intended `rawaa.sy` purchase remains pending with the seller.
 - Supabase read-only advisors: leaked-password protection disabled (WARN); 17 RLS-without-policy INFO notices on Ghaiooth-core; 10 unused indexes (INFO), one duplicate-index warning on `rawaa_store.orders`. No DB changes were made.
-- The backup workflow now runs on every push to main as well as daily and manually. A completed artifact, checksum verification and restore drill still require read-back evidence; backup completion remains unverified.
+- The backup workflow runs on every push to main as well as daily and manually. The first post-merge run and restore drill are now verified; see the artifact details below.
 - R2 remains deferred pending payment-card readiness. No billing, DNS, schema, Edge Function or production data changes were made.
 - Release gates remain: formula/INCI and supplier evidence, actual product photos, privacy-policy review, source-level review of order-related Edge Functions, and a tested order lifecycle before direct order intake.
 
@@ -79,3 +79,14 @@ This repository is a reconstruction from Cloudflare Pages production and success
 
 - The backup workflow now runs on every push to canonical `main`, in addition to its daily schedule and manual trigger. The PR #24 merge commit should start a backup run and produce a 90-day GitHub Actions artifact without requiring Cloudflare R2 or a paid service.
 - Artifact creation, SHA-256 verification and an isolated restore drill still require read-back evidence; the trigger change alone is not proof that a backup completed.
+
+
+## Verified backup evidence — 2026-11-15
+
+The first post-merge backup has now been verified end-to-end:
+- Workflow run: `43656695373` (success).
+- Artifact: `rawaa-disaster-recovery-43656695373-5678c59d993a8de772f5e79708c474859e612d3e`, artifact ID `14138676139`, 12,812,495 bytes; expires 2027-02-13.
+- Artifact ZIP SHA-256 matches GitHub's recorded digest: `f83983670c6197635f5e6af58f2174340520646bb65c8463fe9cb3dd268ac23f`.
+- All three embedded SHA-256 checks passed. Git bundle verification passed; an isolated bare restore fetched all 34 refs and `git fsck --full --no-reflogs` found no missing or corrupt objects.
+- The source archive extracted successfully; `scripts/check-site.mjs`, `scripts/build-deploy.mjs` (178-file payload), and all JavaScript syntax checks passed under Node 22.16.0.
+- This verifies the GitHub artifact and an isolated restore. It does not yet create an independent R2/off-platform copy; R2 remains deferred until payment-card readiness.
