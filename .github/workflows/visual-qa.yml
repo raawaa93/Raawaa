@@ -3,6 +3,7 @@ name: RAWAA visual QA audit
 on:
   push:
     branches:
+      - main
       - 'qa/visual-audit-*'
   workflow_dispatch:
 
