@@ -54,7 +54,7 @@ GitHub Actions runs these checks on pushes and pull requests. Make future edits 
 - Cloudflare Pages project: `raawaa-store`.
 - Production URL: https://raawaa-store.pages.dev
 - The existing Pages project uses **Direct Upload**, not Git integration.
-- Every push to `main` runs the production validation pipeline; after all browser, policy, integrity, and clean-build checks pass, the same validated commit is deployed automatically to Cloudflare Pages production.
+- Every production-affecting source/configuration change pushed to `main` runs the production validation pipeline; after all browser, policy, integrity, and clean-build checks pass, the same validated commit is deployed automatically to Cloudflare Pages production. Documentation, recovery archives, test-only files, and validation-script-only changes are intentionally excluded from production releases.
 - Failed validation blocks deployment. The release job refuses stale or dirty source and targets only the production Pages branch.
 - Pull requests and non-main branches do not deploy to production. Preview deployments remain isolated from production.
 - A merge to `main` authorizes automatic production release once all required validation succeeds.
