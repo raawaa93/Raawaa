@@ -10,6 +10,7 @@ on:
       - 'AGENTS.md'
       - '.agents/**'
       - '.github/workflows/**'
+      - 'recovery/**'
   workflow_dispatch:
     inputs:
       confirm_production:
