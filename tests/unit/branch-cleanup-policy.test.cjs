@@ -2,7 +2,7 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { classifyBranches, SUPERSEDED_CLOSED_PR_BRANCHES, STALE_NO_PR_BRANCHES } = require('../../scripts/branch-cleanup-policy.cjs');
+const { classifyBranches } = require('../../scripts/branch-cleanup-policy.cjs');
 
 const repository = 'raawaa93/Raawaa';
 const branch = (name, protectedBranch = false) => ({ name, protected: protectedBranch });
@@ -17,22 +17,23 @@ test('prunes a merged same-repository feature branch', () => {
   assert.deepEqual(result.map(x => x.name), ['fix/merged']);
 });
 
-test('preserves closed-unmerged work unless explicitly superseded', () => {
+test('preserves closed-unmerged work', () => {
   const result = classifyBranches([branch('feature/unresolved')], [pr('feature/unresolved')], repository);
   assert.deepEqual(result, []);
 });
 
-test('prunes only reviewed superseded closed-unmerged branches', () => {
-  const name = 'ci/restore-release-boundaries-2026-11-15-rebased';
-  assert.ok(SUPERSEDED_CLOSED_PR_BRANCHES.includes(name));
-  const result = classifyBranches([branch(name)], [pr(name)], repository);
-  assert.deepEqual(result.map(x => x.name), [name]);
-});
-
-test('protects a branch referenced by an open PR even if another PR was merged', () => {
+test('preserves a branch reused by both a merged and closed-unmerged PR', () => {
   const result = classifyBranches([branch('qa/reused')], [
     pr('qa/reused', { merged: true }),
-    pr('qa/reused', { state: 'open' }),
+    pr('qa/reused'),
+  ], repository);
+  assert.deepEqual(result, []);
+});
+
+test('preserves a branch referenced by an open PR even if another PR was merged', () => {
+  const result = classifyBranches([branch('qa/open')], [
+    pr('qa/open', { merged: true }),
+    pr('qa/open', { state: 'open' }),
   ], repository);
   assert.deepEqual(result, []);
 });
@@ -43,24 +44,21 @@ test('preserves backup and recovery namespaces even after merge', () => {
   assert.deepEqual(result, []);
 });
 
-test('preserves protected branches', () => {
-  const result = classifyBranches([branch('fix/protected', true)], [pr('fix/protected', { merged: true })], repository);
+test('preserves protected branches and main', () => {
+  const result = classifyBranches([branch('fix/protected', true), branch('main')], [
+    pr('fix/protected', { merged: true }), pr('main', { merged: true }),
+  ], repository);
   assert.deepEqual(result, []);
 });
 
 test('never deletes a fork branch', () => {
-  const result = classifyBranches([branch('feature/fork')], [pr('feature/fork', { merged: true, owner: 'contributor/Raawaa' })], repository);
+  const result = classifyBranches([branch('feature/fork')], [
+    pr('feature/fork', { merged: true, owner: 'contributor/Raawaa' }),
+  ], repository);
   assert.deepEqual(result, []);
 });
 
-test('prunes only the explicitly reviewed stale preview/deploy refs', () => {
-  const name = 'preview-deploy/2026-11-15-post-fix';
-  assert.ok(STALE_NO_PR_BRANCHES.includes(name));
-  const result = classifyBranches([branch(name)], [], repository);
-  assert.deepEqual(result.map(x => x.name), [name]);
-});
-
-test('does not prune an arbitrary unreferenced branch', () => {
-  const result = classifyBranches([branch('work/unknown')], [], repository);
+test('does not prune an arbitrary unreferenced branch, including previews', () => {
+  const result = classifyBranches([branch('work/unknown'), branch('preview-deploy/current')], [], repository);
   assert.deepEqual(result, []);
 });
