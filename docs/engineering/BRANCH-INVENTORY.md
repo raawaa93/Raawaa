@@ -192,3 +192,12 @@ Do not delete or consolidate any of these 17 refs without a new individual revie
 - `maintenance/finalize-archive-index-2026-11-15`, prior head `7035569abb0dcd626347170f3df288af10602eab`: its archive allowlist still referenced the already-retired PR116 head and is superseded by the canonical empty archive policy.
 - `maintenance/finalize-pr113-archive-2026-11-15`, prior head `c91f134ffc24b5f29366fb071175734a872d5524`: its archive index, domain audit, and final branch state are now present in canonical main.
 - Both are no-PR maintenance refs. Their content has been reconciled into main; they are fast-forwarded to the current main SHA and eligible for deletion only after GitHub confirms `ahead_by=0`.
+
+
+## Final live inventory — 2026-11-15 06:44 UTC
+
+- Latest verified GitHub read-back: **17 branch refs**, **35 annotated recovery tags**, **0 open pull requests**.
+- Branch-hygiene run [#43686773498](https://github.com/raawaa93/Raawaa/actions/runs/43686773498) succeeded. It removed the exact merged maintenance refs `maintenance/fix-merged-head-cleanup-logic-2026-11-15` and `maintenance/retire-last-closed-ref-2026-11-15` after the merged-head allowlist and exact-head checks passed.
+- The 17 retained refs are the purpose-specific `main`, backup, deploy, preview, production-deploy, recovery, release, and restore refs. No temporary maintenance branch remains in the live enumeration.
+- The 35 archive tags remain intact; no backup, recovery, release, preview, deployment, or restore ref was removed.
+- The earlier 19-branch / two-temporary-ref note above is a historical checkpoint and is superseded by this final live read-back.
