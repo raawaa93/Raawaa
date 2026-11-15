@@ -81,7 +81,8 @@ const MERGED_PR_BRANCHES = Object.freeze([
 ]);
 const SUPERSEDED_CLOSED_PR_BRANCHES = Object.freeze([
   "maintenance/close-archive-closure-2026-11-15",
-  "maintenance/archive-final-closure-ref-2026-11-15"
+  "maintenance/archive-final-closure-ref-2026-11-15",
+  "maintenance/finalize-pr113-archive-2026-11-15"
 ]);
 const STALE_NO_PR_BRANCHES = Object.freeze([
   "maintenance/finalize-archive-index-2026-11-15",
