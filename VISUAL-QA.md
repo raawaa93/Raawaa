@@ -11,6 +11,6 @@ This isolated, read-only audit captures the production storefront without changi
 
 ## Run
 
-The GitHub Actions workflow runs on pushes to `main` and `qa/visual-audit-*`, and can be started manually from Actions.
+The GitHub Actions workflow runs after successful production CI on `main`, every Monday at 03:17 UTC, and on pushes to `qa/visual-audit-*`. It can also be started manually from Actions.
 
 Each run uploads an artifact containing viewport screenshots, full-page screenshots, serum interactive-view captures, per-page JSON diagnostics, and a self-contained HTML report. The workflow is read-only against the production website.
