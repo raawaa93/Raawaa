@@ -10,7 +10,6 @@ on:
       - "js/**"
       - "assets/**"
       - "lighthouserc.json"
-      - ".github/workflows/performance-audit.yml"
       - "scripts/build-deploy.mjs"
   pull_request:
     paths:
@@ -19,7 +18,6 @@ on:
       - "js/**"
       - "assets/**"
       - "lighthouserc.json"
-      - ".github/workflows/performance-audit.yml"
       - "scripts/build-deploy.mjs"
   workflow_dispatch:
 
