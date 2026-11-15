@@ -73,3 +73,9 @@ This repository is a reconstruction from Cloudflare Pages production and success
 - The backup workflow exists, but a completed artifact, checksum verification and restore drill could not be confirmed in this audit. Backup status remains unverified.
 - R2 remains deferred pending payment-card readiness. No billing, DNS, schema, Edge Function or production data changes were made.
 - Release gates remain: formula/INCI and supplier evidence, actual product photos, privacy-policy review, source-level review of order-related Edge Functions, and a tested order lifecycle before direct order intake.
+
+
+### Backup trigger improvement in this PR
+
+- The backup workflow now runs on every push to canonical `main`, in addition to its daily schedule and manual trigger. Once this PR is merged, the merge commit itself should start a backup run and produce a 90-day GitHub Actions artifact without requiring Cloudflare R2 or a paid service.
+- Artifact creation, SHA-256 verification and an isolated restore drill still require read-back evidence; the trigger change alone is not proof that a backup completed.
