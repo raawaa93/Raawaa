@@ -19,7 +19,7 @@ ROOT = Path(__file__).resolve().parents[1]
 TARGETS_PATH = ROOT / "docs/engineering/competitor-targets.json"
 OUTPUT_DIR = Path(os.environ.get("RAWAA_CRAWL_OUTPUT", ROOT / "artifacts/competitor-crawl"))
 USER_AGENT = "RAWAAResearchBot"
-MAX_MARKDOWN_CHARS = 40_000
+MAX_MARKDOWN_CHARS = 120_000
 PAGE_TIMEOUT_MS = 45_000
 REQUEST_GAP_SECONDS = 3.0
 
@@ -38,6 +38,35 @@ class JSONLDParser(HTMLParser):
         if tag.lower() == "script" and self._capture:
             self.blocks.append("".join(self._chunks))
             self._capture, self._chunks = False, []
+
+
+class MetaParser(HTMLParser):
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.meta = {}
+
+    def handle_starttag(self, tag, attrs):
+        if tag.lower() != "meta":
+            return
+        values = dict(attrs)
+        key = (values.get("property") or values.get("name") or values.get("itemprop") or "").strip().lower()
+        content = values.get("content")
+        if key and content:
+            self.meta[key] = content
+
+
+def extract_page_metadata(html):
+    parser = MetaParser()
+    parser.feed(html or "")
+    keys = (
+        "og:title", "og:description", "description", "og:image",
+        "product:price:amount", "og:price:amount",
+        "product:price:currency", "og:price:currency",
+        "product:availability", "og:availability",
+        "product:brand", "product:retailer_item_id",
+    )
+    return {key: parser.meta[key] for key in keys if key in parser.meta}
+
 
 def parse_jsonld_blocks(html):
     parser = JSONLDParser()
@@ -148,7 +177,7 @@ async def crawl_targets():
                 "kind": target["kind"], "url": url,
                 "captured_at": datetime.now(timezone.utc).isoformat(),
                 "robots_allowed": allowed, "robots_source": robots_source,
-                "success": False, "status_code": None, "page_title": None,
+                "success": False, "status_code": None, "page_title": None, "page_metadata": {},
                 "products": [], "markdown_file": None, "error": None,
             }
             if not allowed:
@@ -162,6 +191,7 @@ async def crawl_targets():
                 record["status_code"] = getattr(response, "status_code", None)
                 html = getattr(response, "html", "") or getattr(response, "cleaned_html", "") or ""
                 record["page_title"] = _page_title(html)
+                record["page_metadata"] = extract_page_metadata(html)
                 record["products"] = extract_products_from_jsonld(parse_jsonld_blocks(html))
                 markdown = _markdown_text(getattr(response, "markdown", None))
                 if markdown:
@@ -188,13 +218,17 @@ async def crawl_targets():
         "# RAWAA competitor crawl snapshot", "",
         f"- Captured: {payload['generated_at']}",
         f"- Successful pages: {success_count}/{len(targets)}",
-        "- Extraction: public JSON-LD Product/Offer data plus Markdown snapshots",
+        "- Extraction: public JSON-LD Product/Offer and Open Graph/product metadata plus Markdown snapshots",
         "- No LLM/API key, login, proxy, stealth, or CAPTCHA bypass was used.", "",
-        "| Brand | Market | Status | Product records |", "|---|---|---:|---:|",
+        "| Brand | Market | Status | Product records | Meta price |", "|---|---|---:|---:|---|",
     ]
     for item in results:
         status = f"HTTP {item['status_code']}" if item["status_code"] else ("skipped" if not item["robots_allowed"] else "failed")
-        lines.append(f"| {item['brand']} | {item['market']} | {status} | {len(item['products'])} |")
+        meta = item.get("page_metadata", {})
+        price = meta.get("product:price:amount") or meta.get("og:price:amount") or "—"
+        currency = meta.get("product:price:currency") or meta.get("og:price:currency") or ""
+        price_label = f"{price} {currency}".strip() if price != "—" else price
+        lines.append(f"| {item['brand']} | {item['market']} | {status} | {len(item['products'])} | {price_label} |")
     lines.extend(["", "## Notes", ""])
     for item in results:
         if item["error"]: lines.append(f"- **{item['brand']}**: {item['error']}")
