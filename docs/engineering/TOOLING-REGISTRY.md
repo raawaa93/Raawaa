@@ -63,7 +63,7 @@ Other available skill/tool families include data analysis, user settings, and fi
 - Daily disaster-recovery bundle and source archive.
 - Scheduled visual QA for mobile and desktop.
 - Search Console connected through OpenSEO; IndexNow successfully submitted home, serum, and privacy on 2026-11-15.
-- Automatic production release only after full validation of qualifying website-source changes on main; workflow-only/docs-only changes are excluded.
+- Automatic production release only after full validation of qualifying website-source changes on main; workflow-only/docs-only/test-only/visual-audit helper changes are excluded. Manual workflow_dispatch is disabled. A maintenance-only merge previously caused redundant deploy #43677941627; PR #81 restores and tests the push-only trigger.
 - Branch hygiene PR #70 merged. Run #43676889692 inspected 84 refs and deleted 55: 53 merged-PR heads plus two stale preview refs. It also deleted three operational merged refs; all three were restored at their exact original PR head SHAs. No backup/recovery refs were deleted. PR #74 merged with regression tests and permanent protection for `backup/`, `recovery/`, `restore/`, `release/`, `production-deploy/`, `deploy/`, and active `preview-deploy/` refs.
 
 ## Skills available in the ChatGPT workspace
