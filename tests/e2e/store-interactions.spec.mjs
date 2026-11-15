@@ -91,3 +91,18 @@ test('Owner pricing editor parses the published config and renders all products'
   await expect(page.locator('#impact tbody tr')).toHaveCount(36);
   expect(pageErrors).toEqual([]);
 });
+
+
+test('public pages satisfy the restrictive CSP without browser violations', async ({ page }) => {
+  for (const route of ['/', '/serum', '/campaign', '/privacy']) {
+    await page.addInitScript(() => {
+      window.__rawaaCspViolations = [];
+      window.addEventListener('securitypolicyviolation', event => {
+        window.__rawaaCspViolations.push(event.violatedDirective + ': ' + event.blockedURI);
+      });
+    });
+    await page.goto(route, { waitUntil: 'domcontentloaded' });
+    const violations = await page.evaluate(() => window.__rawaaCspViolations);
+    expect(violations).toEqual([]);
+  }
+});
