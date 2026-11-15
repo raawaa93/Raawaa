@@ -75,13 +75,20 @@ const SUPERSEDED_CLOSED_PR_BRANCHES = Object.freeze([
   "automation/graphify-daily-refresh-2026-11-15",
   "qa/visual-audit-2026-11-15",
   "feature/campaign-nitro-offer-2026-11-14",
-  "fix/visual-audit-top-viewport-2026-11-15"
+  "fix/visual-audit-top-viewport-2026-11-15",
+  "fix/final-visual-and-release-policy-2026-11-15",
+  "fix/final-visual-release-policy-consolidated-2026-11-15"
 ]);
+const DUPLICATE_REF_ALIASES = Object.freeze({
+  'fix/final-visual-release-policy-verified-2026-11-15': 'fix/final-visual-release-policy-consolidated-2026-11-15',
+});
+
 const STALE_NO_PR_BRANCHES = Object.freeze([
   "preview-deploy/visual-qa-2026-11-15",
   "preview-deploy/2026-11-15-post-fix",
   "preview-deploy/2026-11-15-main-78ece71",
-  "docs/project-tooling-and-branch-inventory-2026-11-15"
+  "docs/project-tooling-and-branch-inventory-2026-11-15",
+  "fix/raawaa-final-qa-release-policy-2026-11-15"
 ]);
 
 function classifyBranches(branches, pullRequests, repositoryFullName, comparisons = {}) {
@@ -96,6 +103,7 @@ function classifyBranches(branches, pullRequests, repositoryFullName, comparison
   const mergedAllowlist = new Set(MERGED_PR_BRANCHES);
   const superseded = new Set(SUPERSEDED_CLOSED_PR_BRANCHES);
   const staleNoPr = new Set(STALE_NO_PR_BRANCHES);
+  const branchesByName = new Map(branches.map((branch) => [branch.name, branch]));
 
   return branches.filter((branch) => {
     const name = branch?.name;
@@ -108,6 +116,15 @@ function classifyBranches(branches, pullRequests, repositoryFullName, comparison
 
     const related = relatedByHead.get(name) || [];
     if (related.some((pull) => pull.state === 'open')) return false;
+
+    // An exact duplicate ref is removable only while its reviewed retained alias
+    // exists at the same commit SHA. No unique commit can be lost by this rule.
+    const retainedAliasName = DUPLICATE_REF_ALIASES[name];
+    if (retainedAliasName) {
+      const retainedAlias = branchesByName.get(retainedAliasName);
+      return related.length === 0 && Boolean(retainedAlias) &&
+        retainedAlias.commit?.sha === branch.commit?.sha && !DUPLICATE_REF_ALIASES[retainedAliasName];
+    }
 
     const hasMergedPR = related.some((pull) => Boolean(pull.merged_at));
     const hasClosedUnmergedPR = related.some((pull) => pull.state === 'closed' && !pull.merged_at);
@@ -140,4 +157,5 @@ module.exports = {
   MERGED_PR_BRANCHES,
   SUPERSEDED_CLOSED_PR_BRANCHES,
   STALE_NO_PR_BRANCHES,
+  DUPLICATE_REF_ALIASES,
 };
