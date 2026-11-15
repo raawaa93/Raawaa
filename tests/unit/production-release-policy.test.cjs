@@ -18,6 +18,8 @@ test('validated pushes to canonical main deploy automatically without manual app
 test('maintenance and visual-audit helpers are ignored by production release triggers', () => {
   const ignored = workflow.split('paths-ignore:')[1]?.split('\n\npermissions:')[0] || '';
   for (const file of [
+    '.github/workflows/**',
+    'scripts/check-site.mjs',
     'scripts/branch-cleanup-policy.cjs',
     'scripts/branch-archive-policy.cjs',
     'scripts/visual-audit.mjs',
