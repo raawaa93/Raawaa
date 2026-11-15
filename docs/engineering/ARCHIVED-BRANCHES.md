@@ -101,3 +101,14 @@ Do not delete archive tags as part of routine cleanup. They preserve the origina
 - The annotated tag target was read back and matched the captured branch SHA before the branch ref was deleted.
 - Verified archive count: **34 tags**. Stable branch count: **17 refs** and **0 open PRs**.
 - The one-time archive allowlist is cleared in the next policy cleanup.
+
+
+## Additional verified maintenance archive — 2026-11-15
+
+| Original branch | Preserved commit SHA | Recovery tag |
+|---|---|---|
+| `maintenance/record-pr113-archive-2026-11-15` | `1415d8dcac9ca2113626659d4454b2450b42b423` | `archive/branches/2026-11-15/maintenance/record-pr113-archive-2026-11-15` |
+
+- Archive workflow run: [#43685544073](https://github.com/raawaa93/Raawaa/actions/runs/43685544073) — tag creation step succeeded; exact target SHA is `1415d8dcac9ca2113626659d4454b2450b42b423`.
+- The temporary branch ref was retired after the tag target was verified.
+- This adds the 35th recovery tag. The archive allowlist is cleared so the same ref cannot be archived twice.
