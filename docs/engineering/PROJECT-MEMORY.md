@@ -8,7 +8,7 @@ This file is the repository-backed memory that survives AI sessions, client chan
 - Repository: `raawaa93/Raawaa`; `main` is the only canonical website source.
 - Cloudflare Pages project: `raawaa-store`; current known URL: https://raawaa-store.pages.dev.
 - Pages uses Direct Upload, not Git integration. A merge to `main` is **not** a production deployment.
-- Production release is automated by the existing `RAWAA production CI and release` workflow after the full validation job succeeds on a push to `main`; manual dispatch with `confirm_production=yes` remains available for controlled reruns. It validates the exact current `main` SHA, rebuilds the clean payload, and refuses stale/dirty source. Owner has granted standing authorization for routine releases after these gates pass.
+- Production release is push-triggered only by qualifying website-source/configuration changes on `main`. The `RAWAA automatic production CI and release` workflow runs full validation, rebuilds the clean payload, and refuses stale/dirty source before deployment. There is no manual production dispatch. Documentation, workflow-only, dependency-only, test-only, and validation-script-only changes do not trigger a production release. Owner has granted standing authorization for routine releases after these gates pass.
 - Preview deployment is isolated from production. Never deploy a backup branch.
 - `backup/*` branches and `recovery/` snapshots are historical rollback/evidence; do not delete, overwrite, or deploy them.
 
