@@ -20,13 +20,13 @@ const pr = (ref, { state = 'closed', merged = false, owner = repository, sha = '
   head: { ref, sha, repo: { full_name: owner } },
 });
 
-test('prunes a merged branch only when its current head is the merged PR head', () => {
+test('preserves merged PR heads by default, even when the exact head is already in main', () => {
   const result = classifyBranches(
     [branch('fix/merged', { sha: 'same-sha' })],
     [pr('fix/merged', { merged: true, sha: 'same-sha' })],
     repository,
   );
-  assert.deepEqual(result.map(x => x.name), ['fix/merged']);
+  assert.deepEqual(result, []);
 });
 
 test('preserves a branch updated after its merged PR unless the new head is in main', () => {
@@ -46,7 +46,7 @@ test('preserves closed-unmerged work unless its head is already in main', () => 
     'feature/in-main': { ahead_by: 0, behind_by: 3 },
   });
   assert.deepEqual(keep, []);
-  assert.deepEqual(remove.map(x => x.name), ['feature/in-main']);
+  assert.deepEqual(remove, []);
 });
 
 test('prunes only explicitly reviewed superseded closed-unmerged branches', () => {
@@ -55,7 +55,11 @@ test('prunes only explicitly reviewed superseded closed-unmerged branches', () =
   const result = classifyBranches([branch(name)], [pr(name)], repository, {
     [name]: { ahead_by: 4, behind_by: 8 },
   });
-  assert.deepEqual(result.map(x => x.name), [name]);
+  assert.deepEqual(result, []);
+  const contained = classifyBranches([branch(name)], [pr(name)], repository, {
+    [name]: { ahead_by: 0, behind_by: 8 },
+  });
+  assert.deepEqual(contained.map(x => x.name), [name]);
 });
 
 test('preserves a branch reused by merged and closed-unmerged PRs unless explicitly superseded or contained in main', () => {
@@ -101,7 +105,11 @@ test('never deletes a fork branch', () => {
 test('prunes only the explicitly reviewed stale no-PR refs', () => {
   const name = 'preview-deploy/2026-11-15-post-fix';
   assert.ok(STALE_NO_PR_BRANCHES.includes(name));
-  const result = classifyBranches([branch(name)], [], repository);
+  const missingProof = classifyBranches([branch(name)], [], repository);
+  const result = classifyBranches([branch(name)], [], repository, {
+    [name]: { ahead_by: 0, behind_by: 4 },
+  });
+  assert.deepEqual(missingProof, []);
   assert.deepEqual(result.map(x => x.name), [name]);
 });
 
@@ -116,5 +124,5 @@ test('prunes an unreferenced branch only when its head is contained in main', ()
   const result = classifyBranches([branch('old/ancestor')], [], repository, {
     'old/ancestor': { ahead_by: 0, behind_by: 10 },
   });
-  assert.deepEqual(result.map(x => x.name), ['old/ancestor']);
+  assert.deepEqual(result, []);
 });
