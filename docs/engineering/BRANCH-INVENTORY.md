@@ -279,3 +279,13 @@ Current main at review: `8687b0ed62f15c0aa533fedb5e3904706c9f6dec`.
 No branch was deleted, force-updated, or merged during this review. The connected GitHub actions available in this session do not expose a branch-delete operation. Do not simulate cleanup by overwriting refs or deleting recovery evidence. A safe retirement requires capturing each exact branch-head SHA, creating and verifying an annotated recovery tag where needed, re-reading the ref to detect movement, and then deleting only the reviewed ref through an authorized branch-management path.
 
 The three extra refs are working refs, not additional durable backup checkpoints. Keep the 17 operational/recovery refs protected. The live count must be refreshed again before any future cleanup; this addendum is a dated snapshot, not a permanent branch count.
+
+### Production-release policy correction — 2026-11-21
+
+A stale sentence in the historical audit trail above says production is gated by explicit owner confirmation. That sentence is superseded by the live canonical workflow and the current project policy:
+
+- `.github/workflows/production-cicd.yml` runs validation for qualifying pushes to `main`, then automatically deploys the exact validated commit after freshness and clean-checkout guards pass.
+- The workflow has no `workflow_dispatch` or `confirm_production` input. Do not reintroduce a manual confirmation gate.
+- The latest Cloudflare production deployment observed in this audit is `14abd47f-6d32-454a-a818-1abba6c71d4d`, created 2026-11-15 09:52 UTC, status `success`, source SHA `667db996286c9b3446f8d790df410861aa9e0b1f`.
+- Current canonical main at the time of this addendum is `1b576e7badd6f209be42a3fbd6df39c1d141f03d`. The difference from the deployed SHA consists of workflow/policy/documentation/test files; no storefront page, pricing, product, or browser asset changed in those commits. The 2026-11-21 branch-inventory correction is documentation-only and is excluded from production deployment triggers.
+- A historical audit note reports that the production alias served a retired `/hama` route while an immutable deployment URL returned 404. The current web inspection interface could not retrieve either URL, so that discrepancy is **not revalidated or resolved** by this audit. Keep it as a release-verification item; do not claim a live visual or route smoke test passed.
