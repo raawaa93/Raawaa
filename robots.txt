@@ -6,7 +6,6 @@ Allow: /
 
 # مسارات لا تُفهرَس
 Disallow: /404.html
-Disallow: /hama
 Disallow: /check.html
 Disallow: /setup.html
 Disallow: /owner/

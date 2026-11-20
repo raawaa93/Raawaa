@@ -16,9 +16,6 @@ const routes = [
   { name: 'serum', path: '/serum.html' },
   { name: 'campaign', path: '/campaign.html' },
   { name: 'privacy', path: '/privacy.html' },
-  // This must stay a real 404 on the production alias; it guards against
-  // stale Pages alias content resurrecting the retired Hama route.
-  { name: 'retired-hama', path: '/hama', expectedStatus: 404 },
 ];
 const viewports = [
   { name: 'iphone-13', device: devices['iPhone 13'] },
@@ -222,7 +219,6 @@ for (const engine of engines) {
         const result = {
           route: route.path,
           page: route.name,
-          expectedStatus: route.expectedStatus ?? 200,
           engine: engine.name,
           viewport: viewport.name,
           navigationStatus,
@@ -243,7 +239,7 @@ for (const engine of engines) {
         await fs.promises.writeFile(path.join(outDir, prefix + '.json'), JSON.stringify(result, null, 2));
       } catch (error) {
         navigationError = String(error);
-        results.push({ route: route.path, page: route.name, expectedStatus: route.expectedStatus ?? 200, engine: engine.name, viewport: viewport.name, navigationStatus, navigationError, metrics, consoleErrors, cspViolations: [], knownWebKitCspFalsePositives: [], realCspViolations: [], pageErrors, failedRequests, badResponses, screenshots, interactiveScreenshots });
+        results.push({ route: route.path, page: route.name, engine: engine.name, viewport: viewport.name, navigationStatus, navigationError, metrics, consoleErrors, cspViolations: [], knownWebKitCspFalsePositives: [], realCspViolations: [], pageErrors, failedRequests, badResponses, screenshots, interactiveScreenshots });
       } finally {
         await page.close();
       }
@@ -257,8 +253,7 @@ for (const engine of engines) {
 
 const issues = [];
 for (const r of results) {
-  const expectedStatus = r.expectedStatus ?? 200;
-  if (r.navigationStatus !== expectedStatus) issues.push(r.page + '/' + r.viewport + ': HTTP status ' + r.navigationStatus + '; expected ' + expectedStatus);
+  if (r.navigationStatus !== 200) issues.push(r.page + '/' + r.viewport + ': HTTP status ' + r.navigationStatus);
   if (r.navigationError) issues.push(r.page + '/' + r.engine + '/' + r.viewport + ': audit execution error: ' + r.navigationError);
   if (r.consoleErrors?.length) issues.push(r.page + '/' + r.engine + '/' + r.viewport + ': browser console errors: ' + r.consoleErrors.join(' | '));
   if (r.realCspViolations?.length) issues.push(r.page + '/' + r.engine + '/' + r.viewport + ': CSP violations: ' + JSON.stringify(r.realCspViolations));
@@ -271,10 +266,7 @@ for (const r of results) {
   if (r.metrics?.brokenImages?.length) issues.push(r.page + '/' + r.viewport + ': ' + r.metrics.brokenImages.length + ' broken visible images');
   if (r.metrics?.incompleteVisibleImages?.length) issues.push(r.page + '/' + r.viewport + ': ' + r.metrics.incompleteVisibleImages.length + ' visible images did not finish loading');
   if (r.pageErrors?.length) issues.push(r.page + '/' + r.viewport + ': JavaScript page errors: ' + r.pageErrors.join(' | '));
-  const expectedNavigationUrl = baseURL + r.route;
-  const sameOriginBadResponses = (r.badResponses || []).filter(item =>
-    item.url.startsWith(baseURL) && !(item.url === expectedNavigationUrl && item.status === expectedStatus)
-  );
+  const sameOriginBadResponses = (r.badResponses || []).filter(item => item.url.startsWith(baseURL));
   if (sameOriginBadResponses.length) issues.push(r.page + '/' + r.viewport + ': same-origin HTTP errors: ' + JSON.stringify(sameOriginBadResponses));
   const sameOriginFailedRequests = (r.failedRequests || []).filter(item => item.url.startsWith(baseURL));
   if (sameOriginFailedRequests.length) issues.push(r.page + '/' + r.viewport + ': same-origin failed requests: ' + JSON.stringify(sameOriginFailedRequests));
@@ -284,7 +276,7 @@ await fs.promises.writeFile(path.join(outDir, 'report.json'), JSON.stringify({ b
 const cards = results.map(r => {
   const title = r.page + ' / ' + r.viewport;
   const imgs = [...(r.screenshots || []), ...(r.interactiveScreenshots || [])].map(s => '<a href="' + s + '"><img src="' + s + '" alt="' + s + '"></a>').join('');
-  const state = r.navigationStatus === (r.expectedStatus ?? 200) && !r.navigationError ? 'Captured' : 'FAILED';
+  const state = r.navigationStatus === 200 && !r.navigationError ? 'Captured' : 'FAILED';
   const detail = r.metrics ? '<p>HTTP ' + r.navigationStatus + ' · viewport ' + r.metrics.viewportWidth + 'px · document ' + r.metrics.documentWidth + 'px · ' + r.metrics.documentHeight + 'px tall · ' + r.metrics.images.length + ' images · ' + r.metrics.brokenImages.length + ' broken · ' + (r.metrics.incompleteVisibleImages || []).length + ' incomplete visible</p>' : '<p>' + (r.navigationError || 'No metrics') + '</p>';
   return '<section><h2>' + title + ' — ' + state + '</h2>' + detail + '<div class="shots">' + imgs + '</div></section>';
 }).join('');

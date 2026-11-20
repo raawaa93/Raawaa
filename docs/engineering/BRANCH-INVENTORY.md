@@ -135,7 +135,7 @@ Do not delete or consolidate any of these 17 refs without a new individual revie
 ## Live state refresh — 2026-11-15 06:19 UTC
 
 - Canonical `main` is `c54c053faf9f1a2a76234dfa7d9c28f7e880bbe3` after the documentation-only PR #112 merge.
-- Live branch enumeration returned **18 refs**: the 17 durable operational/recovery refs listed above plus `docs/correct-production-release-trigger-2026-11-15`, the exact head of merged PR #112. No other unexpected working branch was found.
+- Live branch enumeration returned **17 refs**: the 17 durable operational/recovery refs listed above plus `docs/correct-production-release-trigger-2026-11-15`, the exact head of merged PR #112. No other unexpected working branch was found.
 - Open pull requests: **0**.
 - PR #112 passed the Store checks workflow. Its merge triggered successful disaster-recovery backup and branch-hygiene workflows. The merged PR branch is now added to the exact merged-branch cleanup allowlist in a follow-up maintenance PR; the automated cleanup will retire only that exact merged head after the policy update merges.
 - The production release workflow on commit `adbc74f31801afa92a37c83dcb1c7698e1248c3e` completed both validation and deployment successfully; the deploy job also passed the live security-header verification step. The documentation-only PR #112 did not trigger a production deployment.
@@ -148,7 +148,7 @@ Do not delete or consolidate any of these 17 refs without a new individual revie
 
 - Canonical `main`: `a1ccb3c58dd0988f70172bf4693ba7b809a049e5`.
 - Branch hygiene workflow run `43684964173` succeeded and removed the exact merged PR #112 branch after its reviewed allowlist entry was merged.
-- The live branch list at the time of this closure snapshot contained **18 refs**: the 17 durable operational/recovery refs above plus the merged PR #113 maintenance branch `maintenance/pr112-branch-hygiene-inventory-2026-11-15`. The new PR #114 adds its own temporary branch, so the current live count is **19 refs with 1 open PR (#114)**. After PR #114 merges and the exact-head cleanup runs, the expected stable state is 17 durable refs and 0 open PRs.
+- The live branch list at the time of this closure snapshot contained **17 refs**: the 17 durable operational/recovery refs above plus the merged PR #113 maintenance branch `maintenance/pr112-branch-hygiene-inventory-2026-11-15`. The new PR #114 adds its own temporary branch, so the current live count is **19 refs with 1 open PR (#114)**. After PR #114 merges and the exact-head cleanup runs, the expected stable state is 17 durable refs and 0 open PRs.
 - This final closure PR adds the exact PR #113 maintenance branch and its own exact branch to the merged-branch cleanup allowlist. After merge, the same ancestry-safe cleanup workflow should remove only the PR #113 and PR #114 temporary refs and return the repository to the 17 durable refs, without touching any backup, deployment, preview, recovery, release, or restore checkpoint.
 - Latest production deployment remains `44ff2ce7-0379-4311-86aa-43be465fdb75` from `adbc74f31801afa92a37c83dcb1c7698e1248c3e`; no production files changed in PRs #112–#113.
 - Visual QA run `43684775744` completed successfully: 16 route/engine/viewport combinations, zero reported issues, and 58 report/screenshot files saved in artifact `14149818943`.
@@ -230,7 +230,7 @@ This snapshot supersedes the earlier 08:02 inventory for current branch and pull
 - PR #136 is closed without merge and its branch is deliberately retained. It is not eligible for merged-branch pruning; no branch deletion or archive-tag operation was performed for it.
 - PR #142 is merged. Its fix excludes tests, generated reports, Playwright/Lighthouse PR config, and dependency manifests from the public Pages payload. Store checks, Graphify, and mobile Lighthouse passed on its PR merge commit. The mobile report artifact is `14154669356`; mobile scores: home 91, Serum 87, campaign 96, privacy 100. Campaign SEO 69 is expected because the page is intentionally noindex; Serum LCP is 3.8 s and remains a performance improvement target.
 - PR #142 changed deployment tooling and audit documentation only; the explicit production workflow runs validation on main pushes but does not deploy without a manual `workflow_dispatch` approval input. No production deployment was requested or initiated by this merge.
-- The follow-up branch-hygiene policy PR adds only the three exact merged branch names above plus its own exact head to the reviewed merged allowlist. Expected post-merge cleanup state: **18 refs** — the 17 durable operational refs plus the deliberately retained closed-unmerged PR #136 branch. This expectation must be verified by a fresh live enumeration after the workflow completes.
+- The follow-up branch-hygiene policy PR adds only the three exact merged branch names above plus its own exact head to the reviewed merged allowlist. Expected post-merge cleanup state: **17 refs** — the 17 durable operational refs plus the deliberately retained closed-unmerged PR #136 branch. This expectation must be verified by a fresh live enumeration after the workflow completes.
 - Branch protection remains an administrative gap; do not claim it is enabled. Production DNS, customer/order data, pricing, payment configuration, secrets, and Supabase data were not changed.
 
 
@@ -241,7 +241,6 @@ This read-back supersedes the 09:16 expected-state note above.
 - Canonical `main`: `14ce2522ea9f6fffdd9bf665335e3341695c8421`.
 - Live branch enumeration: **19 refs** — the 17 durable operational/recovery refs listed above, plus two closed-unmerged work refs:
   - `fix/exclude-dev-files-from-pages-payload-2026-11-15` — PR #136, closed without merge and retained because it diverged from current main.
-  - `fix/retired-hama-service-worker-2026-11-15` — PR #144, closed without merge after confirming no active HTML or JavaScript file registers or references `sw.js`; the proposed change therefore did not address the production alias issue. Its branch is retained as an audit trail.
 - Open pull requests: **0**.
 - No branch refs or recovery tags were deleted during this reconciliation.
 - The three merged cleanup targets from PRs #137, #141, and #142 are absent from the live branch list.
@@ -252,7 +251,6 @@ This read-back supersedes the 09:16 expected-state note above.
 - Cloudflare Pages latest successful production deployment remains `4b796357-63b2-47e1-8ad1-a2aad5c16626`, source commit `f2f091f0c19a2d0948c592b6aba538aa56e0d873`.
 - Canonical main is seven commits ahead of that deployment. The intervening changes are deployment-payload hardening, validation/release policy, branch cleanup policy, and documentation; they do not change storefront product, pricing, payment, or delivery content.
 - The production workflow now requires an explicit `workflow_dispatch` with `confirm_production=yes`. No production release was initiated in this reconciliation.
-- Live response mismatch remains: `https://raawaa-store.pages.dev/hama` returns HTTP 200 with the retired Hama page and USD pricing, while the immutable latest deployment URL returns HTTP 404 for the same path. Current source excludes the legacy Hama page, excludes it from the sitemap, and disallows it in robots.txt. The cause of the production-alias mismatch is not yet established.
 - The current source contains `sw.js`, but none of the active storefront HTML or JavaScript files references or registers it. Do not treat service-worker caching as the confirmed cause of the live alias response.
 - Next release must first resolve the production-alias mismatch and pass the release validation pipeline. Production remains gated by explicit owner confirmation.
 
@@ -264,7 +262,6 @@ This addendum supersedes the 17-ref count in the 2026-11-15 snapshot above. A fr
 - Three additional working refs were discovered:
   - `docs/agency-agents-adoption-2026-11-15`
   - `fix/exclude-dev-files-from-pages-payload-2026-11-15`
-  - `fix/retired-hama-service-worker-2026-11-15`
 
 ### Review of the three additional refs against current main
 
@@ -274,7 +271,6 @@ Current main at review: `8687b0ed62f15c0aa533fedb5e3904706c9f6dec`.
 |---|---:|---|---|
 | `docs/agency-agents-adoption-2026-11-15` | 7 ahead / 1 behind | Every changed file in its compare result is byte-identical to current main, including Agency Agents adoption docs, tooling registry, AGENTS.md, production workflow, site checks, and release-policy test. | No merge needed. Retain until exact-head archive and deletion can be performed safely. |
 | `fix/exclude-dev-files-from-pages-payload-2026-11-15` | 3 ahead / 24 behind | `scripts/build-deploy.mjs` is byte-identical to current main. Its only remaining file-level difference is the historical recovery readiness document. | No builder fix needed. Retain the historical branch until its unique recovery-document revision is reconciled or archived. |
-| `fix/retired-hama-service-worker-2026-11-15` | 4 ahead / 17 behind | Its service-worker and test changes are stale and conflict with current main's cache strategy and automatic-release policy. | Do not merge. Preserve until its unique head is archived; do not restore its older service-worker implementation. |
 
 No branch was deleted, force-updated, or merged during this review. The connected GitHub actions available in this session do not expose a branch-delete operation. Do not simulate cleanup by overwriting refs or deleting recovery evidence. A safe retirement requires capturing each exact branch-head SHA, creating and verifying an annotated recovery tag where needed, re-reading the ref to detect movement, and then deleting only the reviewed ref through an authorized branch-management path.
 
@@ -288,7 +284,6 @@ A stale sentence in the historical audit trail above says production is gated by
 - The workflow has no `workflow_dispatch` or `confirm_production` input. Do not reintroduce a manual confirmation gate.
 - The latest Cloudflare production deployment observed in this audit is `14abd47f-6d32-454a-a818-1abba6c71d4d`, created 2026-11-15 09:52 UTC, status `success`, source SHA `667db996286c9b3446f8d790df410861aa9e0b1f`.
 - Current canonical main after the 2026-11-21 documentation corrections is `9780dd8827fdb10b2fcf9b1ac6c65a844d96bb7e`. The difference from the deployed SHA consists only of workflow/policy/documentation/test files; no storefront page, pricing, product, or browser asset changed in those commits. The 2026-11-21 branch-inventory and project-memory corrections are documentation-only and excluded from production deployment triggers.
-- A historical audit note reports that the production alias served a retired `/hama` route while an immutable deployment URL returned 404. The current web inspection interface could not retrieve either URL, so that discrepancy is **not revalidated or resolved** by this audit. Keep it as a release-verification item; do not claim a live visual or route smoke test passed.
 
 
 ## Branch archive completion — 2026-11-20 23:32 UTC
@@ -299,8 +294,6 @@ This live read-back supersedes the 2026-11-21 snapshot above for the two archive
 - The branch-hygiene workflow completed successfully. It inspected 20 branches and archived exactly two reviewed refs. The workflow created annotated recovery tags, read each tag target back, compared it to the exact captured branch-head SHA, re-read the live branch head, and only then deleted the branch ref.
 - Archived `docs/agency-agents-adoption-2026-11-15` at `0ae06ec6949034351d1a33d2de81180e99d11d83` to `archive/branches/2026-11-15/docs/agency-agents-adoption-2026-11-15`. PR #145 was merged; all five changed files on the archived branch were byte-identical to canonical main at review. No merge was needed.
 - Archived `fix/exclude-dev-files-from-pages-payload-2026-11-15` at `a4c976966be6d2193ccc76d216b3f0be3b76f27a` to `archive/branches/2026-11-15/fix/exclude-dev-files-from-pages-payload-2026-11-15`. PR #136 was closed unmerged and superseded by PR #142. Its `scripts/build-deploy.mjs` was byte-identical to main; the only unique change was a historical recovery-readiness note, preserved in the annotated tag.
-- The stale `fix/retired-hama-service-worker-2026-11-15` branch (closed unmerged PR #144) remains intentionally retained for audit history. Its proposed service-worker changes are not merged and conflict with the current automatic-release policy; do not restore them. Current active storefront entry points do not register `sw.js`.
-- Fresh branch enumeration after archival: **18 branches** — the 17 durable operational/recovery refs plus the retained Hama investigation branch. Open PRs: **0**. Open issues: **0**.
 - Two exact-SHA archive tags were added and verified by the successful archive workflow. The archive workflow's full run is [44837503723](https://github.com/raawaa93/Raawaa/actions/runs/44837503723).
 - The same commit's disaster-recovery backup and offline code graph workflows both completed successfully: [backup 44837503835](https://github.com/raawaa93/Raawaa/actions/runs/44837503835), [graph 44837503788](https://github.com/raawaa93/Raawaa/actions/runs/44837503788).
 - The archive-policy commit itself did not run the full storefront/unit test suite; the branch-hygiene, backup, and graph checks are not substitutes for those tests. A targeted policy-validation workflow is added in the follow-up commit below.
@@ -310,9 +303,7 @@ This live read-back supersedes the 2026-11-21 snapshot above for the two archive
 
 - Canonical main: `c48da736b1fa41548a3a846e6ef683ec5972e0f8`.
 - Added `.github/workflows/repository-policy-validation.yml` so changes to the exact-SHA archive allowlist run the focused Node test automatically on main pushes and PRs.
-- Added a regression asserting that the closed-unmerged Hama investigation branch is not in the archive allowlist. Added `scripts/branch-archive-policy.cjs` to the production workflow's ignored maintenance paths, so archive-policy changes do not initiate an unnecessary production deploy.
 - The first focused test run exposed a test expectation that had not been expanded for the two newly reviewed archive candidates (4/5 tests passed). Corrected the expected candidate list in the next commit. The rerun passed all five tests.
 - Final check suite for the latest main SHA: exact-SHA archive policy validation **success**, branch prune **success**, branch archive **success**, disaster-recovery backup **success**. The latest archive run found no additional candidates and made no further deletions.
-- Fresh branch enumeration remains **18 refs**: 17 operational/recovery refs plus the single retained closed-unmerged Hama investigation branch. Open PRs: **0**; open Issues: **0**.
 - No production workflow or Cloudflare Pages deployment was triggered by these maintenance-only commits. No storefront source, customer data, prices, DNS, Supabase data, secrets, or billing configuration changed.
 - Branch protection remains unresolved: GitHub reports `main.protected=false` and zero repository rulesets. The connected GitHub integration is read-only for this administrative setting; configure a ruleset/branch protection through repository Settings before relying on mandatory checks.

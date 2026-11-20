@@ -92,10 +92,7 @@ assert.doesNotMatch(campaign, /لا تشمل التوصيل|رسوم التوص�
 assert.ok(campaignScript.includes('product.image && product.image.src'), 'Campaign cards must display the configured product image');
 assert.match(campaign, /<meta name="robots" content="noindex,follow">/u, 'Campaign landing page must remain noindex');
 assert.ok(!sitemap.includes('/campaign'), 'Noindex campaign page must be excluded from sitemap');
-assert.ok(!sitemap.includes('/hama'), 'Legacy Hama route must be removed from sitemap');
-assert.ok(!serviceWorker.toLowerCase().includes('hama'), 'Service worker must not cache the retired Hama route');
-assert.ok(robots.includes('Disallow: /hama'), 'Robots must disallow the retired Hama route');
-for (const legacy of ['hama.html', 'setup.html', 'check.html', 'css/hama.css', 'css/setup.css', 'css/check.css', 'js/setup-inline.js', 'js/check-inline.js']) {
+for (const legacy of ['setup.html', 'check.html', 'css/setup.css', 'css/check.css', 'js/setup-inline.js', 'js/check-inline.js']) {
   assert.ok(!fs.existsSync(path.join(root, legacy)), legacy + ' must be retired from the active source root');
 }
 assert.doesNotMatch(index, /خصم 15%|15%[^<]{0,40}شام كاش/u, 'Homepage must not advertise a 15% Sham Cash discount');

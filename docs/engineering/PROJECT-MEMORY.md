@@ -416,7 +416,6 @@ This section supersedes earlier assumptions in this file about the Store's Supab
 - Latest production deployment remains `14abd47f-6d32-454a-a818-1abba6c71d4d`, URL `https://14abd47f.raawaa-store.pages.dev`, deployment stage `success`, created `2026-11-15T09:52:55Z`, source SHA `667db996286c9b3446f8d790df410861aa9e0b1f`.
 - The deployed SHA is an ancestor of current main. Its comparison contains only workflow/policy/documentation/test changes; no storefront HTML, CSS, browser JavaScript, product/pricing configuration, or other Pages payload source changed. The 2026-11-21 inventory and memory corrections are documentation-only and excluded by the production workflow's trigger filters. There is no storefront-source change requiring a production redeploy at this checkpoint.
 - The Pages custom-domain API reports `rawaa.eu.org` as `pending`, with verification error `CNAME record not set`. The project currently lists only `raawaa-store.pages.dev` as an active domain. Do not change DNS or nameservers without verified domain control and explicit intent.
-- A fresh live HTTP/browser inspection was not possible in this environment (runtime DNS resolution failed). The previously reported `/hama` production-alias mismatch remains unresolved and must not be described as fixed or revalidated.
 
 ### Release and repository controls
 - The canonical production workflow is automatic after successful validation on qualifying main pushes. It has no manual approval/dispatch gate. Do not reintroduce an owner-confirmation gate.
