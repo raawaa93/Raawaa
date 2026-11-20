@@ -1,0 +1,36 @@
+name: RAWAA repository policy validation
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'scripts/branch-archive-policy.cjs'
+      - 'tests/unit/branch-archive-policy.test.cjs'
+      - '.github/workflows/repository-policy-validation.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'scripts/branch-archive-policy.cjs'
+      - 'tests/unit/branch-archive-policy.test.cjs'
+      - '.github/workflows/repository-policy-validation.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rawaa-repository-policy-validation-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - name: Test exact-SHA branch archival policy
+        run: node --test tests/unit/branch-archive-policy.test.cjs

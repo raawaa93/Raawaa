@@ -38,6 +38,12 @@ test('archives individually reviewed inactive refs only at their exact SHAs', ()
   );
 });
 
+test('keeps the closed-unmerged Hama investigation branch outside the archive allowlist', () => {
+  const name = 'fix/retired-hama-service-worker-2026-11-15';
+  assert.equal(Object.hasOwn(ARCHIVE_BRANCHES, name), false);
+  assert.deepEqual(selectArchiveCandidates([branch(name)], [], repository), []);
+});
+
 test('does not re-archive any retired ref if a stale branch is recreated', () => {
   const names = [
     'docs/workspace-hygiene-2026-11-15',

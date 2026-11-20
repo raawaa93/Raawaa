@@ -289,3 +289,19 @@ A stale sentence in the historical audit trail above says production is gated by
 - The latest Cloudflare production deployment observed in this audit is `14abd47f-6d32-454a-a818-1abba6c71d4d`, created 2026-11-15 09:52 UTC, status `success`, source SHA `667db996286c9b3446f8d790df410861aa9e0b1f`.
 - Current canonical main after the 2026-11-21 documentation corrections is `9780dd8827fdb10b2fcf9b1ac6c65a844d96bb7e`. The difference from the deployed SHA consists only of workflow/policy/documentation/test files; no storefront page, pricing, product, or browser asset changed in those commits. The 2026-11-21 branch-inventory and project-memory corrections are documentation-only and excluded from production deployment triggers.
 - A historical audit note reports that the production alias served a retired `/hama` route while an immutable deployment URL returned 404. The current web inspection interface could not retrieve either URL, so that discrepancy is **not revalidated or resolved** by this audit. Keep it as a release-verification item; do not claim a live visual or route smoke test passed.
+
+
+## Branch archive completion — 2026-11-20 23:32 UTC
+
+This live read-back supersedes the 2026-11-21 snapshot above for the two archived working refs.
+
+- Canonical main at the start of this cleanup: `d0b83e6e846b84d947664e09edf4fab1534cf05e`.
+- The branch-hygiene workflow completed successfully. It inspected 20 branches and archived exactly two reviewed refs. The workflow created annotated recovery tags, read each tag target back, compared it to the exact captured branch-head SHA, re-read the live branch head, and only then deleted the branch ref.
+- Archived `docs/agency-agents-adoption-2026-11-15` at `0ae06ec6949034351d1a33d2de81180e99d11d83` to `archive/branches/2026-11-15/docs/agency-agents-adoption-2026-11-15`. PR #145 was merged; all five changed files on the archived branch were byte-identical to canonical main at review. No merge was needed.
+- Archived `fix/exclude-dev-files-from-pages-payload-2026-11-15` at `a4c976966be6d2193ccc76d216b3f0be3b76f27a` to `archive/branches/2026-11-15/fix/exclude-dev-files-from-pages-payload-2026-11-15`. PR #136 was closed unmerged and superseded by PR #142. Its `scripts/build-deploy.mjs` was byte-identical to main; the only unique change was a historical recovery-readiness note, preserved in the annotated tag.
+- The stale `fix/retired-hama-service-worker-2026-11-15` branch (closed unmerged PR #144) remains intentionally retained for audit history. Its proposed service-worker changes are not merged and conflict with the current automatic-release policy; do not restore them. Current active storefront entry points do not register `sw.js`.
+- Fresh branch enumeration after archival: **18 branches** — the 17 durable operational/recovery refs plus the retained Hama investigation branch. Open PRs: **0**. Open issues: **0**.
+- Two exact-SHA archive tags were added and verified by the successful archive workflow. The archive workflow's full run is [44837503723](https://github.com/raawaa93/Raawaa/actions/runs/44837503723).
+- The same commit's disaster-recovery backup and offline code graph workflows both completed successfully: [backup 44837503835](https://github.com/raawaa93/Raawaa/actions/runs/44837503835), [graph 44837503788](https://github.com/raawaa93/Raawaa/actions/runs/44837503788).
+- The archive-policy commit itself did not run the full storefront/unit test suite; the branch-hygiene, backup, and graph checks are not substitutes for those tests. A targeted policy-validation workflow is added in the follow-up commit below.
+- Repository release governance remains an open gap: the live branch API reports `main.protected=false`, and the repository rulesets endpoint returns an empty list. The connected integration cannot write repository administration settings. No claim of branch protection is made.

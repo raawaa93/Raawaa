@@ -18,6 +18,7 @@ on:
       - 'scripts/check-site.mjs'
       - 'scripts/branch-cleanup-policy.cjs'
       - 'scripts/branch-archive-policy.cjs'
+      - 'scripts/branch-archive-policy.cjs'
       - 'scripts/visual-audit.mjs'
       - 'scripts/visual-audit-csp-policy.cjs'
       - 'lighthouserc.json'
