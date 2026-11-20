@@ -255,3 +255,27 @@ This read-back supersedes the 09:16 expected-state note above.
 - Live response mismatch remains: `https://raawaa-store.pages.dev/hama` returns HTTP 200 with the retired Hama page and USD pricing, while the immutable latest deployment URL returns HTTP 404 for the same path. Current source excludes the legacy Hama page, excludes it from the sitemap, and disallows it in robots.txt. The cause of the production-alias mismatch is not yet established.
 - The current source contains `sw.js`, but none of the active storefront HTML or JavaScript files references or registers it. Do not treat service-worker caching as the confirmed cause of the live alias response.
 - Next release must first resolve the production-alias mismatch and pass the release validation pipeline. Production remains gated by explicit owner confirmation.
+
+## Live correction — 2026-11-21
+
+This addendum supersedes the 17-ref count in the 2026-11-15 snapshot above. A fresh live enumeration of GitHub refs returned **20 branches**, not 17:
+
+- The 17 durable operational/recovery refs listed in the prior snapshot remain present.
+- Three additional working refs were discovered:
+  - `docs/agency-agents-adoption-2026-11-15`
+  - `fix/exclude-dev-files-from-pages-payload-2026-11-15`
+  - `fix/retired-hama-service-worker-2026-11-15`
+
+### Review of the three additional refs against current main
+
+Current main at review: `8687b0ed62f15c0aa533fedb5e3904706c9f6dec`.
+
+| Branch | Compare with main | File-level finding | Disposition |
+|---|---:|---|---|
+| `docs/agency-agents-adoption-2026-11-15` | 7 ahead / 1 behind | Every changed file in its compare result is byte-identical to current main, including Agency Agents adoption docs, tooling registry, AGENTS.md, production workflow, site checks, and release-policy test. | No merge needed. Retain until exact-head archive and deletion can be performed safely. |
+| `fix/exclude-dev-files-from-pages-payload-2026-11-15` | 3 ahead / 24 behind | `scripts/build-deploy.mjs` is byte-identical to current main. Its only remaining file-level difference is the historical recovery readiness document. | No builder fix needed. Retain the historical branch until its unique recovery-document revision is reconciled or archived. |
+| `fix/retired-hama-service-worker-2026-11-15` | 4 ahead / 17 behind | Its service-worker and test changes are stale and conflict with current main's cache strategy and automatic-release policy. | Do not merge. Preserve until its unique head is archived; do not restore its older service-worker implementation. |
+
+No branch was deleted, force-updated, or merged during this review. The connected GitHub actions available in this session do not expose a branch-delete operation. Do not simulate cleanup by overwriting refs or deleting recovery evidence. A safe retirement requires capturing each exact branch-head SHA, creating and verifying an annotated recovery tag where needed, re-reading the ref to detect movement, and then deleting only the reviewed ref through an authorized branch-management path.
+
+The three extra refs are working refs, not additional durable backup checkpoints. Keep the 17 operational/recovery refs protected. The live count must be refreshed again before any future cleanup; this addendum is a dated snapshot, not a permanent branch count.
