@@ -6,7 +6,7 @@ Recovered, editable source for the RAWAA Store static website.
 
 - The full recoverable Store source is now on `main`.
 - Source was reconstructed from the 2026-11-08 Cloudflare Pages production copy and successful development previews. This is not a clone of the original Git history.
-- The restored root tree contains 199 files: all 199 paths from the production manifest except the two nonessential Hama MP4 videos, plus this README and the recovered RAWAA design-system stylesheet. The two MP4s are intentionally not required for this recovery.
+- The storefront source is maintained as a clean, current tree on `main`; historical recovery snapshots are isolated under `recovery/` and are never part of the deployment payload.
 - PR #188's approved 10% Sham Cash-only policy and latest page/content checkpoint are integrated with the complete cart recovered from PR #205.
 - PR #188's partial cart was not used.
 - Automated checks pass for all root HTML/CSS local asset references, store policies, product disclosures, structured data, complete cart presence, and JavaScript syntax.
@@ -31,7 +31,7 @@ This is the only active commercial policy for the recovered source. Historical s
 
 ## Pages and assets
 
-- Storefront: `index.html`, `serum.html`, `campaign.html`, `privacy.html`, `404.html`. Retired Hama/setup/diagnostic pages remain only in `recovery/`.
+- Storefront: `index.html`, `serum.html`, `campaign.html`, `privacy.html`, `404.html`. Retired setup/diagnostic material, where retained for recovery, is isolated under `recovery/`.
 - Owner-facing pages: `owner/index.html`, `owner/pricing.html`.
 - Front-end code: `js/`, `css/`, `owner/`.
 - Static assets: `assets/` (product and campaign images, brand assets, icons, fonts and captions).
