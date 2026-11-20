@@ -261,3 +261,29 @@ jobs:
               .write();
 
             if (failed.length) core.setFailed(`Branch archival had ${failed.length} failures.`);
+
+  purge-retired-page-branch:
+    name: Remove abandoned page working ref
+    needs: archive-inactive
+    if: needs.archive-inactive.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Delete only the reviewed abandoned page branch
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const branchName = 'fix/retired-hama-service-worker-2026-11-15';
+            const expectedSha = '4d44f636e97c99399de0267bdb9114fb3e7a1324';
+            const [branch, pulls] = await Promise.all([
+              github.rest.repos.getBranch({ owner, repo, branch: branchName }),
+              github.rest.pulls.list({ owner, repo, state: 'all', head: `${owner}:${branchName}`, per_page: 100 }),
+            ]);
+            if (branch.data.protected) throw new Error('Refusing to delete a protected branch.');
+            if (branch.data.commit.sha !== expectedSha) throw new Error('Branch head changed; refusing deletion.');
+            if (pulls.data.some(p => p.state === 'open')) throw new Error('An open PR still references this branch.');
+            const closedUnmerged = pulls.data.some(p => p.number === 144 && p.state === 'closed' && !p.merged_at);
+            if (!closedUnmerged) throw new Error('Expected closed-unmerged PR #144 was not verified.');
+            await github.rest.git.deleteRef({ owner, repo, ref: `heads/${branchName}` });
+            core.notice(`Deleted abandoned page branch ${branchName} at verified SHA ${expectedSha}; no recovery tag was created.`);
