@@ -387,7 +387,7 @@ No prices, discounts, delivery rules, payment settings, customer/order data, Sup
 - GitHub main branch protection remains unresolved; require branch protection and mandatory production checks through authorized repository settings. Do not infer protection from successful CI.
 - Keep the custom domain pending until the registrant/owner intent and DNS delegation are confirmed. No DNS changes were made.
 - Remaining owner-supplied operational inputs are unchanged: Sham Cash wallet number if that method is to be enabled; verified complete INCI/manufacturer/supplier documentation; genuine product photography; privacy-notice approval for the operating jurisdiction; and a decision on whether WhatsApp handoff remains the order flow or a separately designed backend/payment system is desired.
-- Neither connected Supabase project is confirmed as the Store database. Do not connect either one to checkout. Firecrawl quota remains exhausted until its stated renewal; TinyFish remains prohibited. No paid billing, customer/order data, secrets, pricing, discounts, or delivery rules were changed.
+- Historical Supabase identity note, superseded by the 2026-11-21 live correction below: canonical `owner/settings.mjs` points the owner dashboard at `Ghaiooth-core`, which is a shared staging/test backend rather than a dedicated production Store database. Do not connect `raawaa-engine-fallback` to checkout. Firecrawl quota remains exhausted until its stated renewal; TinyFish remains prohibited. No paid billing, customer/order data, secrets, pricing, discounts, or delivery rules were changed.
 
 
 ## Live infrastructure correction — 2026-11-21
