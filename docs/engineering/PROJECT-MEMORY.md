@@ -388,3 +388,26 @@ No prices, discounts, delivery rules, payment settings, customer/order data, Sup
 - Keep the custom domain pending until the registrant/owner intent and DNS delegation are confirmed. No DNS changes were made.
 - Remaining owner-supplied operational inputs are unchanged: Sham Cash wallet number if that method is to be enabled; verified complete INCI/manufacturer/supplier documentation; genuine product photography; privacy-notice approval for the operating jurisdiction; and a decision on whether WhatsApp handoff remains the order flow or a separately designed backend/payment system is desired.
 - Neither connected Supabase project is confirmed as the Store database. Do not connect either one to checkout. Firecrawl quota remains exhausted until its stated renewal; TinyFish remains prohibited. No paid billing, customer/order data, secrets, pricing, discounts, or delivery rules were changed.
+
+## Live infrastructure correction — 2026-11-21
+
+This section supersedes any earlier assumptions in this file that either connected Supabase project is the RAWAA Store checkout/order database, and supersedes stale deployment/domain snapshots where they conflict with the live API read below.
+
+### Supabase project identity — read-only verified
+- The connected Supabase organization currently exposes exactly two projects: `raawaa-engine-fallback` (`xuwtuhfqjjwszxqkmivj`) and `Ghaioooth-core` (`oyoyozdugicmnkfhjovo`).
+- Neither project is confirmed as the Store database. Do not attribute their tables, RLS findings, Edge Functions, or advisor output to RAWAA Store; do not connect either to storefront checkout or write to either project on the Store's behalf.
+- A prior read-only audit mistakenly inspected `Ghaioooth-core` and described its `rawaa_store` / `commerce` schema and six Edge Functions as if they were the Store backend. That attribution was incorrect. Treat those observations as belonging to the inspected project only; they are not evidence of Store backend readiness or a Store security defect.
+- The Store's actual backend identity and source remain unverified. Continue with the WhatsApp handoff as the only established order flow until the correct Store backend is identified and reviewed. Do not create or migrate production order data in either connected project.
+
+### Cloudflare Pages — live API read
+- Pages project: `raawaa-store`; production branch: `main`; project uses no Pages Functions.
+- Latest production deployment remains `14abd47f-6d32-454a-a818-1abba6c71d4d`, URL `https://14abd47f.raawaa-store.pages.dev`, deployment stage `success`, created `2026-11-15T09:52:55Z`, source SHA `667db996286c9b3446f8d790df410861aa9e0b1f`.
+- The deployed SHA is an ancestor of current main. Its five-commit comparison contains only workflow/policy/documentation/test changes; it contains no storefront HTML, CSS, browser JavaScript, product/pricing configuration, or other Pages payload source changes. The 2026-11-21 inventory and memory corrections are documentation-only and are excluded by the production workflow's trigger filters. Therefore there is no storefront-source change requiring a production redeploy at this checkpoint. Do not create an unnecessary deployment solely to advance the deployment SHA.
+- The Pages custom-domain API reports `rawaa.eu.org` as `pending`, with verification error `CNAME record not set`. The project currently lists only `raawaa-store.pages.dev` as an active domain. Earlier notes claiming a store-specific CNAME was already present are stale; do not change DNS or nameservers without verified domain control and explicit intent.
+- A fresh live HTTP/browser inspection was not possible in this environment (DNS resolution unavailable to the runtime). The previously reported `/hama` production-alias mismatch remains unresolved and must not be described as fixed or revalidated.
+
+### Release and repository controls
+- Current main includes the inventory correction commit `089e5d3504682a22d996e88fcebab70539ff0f07` (and its parent `1b576e7badd6f209be42a3fbd6df39c1d141f03d)); these are documentation-only changes after the deployed source.
+- The canonical production workflow is automatic after successful validation on qualifying main pushes. It has no manual approval/dispatch gate. Do not reintroduce an owner-confirmation gate.
+- GitHub repository metadata currently grants the connected identity admin/maintain/push permissions, but this read did not verify branch protection. Do not claim required checks or branch protection are enabled without reading the repository's protection/ruleset settings.
+- No DNS, Pages domain binding, production source, Supabase schema/data, secrets, prices, discounts, delivery rules, customer/order data, or billing settings were changed during this checkpoint.
