@@ -34,7 +34,12 @@ test('archives individually reviewed inactive refs only at their exact SHAs', ()
   }
   assert.deepEqual(
     selectArchiveCandidates(branches, [pull('performance/fix-serum-image-preload-2026-11-15')], repository).map(x => x.name),
-    ['performance/trim-serum-css-2026-11-15', 'fix/mobile-header-buttons-colors-2026-11-15'],
+    [
+      'performance/trim-serum-css-2026-11-15',
+      'fix/mobile-header-buttons-colors-2026-11-15',
+      'docs/agency-agents-adoption-2026-11-15',
+      'fix/exclude-dev-files-from-pages-payload-2026-11-15',
+    ],
   );
 });
 
