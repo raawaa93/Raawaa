@@ -4,6 +4,8 @@ const ARCHIVE_BRANCHES = Object.freeze({
   "fix/mobile-header-buttons-colors-2026-11-15": "6d9887c48cbbbd5eb9c0bf84a97acb6db2bfaf95",
   "performance/fix-serum-image-preload-2026-11-15": "9368c47535062ad147bafba2632a899adac2c2fe",
   "performance/trim-serum-css-2026-11-15": "1449c8579d43b5535ef90d956daa8917c4e860a3",
+  "docs/agency-agents-adoption-2026-11-15": "0ae06ec6949034351d1a33d2de81180e99d11d83",
+  "fix/exclude-dev-files-from-pages-payload-2026-11-15": "a4c976966be6d2193ccc76d216b3f0be3b76f27a",
 });
 const PROTECTED_PREFIXES = Object.freeze([
   'backup/',
