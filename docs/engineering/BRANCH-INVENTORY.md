@@ -305,3 +305,14 @@ This live read-back supersedes the 2026-11-21 snapshot above for the two archive
 - The same commit's disaster-recovery backup and offline code graph workflows both completed successfully: [backup 44837503835](https://github.com/raawaa93/Raawaa/actions/runs/44837503835), [graph 44837503788](https://github.com/raawaa93/Raawaa/actions/runs/44837503788).
 - The archive-policy commit itself did not run the full storefront/unit test suite; the branch-hygiene, backup, and graph checks are not substitutes for those tests. A targeted policy-validation workflow is added in the follow-up commit below.
 - Repository release governance remains an open gap: the live branch API reports `main.protected=false`, and the repository rulesets endpoint returns an empty list. The connected integration cannot write repository administration settings. No claim of branch protection is made.
+
+## Policy validation and final live read-back — 2026-11-20 23:34 UTC
+
+- Canonical main: `c48da736b1fa41548a3a846e6ef683ec5972e0f8`.
+- Added `.github/workflows/repository-policy-validation.yml` so changes to the exact-SHA archive allowlist run the focused Node test automatically on main pushes and PRs.
+- Added a regression asserting that the closed-unmerged Hama investigation branch is not in the archive allowlist. Added `scripts/branch-archive-policy.cjs` to the production workflow's ignored maintenance paths, so archive-policy changes do not initiate an unnecessary production deploy.
+- The first focused test run exposed a test expectation that had not been expanded for the two newly reviewed archive candidates (4/5 tests passed). Corrected the expected candidate list in the next commit. The rerun passed all five tests.
+- Final check suite for the latest main SHA: exact-SHA archive policy validation **success**, branch prune **success**, branch archive **success**, disaster-recovery backup **success**. The latest archive run found no additional candidates and made no further deletions.
+- Fresh branch enumeration remains **18 refs**: 17 operational/recovery refs plus the single retained closed-unmerged Hama investigation branch. Open PRs: **0**; open Issues: **0**.
+- No production workflow or Cloudflare Pages deployment was triggered by these maintenance-only commits. No storefront source, customer data, prices, DNS, Supabase data, secrets, or billing configuration changed.
+- Branch protection remains unresolved: GitHub reports `main.protected=false` and zero repository rulesets. The connected GitHub integration is read-only for this administrative setting; configure a ruleset/branch protection through repository Settings before relying on mandatory checks.
