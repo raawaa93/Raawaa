@@ -119,7 +119,9 @@ const MERGED_PR_BRANCHES = Object.freeze([
   "maintenance/close-merged-branches-refresh-inventory-2026-11-15",
   "fix/remove-retired-route-build-guard-2026-11-21",
   "maintenance/retire-pr146-branches-2026-11-21",
-  "perf/responsive-product-images-2026-11-21"
+  "perf/responsive-product-images-2026-11-21",
+  // This PR uses a merge commit so its exact head is preserved in main before auto-pruning.
+  "maintenance/finalize-branch-archive-2026-11-21"
 ]);
 const SUPERSEDED_CLOSED_PR_BRANCHES = Object.freeze([
   "maintenance/retire-superseded-finalize-ref-2026-11-15",
