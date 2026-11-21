@@ -7,6 +7,9 @@ const ARCHIVE_BRANCHES = Object.freeze({
   "docs/agency-agents-adoption-2026-11-15": "0ae06ec6949034351d1a33d2de81180e99d11d83",
   // Closed PR #159: preserve this exact historical head in an archive tag before ref deletion.
   "docs/final-live-state-2026-11-21": "b617c56799a3d913878df4915a1c2a94ea273617",
+  // Unmerged experiment: preserve the exact runner branch before retiring its ref.
+  // The existing cleanup-merged-branches.yml workflow verifies the archive tag before deleting it.
+  "maintenance/branch-maintenance-runner-2026-11-21": "881720de49a7a3a3a28fde6102987de9f06ded31",
   "fix/exclude-dev-files-from-pages-payload-2026-11-15": "a4c976966be6d2193ccc76d216b3f0be3b76f27a",
 });
 const PROTECTED_PREFIXES = Object.freeze([

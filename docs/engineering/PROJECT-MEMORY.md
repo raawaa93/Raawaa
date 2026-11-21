@@ -473,3 +473,18 @@ This section supersedes earlier assumptions in this file about the Store's Supab
 
 - PR #161 is the only open PR. It contains exact-SHA policy and regression tests to remove merged PR #160's temporary branch, archive then remove closed PR #159's stale branch, and remove its own branch after merge.
 - Current ref count is 20: 17 durable operational/recovery refs plus three temporary refs. Do not claim the final 17-ref state until the archive and branch-cleanup workflows verify it.
+
+
+## Existing branch workflow and final archive — 2026-11-21
+
+- Confirmed `.github/workflows/cleanup-merged-branches.yml` already executes exact reviewed branch cleanup on pushes to `main` and weekly; it runs merged-head pruning before inactive-ref archival. No duplicate executor was added to main.
+- After PR #161 merged, the workflow removed the exact merged heads for PRs #160 and #161, and archived/deleted closed PR #159's exact branch head `b617c56799a3d913878df4915a1c2a94ea273617`. The archive tag `archive/branches/2026-11-21/docs/final-live-state-2026-11-21` resolves to the same inspected file blob as the archived commit.
+- The only remaining non-durable ref is an unmerged experiment `maintenance/branch-maintenance-runner-2026-11-21` at exact SHA `881720de49a7a3a3a28fde6102987de9f06ded31`. It will be archived through the existing policy workflow; do not merge its code or add a second executor.
+- Current branch count is 18: 17 durable refs plus the one reviewed archive candidate. The archive-policy PR branch is allowlisted for cleanup after its own merge; verify the final 17-ref state after the main-push workflow completes.
+
+
+## Archive policy PR #162 — 2026-11-21
+
+- PR #162 is the only open PR. Current branch count is 19: 17 durable refs plus the unmerged runner experiment and the active archive-policy PR branch.
+- The unmerged experiment is allowlisted at exact SHA `881720de49a7a3a3a28fde6102987de9f06ded31`; it must be archived before deletion by the existing branch-hygiene workflow.
+- The PR branch is allowlisted as an exact merged head so the same workflow can retire it after merge. Verify the tag target and final 17-ref inventory before marking branch cleanup complete.
