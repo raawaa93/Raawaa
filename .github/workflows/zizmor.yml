@@ -1,0 +1,57 @@
+name: GitHub Actions security analysis
+
+on:
+  pull_request:
+    branches: [main]
+    paths: ['.github/workflows/**', '.github/actions/**', 'dependabot.yml', '.agents/skills/github-actions-security/**', 'AGENTS.md']
+  push:
+    branches: [main]
+    paths: ['.github/workflows/**', '.github/actions/**', 'dependabot.yml', '.agents/skills/github-actions-security/**', 'AGENTS.md']
+  schedule:
+    - cron: '23 4 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rawaa-zizmor-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  audit:
+    name: Audit GitHub Actions workflows
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout exact source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Run zizmor static analysis
+        id: zizmor
+        continue-on-error: true # Advisory baseline until findings are triaged and branch rulesets are enabled.
+        uses: zizmorcore/zizmor-action@85b2b9fb8e3325e7a23d7d0a9d7ba5ae0f999e3e # v0.7.1
+        with:
+          version: '1.32.0'
+          online-audits: false
+          advanced-security: false
+          annotations: true
+          min-severity: low
+          min-confidence: medium
+          color: false
+      - name: Record advisory status
+        if: always()
+        shell: bash
+        env:
+          ZIZMOR_OUTCOME: ${{ steps.zizmor.outcome }}
+        run: |
+          {
+            echo '## GitHub Actions security analysis'
+            echo
+            echo "zizmor step outcome: ${ZIZMOR_OUTCOME}"
+            echo
+            echo 'This first baseline is advisory. Review annotations and triage findings before making it a required merge check.'
+          } >> "$GITHUB_STEP_SUMMARY"
