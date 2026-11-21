@@ -491,3 +491,9 @@ No customer/order data, product formulas, prices, discounts, shipping policy, ch
 
 - PostHog tools are now exposed in this session (two read/analysis actions). A read-only project listing confirms one `Default project`, onboarding incomplete, and no ingested events. Older entries in this registry that say PostHog tools were unavailable refer to earlier sessions and are historical, not current status. No event capture, SDK, token, or session replay is active.
 - The pinned zizmor v1.32.0 scan on workflow head `2a2cfd77c395013480d0c8c815f6aea1bfd1a182` completed successfully with no findings after action SHA pinning, permission narrowing, and the documented visual-QA exception. The workflow now fails on future findings. GitHub rulesets remain absent and are not editable through the current connector.
+
+
+## QA evidence — 2026-11-21
+
+- Visual QA run `44851816008` passed on 4 routes × 2 engines (Chromium/WebKit) × 2 viewports (iPhone 13/desktop): 16 cases, zero reported issues, overflow, broken images, console/page errors, failed requests, bad responses, or real CSP violations. Artifact: `rawaa-visual-qa-44851816008`.
+- Lighthouse run `44851816135` passed with 3 runs per route. Median Performance: home 99, serum 92, campaign 97, privacy 100; Accessibility and Best Practices 100 on all routes; SEO 100 except campaign 69 due to its intentional noindex. Serum mobile LCP median 3.11s (3.03–3.30s range), FCP median 1.99s, TBT 0–10ms, CLS 0. These are lab results from a localhost static server, not field metrics. Validate caching/TTFB on Cloudflare Pages; optimize serum hero/LCP delivery next. Campaign noindex must remain unchanged.
