@@ -538,3 +538,10 @@ This section supersedes earlier assumptions in this file about the Store's Supab
 - PR #172's rebased marketing launch-readiness branch is merged and will be pruned by exact merged-head SHA. The earlier PR #171 branch is closed unmerged and will be archived at its exact head before deletion.
 - Closed duplicate PR #174's branch is also archived at its exact head. PR #173's merged branch and PR #175's own branch are allowlisted for exact merged-head cleanup.
 - Keep the 17 durable operational/recovery refs. The existing branch workflow should leave 17 refs and zero open PRs after PR #175 merges.
+
+
+## Final branch cleanup — 2026-11-21
+
+- PR #172's rebased marketing changes are merged. The old PR #171 branch is closed and has no unique commits relative to main (`ahead_by=0)); it is now handled as a superseded closed-PR ref rather than a stale exact-SHA archive candidate.
+- `maintenance/archive-closed-pr174-2026-11-21` has no PR and is also proven to contain no unique commits (`ahead_by=0)); it is added to the reviewed no-PR cleanup list.
+- PR #176 adds tests for both ancestry checks and for its own exact merged-head cleanup. Expected result after the existing workflow: 17 durable refs, zero open PRs.
