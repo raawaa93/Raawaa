@@ -407,3 +407,14 @@ Required administrative follow-up: configure a `main` branch ruleset requiring p
 - PR #154 is a tooling/maintenance-only change. It updates archive tag dates to the actual execution date, removes duplicate skill attribution, and corrects the public registry; it does not change storefront payload.
 - The old no-PR audit branch is no longer a candidate for archival; it was merged as PR #153 and deleted through the merged-PR cleanup policy.
 - Branch protection/rulesets remain absent; all enumerated refs are `protected=false`. Repository-admin settings action remains required.
+
+
+## Final verified branch state — 2026-11-21 03:55 UTC
+
+- Canonical `main`: `cdb08a49b638d80a794d64bb8afc6c5def0c9e05`.
+- Live branch refs: **17**. All 17 are durable operational/recovery refs; there are no open PRs and no temporary work branches after the successful branch-hygiene run.
+- Retained refs: `main`; four `backup/*`; two `deploy/*`; four `preview-deploy/*`; one `production-deploy/*`; three `recovery/*`; one `release/*`; and one `restore/*`.
+- Branch-hygiene run [#44845577319](https://github.com/raawaa93/Raawaa/actions/runs/44845577319) succeeded. It inspected 18 refs and 154 PRs, removed only the exact merged PR #154 branch `maintenance/archive-noop-audit-branch-2026-11-21`, and retained every operational/recovery ref. The previously merged PR #153 branch had already been removed by the same exact-head policy.
+- The archive phase succeeded with zero remaining archive candidates; no new archive tags were required in this run.
+- The branch cleanup workflow and tests now treat the PR #153 branch as merged-PR work, not no-PR work. No stale no-PR candidate was added.
+- GitHub still reports no branch protection and no rulesets; every retained ref is `protected=false`. The repository is clean of temporary branches, but the missing main ruleset remains a material security gap requiring owner action.
