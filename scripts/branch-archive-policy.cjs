@@ -20,6 +20,8 @@ const ARCHIVE_BRANCHES = Object.freeze({
   "maintenance/archive-stale-pr168-2026-11-21": "0a7e47d3814b60640345a58d7f739ed6e19ac41d",
   // Closed duplicate PR #174: preserve its exact branch head before deletion.
   "maintenance/archive-duplicate-pr170-2026-11-21": "2558a850dce41d277ef186e7157b345beef7f5ad",
+  // Closed duplicate PR #176: preserve its exact superseded policy branch before deleting it.
+  "maintenance/archive-closed-pr174-2026-11-21": "8aa2cca363008add9770833cbeff3b7aed81b74c",
   // PR #171 was superseded by the merged rebase; ancestry-safe cleanup handles its old ref.
   "fix/exclude-dev-files-from-pages-payload-2026-11-15": "a4c976966be6d2193ccc76d216b3f0be3b76f27a",
 });
