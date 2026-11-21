@@ -186,3 +186,39 @@
 - الثالث: لا نربط أي API ولا نضيف نموذج اشتراك في المتجر قبل تحقق المزود والنطاق وسياسة الخصوصية وسجل موافقة بريد مستقل.
 
 **حالة التحقق:** بلد الكيان أصبح معلوماً (سوريا)، لكن لم يُنشأ حساب مزود ولم تُرسل مراسلة دعم من حساب المالك؛ تكامل GitHub الحالي لا يملك قناة مراسلة مع دعم هذه الشركات. لذلك لا أدعي الحصول على قبول فعلي. لا توجد تغييرات إنتاجية أو نقل بيانات أو رسائل مرسلة.
+
+## قنوات التواصل الرسمية ونص استفسار أهلية الكيان السوري
+
+تم التحقق من قنوات الاتصال المنشورة التالية:
+
+- **Elastic Email:** نموذج التواصل الرسمي https://elasticemail.com/contact أو البريد المنشور من Elastic Email: support@elasticemail.com. المصادر: https://elasticemail.com/contact وhttps://elasticemail.com/resources/terms/terms-of-use.
+- **Mailjet:** يوضح مركز المساعدة أن طلبات الدعم تُفتح من Support Center داخل الحساب، أو من صفحة تسجيل الدخول عبر خيار Contact us عند تعذر الدخول. الحساب المجاني الجديد يحصل على 30 يوماً من دعم التذاكر. المصدر: https://documentation.mailjet.com/hc/en-us/articles/5460904032795-How-to-Contact-Mailjet-Support.
+- **Mailjet Sales:** نموذج التواصل الرسمي للاستفسارات التجارية: https://www.mailjet.com/contact/sales/.
+
+### رسالة موحدة جاهزة للإرسال إلى المزودين
+
+**Subject:** Eligibility confirmation — Syrian-registered e-commerce business (Raawaa)
+
+Hello Compliance / Support Team,
+
+We are evaluating your email marketing / email delivery service for Raawaa, an e-commerce business registered and operating in Syria. Before creating an account or uploading any personal data, we need written confirmation of the following:
+
+1. Do your current terms and compliance policies allow a business legally registered and operating in Syria to create and use an account, including your Free plan?
+2. Can a Syrian business representative complete identity, phone (including a +963 number if required), and any other account verification steps using accurate Syrian business details?
+3. Are there restrictions on sending permission-based marketing emails for an e-commerce store selling fragrances, cosmetics, and branded beauty products? If any brand/product approval is required, please specify the process.
+4. Which legal entity will contract with us, and in which countries/regions are account, subscriber, event, and message data stored and processed? Please share your DPA and subprocessors list.
+5. Are there restrictions on payment methods or billing for a Syrian-registered business, even when starting on a no-card Free plan?
+6. What documentation do you require to verify the business and its beneficial owners, and are there any additional export-control or sanctions screening requirements?
+
+We will use only truthful business, address, ownership, and location information. We will not upload contacts or send messages until eligibility is confirmed and our sender domain and consent process are verified.
+
+Please confirm each point explicitly and link the applicable current policy or contractual clause.
+
+Regards,
+Raawaa Team
+
+**ملاحظة:** لا ترسل الرسالة قبل استبدال اسم النشاط/التوقيع إذا لزم، ولا ترفق وثائق هوية أو سجلات تجارية في أول استفسار. أرسل المستندات فقط عبر قناة آمنة يحددها المزود بعد توضيح سبب طلبها.
+
+### حالة التواصل
+
+هذه قنوات اتصال ونص جاهز موثق؛ لم تُرسل الرسائل بعد ولم يصل رد من أي مزود. لا نملك في تكاملات المشروع قناة دعم مباشرة داخل حسابات Elastic Email أو Mailjet، كما أن إنشاء تذكرة Mailjet يتطلب بريداً للحساب/تسجيل دخول. لذلك لا ندعي أن الاستفسار أُرسل أو أن الأهلية قُبلت.
