@@ -490,3 +490,10 @@ Required administrative follow-up: configure a `main` branch ruleset requiring p
 - Verified archive tag `archive/branches/2026-11-21/maintenance/branch-maintenance-runner-2026-11-21`: fetching `scripts/branch-archive-policy.cjs` through the tag and through the archived commit returned identical blob SHA `5e3a6447577a46a1dc63397209149941ff9bdcf2`. This verifies the archived source content is retained at the exact reviewed commit.
 - Temporary PR #162 branch is also absent from the live ref list. No operational, backup, recovery, deployment, preview, release, or restore refs were removed.
 - Branch cleanup is complete for this cycle. Do not run another cleanup pass against the 17 retained refs without a fresh inventory and exact-SHA review.
+
+
+## Final-ref reconciliation after PR #163 — 2026-11-21
+
+- The final 17-ref inventory above was verified after PR #162. A subsequent audit found three temporary refs that had not yet been retired: merged PR #163 branch `docs/final-branch-cleanup-verification-2026-11-21`; closed-unmerged PR #164 branch `maintenance/final-branch-state-2026-11-21` at exact SHA `71e11b7b3d861787e9e72d574879298f69251b6c`; and no-PR branch `maintenance/reconcile-concurrent-docs-2026-11-21`, which compares identical to main (`ahead_by=0, behind_by=0`).
+- PR #165 adds only exact reviewed retirement permissions: merged-head pruning for PR #163 and this PR, archive-first retirement of PR #164 at its exact SHA, and no-PR deletion only while the branch remains exactly even with main.
+- Before PR #165 merge: 20 refs = 17 durable refs + three temporary refs; no other open PRs. After the main-push workflow completes, expect 17 refs and zero open PRs. Verify the archive tag and exact final list.
