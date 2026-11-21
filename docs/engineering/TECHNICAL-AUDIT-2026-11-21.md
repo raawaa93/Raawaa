@@ -28,15 +28,15 @@
 - Main commit: `48fa6d2dba4edd3ae9350e61362de680aa288754`.
 - Tree enumeration: 335 paths; no path matching the retired microsite name remains in the current main tree.
 - Open pull requests: zero after PR #146 merged.
-- Branch enumeration immediately after PR #146: 18 refs. The additional merged working branch is `fix/remove-retired-route-build-guard-2026-11-21`; its retirement policy is being added separately. Do not treat the previous 17-ref snapshot as current until that cleanup completes.
-- Archive-tag enumeration: 40 archive refs. Retain all recovery tags unless individually reviewed.
+- Current live branch enumeration after PR #147 cleanup: **17 refs**, matching the durable operational/recovery inventory; zero open PRs. Archive-tag enumeration: **40 refs**. All recovery tags are retained.
+- Branch hygiene run [#44841319041](https://github.com/raawaa93/Raawaa/actions/runs/44841319041) inspected 19 refs/147 PRs and deleted exactly the merged PR #146 branch and its cleanup branch from the reviewed allowlist. All backup/recovery/deployment/preview/release/restore refs remain.
 
 ### PR #146 and the release failure
 
 - PR #146 removed obsolete route-specific deployment-builder exclusions/assertions from `scripts/build-deploy.mjs` and corrected the stale README inventory.
 - The prior production run `44838646326` passed browser regression, site policy checks, and 56 unit tests, then failed because the builder still required a retired-route robots directive that had already been removed.
 - PR #146 checks all passed: Store checks, offline Graphify, and mobile performance baseline.
-- PR #146 merged as `48fa6d2dba4edd3ae9350e61362de680aa288754`.
+- PR #146 merged as `48fa6d2dba4edd3ae9350e61362de680aa288754`. PR #147 then added exact-head cleanup permissions and unit coverage; it merged as `f8d4e945afbf693177444fc62f518a05bfefb322`, after which the two temporary refs were removed by the verified branch-hygiene run.
 
 ### Production pipeline and deployment
 
