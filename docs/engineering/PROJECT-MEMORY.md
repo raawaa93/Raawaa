@@ -488,3 +488,14 @@ This section supersedes earlier assumptions in this file about the Store's Supab
 - PR #162 is the only open PR. Current branch count is 19: 17 durable refs plus the unmerged runner experiment and the active archive-policy PR branch.
 - The unmerged experiment is allowlisted at exact SHA `881720de49a7a3a3a28fde6102987de9f06ded31`; it must be archived before deletion by the existing branch-hygiene workflow.
 - The PR branch is allowlisted as an exact merged head so the same workflow can retire it after merge. Verify the tag target and final 17-ref inventory before marking branch cleanup complete.
+
+
+## Final live verification after PR #162 — 2026-11-21
+
+- PR #162 merged successfully at `8a54490aef4966050792dcfe5013b37f5c34c247`; all three required checks passed: Store checks, repository policy validation, and offline Graphify.
+- Live GitHub branch enumeration after merge returned **17 refs**, exactly the durable operational/recovery set: `main`; four `backup/*`; two `deploy/*`; four `preview-deploy/*`; one `production-deploy/*`; three `recovery/*`; one `release/*`; and one `restore/*`.
+- Live open-PR enumeration returned **zero**.
+- Experimental branch `maintenance/branch-maintenance-runner-2026-11-21` is absent. Its exact commit SHA was `881720de49a7a3a3a28fde6102987de9f06ded31`.
+- Verified archive tag `archive/branches/2026-11-21/maintenance/branch-maintenance-runner-2026-11-21`: fetching `scripts/branch-archive-policy.cjs` through the tag and through the archived commit returned identical blob SHA `5e3a6447577a46a1dc63397209149941ff9bdcf2`. This verifies the archived source content is retained at the exact reviewed commit.
+- Temporary PR #162 branch is also absent from the live ref list. No operational, backup, recovery, deployment, preview, release, or restore refs were removed.
+- Branch cleanup is complete for this cycle. Do not run another cleanup pass against the 17 retained refs without a fresh inventory and exact-SHA review.
