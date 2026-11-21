@@ -32,8 +32,6 @@ const ARCHIVE_BRANCHES = Object.freeze({
   "docs/supabase-edge-auth-audit-2026-11-21": "6e73b8a315dbe6975c8ce1948c51eafc74a20242",
   // Merged PR #181: preserve the exact setup-python dependency update branch head.
   "dependabot/github_actions/actions/setup-python-7.1.0": "f583302ca899a4ee6db406957b8a522893b737c1",
-  // Merged PR #182: preserve the exact upload-artifact dependency update branch head.
-  "dependabot/github_actions/actions/upload-artifact-7.0.2": "779d7424c54bd46b98b30cfd610b985340e1e5db",
 });
 const PROTECTED_PREFIXES = Object.freeze([
   'backup/',
