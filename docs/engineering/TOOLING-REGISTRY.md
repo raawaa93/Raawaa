@@ -438,3 +438,10 @@ No customer/order data, product formulas, prices, discounts, shipping policy, ch
 - Current branch count after PR #153 cleanup: **18** = 17 durable operational/recovery refs plus the active PR #154 branch. No PostHog audit branch remains.
 - Public repository docs intentionally omit account-level ChatGPT permission overrides and connector project IDs. The private continuity page retains the read-only permission audit.
 - GitHub main branch protection/rulesets are still absent. The working GitHub connection has repository Admin, but its available tools cannot create rulesets or narrow the GitHub App installation scope.
+
+
+### Repository hygiene review — 2026-11-21 03:50 UTC
+
+- PR #154 is now based on current `main` commit `23db34ebf7b0d8d06788e085188eef78da5c93b0` through a two-parent merge commit, preserving its reviewed file tree while including PR #153's PostHog registry changes.
+- The PostHog audit branch is treated as a merged PR #153 head (`c20f2b8f647bc5542715cba74574cbdc422dc4ce`), not a no-PR ref. It is removed only by the merged-PR cleanup policy after exact head verification.
+- The PR's earlier failing checks exposed a stale archive-list assertion. The test and policy now move that branch to the merged-PR allowlist; fresh CI is required before merge.
