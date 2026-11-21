@@ -1,6 +1,6 @@
 # RAWAA Store tooling and skills registry
 
-**Last verified:** 2026-11-21 03:20 UTC  
+**Last verified:** 2026-11-21 00:43 UTC  
 **Policy:** use free tiers and included quotas; never activate billing or paid usage without a separate explicit instruction. Quota values below are dated snapshots, not permanent guarantees.
 
 ## Project source of truth
@@ -13,11 +13,11 @@
 - Agent rules: AGENTS.md
 - Branch rules: docs/engineering/BRANCH-INVENTORY.md
 - This registry is the inventory of connected tools and skills; update it when access, quota, or project architecture changes.
-- Complete Skills catalog: `docs/engineering/SKILL-REGISTRY.md` (151 entries).
+- Complete Skills catalog: `docs/engineering/SKILL-REGISTRY.md` (152 available workspace Skills).
 
 ## Connected tool families available in this ChatGPT workspace
 
-The current workspace inventory exposes **801 tool definitions across 24 integration families**, plus **151 skills**. This is a workspace-wide count, not a claim that every tool is connected to the RAWAA production account.
+The current workspace inventory exposes **817 tool definitions across 24 integration families**, plus **152 skills**. This is a workspace-wide count, not a claim that every tool is connected to the RAWAA production account.
 
 | Integration | Available tools | Project use / status |
 |---|---:|---|
@@ -368,7 +368,9 @@ This is the newest verified state and supersedes older connection, release, bran
 
 - Verified installed/available in this workspace for RAWAA work: GitHub, Cloudflare, Supabase, Notion, OpenSEO, Ahrefs, Context7, Figma, and Lovable. Their connection status and project suitability differ; a listed tool is not proof of a configured production integration.
 - OpenSEO is connected to Search Console. No GA4 property is visible in the connected Google account.
-- PostHog is now connected. The only non-demo project in the Raawaa organization is `Default project` (ID `756281`), with zero ingested events and session replay disabled. The organization has a one-project free-plan limit; use this project only after the user confirms it is the intended RAWAA Store analytics destination. See [PostHog pricing](https://posthog.com/pricing) and [project settings](https://posthog.com/docs/settings/projects).
+- PostHog is visible in ChatGPT permission settings, but its data tools are not exposed in this session. A previous connector audit reported one non-demo project named `Default project`; the project ID and ingestion state are intentionally not recorded in this public repository and are not independently verified here.
+- Confirm the intended destination project before writing any token. Do not add an SDK, enable autocapture/session replay, or change CSP until the consent/privacy implementation is approved.
+- Published free allowances include 1M analytics events, 5K recordings, 1M feature-flag requests, 100K exceptions, 1,500 survey responses, and 1M warehouse rows per month. No paid upgrade or billing action was made. See [PostHog pricing](https://posthog.com/pricing).
 - Linear was discovered but not recommended because Notion is already connected for project knowledge/tasks and another task tracker would duplicate workflow. Datadog is not recommended because the current static site can use GitHub/Cloudflare checks without a new observability bill. TinyFish remains prohibited.
 - No plugin was uninstalled, no billing enabled, and no paid API usage activated.
 
@@ -376,7 +378,7 @@ This is the newest verified state and supersedes older connection, release, bran
 
 1. Add GitHub `main` branch ruleset and restrict the GitHub App installation from all repositories to the smallest necessary repository set. Both require GitHub settings access unavailable through the current connector.
 2. Restore the second saved GitHub connection or remove it from future use after the user resolves the account-level 403. Do not route work through it while it is suspended.
-3. Confirm whether `Default project` (ID `756281`) is the intended RAWAA Store analytics destination. Then implement consent-first minimal event capture, with autocapture/session replay off by default and no personal/order/payment/WhatsApp data in event properties.
+3. Confirm the intended PostHog destination project. The current session exposes no PostHog data tools; do not write tokens or add instrumentation until the project and consent flow are confirmed.
 4. Reconcile the 18 live branch refs against the stale historical branch inventory; retain all recovery and deployment checkpoints, and archive the single same-as-main redundant ref only through the exact-SHA tag workflow.
 5. Continue improving the measured Lighthouse opportunities without relaxing existing CI thresholds.
 
@@ -411,7 +413,7 @@ No customer/order data, product formulas, prices, discounts, shipping policy, ch
 - OpenSEO crawl [audit `be7a9242-66cd-49a7-bb8d-a6892dc4acfc`](https://app.openseo.so/p/8609bf87-b153-41f8-b10c-c716c36a5c4f/audit?auditId=be7a9242-66cd-49a7-bb8d-a6892dc4acfc) completed all 7 discovered URLs. All 200 pages had one H1 and zero images missing alt text; `/index.html` redirected 308; the three `?product=` variants were informational canonicalized URLs, not errors. Campaign is intentionally noindex and absent from the indexable sitemap.
 - PR #151 merged as `834d7705597f8e2d13ea6976bcc7640260deecf3`, adding the project-local Modern Web Guidance skill and Apache-2.0 license. The current follow-up PR #152 scopes its triggers, pins CLI 1.0.1, disables telemetry, and adds policy tests.
 - The live main branch is now `834d7705597f8e2d13ea6976bcc7640260deecf3`; the production payload SHA is `e554489b78de8b280b1281b2c706d6acc42b5ad5`. The later commit only changes agent instructions, skill/docs, and tests; it does not change the deployed storefront payload.
-- The PostHog connector is connected, but project use is pending the user's confirmation of `Default project` (ID `756281`). No tracking code, session replay, or paid services were enabled.
+- PostHog is visible in ChatGPT plugin permission settings, but its data tools are not exposed in this session. A prior connector audit reported a `Default project`; this session cannot independently verify project ID, usage, or ingestion. No tracking code, session replay, or paid services were enabled.
 
 
 ## Follow-up closure — 2026-11-21 00:36 UTC
@@ -444,4 +446,14 @@ No customer/order data, product formulas, prices, discounts, shipping policy, ch
 
 - PR #154 is now based on current `main` commit `23db34ebf7b0d8d06788e085188eef78da5c93b0` through a two-parent merge commit, preserving its reviewed file tree while including PR #153's PostHog registry changes.
 - The PostHog audit branch is treated as a merged PR #153 head (`c20f2b8f647bc5542715cba74574cbdc422dc4ce`), not a no-PR ref. It is removed only by the merged-PR cleanup policy after exact head verification.
-- The PR's earlier failing checks exposed a stale archive-list assertion. The test and policy now move that branch to the merged-PR allowlist; fresh CI is required before merge.
+- The PR's earlier failing checks exposed a stale archive-list assertion. The test and policy now move that branch to the merged-PR allowlist; fresh CI passed before merge.
+
+
+## Current verified snapshot — 2026-11-21 00:43 UTC
+
+- Canonical `main`: `cdb08a49b638d80a794d64bb8afc6c5def0c9e05`.
+- PR #154 merged. Its branch was removed by the exact-head branch-hygiene workflow; current branch enumeration is **17 refs**, all durable backup/deploy/preview/production/recovery/release/restore refs plus main. There are **0 open PRs** at this snapshot.
+- Latest production payload remains Cloudflare deployment `349bd1d4-1254-40e1-b4ec-5f19c74176b9` from validated storefront commit `e554489b78de8b280b1281b2c706d6acc42b5ad5`. PR #154 changed only workflow/docs/tests and did not require a new Pages deployment.
+- Branch hygiene and disaster-recovery workflows triggered after PR #154; the prune job succeeded, the archive job found zero candidates, and no additional recovery/deployment refs were removed.
+- ChatGPT permission settings for GitHub, Cloudflare, Notion, OpenSEO, and PostHog have app-specific Allow-all overrides; this account-level audit is stored in the private Notion continuity record, not the public repository.
+- GitHub App installation still spans all repositories; main branch rulesets/branch protection remain absent. These settings require user-side GitHub settings access.
