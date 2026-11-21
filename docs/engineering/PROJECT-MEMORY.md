@@ -423,23 +423,14 @@ This section supersedes earlier assumptions in this file about the Store's Supab
 - No DNS, Pages domain binding, production source, Supabase schema/data, secrets, prices, discounts, delivery rules, customer/order data, or billing settings were changed during this checkpoint.
 
 
-## Comprehensive technical audit — 2026-11-21
+## Operational audit summary — 2026-11-21
 
-- Full evidence-backed audit recorded in [TECHNICAL-AUDIT-2026-11-21.md](TECHNICAL-AUDIT-2026-11-21.md). It covers repository, release, Cloudflare, storefront behavior, Supabase schemas/functions/security, SEO/Search Console, analytics, tool inventory, blockers, and next actions.
-- PR #146 removed the obsolete deployment-builder assertions and corrected README inventory. It merged as `48fa6d2dba4edd3ae9350e61362de680aa288754`.
-- Production run [#44840290249](https://github.com/raawaa93/Raawaa/actions/runs/44840290249) passed validation and deployment. Cloudflare deployment `7ea90c29-002b-403a-9b89-18d220544781` / [immutable URL](https://7ea90c29.raawaa-store.pages.dev) is successful and sourced from that exact commit.
-- Live production Visual QA [#44840577452](https://github.com/raawaa93/Raawaa/actions/runs/44840577452) passed 16 cases: four routes × Chromium/WebKit × iPhone 13/desktop. All returned HTTP 200, with zero automated issues, broken/incomplete visible images, console/CSP/page errors, failed/bad requests, horizontal overflow, or viewport-width mismatch. The artifact screenshots were downloaded and inspected.
-- Mobile Lighthouse [#44840290194](https://github.com/raawaa93/Raawaa/actions/runs/44840290194): median Performance home 99 (one 75 outlier), serum 87, campaign 96, privacy 100; Accessibility and Best Practices 100 throughout. Serum LCP 3.8s and image/render-blocking/cache/unused JS/CSS opportunities remain. Campaign SEO 69 is intentional because it is noindex.
-- The direct HTTP client in this audit runtime could not resolve Cloudflare Pages DNS; however, the GitHub Action runner reached the live production alias and performed the verified capture.
-- Search Console: URL-prefix property is verified as siteOwner; only the homepage is indexed. The last 28-day report contains one impression, zero clicks, and average position 73 for `rowaa`. Serum/privacy/campaign URLs were not yet recognized by Google. GA4 is not connected.
-- OpenSEO crawl completed 7 URLs with no critical/warning issues; three query variants are canonicalized as expected. Lighthouse was not part of that crawl.
-- Supabase remains shared staging/test infrastructure. The storefront still hands off to WhatsApp and does not directly insert orders. The two Store/commerce order tables each had zero rows. Six deployed functions exist; source export is blocked by a Supabase connector protocol error. JWT-off functions require source-level review before any change or production certification.
-- GitHub main remains unprotected and the rulesets list is empty; branch-protection API access returns 403. This is an account-administration blocker.
-- Cloudflare custom domain `rawaa.eu.org` is pending with `CNAME record not set`. No DNS or nameserver changes were made.
-- Runtime inventory: 817 tool definitions across 24 integration families and 152 Skills. Catalog presence is not equivalent to a project connection. Firecrawl remains quota-exhausted until its recorded renewal; Ahrefs workspace units are zero. TinyFish remains prohibited; Arena remains paused.
-- Branch inventory immediately after PR #146 had 18 refs because the merged PR branch had not yet been added to the exact cleanup allowlist. A reviewed follow-up adds both the PR #146 head and its own cleanup branch to the allowlist with unit coverage; branch retirement must be confirmed by the resulting workflow before reporting 17 refs again.
-- No prices, discount/delivery rules, DNS, Supabase schema/data, secrets, customer/order data, billing, or paid service activation were changed.
-
+- Detailed technical, infrastructure, and security findings are retained in the private Notion continuity record, not duplicated into this public repository.
+- PR #146 corrected the obsolete Pages build guard and merged as `48fa6d2dba4edd3ae9350e61362de680aa288754`. Production CI [#44840290249](https://github.com/raawaa93/Raawaa/actions/runs/44840290249) passed and deployed Cloudflare Pages deployment `7ea90c29-002b-403a-9b89-18d220544781`.
+- Live Visual QA [#44840577452](https://github.com/raawaa93/Raawaa/actions/runs/44840577452) passed 16 browser/route/device captures with zero reported layout or runtime issues.
+- Mobile Lighthouse baseline [#44840290194](https://github.com/raawaa93/Raawaa/actions/runs/44840290194) recorded Performance scores: home 99 median, serum 87, campaign 96, privacy 100; Accessibility and Best Practices 100.
+- Search Console has low early visibility; IndexNow accepted a submission for the canonical serum URL. GA4 property is not available on the connected Google account.
+- No pricing, delivery, payment, customer/order data, database schema, DNS, or billing changes were made.
 
 ## Branch cleanup closure — 2026-11-21
 
