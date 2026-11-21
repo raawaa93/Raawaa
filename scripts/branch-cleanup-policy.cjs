@@ -83,6 +83,7 @@ const MERGED_PR_BRANCHES = Object.freeze([
   "docs/record-final-archive-run-2026-11-15",
   "docs/integration-audit-2026-11-21",
   "perf/serum-css-pruning-2026-11-21",
+  "tooling/modern-web-guidance-2026-11-21",
   "feature/competitor-crawl4ai-weekly",
   "fix/competitor-crawl-runner",
   "fix/production-release-ancestry-fetch",
