@@ -396,3 +396,14 @@ Required administrative follow-up: configure a `main` branch ruleset requiring p
 - PR #154 updates archive tag dates to execution date and removes duplicate skill attribution; it also corrects branch cleanup policy. It must not archive the PostHog branch as no-PR work.
 - All 17 durable backup, deploy, preview, production-deploy, recovery, release, restore, and main refs remain preserved.
 - GitHub still reports no rulesets and every branch `protected=false`; main branch protection remains the highest-priority administrative fix.
+
+
+## Final live branch snapshot — 2026-11-21 03:48 UTC
+
+- Canonical `main`: `23db34ebf7b0d8d06788e085188eef78da5c93b0`.
+- PR #153 merged and its exact head branch `docs/posthog-integration-audit-2026-11-21` was removed by branch hygiene run [#44845158276](https://github.com/raawaa93/Raawaa/actions/runs/44845158276).
+- Current count: **18 refs** = 17 durable operational/recovery refs plus the active PR #154 branch `maintenance/archive-noop-audit-branch-2026-11-21`.
+- The 17 durable refs remain: main; four backups; two deploy checkpoints; four preview checkpoints; one production-deploy checkpoint; three recovery refs; one release ref; one restore ref.
+- PR #154 is a tooling/maintenance-only change. It updates archive tag dates to the actual execution date, removes duplicate skill attribution, and corrects the public registry; it does not change storefront payload.
+- The old no-PR audit branch is no longer a candidate for archival; it was merged as PR #153 and deleted through the merged-PR cleanup policy.
+- Branch protection/rulesets remain absent; all enumerated refs are `protected=false`. Repository-admin settings action remains required.
