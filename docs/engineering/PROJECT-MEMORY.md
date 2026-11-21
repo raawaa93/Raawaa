@@ -451,3 +451,11 @@ This section supersedes earlier assumptions in this file about the Store's Supab
 - The detailed technical audit remains in the Notion continuity record; the public copy is absent from the current repository tree. The earlier commit remains in Git history.
 - Current-session tool inventory: **817 total definitions** (802 connector/MCP tools across 21 provider families + 15 native tools) and **152 Skills**. PostHog was audited through a separate enabled session but no PostHog MCP actions are exposed in this session.
 - No product pricing, formulas, shipping/payment rules, WhatsApp checkout, customer/order data, Supabase schema/data, DNS, domain purchase, or billing changed.
+
+## Live tooling and repository refresh — 2026-11-21
+
+- The current ChatGPT session exposes **819 tool definitions**: **804 connector/MCP tools across 22 provider families** and **15 native tools**, plus **152 workspace Skills**. This is a workspace-wide capability count, not proof that every provider is connected to RAWAA.
+- PostHog MCP actions are now available in this session (two tools). No Store analytics instrumentation or session replay is active; confirm the intended destination and review consent/privacy before any SDK, token, CSP, or event-capture change.
+- Agency Agents remains a selectively adopted MIT instruction catalog from PR #145, not an execution runtime. Do not bulk-import its roster.
+- AgenC Core was reviewed as a separate MIT-licensed agent-runtime candidate. Keep it outside the static Store runtime; any pilot requires a separate host, provider, hard model budget, least-privilege permissions, and measurable baseline. Its published benchmark is project-reported, and model inference is not free.
+- During this audit, the open PR #157 head branch ref was absent even though the PR remained open. The branch was restored at its exact recorded head SHA before updating its tooling registry. Preserve open-PR heads in all future cleanup runs.
