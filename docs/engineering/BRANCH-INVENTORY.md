@@ -506,3 +506,10 @@ Required administrative follow-up: configure a `main` branch ruleset requiring p
 - PR #166's unique safe-cleanup intent is retained: PR #163 exact merged head, PR #164 exact closed-unmerged archive head, and exact no-PR ancestry checks. The relevant policies/tests already landed in PR #165.
 - PR #166 is closed as superseded; its exact latest head `31ff93d7ede35deaafff0373a92e5caa8cfc7822` is added to the archive allowlist so its ref is preserved before deletion.
 - The new PR #167 only reconciles this exact archive and its own branch cleanup. Do not remove any durable operational refs.
+
+
+## Final closed-PR branch archival — 2026-11-21
+
+- PR #167 merged the archive policy for PR #166 and removed the no-op branch; the repository returned to 17 durable refs.
+- A redundant closed PR #168 was then closed as superseded by PR #167. Its branch `maintenance/archive-closed-stale-refs-2026-11-21` remains at exact head `9ee3d444021971c3ee3882de844c0c6952dd6258`.
+- PR #169 adds only the exact archive SHA for that closed branch and a self-cleanup entry for its own merged head. Before opening PR #169, 19 refs were present: 17 durable refs plus the closed PR #168 branch and this PR branch. After merge and the existing workflow, expect 17 refs.
