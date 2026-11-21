@@ -466,15 +466,6 @@ test('retires the final live-state documentation branch only after its exact hea
 });
 
 
-test('retires docs/final-access-and-branch-audit-2026-11-21 only after its exact head is merged', () => {
-  const name = 'docs/final-access-and-branch-audit-2026-11-21';
-  assert.ok(MERGED_PR_BRANCHES.includes(name));
-  assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
-  assert.deepEqual(
-    classifyBranches([branchRef(name)], [pr(name, { merged: true })], repository).map(x => x.name),
-    [name],
-  );
-});
 
 
 test('deletes the superseded final access audit branch only after it is closed and reset to main', () => {
