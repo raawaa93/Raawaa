@@ -105,3 +105,13 @@ test('archives the exact unmerged runner experiment only when its reviewed SHA m
   assert.deepEqual(selectArchiveCandidates([branch(name, sha)], [], repository).map(x => x.name), [name]);
   assert.deepEqual(selectArchiveCandidates([branch(name, sha)], [pull(name, 'open')], repository), []);
 });
+
+
+test('archives the exact closed-unmerged PR #164 head after its useful notes are transferred', () => {
+  const name = 'maintenance/final-branch-state-2026-11-21';
+  const sha = '71e11b7b3d861787e9e72d574879298f69251b6c';
+  assert.equal(expectedArchiveShaMatches(branch(name, sha)), true);
+  assert.equal(expectedArchiveShaMatches(branch(name, 'moved-head')), false);
+  assert.deepEqual(selectArchiveCandidates([branch(name, sha)], [], repository).map(x => x.name), [name]);
+  assert.deepEqual(selectArchiveCandidates([branch(name, sha)], [pull(name, 'open')], repository), []);
+});
