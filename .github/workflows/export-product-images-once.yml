@@ -1,0 +1,61 @@
+name: RAWAA one-time responsive product image export
+
+on:
+  push:
+    branches:
+      - perf/responsive-product-images-2026-11-21
+
+permissions:
+  contents: write
+
+jobs:
+  encode:
+    if: github.event.head_commit.message != 'Add responsive product image derivatives'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout the isolated optimization branch
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.ref }}
+          fetch-depth: 0
+
+      - name: Install open-source image encoders
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y imagemagick webp libavif-bin
+
+      - name: Generate responsive AVIF, WebP, and JPEG derivatives
+        shell: bash
+        run: |
+          set -euo pipefail
+          for family in rosemary olive castor; do
+            source="assets/img/products/rawaa-${family}.jpg"
+            test -s "$source"
+            for width in 480 720 900; do
+              tmp="$(mktemp --suffix=.png)"
+              base="assets/img/products/rawaa-${family}-${width}"
+              convert "$source" -auto-orient -resize "${width}x" -strip -colorspace sRGB "$tmp"
+              avifenc -q 65 -s 6 -j 4 "$tmp" "${base}.avif"
+              cwebp -quiet -q 82 -m 6 "$tmp" -o "${base}.webp"
+              convert "$tmp" -strip -quality 82 "${base}.jpg"
+              rm -f "$tmp"
+              test -s "${base}.avif"
+              test -s "${base}.webp"
+              test -s "${base}.jpg"
+              actual="$(identify -format '%w' "${base}.jpg")"
+              test "$actual" = "$width"
+            done
+          done
+
+      - name: Report generated size and commit derivatives
+        shell: bash
+        run: |
+          set -euo pipefail
+          du -h assets/img/products/rawaa-{rosemary,olive,castor}-{480,720,900}.{avif,webp,jpg}
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/export-product-images-once.yml
+          git add assets/img/products/rawaa-rosemary-* assets/img/products/rawaa-olive-* assets/img/products/rawaa-castor-*
+          git commit -m "Add responsive product image derivatives"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
