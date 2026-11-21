@@ -400,3 +400,14 @@ test('retires the serum CSS optimization branch only after its exact head is mer
     [name],
   );
 });
+
+
+test('retires the Modern Web Guidance tooling branch only after its exact head is merged', () => {
+  const name = 'tooling/modern-web-guidance-2026-11-21';
+  assert.ok(MERGED_PR_BRANCHES.includes(name));
+  assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
+  assert.deepEqual(
+    classifyBranches([branchRef(name)], [pr(name, { merged: true })], repository).map(x => x.name),
+    [name],
+  );
+});
