@@ -6,6 +6,7 @@ const ARCHIVE_BRANCHES = Object.freeze({
   "performance/trim-serum-css-2026-11-15": "1449c8579d43b5535ef90d956daa8917c4e860a3",
   "docs/agency-agents-adoption-2026-11-15": "0ae06ec6949034351d1a33d2de81180e99d11d83",
   "fix/exclude-dev-files-from-pages-payload-2026-11-15": "a4c976966be6d2193ccc76d216b3f0be3b76f27a",
+  "docs/final-access-and-branch-audit-2026-11-21": "8fe861b2496db12242aee3b8d3362d656de3e47c",
 });
 const PROTECTED_PREFIXES = Object.freeze([
   'backup/',
