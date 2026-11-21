@@ -479,3 +479,31 @@ Required administrative follow-up: configure a `main` branch ruleset requiring p
 - Exact archive candidate: `maintenance/branch-maintenance-runner-2026-11-21` at `881720de49a7a3a3a28fde6102987de9f06ded31`.
 - PR #162 branch `maintenance/archive-experimental-runner-2026-11-21` is included in the exact merged-head cleanup allowlist and must be removed only after GitHub confirms its exact PR head is merged.
 - The existing `.github/workflows/cleanup-merged-branches.yml` runs after the main push, prunes exact merged heads, then creates and verifies the archive tag before deleting the reviewed experiment branch. Verify the archive tag and final **17-ref** count after the workflow completes.
+
+
+## Final branch cleanup verification — 2026-11-21
+
+- After PR #162 merged and the existing `.github/workflows/cleanup-merged-branches.yml` completed, the repository has **17 refs** and **zero open PRs**.
+- Retained refs:
+  - `main`
+  - `backup/continuity-hardening-2026-11-15`
+  - `backup/site-2026-11-14-post-mobile-audit`
+  - `backup/site-2026-11-14-restored-main`
+  - `backup/site-2026-11-15-preproduction`
+  - `deploy/10-percent-2026-11-14`
+  - `deploy/10-percent-site-only`
+  - `preview-deploy/visual-qa-after-csp-fix-2026-11-15`
+  - `preview-deploy/visual-qa-current-2026-11-15`
+  - `preview-deploy/2026-11-14`
+  - `preview-deploy/2026-11-15-main-78ece71`
+  - `production-deploy/release-2026-11-15`
+  - `recovery/archive-store-supabase-migrations-2026-11-15`
+  - `recovery/cloudflare-manifest-2026-11-14`
+  - `recovery/inspect-edge-functions-2026-11-15`
+  - `release/clean-pages-payload-2026-11-14`
+  - `restore/integrated-store-2026-11-14`
+- Merged temporary refs removed: `docs/tooling-refresh-2026-11-21`, `maintenance/cleanup-docs-branches-2026-11-21`, and `maintenance/archive-experimental-runner-2026-11-21`.
+- Closed-unmerged PR #159 ref archived then removed: `docs/final-live-state-2026-11-21` at exact SHA `b617c56799a3d913878df4915a1c2a94ea273617`; archive tag `archive/branches/2026-11-21/docs/final-live-state-2026-11-21`.
+- Unmerged experimental runner archived then removed: `maintenance/branch-maintenance-runner-2026-11-21` at exact SHA `881720de49a7a3a3a28fde6102987de9f06ded31`; archive tag `archive/branches/2026-11-21/maintenance/branch-maintenance-runner-2026-11-21`.
+- Both archive tags resolve to file blobs identical to their exact source commits; the workflow verifies the annotated tag target equals the captured branch SHA before deletion.
+- This final-state documentation branch is itself in the exact merged-head cleanup allowlist. After its PR merges, verify the count remains **17**.
