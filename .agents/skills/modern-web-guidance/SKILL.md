@@ -8,6 +8,8 @@ description: |
 
 # Modern Web Guidance
 
+> RAWAA local adaptation from GoogleChrome/modern-web-guidance, upstream commit `64a6d708f5a43f2cd3fde5d4d7db3905ba1bdf65`. Copyright Google LLC and contributors. Licensed under Apache-2.0; see `LICENSE`.
+
 Search and retrieve standardized modern web best practices when implementing or changing a browser-facing feature where current platform behavior or compatibility materially affects correctness, accessibility, performance, or security. Skip simple copy/text/markup edits and routine changes where external guidance would not change the implementation.
 
 ## Primary Workflow
