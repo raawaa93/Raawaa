@@ -554,7 +554,7 @@ This section supersedes earlier assumptions in this file about the Store's Supab
 
 ## Integration and tooling audit — 2026-11-21 04:00 UTC
 
-- Canonical `main` at audit start: `dfa64fe721dd9c803080b40ee51e46d20d62014e`; 17 branches and zero open PRs. GitHub rulesets endpoint returned `[]`; `main` is not protected. The active `raawaa93` GitHub installation has Admin permission on this repository. The separate Primary connection returns 403 and must not be treated as a fallback.
+- Canonical `main` at audit start: `dfa64fe721dd9c803080b40ee51e46d20d62014e`; 17 durable branches and zero open PRs before this maintenance branch. GitHub rulesets endpoint returned `[]`; `main` is not protected. The current repository connector does not expose a ruleset/branch-protection write operation.
 - Cloudflare read access is live. `raawaa-store` has a successful production deployment from `e554489b78de8b280b1281b2c706d6acc42b5ad5`; `rawaa.eu.org` remains pending because CNAME is absent. Web Analytics is not installed. No DNS or analytics changes were made.
 - Supabase `Ghaiooth-core` contains RAWAA staging/commerce schemas and six active Edge Functions; its security advisor reports 17 RLS-enabled tables without policies and leaked-password protection disabled. A read-only privilege audit confirms no `anon` or `authenticated` SELECT/INSERT grants on those affected application tables. The project also has one duplicate-index and ten unused-index notices. Treat these as review items, not permission to alter production schema or indexes.
 - `raawaa-engine-fallback` is a separate healthy project with seven RLS-enabled/no-policy tables and no `anon`/`authenticated` SELECT grants. No row data was read or changed in either project.
