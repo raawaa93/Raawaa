@@ -10,6 +10,8 @@ const ARCHIVE_BRANCHES = Object.freeze({
   // Unmerged experiment: preserve the exact runner branch before retiring its ref.
   // The existing cleanup-merged-branches.yml workflow verifies the archive tag before deleting it.
   "maintenance/branch-maintenance-runner-2026-11-21": "881720de49a7a3a3a28fde6102987de9f06ded31",
+  // Closed PR #164: preserve its exact superseded documentation head before deleting the ref.
+  "maintenance/final-branch-state-2026-11-21": "71e11b7b3d861787e9e72d574879298f69251b6c",
   "fix/exclude-dev-files-from-pages-payload-2026-11-15": "a4c976966be6d2193ccc76d216b3f0be3b76f27a",
 });
 const PROTECTED_PREFIXES = Object.freeze([
