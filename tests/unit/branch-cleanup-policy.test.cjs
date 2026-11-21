@@ -581,3 +581,12 @@ test('retires the exact PR169 archive branch after its own head merges', () => {
     [name],
   );
 });
+
+
+test('retires the exact archive PR #171 branch after its own head merges', () => {
+  const name = 'maintenance/archive-duplicate-pr170-2026-11-21';
+  const head = 'pr171-archive-head';
+  assert.ok(MERGED_PR_BRANCHES.includes(name));
+  assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
+  assert.deepEqual(classifyBranches([branchRef(name, { sha: head })], [pr(name, { merged: true, sha: head })], repository).map(x => x.name), [name]);
+});
