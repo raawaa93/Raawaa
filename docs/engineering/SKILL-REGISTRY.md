@@ -209,3 +209,7 @@ This is an inventory, not a claim that every Skill is active in every turn. Skil
 - The repository includes one reviewed project-local `.agents/skills/modern-web-guidance/` package (Apache-2.0, upstream GoogleChrome source). Other skill collections remain references only.
 - For UI work, select a small compatible design skill set rather than stacking overlapping design rule packs.
 - For browser QA, retain the existing Playwright Chromium/WebKit stack; do not add a second browser automation framework without a demonstrated gap.
+
+## Additional project-local Skill — 2026-11-21
+
+- **GitHub Actions Security** — `.agents/skills/github-actions-security/SKILL.md`. Original project-specific guidance for reviewing workflow triggers, permissions, action pinning, credential persistence, shell injection, untrusted PR execution, and deployment boundaries. It uses the repository's pinned zizmor-action v0.8.1 and CLI v1.32.0 workflow as its evidence source. It is not counted among the 152 global workspace Skills.

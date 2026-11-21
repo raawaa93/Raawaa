@@ -7,6 +7,8 @@ updates:
       day: monday
       time: "06:00"
       timezone: Etc/UTC
+    cooldown:
+      default-days: 7
     open-pull-requests-limit: 5
     groups:
       playwright:
@@ -19,4 +21,6 @@ updates:
       day: monday
       time: "06:15"
       timezone: Etc/UTC
+    cooldown:
+      default-days: 7
     open-pull-requests-limit: 5

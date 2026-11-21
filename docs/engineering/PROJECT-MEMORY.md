@@ -551,3 +551,35 @@ This section supersedes earlier assumptions in this file about the Store's Supab
 
 - PR #176 was closed as superseded by merged PR #177; it was not merged. Its exact branch head `8aa2cca363008add9770833cbeff3b7aed81b74c` is preserved through the archive-first policy in PR #178.
 - PR #178's own branch is allowlisted for exact merged-head cleanup. Expected post-workflow state: 17 durable refs, zero open PRs.
+
+## Integration and tooling audit — 2026-11-21 04:00 UTC
+
+- Canonical `main` at audit start: `dfa64fe721dd9c803080b40ee51e46d20d62014e`; 17 durable branches and zero open PRs before this maintenance branch. GitHub rulesets endpoint returned `[]`; `main` is not protected. The current repository connector does not expose a ruleset/branch-protection write operation.
+- Cloudflare read access is live. `raawaa-store` has a successful production deployment from `e554489b78de8b280b1281b2c706d6acc42b5ad5`; `rawaa.eu.org` remains pending because CNAME is absent. Web Analytics is not installed. No DNS or analytics changes were made.
+- Supabase `Ghaiooth-core` contains RAWAA staging/commerce schemas and six active Edge Functions; its security advisor reports 17 RLS-enabled tables without policies and leaked-password protection disabled. A read-only privilege audit confirms no `anon` or `authenticated` SELECT/INSERT grants on those affected application tables. The project also has one duplicate-index and ten unused-index notices. Treat these as review items, not permission to alter production schema or indexes.
+- `raawaa-engine-fallback` is a separate healthy project with seven RLS-enabled/no-policy tables and no `anon`/`authenticated` SELECT grants. No row data was read or changed in either project.
+- PostHog's Default project has not completed onboarding and has ingested no events; no tracking is active. Figma is connected with View-only seat. Plugin search confirms the core GitHub, OpenSEO, Lovable, Ahrefs, PostHog, and Figma integrations are already installed; no redundant app was added. TinyFish remains excluded.
+- Added the project-local GitHub Actions Security skill and a pinned zizmor workflow to audit workflow supply-chain risks. The final workflow scan on `2a2cfd77c395013480d0c8c815f6aea1bfd1a182` passed with no findings; the workflow is blocking on future findings. GitHub rulesets remain unavailable through the connector.
+
+
+## Security audit follow-up — 2026-11-21
+
+- Initial zizmor v1.32.0 scan identified unpinned GitHub Actions references and broad default permissions. All discovered action/reusable-workflow references were pinned to immutable commit SHAs; workflow-level permissions default to `contents: read`; write access is scoped to the branch-pruning job; Playwright is explicitly read-only; Dependabot updates now have a 7-day cooldown.
+- `visual-qa.yml` keeps a narrowly documented `workflow_run` exception: it checks out the default branch, has read-only contents permission, receives no secrets, and audits fixed public Pages URLs. The zizmor ignore is scoped to that single trigger.
+- The zizmor workflow now fails on findings. Its previous run still showed two default-permission warnings in the branch-hygiene workflow; the workflow-level `contents: read` fix is now committed, and the exact-head rescan is pending.
+- The PR Lighthouse config was changed from one run to three to reduce false failures from a single noisy mobile performance sample. The first one-run sample scored homepage Performance 0.76 against the 0.80 threshold; this is not evidence of a production regression. The exact-head three-run median must pass before merge.
+- PR #179 remains open and documentation/CI-only. Do not merge until the final exact-head Store checks, Playwright, Visual QA, Lighthouse, OSV, repository-policy, Graphify, and blocking zizmor results are reviewed. No production deployment or website source change is included.
+
+
+## Current-session reconciliation — 2026-11-21
+
+- PostHog tools are now exposed in this session (two read/analysis actions). A read-only project listing confirms one `Default project`, onboarding incomplete, and no ingested events. Earlier notes saying PostHog tools were unavailable refer to a prior session; they are no longer current. No SDK, token, event capture, or session replay is active.
+- The latest clean zizmor run reviewed all 14 workflow/config files on commit `2a2cfd77c395013480d0c8c815f6aea1bfd1a182`. The only subsequent changes are documentation/registry updates, not workflow changes. The PR's full validation on the latest docs head is still being rerun.
+
+
+## Full browser and mobile performance audit — 2026-11-21
+
+- Reviewed completed visual-QA artifact from run `44851816008`: 16 combinations covering four routes (`/`, `/serum.html`, `/campaign.html`, `/privacy.html`), Chromium and WebKit, iPhone 13 and 1440px desktop. All routes returned HTTP 200. No horizontal overflow, broken/incomplete visible images, console errors, page errors, failed requests, bad HTTP responses, or real CSP violations were reported; `issues` is empty. Interactive screenshots were captured for the serum size selector and usage ritual.
+- Reviewed Lighthouse CI artifact from run `44851816135`: three runs per route. Median category scores: homepage Performance 99 / Accessibility 100 / Best Practices 100 / SEO 100; serum Performance 92 / Accessibility 100 / Best Practices 100 / SEO 100; campaign Performance 97 / Accessibility 100 / Best Practices 100 / SEO 69; privacy Performance 100 / Accessibility 100 / Best Practices 100 / SEO 100. Campaign SEO 69 is expected because its `noindex` is intentional; do not remove it to satisfy generic SEO assertions.
+- Serum mobile LCP measured 3.03–3.30s across the three runs (median 3.11s), while FCP was 1.98–2.02s; TBT 0–10ms and CLS 0. The primary optimization opportunity is the product page's above-the-fold/LCP delivery. Homepage LCP was about 1.20s; campaign about 2.48s; privacy about 1.05s. These are local CI Lighthouse measurements, not field/Core Web Vitals data from real visitors.
+- Several warning-level Lighthouse assertions reflect localhost/static-server limitations or intentional behavior: cache lifetime and document latency should be checked on the deployed Cloudflare Pages origin; unminified assets are a potential optimization, not a functional defect; campaign `is-crawlable` and SEO warnings are expected from intentional noindex. The PR checks completed successfully and artifacts were retained for review.

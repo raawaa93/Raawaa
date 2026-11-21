@@ -1,15 +1,14 @@
 name: RAWAA repository branch hygiene
 
+permissions:
+  contents: read
+
 on:
   push:
     branches: [main]
   schedule:
     - cron: '45 4 * * 0'
   workflow_dispatch:
-
-permissions:
-  contents: write
-  pull-requests: read
 
 concurrency:
   group: rawaa-branch-hygiene
@@ -19,16 +18,19 @@ jobs:
   prune:
     name: Prune reviewed obsolete branch refs
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: read
     timeout-minutes: 15
     steps:
       - name: Checkout canonical policy
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: main
           persist-credentials: false
 
       - name: Delete only policy-approved branch refs
-        uses: actions/github-script@v9
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           script: |
             const path = `${process.env.GITHUB_WORKSPACE}/scripts/branch-cleanup-policy.cjs`;
@@ -128,13 +130,13 @@ jobs:
     timeout-minutes: 20
     steps:
       - name: Checkout archive policy
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: main
           persist-credentials: false
 
       - name: Create durable tags before retiring inactive refs
-        uses: actions/github-script@v9
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           script: |
             const path = `${process.env.GITHUB_WORKSPACE}/scripts/branch-archive-policy.cjs`;

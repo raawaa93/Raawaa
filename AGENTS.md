@@ -13,6 +13,7 @@
 ## Design and implementation skills
 Use these upstream skills as specialist references when a Codex environment has them installed:
 - Emil Kowalski design engineering: https://github.com/emilkowalski/skills (MIT). Install the upstream collection with `npx skills@latest add emilkowalski/skills -a codex`.
+- GitHub Actions Security: project-local workflow review guidance at `.agents/skills/github-actions-security/`; use the pinned zizmor CI audit to detect risky triggers, permissions, credential persistence, unpinned actions, and injection paths. Review findings before changing workflows; do not suppress findings simply to green the check.
 - Google Chrome Modern Web Guidance: local adaptation at `.agents/skills/modern-web-guidance/` (Apache-2.0, upstream source commit `64a6d708f5a43f2cd3fde5d4d7db3905ba1bdf65`, CLI pinned to `modern-web-guidance@1.0.1`). Use it for non-trivial browser-platform work: responsive image loading, accessibility, Core Web Vitals, forms/validation, modern CSS/DOM APIs, browser compatibility, and client-side security. Skip trivial copy/text/markup edits and routine changes where it will not materially improve the result. Set `DISABLE_TELEMETRY=1` on every invocation; if network access is blocked, do not bypass the environment. Development-time only; never add it to production dependencies.
 - Taste Skill: https://github.com/Leonxlnx/taste-skill (MIT). The upstream README documents the Codex plugin installation:
   `codex plugin marketplace add Leonxlnx/taste-skill`

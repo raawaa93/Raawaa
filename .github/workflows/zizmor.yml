@@ -1,0 +1,57 @@
+name: GitHub Actions security analysis
+# Blocking static analysis; see .agents/skills/github-actions-security/SKILL.md.
+
+on:
+  pull_request:
+    branches: [main]
+    paths: ['.github/workflows/**', '.github/actions/**', 'dependabot.yml', '.agents/skills/github-actions-security/**', 'AGENTS.md']
+  push:
+    branches: [main]
+    paths: ['.github/workflows/**', '.github/actions/**', 'dependabot.yml', '.agents/skills/github-actions-security/**', 'AGENTS.md']
+  schedule:
+    - cron: '23 4 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rawaa-zizmor-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  audit:
+    name: Audit GitHub Actions workflows
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout exact source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Run zizmor static analysis
+        id: zizmor
+        uses: zizmorcore/zizmor-action@45d7276c9ca790aabd705e31ca99c6185c3e76dd # v0.8.1
+        with:
+          version: '1.32.0'
+          online-audits: false
+          advanced-security: false
+          annotations: true
+          min-severity: low
+          min-confidence: medium
+          color: false
+      - name: Record audit status
+        if: always()
+        shell: bash
+        env:
+          ZIZMOR_OUTCOME: ${{ steps.zizmor.outcome }}
+        run: |
+          {
+            echo '## GitHub Actions security analysis'
+            echo
+            echo "zizmor step outcome: ${ZIZMOR_OUTCOME}"
+            echo
+            echo 'Findings fail this workflow. GitHub branch rulesets must still require this check to enforce it before merge.'
+          } >> "$GITHUB_STEP_SUMMARY"
