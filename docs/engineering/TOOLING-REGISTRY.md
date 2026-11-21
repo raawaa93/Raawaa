@@ -400,3 +400,15 @@ No customer/order data, product formulas, prices, discounts, shipping policy, ch
 - Repository commands pin the CLI and set `DISABLE_TELEMETRY=1`; no analytics beacon, external model API, paid service, or package dependency was added.
 - Use focused guides only for non-trivial UI/platform tasks; skip trivial copy and markup edits. The pinned CLI is invoked with `DISABLE_TELEMETRY=1`; do not send private project or customer data in search queries. Validate resulting changes through the existing Playwright and Lighthouse pipelines.
 - Other high-profile skill repositories were reviewed but not bulk-imported: `mattpocock/skills` and `addyosmani/agent-skills` overlap with the existing Superpowers/TDD/review stack; `cloudflare/security-audit-skill` requires isolated execution sandboxing and parallel subagents not available in the current hosted environment, so it remains a reviewed candidate rather than an active workflow.
+
+
+## Production and crawl verification — 2026-11-21 00:35 UTC
+
+- PR #149 stylesheet optimization merged as `e554489b78de8b280b1281b2c706d6acc42b5ad5`. Production CI [#44844282044](https://github.com/raawaa93/Raawaa/actions/runs/44844282044) completed successfully, including the clean Pages build and published security-header verification.
+- Cloudflare Pages deployment `349bd1d4-1254-40e1-b4ec-5f19c74176b9` is `success` at [https://349bd1d4.raawaa-store.pages.dev](https://349bd1d4.raawaa-store.pages.dev), serving the validated PR #149 payload.
+- Post-deploy Visual QA [#44844485736](https://github.com/raawaa93/Raawaa/actions/runs/44844485736) succeeded with `issues: []`; the screenshot/report artifact is attached to that run.
+- Post-deploy mobile performance audit [#44844282027](https://github.com/raawaa93/Raawaa/actions/runs/44844282027) succeeded. Non-blocking warnings remain for document latency, cache/render-blocking resources, unminified CSS/JS, and serum FCP/LCP; campaign crawlability/SEO warnings are expected because `campaign.html` intentionally declares `noindex,follow`.
+- OpenSEO crawl [audit `be7a9242-66cd-49a7-bb8d-a6892dc4acfc`](https://app.openseo.so/p/8609bf87-b153-41f8-b10c-c716c36a5c4f/audit?auditId=be7a9242-66cd-49a7-bb8d-a6892dc4acfc) completed all 7 discovered URLs. All 200 pages had one H1 and zero images missing alt text; `/index.html` redirected 308; the three `?product=` variants were informational canonicalized URLs, not errors. Campaign is intentionally noindex and absent from the indexable sitemap.
+- PR #151 merged as `834d7705597f8e2d13ea6976bcc7640260deecf3`, adding the project-local Modern Web Guidance skill and Apache-2.0 license. The current follow-up PR #152 scopes its triggers, pins CLI 1.0.1, disables telemetry, and adds policy tests.
+- The live main branch is now `834d7705597f8e2d13ea6976bcc7640260deecf3`; the production payload SHA is `e554489b78de8b280b1281b2c706d6acc42b5ad5`. The later commit only changes agent instructions, skill/docs, and tests; it does not change the deployed storefront payload.
+- The plugin suggestion for PostHog remains pending user connection; no tracking code was added. No paid services or billing were enabled.
