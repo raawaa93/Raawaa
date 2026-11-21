@@ -368,7 +368,6 @@ test('retires only exact reviewed merged working branches after merge', () => {
     'fix/remove-retired-route-build-guard-2026-11-21',
     'maintenance/retire-pr146-branches-2026-11-21',
     'perf/responsive-product-images-2026-11-21',
-    'perf/serum-css-pruning-2026-11-21',
   ];
   for (const name of names) {
     assert.ok(MERGED_PR_BRANCHES.includes(name));
@@ -378,4 +377,26 @@ test('retires only exact reviewed merged working branches after merge', () => {
       [name],
     );
   }
+});
+
+
+test('retires the integration audit documentation branch only after its exact head is merged', () => {
+  const name = 'docs/integration-audit-2026-11-21';
+  assert.ok(MERGED_PR_BRANCHES.includes(name));
+  assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
+  assert.deepEqual(
+    classifyBranches([branchRef(name)], [pr(name, { merged: true })], repository).map(x => x.name),
+    [name],
+  );
+});
+
+
+test('retires the serum CSS optimization branch only after its exact head is merged', () => {
+  const name = 'perf/serum-css-pruning-2026-11-21';
+  assert.ok(MERGED_PR_BRANCHES.includes(name));
+  assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
+  assert.deepEqual(
+    classifyBranches([branchRef(name)], [pr(name, { merged: true })], repository).map(x => x.name),
+    [name],
+  );
 });
