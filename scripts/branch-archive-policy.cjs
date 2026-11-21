@@ -24,6 +24,14 @@ const ARCHIVE_BRANCHES = Object.freeze({
   "maintenance/archive-closed-pr174-2026-11-21": "8aa2cca363008add9770833cbeff3b7aed81b74c",
   // PR #171 was superseded by the merged rebase; ancestry-safe cleanup handles its old ref.
   "fix/exclude-dev-files-from-pages-payload-2026-11-15": "a4c976966be6d2193ccc76d216b3f0be3b76f27a",
+  // Merged PR #179: preserve the exact security-hardening branch head before retiring its ref.
+  "security/zizmor-github-actions-2026-11-21": "80de5fe20505442a3eb1c98363745f139bc49a2b",
+  // Merged PR #183: preserve the exact marketing documentation branch head.
+  "marketing/raawaa-video-scripts-2026-11-21": "09dbebab50f21292ce516cfe6cd9365a5f546023",
+  // Merged PR #184: preserve the exact Supabase/LCP audit documentation branch head.
+  "docs/supabase-edge-auth-audit-2026-11-21": "6e73b8a315dbe6975c8ce1948c51eafc74a20242",
+  // Merged PR #181: preserve the exact setup-python dependency update branch head.
+  "dependabot/github_actions/actions/setup-python-7.1.0": "f583302ca899a4ee6db406957b8a522893b737c1",
 });
 const PROTECTED_PREFIXES = Object.freeze([
   'backup/',
