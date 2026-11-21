@@ -90,12 +90,12 @@
       "price": 2000,
       "image": {
         "base": "rosemary-caffeine",
-        "avif": [],
-        "webp": [],
-        "widths": [],
-        "src": "assets/img/products/rawaa-rosemary.jpg",
-        "width": 1024,
-        "height": 1280,
+        "avif": ["rawaa-rosemary-480.avif", "rawaa-rosemary-720.avif", "rawaa-rosemary-900.avif"],
+        "webp": ["rawaa-rosemary-480.webp", "rawaa-rosemary-720.webp", "rawaa-rosemary-900.webp"],
+        "widths": [480, 720, 900],
+        "src": "assets/img/products/rawaa-rosemary-480.jpg",
+        "width": 480,
+        "height": 480,
         "alt": "تصوّر تصميمي لعبوة رواء · روزماري وكافيين"
       }
     },
@@ -111,12 +111,12 @@
       "badge": "الأنسب للاستعمال اليومي",
       "image": {
         "base": "rosemary-caffeine",
-        "avif": [],
-        "webp": [],
-        "widths": [],
-        "src": "assets/img/products/rawaa-rosemary.jpg",
-        "width": 1024,
-        "height": 1280,
+        "avif": ["rawaa-rosemary-480.avif", "rawaa-rosemary-720.avif", "rawaa-rosemary-900.avif"],
+        "webp": ["rawaa-rosemary-480.webp", "rawaa-rosemary-720.webp", "rawaa-rosemary-900.webp"],
+        "widths": [480, 720, 900],
+        "src": "assets/img/products/rawaa-rosemary-480.jpg",
+        "width": 480,
+        "height": 480,
         "alt": "تصوّر تصميمي لعبوة رواء · روزماري وكافيين"
       }
     },
@@ -131,12 +131,12 @@
       "price": 2800,
       "image": {
         "base": "rosemary-caffeine",
-        "avif": [],
-        "webp": [],
-        "widths": [],
-        "src": "assets/img/products/rawaa-rosemary.jpg",
-        "width": 1024,
-        "height": 1280,
+        "avif": ["rawaa-rosemary-480.avif", "rawaa-rosemary-720.avif", "rawaa-rosemary-900.avif"],
+        "webp": ["rawaa-rosemary-480.webp", "rawaa-rosemary-720.webp", "rawaa-rosemary-900.webp"],
+        "widths": [480, 720, 900],
+        "src": "assets/img/products/rawaa-rosemary-480.jpg",
+        "width": 480,
+        "height": 480,
         "alt": "تصوّر تصميمي لعبوة رواء · روزماري وكافيين"
       }
     },
@@ -151,12 +151,12 @@
       "price": 1800,
       "image": {
         "base": "olive-panthenol",
-        "avif": [],
-        "webp": [],
-        "widths": [],
-        "src": "assets/img/products/rawaa-olive.jpg",
-        "width": 1024,
-        "height": 1280,
+        "avif": ["rawaa-olive-480.avif", "rawaa-olive-720.avif", "rawaa-olive-900.avif"],
+        "webp": ["rawaa-olive-480.webp", "rawaa-olive-720.webp", "rawaa-olive-900.webp"],
+        "widths": [480, 720, 900],
+        "src": "assets/img/products/rawaa-olive-480.jpg",
+        "width": 480,
+        "height": 480,
         "alt": "تصوّر تصميمي لعبوة رواء · زيت الزيتون والبانثينول"
       }
     },
@@ -172,12 +172,12 @@
       "badge": "الأنسب للاستعمال اليومي",
       "image": {
         "base": "olive-panthenol",
-        "avif": [],
-        "webp": [],
-        "widths": [],
-        "src": "assets/img/products/rawaa-olive.jpg",
-        "width": 1024,
-        "height": 1280,
+        "avif": ["rawaa-olive-480.avif", "rawaa-olive-720.avif", "rawaa-olive-900.avif"],
+        "webp": ["rawaa-olive-480.webp", "rawaa-olive-720.webp", "rawaa-olive-900.webp"],
+        "widths": [480, 720, 900],
+        "src": "assets/img/products/rawaa-olive-480.jpg",
+        "width": 480,
+        "height": 480,
         "alt": "تصوّر تصميمي لعبوة رواء · زيت الزيتون والبانثينول"
       }
     },
@@ -192,12 +192,12 @@
       "price": 2600,
       "image": {
         "base": "olive-panthenol",
-        "avif": [],
-        "webp": [],
-        "widths": [],
-        "src": "assets/img/products/rawaa-olive.jpg",
-        "width": 1024,
-        "height": 1280,
+        "avif": ["rawaa-olive-480.avif", "rawaa-olive-720.avif", "rawaa-olive-900.avif"],
+        "webp": ["rawaa-olive-480.webp", "rawaa-olive-720.webp", "rawaa-olive-900.webp"],
+        "widths": [480, 720, 900],
+        "src": "assets/img/products/rawaa-olive-480.jpg",
+        "width": 480,
+        "height": 480,
         "alt": "تصوّر تصميمي لعبوة رواء · زيت الزيتون والبانثينول"
       }
     },
@@ -212,12 +212,12 @@
       "price": 1800,
       "image": {
         "base": "castor-blend",
-        "avif": [],
-        "webp": [],
-        "widths": [],
-        "src": "assets/img/products/rawaa-castor.jpg",
-        "width": 1024,
-        "height": 1280,
+        "avif": ["rawaa-castor-480.avif", "rawaa-castor-720.avif", "rawaa-castor-900.avif"],
+        "webp": ["rawaa-castor-480.webp", "rawaa-castor-720.webp", "rawaa-castor-900.webp"],
+        "widths": [480, 720, 900],
+        "src": "assets/img/products/rawaa-castor-480.jpg",
+        "width": 480,
+        "height": 480,
         "alt": "تصوّر تصميمي لعبوة رواء · خروع وزيوت مختارة"
       }
     },
@@ -233,12 +233,12 @@
       "badge": "الأنسب للاستعمال اليومي",
       "image": {
         "base": "castor-blend",
-        "avif": [],
-        "webp": [],
-        "widths": [],
-        "src": "assets/img/products/rawaa-castor.jpg",
-        "width": 1024,
-        "height": 1280,
+        "avif": ["rawaa-castor-480.avif", "rawaa-castor-720.avif", "rawaa-castor-900.avif"],
+        "webp": ["rawaa-castor-480.webp", "rawaa-castor-720.webp", "rawaa-castor-900.webp"],
+        "widths": [480, 720, 900],
+        "src": "assets/img/products/rawaa-castor-480.jpg",
+        "width": 480,
+        "height": 480,
         "alt": "تصوّر تصميمي لعبوة رواء · خروع وزيوت مختارة"
       }
     },
@@ -253,12 +253,12 @@
       "price": 2600,
       "image": {
         "base": "castor-blend",
-        "avif": [],
-        "webp": [],
-        "widths": [],
-        "src": "assets/img/products/rawaa-castor.jpg",
-        "width": 1024,
-        "height": 1280,
+        "avif": ["rawaa-castor-480.avif", "rawaa-castor-720.avif", "rawaa-castor-900.avif"],
+        "webp": ["rawaa-castor-480.webp", "rawaa-castor-720.webp", "rawaa-castor-900.webp"],
+        "widths": [480, 720, 900],
+        "src": "assets/img/products/rawaa-castor-480.jpg",
+        "width": 480,
+        "height": 480,
         "alt": "تصوّر تصميمي لعبوة رواء · خروع وزيوت مختارة"
       }
     }

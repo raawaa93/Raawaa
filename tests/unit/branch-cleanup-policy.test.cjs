@@ -363,10 +363,11 @@ test('retires the exact home price idle-enhancement PR branch after merge', () =
 });
 
 
-test('retires the exact PR #146 repair branch and its cleanup branch after merge', () => {
+test('retires only exact reviewed merged working branches after merge', () => {
   const names = [
     'fix/remove-retired-route-build-guard-2026-11-21',
     'maintenance/retire-pr146-branches-2026-11-21',
+    'perf/responsive-product-images-2026-11-21',
   ];
   for (const name of names) {
     assert.ok(MERGED_PR_BRANCHES.includes(name));

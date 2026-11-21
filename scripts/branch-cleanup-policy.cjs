@@ -97,7 +97,8 @@ const MERGED_PR_BRANCHES = Object.freeze([
   "fix/exclude-dev-files-from-pages-payload-rebased-2026-11-15",
   "maintenance/close-merged-branches-refresh-inventory-2026-11-15",
   "fix/remove-retired-route-build-guard-2026-11-21",
-  "maintenance/retire-pr146-branches-2026-11-21"
+  "maintenance/retire-pr146-branches-2026-11-21",
+  "perf/responsive-product-images-2026-11-21"
 ]);
 const SUPERSEDED_CLOSED_PR_BRANCHES = Object.freeze([
   "maintenance/retire-superseded-finalize-ref-2026-11-15",
