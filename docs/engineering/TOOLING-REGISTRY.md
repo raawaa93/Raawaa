@@ -1,6 +1,6 @@
 # RAWAA Store tooling and skills registry
 
-**Last verified:** 2026-11-21 03:20 UTC  
+**Last verified:** 2026-11-21 (live session inventory)
 **Policy:** use free tiers and included quotas; never activate billing or paid usage without a separate explicit instruction. Quota values below are dated snapshots, not permanent guarantees.
 
 ## Project source of truth
@@ -13,28 +13,28 @@
 - Agent rules: AGENTS.md
 - Branch rules: docs/engineering/BRANCH-INVENTORY.md
 - This registry is the inventory of connected tools and skills; update it when access, quota, or project architecture changes.
-- Complete Skills catalog: `docs/engineering/SKILL-REGISTRY.md` (151 entries).
+- Complete Skills catalog: `docs/engineering/SKILL-REGISTRY.md` (152 available workspace Skills).
 
 ## Connected tool families available in this ChatGPT workspace
 
-The current workspace inventory exposes **817 tool definitions across 24 integration families**, plus **152 Skills**. This is a workspace-wide count, not a claim that every tool is connected to the RAWAA production account.
+The current session exposes **817 total tool definitions**: **802 connector/MCP tools across 21 provider families** and **15 native tools**, plus **152 available workspace Skills**. This is a workspace-wide count, not a claim that every tool is connected to the RAWAA production account.
 
 | Integration | Available tools | Project use / status |
 |---|---:|---|
-| GitHub | 89 | Primary repository, PR, workflow, file, and release operations |
+| GitHub | 89 | Primary repository, PR, workflow, file, and release operations; main branch protection remains unconfigured |
 | Cloudflare | 4 | Pages/Workers/analytics inspection; DNS remains untouched |
-| Supabase | 36 | Two projects visible; neither confirmed as Store database, so Store writes are blocked |
+| Supabase | 36 | Two projects visible; Store backend source/schema not yet approved for changes |
 | OpenSEO | 87 | Active RAWAA SEO project and Search Console reporting |
-| Ahrefs | 158 | Free API quota; keyword/backlink research |
-| Firecrawl | 32 | Public-page extraction and research; currently exhausted |
-| Figma | 45 | Connected, but current seat is View-only |
+| Ahrefs | 158 | Keyword/backlink research; current workspace allowance is exhausted |
+| Firecrawl | 34 | Public-page extraction and research; quota exhausted until 2026-11-29 |
+| Figma | 47 | Connected, but current seat is View-only |
 | Notion | 79 | Operating model, recovery, and project documentation |
-| Lovable | 47 | App prototyping/build workflow; use only when it adds value |
-| HubSpot | 39 | Connected but not configured for RAWAA |
-| Metricool | 9 | Social scheduling/analytics integration |
+| Lovable | 51 | App prototyping/build workflow; use only when it adds value |
+| HubSpot | 41 | Connected but not configured for RAWAA |
+| Metricool | 9 | Social scheduling/analytics integration; no RAWAA social accounts configured |
 | Gmail | 21 | Mail lookup and communications |
-| Runway | 40 | Image/video generation; use only when a creative asset is needed |
-| ChatGPT Ads Manager | 65 | Ad account operations; no spend without approval |
+| Runway | 45 | Image/video generation; use only when a creative asset is needed |
+| ChatGPT Ads Manager | 66 | Ad account operations; no spend or billing changes without instruction |
 | Plugin Management | 6 | Discover/manage ChatGPT app integrations |
 | Plugin Creator | 9 | Custom app/plugin development |
 | Context7 | 2 | Current library documentation |
@@ -42,11 +42,13 @@ The current workspace inventory exposes **817 tool definitions across 24 integra
 | Consensus | 7 | Academic literature search |
 | OpenAI Platform | 2 | API key/platform setup; do not create keys or incur spend without request |
 | Automations | 7 | Scheduled checks and reminders |
-| Files | 11 | Conversation and Library file operations |
-| Skills | 2 | Discover and read workspace skills |
-| User settings | 2 | Inspect/update ChatGPT appearance and personality settings only when requested |
 
-Other available skill/tool families include data analysis, user settings, and file-library operations. Availability in this workspace does not mean every service is connected to a RAWAA account.
+## Native tools and Skills
+
+- **15 native tool definitions** are available in this session, covering web search, image generation, file/library operations, Python and container execution, personal context, safety/settings, and direct host actions. These are separate from the 21 connector provider families above.
+- **152 workspace Skills** are available. The project-local Modern Web Guidance skill is maintained in this repository and is not counted as a global workspace Skill.
+- PostHog was audited through a separate enabled MCP session (PR #153), but no PostHog MCP actions are exposed in this current session. Do not claim current-session access or add instrumentation until the user confirms the intended destination and consent flow.
+ Availability in this workspace does not mean every service is connected to a RAWAA account.
 
 
 ## Owned private plugin inventory
@@ -368,7 +370,7 @@ This is the newest verified state and supersedes older connection, release, bran
 
 - Verified installed/available in this workspace for RAWAA work: GitHub, Cloudflare, Supabase, Notion, OpenSEO, Ahrefs, Context7, Figma, and Lovable. Their connection status and project suitability differ; a listed tool is not proof of a configured production integration.
 - OpenSEO is connected to Search Console. No GA4 property is visible in the connected Google account.
-- PostHog is now connected. The only non-demo project in the Raawaa organization is `Default project`, with zero ingested events and session replay disabled. The organization has a one-project free-plan limit; use this project only after the user confirms it is the intended RAWAA Store analytics destination. See [PostHog pricing](https://posthog.com/pricing) and [project settings](https://posthog.com/docs/settings/projects).
+- PostHog is now connected. The only non-demo project in the Raawaa organization is `Default project` (ID `756281`), with zero ingested events and session replay disabled. The organization has a one-project free-plan limit; use this project only after the user confirms it is the intended RAWAA Store analytics destination. See [PostHog pricing](https://posthog.com/pricing) and [project settings](https://posthog.com/docs/settings/projects).
 - Linear was discovered but not recommended because Notion is already connected for project knowledge/tasks and another task tracker would duplicate workflow. Datadog is not recommended because the current static site can use GitHub/Cloudflare checks without a new observability bill. TinyFish remains prohibited.
 - No plugin was uninstalled, no billing enabled, and no paid API usage activated.
 
@@ -411,7 +413,7 @@ No customer/order data, product formulas, prices, discounts, shipping policy, ch
 - OpenSEO crawl [audit `be7a9242-66cd-49a7-bb8d-a6892dc4acfc`](https://app.openseo.so/p/8609bf87-b153-41f8-b10c-c716c36a5c4f/audit?auditId=be7a9242-66cd-49a7-bb8d-a6892dc4acfc) completed all 7 discovered URLs. All 200 pages had one H1 and zero images missing alt text; `/index.html` redirected 308; the three `?product=` variants were informational canonicalized URLs, not errors. Campaign is intentionally noindex and absent from the indexable sitemap.
 - PR #151 merged as `834d7705597f8e2d13ea6976bcc7640260deecf3`, adding the project-local Modern Web Guidance skill and Apache-2.0 license. The current follow-up PR #152 scopes its triggers, pins CLI 1.0.1, disables telemetry, and adds policy tests.
 - The live main branch is now `834d7705597f8e2d13ea6976bcc7640260deecf3`; the production payload SHA is `e554489b78de8b280b1281b2c706d6acc42b5ad5`. The later commit only changes agent instructions, skill/docs, and tests; it does not change the deployed storefront payload.
-- The PostHog connector is connected, but project use is pending the user's confirmation of `Default project`. No tracking code, session replay, or paid services were enabled.
+- The PostHog connector is connected, but project use is pending the user's confirmation of `Default project` (ID `756281`). No tracking code, session replay, or paid services were enabled.
 
 
 ## Follow-up closure — 2026-11-21 00:36 UTC
@@ -424,7 +426,7 @@ No customer/order data, product formulas, prices, discounts, shipping policy, ch
 
 ## PostHog integration status — 2026-11-21
 
-- The PostHog plugin is visible in ChatGPT permission settings, but PostHog data tools are not exposed in this session. A separate connector audit reported one non-demo project named `Default project`, no ingested events, and session replay disabled; this session cannot independently verify those details. Project ID and token are intentionally omitted.
+- The PostHog plugin is visible in ChatGPT permission settings, but this session exposes no PostHog data tools; project-level connection, project ID, ingestion state, and usage details cannot be independently verified here.
 - Do not add the PostHog SDK, write a project token, change CSP, or enable event capture until the user confirms the intended destination project and the consent/privacy implementation is ready.
 - Published free-tier allowances include 1M analytics events, 5K session recordings, 1M feature-flag requests, 100K exceptions, 1,500 survey responses, and 1M data-warehouse rows per month. Usage is organization-wide; projects do not multiply the allowance.
 - No tracking script, session replay, user identification, billing, or paid upgrade has been activated.
@@ -445,11 +447,3 @@ No customer/order data, product formulas, prices, discounts, shipping policy, ch
 - PR #154 is now based on current `main` commit `23db34ebf7b0d8d06788e085188eef78da5c93b0` through a two-parent merge commit, preserving its reviewed file tree while including PR #153's PostHog registry changes.
 - The PostHog audit branch is treated as a merged PR #153 head (`c20f2b8f647bc5542715cba74574cbdc422dc4ce`), not a no-PR ref. It is removed only by the merged-PR cleanup policy after exact head verification.
 - The PR's earlier failing checks exposed a stale archive-list assertion. The test and policy now move that branch to the merged-PR allowlist; fresh CI is required before merge.
-
-
-## Workspace and PostHog verification — 2026-11-21 04:00 UTC
-
-- Workspace catalog at this snapshot: 817 tool definitions across 24 integration families and 152 Skills.
-- PostHog plugin visibility is confirmed, but its data tools are not exposed in this session. A separate connector audit reported a `Default project`; current project state is not independently verifiable here. Do not publish project IDs or tokens.
-- PostHog free tier (per current official docs): 1M analytics events, 5K session recordings, 1M feature-flag requests, 100K exceptions, 1,500 survey responses, and 1M data-warehouse rows per month; one project on the free plan. Usage allowances are organization-wide. See [pricing](https://posthog.com/pricing), [projects](https://posthog.com/docs/settings/projects), and [billing FAQ](https://posthog.com/docs/billing/common-questions).
-- No PostHog SDK, project token, CSP changes, autocapture, session replay, or paid billing has been enabled. The project destination must be confirmed before token configuration.
