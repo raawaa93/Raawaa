@@ -503,6 +503,6 @@ This section supersedes earlier assumptions in this file about the Store's Supab
 
 ## Final-ref reconciliation — 2026-11-21
 
-- The 17 durable refs were verified after PR #162. A later inventory found three temporary refs: merged PR #163's documentation branch; closed PR #164's superseded documentation branch at exact SHA `71e11b7b3d861787e9e72d574879298f69251b6c`; and a no-PR branch identical to main. The current PR #165 branch is a fourth temporary ref and is included in the merged-head allowlist.
-- PR #165 authorizes only exact, safe retirement: delete PR #163's merged head only if the current SHA matches; archive PR #164's closed-unmerged head before deletion; delete the no-PR branch only if GitHub comparison remains `ahead_by=0, behind_by=0`; and retire PR #165's own branch after merge.
+- The 17 durable refs were verified after PR #162. A later inventory found three temporary refs: merged PR #163's documentation branch; closed PR #164's superseded documentation branch at exact SHA `71e11b7b3d861787e9e72d574879298f69251b6c`; and a no-PR branch identical to main. The current PR #166 branch is a fourth temporary ref and is included in the merged-head allowlist.
+- PR #166 authorizes only exact, safe retirement: delete PR #163's merged head only if the current SHA matches; archive PR #164's closed-unmerged head before deletion; delete the no-PR branch only if GitHub comparison remains `ahead_by=0, behind_by=0`; and retire PR #166's own branch after merge.
 - Keep all 17 durable operational/recovery refs. Re-verify the archive tag, final 17-ref count, and zero-open-PR state after the existing workflow runs.
