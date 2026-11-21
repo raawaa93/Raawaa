@@ -126,6 +126,9 @@ jobs:
     name: Archive reviewed inactive branch refs
     needs: prune
     if: needs.prune.result == 'success'
+    permissions:
+      contents: write
+      pull-requests: read
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
