@@ -9,7 +9,8 @@ const root = path.resolve(__dirname, '../..');
 
 test('serum uses its pruned shell stylesheet while other routes keep shared CSS', () => {
   const serumHtml = fs.readFileSync(path.join(root, 'serum.html'), 'utf8');
-  const homeHtml = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+  const campaignHtml = fs.readFileSync(path.join(root, 'campaign.html'), 'utf8');
+  const privacyHtml = fs.readFileSync(path.join(root, 'privacy.html'), 'utf8');
   const shellCssPath = path.join(root, 'css', 'serum-shell.css');
   const sharedCssPath = path.join(root, 'css', 'styles.css');
   const shellCss = fs.readFileSync(shellCssPath, 'utf8');
