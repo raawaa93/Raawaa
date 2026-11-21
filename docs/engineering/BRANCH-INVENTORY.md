@@ -428,3 +428,9 @@ Required administrative follow-up: configure a `main` branch ruleset requiring p
 - PR #157 remains open and must be retained until its checks pass and it is merged or explicitly closed.
 - The 17 durable refs remain main; four backups; two deploy; four preview-deploy; one production-deploy; three recovery; one release; and one restore. Preserve all.
 - Main branch protection and repository rulesets remain absent. No branch is reported protected; configure a main ruleset through GitHub settings.
+
+
+## Closed PR #156 branch cleanup — 2026-11-21
+
+- The closed-unmerged branch `docs/final-access-and-branch-audit-2026-11-21` was verified to point exactly to main at `8fe861b2496db12242aee3b8d3362d656de3e47c` with `ahead_by=0` and `behind_by=0`.
+- Its unique documentation changes were carried into PR #157. It is allowlisted only for exact closed-branch cleanup; it will be deleted after PR #157 merges and the cleanup workflow rechecks ancestry.
