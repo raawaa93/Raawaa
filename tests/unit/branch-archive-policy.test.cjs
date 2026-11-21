@@ -33,7 +33,6 @@ test('archives individually reviewed inactive refs only at their exact SHAs', ()
     'maintenance/archive-closed-pr174-2026-11-21': '8aa2cca363008add9770833cbeff3b7aed81b74c',
 
     'fix/exclude-dev-files-from-pages-payload-2026-11-15': 'a4c976966be6d2193ccc76d216b3f0be3b76f27a',
-    'fix/exclude-dev-files-from-pages-payload-2026-11-15': 'a4c976966be6d2193ccc76d216b3f0be3b76f27a',
     'security/zizmor-github-actions-2026-11-21': '80de5fe20505442a3eb1c98363745f139bc49a2b',
     'marketing/raawaa-video-scripts-2026-11-21': '09dbebab50f21292ce516cfe6cd9365a5f546023',
     'docs/supabase-edge-auth-audit-2026-11-21': '6e73b8a315dbe6975c8ce1948c51eafc74a20242',
