@@ -1,4 +1,5 @@
 name: GitHub Actions security analysis
+# Blocking static analysis; see .agents/skills/github-actions-security/SKILL.md.
 
 on:
   pull_request:
@@ -41,7 +42,7 @@ jobs:
           min-severity: low
           min-confidence: medium
           color: false
-      - name: Record advisory status
+      - name: Record audit status
         if: always()
         shell: bash
         env:
