@@ -14,7 +14,7 @@
  * وإلا سيبقى الزائر يرى النسخة القديمة من الذاكرة.
  */
 
-const CACHE_VERSION = 'v20261114-clean-pages-10pct';
+const CACHE_VERSION = 'v20261121-responsive-product-images';
 // استبدال الذاكرة القديمة يمسح مفاتيحها التي ربما احتوت استعلامات روابط.
 const RUNTIME = 'rawaa-runtime-v7';
 
@@ -80,6 +80,16 @@ const CORE = [
   './assets/img/products/size-100-v6-480.avif',
   './assets/img/products/size-100-v6-480.webp',
   './assets/img/products/size-100-v6-480.jpg',
+  // Small responsive formula images keep all three product families usable offline.
+  './assets/img/products/rawaa-rosemary-480.avif',
+  './assets/img/products/rawaa-rosemary-480.webp',
+  './assets/img/products/rawaa-rosemary-480.jpg',
+  './assets/img/products/rawaa-olive-480.avif',
+  './assets/img/products/rawaa-olive-480.webp',
+  './assets/img/products/rawaa-olive-480.jpg',
+  './assets/img/products/rawaa-castor-480.avif',
+  './assets/img/products/rawaa-castor-480.webp',
+  './assets/img/products/rawaa-castor-480.jpg',
   // مشهد رواء: نسخة صغيرة لكل صيغة، تكفي كبديل عند انقطاع الشبكة.
   './assets/img/products/ritual-v5-480.avif',
   './assets/img/products/ritual-v5-480.webp',
