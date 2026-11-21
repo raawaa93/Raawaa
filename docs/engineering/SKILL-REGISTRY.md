@@ -1,8 +1,8 @@
 # ChatGPT workspace Skills registry
 
-**Snapshot:** 2026-11-15  
+**Snapshot:** 2026-11-21  
 **Source:** workspace Skills catalog  
-**Total:** 151 available Skills across 15 provider packages.
+**Total:** 152 available Skills across the current workspace catalog; provider-package grouping is unchanged in this snapshot.
 
 This is an inventory, not a claim that every Skill is active in every turn. Skills are invoked when relevant. Do not bulk-install, vendor, disable, or remove a Skill merely because it is present in this catalog; check its purpose, dependencies, license, and project fit first.
 
@@ -205,7 +205,7 @@ This is an inventory, not a claim that every Skill is active in every turn. Skil
 ## Project application
 
 - Keep repository-backed `AGENTS.md`, `docs/engineering/PROJECT-MEMORY.md`, and Graphify as the project guidance/code-map stack.
-- Use relevant Skills on demand; do not copy all 151 into the repository.
+- Use relevant Skills on demand; do not copy all 152 into the repository.
 - The repository has no project-local `.agents/skills`, `skills/`, or `.claude/` packages.
 - For UI work, select a small compatible design skill set rather than stacking overlapping design rule packs.
 - For browser QA, retain the existing Playwright Chromium/WebKit stack; do not add a second browser automation framework without a demonstrated gap.

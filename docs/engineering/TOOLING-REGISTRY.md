@@ -1,6 +1,6 @@
 # RAWAA Store tooling and skills registry
 
-**Last verified:** 2026-11-15 05:55 UTC  
+**Last verified:** 2026-11-21 03:20 UTC  
 **Policy:** use free tiers and included quotas; never activate billing or paid usage without a separate explicit instruction. Quota values below are dated snapshots, not permanent guarantees.
 
 ## Project source of truth
@@ -330,3 +330,63 @@ This supersedes the earlier catalog count in the historical snapshot above; earl
 - Ahrefs API key reports a Free monthly limit of 200,000 units with 0 used; workspace allowance is 0. Firecrawl remains at 0/1,000 for the current period and should stay paused until renewal/available credits are verified.
 - Prior audit notes still apply where not superseded: Figma View-only; Metricool has no social networks connected; HubSpot is not onboarded for RAWAA; Lovable has no RAWAA project. Recheck those connections before treating catalog tools as active project integrations.
 - TinyFish is prohibited; Arena is paused. No global plugin, Skill, or connector was removed.
+
+
+## Integration and tooling audit — 2026-11-21 03:20 UTC
+
+This is the newest verified state and supersedes older connection, release, branch-count, and capability snapshots above where they conflict.
+
+### GitHub connection and repository access
+
+- The working GitHub connection can read and write `raawaa93/Raawaa`; repository metadata reports `admin`, `maintain`, `push`, and `pull` permissions for the connected actor.
+- The installed GitHub App has one accessible installation configured for **all repositories**, not selected repositories. This is broader than the RAWAA project requires; narrow it to only the repositories that genuinely need this app.
+- A second saved GitHub connection returns HTTP 403 with an account-suspended response. It is not usable for repository operations until its account/authorization is restored. The working connection remains available, so RAWAA work is not blocked.
+- The primary repository is public, default branch `main`, and the repository's configured merge methods include squash and rebase. Auto-merge is disabled.
+- Live state: `main` = `51856e1f8329e9f30086a03e106d5b7abaaa126c`; zero open PRs at the audit snapshot; 18 branch refs were enumerated.
+- **Critical control gap:** every enumerated branch reported `protected=false`; repository rulesets returned an empty list. Direct pushes to `main` are therefore not prevented by GitHub branch protection/rulesets. The production workflow validates a push before deploy, but it does not replace a required-PR/required-check merge policy.
+- The GitHub tools available in this workspace expose read/write repository, PR, branch, and workflow operations but no branch-protection/ruleset mutation operation. Configure a `main` ruleset in GitHub Settings: require pull requests, require the `Store checks` and `Playwright browser checks` results, block force-push and deletion, and include the production/visual checks as appropriate for their event model. Do not require a status name until it has been observed on PRs.
+- One extra ref, `perf/serum-css-pruning-2026-11-21`, points to the exact same SHA as `main` and has no open PR associated in the current open-PR snapshot. It is redundant, but was retained pending exact-SHA archival under the repository's branch policy. All backup, recovery, deploy, preview, release, production-deploy and restore refs remain preserved.
+
+### Latest verified release and checks
+
+- PR #148 merged to `main` as `51856e1f8329e9f30086a03e106d5b7abaaa126c`.
+- Production CI run [#44842592328](https://github.com/raawaa93/Raawaa/actions/runs/44842592328) succeeded, including locked dependency audit, Playwright Chromium/WebKit browser regression, policy/page integrity, unit tests, clean Pages payload build, exact-SHA release, and published security-header verification.
+- Cloudflare Pages production deployment is `34947a3e` at [the immutable deployment URL](https://34947a3e.raawaa-store.pages.dev); latest deployment stage was reported `success` for the same main SHA.
+- Visual QA run [#44842847305](https://github.com/raawaa93/Raawaa/actions/runs/44842847305) succeeded and its report recorded `issues: []`. The artifact contains the screenshots and HTML report.
+- Mobile Lighthouse run [#44842592322](https://github.com/raawaa93/Raawaa/actions/runs/44842592322) succeeded. It still reports non-blocking opportunities around document latency, render-blocking resources, and serum FCP/LCP; campaign SEO/crawlability assertions are warnings, not CI failures. Read the artifact before making precise score claims.
+- Offline Graphify run [#44842592352](https://github.com/raawaa93/Raawaa/actions/runs/44842592352) and disaster-recovery run [#44842592295](https://github.com/raawaa93/Raawaa/actions/runs/44842592295) both succeeded.
+- Production domain remains `raawaa-store.pages.dev`; the custom domain `rawaa.eu.org` is not to be changed without a separate ownership/intent check.
+
+### Current workspace Skills and relevant use
+
+- Live ChatGPT catalog: **152 Skills** (the prior registry snapshot of 151 is stale).
+- Skills already available and relevant to RAWAA: Superpowers (brainstorming, TDD, debugging, plans, review, verification), OpenSEO (SEO audit/project setup/keyword research/AI visibility/reporting), Context7/read-docs, Supabase/Postgres best practices, Figma design workflows, and Data quality/KPI/report skills.
+- These are workspace Skills, not all repository-vendored packages. The repository has one root `AGENTS.md`; no project-local `.agents/skills` bundle was present at this audit.
+- Use the existing skills selectively. Do not bulk-copy large agent catalogs or add a second browser automation stack: Playwright is the deterministic regression authority; Graphify remains offline; the storefront stays static unless evidence justifies a backend change.
+
+### Plugin and connector status
+
+- Verified installed/available in this workspace for RAWAA work: GitHub, Cloudflare, Supabase, Notion, OpenSEO, Ahrefs, Context7, Figma, and Lovable. Their connection status and project suitability differ; a listed tool is not proof of a configured production integration.
+- OpenSEO is connected to Search Console. No GA4 property is visible in the connected Google account.
+- PostHog is **not installed/connected yet**; a connection suggestion has been issued. It is the most relevant additional plugin because it combines event analytics, session replay, feature flags, and error tracking. Its published free tier lists 1M analytics events, 5K session recordings, and 100K exceptions per month; configure usage limits before enabling paid usage. See [PostHog pricing](https://posthog.com/pricing).
+- Linear was discovered but not recommended because Notion is already connected for project knowledge/tasks and another task tracker would duplicate workflow. Datadog is not recommended because the current static site can use GitHub/Cloudflare checks without a new observability bill. TinyFish remains prohibited.
+- No plugin was uninstalled, no billing enabled, and no paid API usage activated.
+
+### Prioritized gaps
+
+1. Add GitHub `main` branch ruleset and restrict the GitHub App installation from all repositories to the smallest necessary repository set. Both require GitHub settings access unavailable through the current connector.
+2. Restore the second saved GitHub connection or remove it from future use after the user resolves the account-level 403. Do not route work through it while it is suspended.
+3. Connect PostHog only after the user completes the suggested connection, then set billing limits to zero and implement privacy/CSP-reviewed, minimal event capture. Do not add a tracking snippet before the privacy notice and consent requirements are settled.
+4. Reconcile the 18 live branch refs against the stale historical branch inventory; retain all recovery and deployment checkpoints, and archive the single same-as-main redundant ref only through the exact-SHA tag workflow.
+5. Continue improving the measured Lighthouse opportunities without relaxing existing CI thresholds.
+
+### No-change confirmation
+
+No customer/order data, product formulas, prices, discounts, shipping policy, checkout/WhatsApp behavior, Supabase schema/data, DNS, Pages domain binding, account billing, or secrets were changed during this audit.
+
+
+### Concurrent PR reconciliation — 2026-11-21 03:24 UTC
+
+- A fresh open-PR enumeration after the initial audit found PR #149 (`perf/serum-css-pruning-2026-11-21`) and this documentation PR #150. PR #149 is a separate in-flight CSS optimization; its branch moved after the earlier 18-ref enumeration and is no longer a redundant same-as-main ref. Keep its branch while the PR is open.
+- PR #149 changes only the serum page's stylesheet reference and adds a generated page-specific CSS bundle. It must not merge until its own Store checks, Chromium/WebKit tests, Visual QA, and Lighthouse run complete and the stylesheet diff is checked for dynamic states. Current checks were still running at the time of this update.
+- Do not treat the earlier 18-ref snapshot as the current open-PR count; this is a time-stamped historical audit snapshot.
