@@ -422,3 +422,14 @@ test('retires the Modern Web Guidance policy-fix branch only after its exact hea
     [name],
   );
 });
+
+
+test('retires the PostHog integration audit branch only after its exact head is merged', () => {
+  const name = 'docs/posthog-integration-audit-2026-11-21';
+  assert.ok(MERGED_PR_BRANCHES.includes(name));
+  assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
+  assert.deepEqual(
+    classifyBranches([branchRef(name)], [pr(name, { merged: true })], repository).map(x => x.name),
+    [name],
+  );
+});
