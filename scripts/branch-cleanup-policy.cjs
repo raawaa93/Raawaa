@@ -131,7 +131,9 @@ const MERGED_PR_BRANCHES = Object.freeze([
   // Provider eligibility evidence appendix follow-up.
   "docs/email-provider-eligibility-evidence-appendix-2026-11-21",
   // Provider-policy, consent, storefront-capture, and Cloudflare architecture clarification PR.
-  "docs/email-provider-eligibility-clarifications-rebased-2026-11-21"
+  "docs/email-provider-eligibility-clarifications-rebased-2026-11-21",
+  // Latest free email provider shortlist comparison.
+  "docs/email-provider-shortlist-current-2026-11-21"
 ]);
 const SUPERSEDED_CLOSED_PR_BRANCHES = Object.freeze([
   "maintenance/retire-superseded-finalize-ref-2026-11-15",
