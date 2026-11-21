@@ -71,7 +71,7 @@ Competitor shortlist and source pages are recorded in the Notion competitor repo
 - **DiGiShi:** Syrian multi-brand retailer. Indexed examples include DAJANI 100 ml at SYP 1,076 (indexed as available), JINA 100 ml at SYP 560 (indexed as out of stock), Zera 50 ml at SYP 340 (indexed as out of stock), and Millia 250 ml at SYP 990 (indexed as out of stock). These values are stale/inconsistent and may contain currency/indexing issues; do not use them for pricing decisions.
 - **Feel22 Syria:** multi-brand alternatives from Garnier, L'Oréal, Kérastase, Klorane and others. Indexed examples: L'Oréal Elvive Midnight Serum 100 ml SYP 1,310; Garnier Honey Treasures 115 ml SYP 1,410; Kérastase Chroma Absolu 150 ml SYP 6,420; Fino Hair Oil SYP 1,680. Treat as search-index observations, not guaranteed live checkout prices.
 - **Urban Care Syria:** useful reference for category architecture by hair need; not proof of a local manufacturer or product sales.
-- **Reach Media Syrian Ad Watch (8–14 Nov 2026):** reported 2,731 ads, 1,454 pages, and 273 health/beauty advertisers in its sample. This is not a full census and does not expose spend, reach, or product-level sales.
+- **Reach Media Syrian Ad Watch (8–14 Nov 2026):** reported 2,731 ads, 1,454 pages, and 292 health/beauty/clinic advertisers in its sample. This is not a full census and does not expose spend, reach, or product-level sales.
 
 No competitor sales, market share, or demand ranking has been established. Normalize currency, variant size, stock status, delivery, and date before using any price comparison. Do not infer demand from ad counts or indexed prices.
 
