@@ -407,3 +407,18 @@ Required administrative follow-up: configure a `main` branch ruleset requiring p
 - PR #154 is a tooling/maintenance-only change. It updates archive tag dates to the actual execution date, removes duplicate skill attribution, and corrects the public registry; it does not change storefront payload.
 - The old no-PR audit branch is no longer a candidate for archival; it was merged as PR #153 and deleted through the merged-PR cleanup policy.
 - Branch protection/rulesets remain absent; all enumerated refs are `protected=false`. Repository-admin settings action remains required.
+
+
+## Final live state — 2026-11-21 00:42 UTC
+
+This snapshot supersedes the earlier live counts above.
+
+- Canonical `main`: `cdb08a49b638d80a794d64bb8afc6c5def0c9e05`.
+- Live branch refs: **17**.
+- Open pull requests: **0**.
+- Archive tag refs: **40**.
+- Branch hygiene [run #44845577319](https://github.com/raawaa93/Raawaa/actions/runs/44845577319) inspected 18 refs and 154 PR records, deleted exactly `maintenance/archive-noop-audit-branch-2026-11-21`, and completed with success. The archive job found zero additional candidates.
+- The 17 retained refs are the durable set: main; four backups; two deploy refs; four preview-deploy refs; one production-deploy ref; three recovery refs; one release ref; and one restore ref. Preserve all.
+- PR #153 and PR #154 are merged; their temporary branches have been removed. No temporary work branch or open PR remains.
+- The PR #149 production payload remains deployed at Cloudflare Pages deployment `349bd1d4-1254-40e1-b4ec-5f19c74176b9` from source SHA `e554489b78de8b280b1281b2c706d6acc42b5ad5`. PRs #153/#154 changed documentation and governance, not the storefront payload.
+- Main branch protection is still absent: GitHub reports `protected=false` and no repository rulesets. This remains an administrative follow-up; CI success alone does not prevent direct pushes or force-pushes.
