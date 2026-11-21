@@ -17,14 +17,15 @@
 
 ## Connected tool families available in this ChatGPT workspace
 
-The current session exposes **817 total tool definitions**: **802 connector/MCP tools across 21 provider families** and **15 native tools**, plus **152 available workspace Skills**. This is a workspace-wide count, not a claim that every tool is connected to the RAWAA production account.
+The current session exposes **819 total tool definitions**: **804 connector/MCP tools across 22 provider families** and **15 native tools**, plus **152 available workspace Skills**. This is a workspace-wide count, not a claim that every tool is connected to the RAWAA production account.
 
 | Integration | Available tools | Project use / status |
 |---|---:|---|
 | GitHub | 89 | Primary repository, PR, workflow, file, and release operations; main branch protection remains unconfigured |
-| Cloudflare | 4 | Pages/Workers/analytics inspection; DNS remains untouched |
+| Cloudflare | 4 | Pages project/deployment read verified; token verification endpoint returned 401, so full token scope/write access is unverified; DNS untouched |
 | Supabase | 36 | Two projects visible; Store backend source/schema not yet approved for changes |
 | OpenSEO | 87 | Active RAWAA SEO project and Search Console reporting |
+| PostHog | 2 | Connected in the current session; Store analytics use remains pending destination and consent/privacy review; no tracking is active |
 | Ahrefs | 158 | Keyword/backlink research; current workspace allowance is exhausted |
 | Firecrawl | 34 | Public-page extraction and research; quota exhausted until 2026-11-29 |
 | Figma | 47 | Connected, but current seat is View-only |
@@ -47,7 +48,7 @@ The current session exposes **817 total tool definitions**: **802 connector/MCP 
 
 - **15 native tool definitions** are available in this session, covering web search, image generation, file/library operations, Python and container execution, personal context, safety/settings, and direct host actions. These are separate from the 21 connector provider families above.
 - **152 workspace Skills** are available. The project-local Modern Web Guidance skill is maintained in this repository and is not counted as a global workspace Skill.
-- PostHog was audited through a separate enabled MCP session (PR #153), but no PostHog MCP actions are exposed in this current session. Do not claim current-session access or add instrumentation until the user confirms the intended destination and consent flow.
+- PostHog MCP is available in this session (two tools). Store analytics use remains pending confirmation of the intended destination and review of consent/privacy implementation; no Store tracking or session replay is active.
  Availability in this workspace does not mean every service is connected to a RAWAA account.
 
 
@@ -319,6 +320,14 @@ This is an account-level inventory. Only resources positively identified as belo
 - **Release-policy correction:** the older registry text above that describes manual production dispatch/confirmation is superseded. Current canonical `main` uses automatic production deployment for qualifying website-source pushes only after full technical validation; workflow-only and documentation-only changes do not trigger storefront deployment. Manual dispatch/confirmation is disabled. See `AGENTS.md` and `docs/engineering/PROJECT-MEMORY.md` for the current release boundary.
 - Current canonical `main` at this review: `5fc284cffa589ad995728fae3210a64e4f603b5c`. Latest recorded visual QA run `43701376564` succeeded; branch-hygiene, disaster-recovery, and offline Graphify runs for the subsequent workflow/docs-only update also succeeded. This does not claim a new storefront deployment occurred.
 
+
+## AgenC Core evaluation — 2026-11-21
+
+- Reviewed [AgenC Core](https://github.com/tetsuo-ai/agenc-core), an MIT-licensed terminal coding-agent runtime with a local daemon, resumable sessions, interactive and headless execution, background agents, task budgets, multiple model providers, and local-model support.
+- The upstream project reports 84.5% on Terminal-Bench 2.1 for $27 using DeepSeek V4.1 Flash. This is a project-published agent/model benchmark, not an independent guarantee or a free inference allowance; actual model use may incur provider charges.
+- npm/source installs require Node.js `>=26.5 <27`; standalone installs bundle a verified Node runtime. This is a separate developer tool, not a browser plugin or storefront dependency.
+- Decision: retain as an external pilot candidate only. Do not add it to the static Store runtime or production CI. Consider a separate isolated trial only when a suitable host, model provider, hard budget, permissions, and measurable task baseline are available. The current iPhone-only workflow is not a supported local host for this runtime.
+- [Core documentation](https://agenc.ag/docs/core) · [published benchmark](https://get.agenc.ag/terminal-bench/).
 
 ## Live runtime catalog snapshot — 2026-11-21
 
