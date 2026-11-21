@@ -221,3 +221,50 @@ Testing sequence: Week 1 hook variants; Week 2 proof style; Week 3 CTA/destinati
 ## 11. Research source notes
 
 Platform recommendations above are official platform guidance where linked, but many examples are ad-creative guidance, not guarantees for organic ranking. EU/UK/US regulatory references apply in their respective jurisdictions; they are used as conservative claim-substantiation benchmarks and do not replace Syrian legal review. Syria-specific feature access and analytics remain unverified unless tested on the actual account.
+
+## 8B. Arabic-first local editor audit (21 Nov 2026)
+
+This follow-up checked the current repository READMEs and published app information. Repository descriptions are maintainer claims, not independent device tests. No APK was installed and no production video was rendered during this audit.
+
+### Candidates and decision
+
+| Candidate | Verified from current project documentation | Risks / limits | Decision |
+|---|---|---|---|
+| **OpenCut Android** — [GitHub](https://github.com/zaitxcode/opencut) | MIT; Android-native; Arabic RTL UI; local-only; multi-track timeline; keyframes; H.264/AAC export up to 4K; 1.0.3 release lists APK SHA-256; README reports 22 unit tests passing | Very small repository (five commits at review); no external adoption evidence; README's unit tests do not validate real device export, Arabic glyph shaping or long-video stability | **Experimental editor candidate only.** Do not replace VN until an actual tablet test passes |
+| **Caption Studio** — [GitHub](https://github.com/Hatsunama/Caption-Studio) | Android-only, local-first Whisper captions; word timing; subtitle styling; multi-track editing; Arabic text support is not yet independently verified in the reviewed README | Package ID changed to `com.xmilo_at_your_side.caption_studio`; older app IDs keep separate data; project explicitly warns older releases may not be immutable. Its documented installer verifies GitHub asset SHA-256 and a pinned signing certificate, but this does not protect against compromise of the same repository | **Best dedicated caption-editor candidate**, but only install the latest eligible release after independently checking release asset digest/signature and preserving any existing app data. Never uninstall an older installation to force an update |
+| **Tahbeer** — [GitHub](https://github.com/mohammadmansour200/tahbeer) | GPL-3.0; Android 8+; local Whisper; Arabic/English localization; full RTL/LTR; TXT/SRT/VTT export and subtitle burn-in | Small project (66 commits / low public adoption at review); release recency and performance on this tablet not proven | **Strongest simple Arabic-transcription fallback**; test a short clean voice sample before adopting |
+| **arsub** — [GitHub](https://github.com/Ifazawezk/arabic-subtitles) | MIT; Arabic-specific subtitle layout; handles RTL direction, punctuation and line-breaking; local CLI/web UI | Python 3.10+ and local GPU strongly recommended; model/runtime downloads can exceed 1 GB; not a practical phone-only workflow | **Do not use on the mobile production path**; retain as a future cloud/desktop engineering option |
+
+Additional Android caption apps (for example cutpoeta, Subly and Vexo) advertise on-device Whisper, but their commercial terms, free limits, Arabic RTL output and actual Syria availability were not sufficiently verified. Do not install or pay for them on the strength of store descriptions alone.
+
+### Practical production decision
+
+1. Keep **VN** as the current primary editor until a replacement passes the device test; this audit does not establish that OpenCut is more reliable.
+2. Use **Tahbeer** as the first low-risk candidate to validate Arabic speech transcription and RTL output, because its project states Arabic localization and on-device processing.
+3. Evaluate **Caption Studio** for word-level caption timing and styling only after verifying the release asset and preserving all prior local projects.
+4. Evaluate **OpenCut** as a full editor in a separate test project; do not import the only copy of a production project.
+5. Keep a clean original MP4 and a separate subtitle file (SRT/VTT) so the editing and captioning tools can be swapped without losing work.
+
+### Required acceptance test (not yet executed)
+
+Use a 20–30 second non-sensitive Arabic voice sample with a deliberately varied test sentence containing hamza, taa marbuta, Arabic comma/question mark, numerals and one English brand term. Test on the Android tablet:
+
+- [ ] Arabic words are correct against the spoken audio; manually count word errors.
+- [ ] RTL order, punctuation and connected Arabic letters render correctly in both preview and exported MP4.
+- [ ] No subtitle is cut off by the vertical safe area; two-line captions remain readable.
+- [ ] SRT/VTT timestamps align with speech and survive import into the other editor.
+- [ ] 1080×1920 H.264/AAC export plays from start to finish with sound in the device gallery.
+- [ ] A 30-second export has no crash, missing frames, frozen preview or watermark.
+- [ ] The app works offline after required model downloads and does not request unnecessary account permissions.
+- [ ] The APK source, release tag, SHA-256 and signing identity are recorded before installation.
+
+**Acceptance rule:** the replacement must pass every critical text/export test twice on separate projects. Until then, VN remains the operational editor and Arabic captions remain manually reviewed. No test APK, third-party mirror, or unknown signing key is acceptable.
+
+### Sources checked
+
+- OpenCut Android README and releases: https://github.com/zaitxcode/opencut
+- Caption Studio install/security guidance: https://github.com/Hatsunama/Caption-Studio
+- Tahbeer README and releases: https://github.com/mohammadmansour200/tahbeer
+- arsub Arabic RTL implementation: https://github.com/Ifazawezk/arabic-subtitles
+- cutpoeta local captioning notes: https://cutpoeta.com/en/auto-captions/
+- VN official Google Play listing: https://play.google.com/store/apps/details?id=com.frontrow.vlog
