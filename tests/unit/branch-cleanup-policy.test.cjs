@@ -368,6 +368,7 @@ test('retires only exact reviewed merged working branches after merge', () => {
     'fix/remove-retired-route-build-guard-2026-11-21',
     'maintenance/retire-pr146-branches-2026-11-21',
     'perf/responsive-product-images-2026-11-21',
+    'perf/serum-css-pruning-2026-11-21',
   ];
   for (const name of names) {
     assert.ok(MERGED_PR_BRANCHES.includes(name));
