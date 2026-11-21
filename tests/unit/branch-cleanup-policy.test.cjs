@@ -65,7 +65,7 @@ test('keeps closed-unmerged work for the exact-SHA archive workflow', () => {
 });
 
 test('no closed-unmerged or no-PR maintenance refs remain individually eligible', () => {
-  assert.deepEqual(SUPERSEDED_CLOSED_PR_BRANCHES, ['maintenance/retire-superseded-finalize-ref-2026-11-15', 'docs/final-access-and-branch-audit-2026-11-21']);
+  assert.deepEqual(SUPERSEDED_CLOSED_PR_BRANCHES, ['maintenance/retire-superseded-finalize-ref-2026-11-15']);
   assert.deepEqual(STALE_NO_PR_BRANCHES, []);
   const retired = [
     'maintenance/close-archive-closure-2026-11-15',
