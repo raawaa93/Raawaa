@@ -370,7 +370,7 @@ This is the newest verified state and supersedes older connection, release, bran
 
 - Verified installed/available in this workspace for RAWAA work: GitHub, Cloudflare, Supabase, Notion, OpenSEO, Ahrefs, Context7, Figma, and Lovable. Their connection status and project suitability differ; a listed tool is not proof of a configured production integration.
 - OpenSEO is connected to Search Console. No GA4 property is visible in the connected Google account.
-- PostHog is now connected. The only non-demo project in the Raawaa organization is `Default project`, with zero ingested events and session replay disabled. The organization has a one-project free-plan limit; use this project only after the user confirms it is the intended RAWAA Store analytics destination. See [PostHog pricing](https://posthog.com/pricing) and [project settings](https://posthog.com/docs/settings/projects).
+- A previous connector audit reported one non-demo PostHog project named `Default project`, with zero ingested events and session replay disabled; current-session access is not available. The organization has a one-project free-plan limit; use this project only after the user confirms it is the intended RAWAA Store analytics destination. See [PostHog pricing](https://posthog.com/pricing) and [project settings](https://posthog.com/docs/settings/projects).
 - Linear was discovered but not recommended because Notion is already connected for project knowledge/tasks and another task tracker would duplicate workflow. Datadog is not recommended because the current static site can use GitHub/Cloudflare checks without a new observability bill. TinyFish remains prohibited.
 - No plugin was uninstalled, no billing enabled, and no paid API usage activated.
 
@@ -413,7 +413,7 @@ No customer/order data, product formulas, prices, discounts, shipping policy, ch
 - OpenSEO crawl [audit `be7a9242-66cd-49a7-bb8d-a6892dc4acfc`](https://app.openseo.so/p/8609bf87-b153-41f8-b10c-c716c36a5c4f/audit?auditId=be7a9242-66cd-49a7-bb8d-a6892dc4acfc) completed all 7 discovered URLs. All 200 pages had one H1 and zero images missing alt text; `/index.html` redirected 308; the three `?product=` variants were informational canonicalized URLs, not errors. Campaign is intentionally noindex and absent from the indexable sitemap.
 - PR #151 merged as `834d7705597f8e2d13ea6976bcc7640260deecf3`, adding the project-local Modern Web Guidance skill and Apache-2.0 license. The current follow-up PR #152 scopes its triggers, pins CLI 1.0.1, disables telemetry, and adds policy tests.
 - The live main branch is now `834d7705597f8e2d13ea6976bcc7640260deecf3`; the production payload SHA is `e554489b78de8b280b1281b2c706d6acc42b5ad5`. The later commit only changes agent instructions, skill/docs, and tests; it does not change the deployed storefront payload.
-- The PostHog connector is connected, but project use is pending the user's confirmation of `Default project` (ID `756281`). No tracking code, session replay, or paid services were enabled.
+- A previous connector audit reported a `Default project`, but current-session PostHog data tools are unavailable; project use still requires user confirmation. No tracking code, session replay, or paid services were enabled.
 
 
 ## Follow-up closure — 2026-11-21 00:36 UTC
@@ -421,7 +421,7 @@ No customer/order data, product formulas, prices, discounts, shipping policy, ch
 - PR #152 merged as `8bd438fb80c6ce5855411c6f3f3f37e8e127dcd2`. The local Modern Web Guidance skill is now scoped to material browser-platform work, pins CLI 1.0.1, disables telemetry, excludes private data from search queries, and includes a local adaptation/Apache-2.0 notice. Its policy suite passed 67 tests.
 - The local CLI invocation was attempted with telemetry disabled but the current execution container could not reach npm before timeout. No sandbox/network controls were bypassed; the skill is installed in the repo for environments with permitted outbound access.
 - PR #153 merged as `23db34ebf7b0d8d06788e085188eef78da5c93b0`, recording the connected PostHog project and quota audit. Its exact branch head `c20f2b8f647bc5542715cba74574cbdc422dc4ce` is now eligible only through the merged-PR branch cleanup allowlist, not the no-PR archive workflow.
-- PostHog is connected; the existing `Default project` still awaits user confirmation before its token is written into the storefront configuration. No analytics instrumentation or paid service was activated.
+- A previous connector audit reported a `Default project`; the current session cannot verify it. User confirmation is still required before any token is written into storefront configuration. No analytics instrumentation or paid service was activated.
 
 
 ## PostHog integration status — 2026-11-21
