@@ -22,7 +22,7 @@ The current session exposes **819 total tool definitions**: **804 connector/MCP 
 | Integration | Available tools | Project use / status |
 |---|---:|---|
 | GitHub | 89 | Primary repository, PR, workflow, file, and release operations; main branch protection remains unconfigured |
-| Cloudflare | 4 | Pages/Workers/analytics inspection; DNS remains untouched |
+| Cloudflare | 4 | Pages project/deployment read verified; token verification endpoint returned 401, so full token scope/write access is unverified; DNS untouched |
 | Supabase | 36 | Two projects visible; Store backend source/schema not yet approved for changes |
 | OpenSEO | 87 | Active RAWAA SEO project and Search Console reporting |
 | PostHog | 2 | Connected in the current session; Store analytics use remains pending destination and consent/privacy review; no tracking is active |
