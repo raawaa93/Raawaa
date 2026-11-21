@@ -524,3 +524,9 @@ This section supersedes earlier assumptions in this file about the Store's Supab
 - PR #167 already completed the exact archive of PR #166 and removed the no-op branch. PR #168 was closed as redundant; it was not merged.
 - The remaining non-durable ref is PR #168's closed branch at exact SHA `9ee3d444021971c3ee3882de844c0c6952dd6258`. PR #169 archives that exact head before deletion and allowlists its own merged branch for cleanup.
 - Keep all 17 durable refs; verify the archive tag and final 17-ref count after the existing main-push workflow.
+
+
+## Duplicate PR #170 archive — 2026-11-21
+
+- PR #169 already merged the exact-SHA archive policy for PR #168. Duplicate PR #170 was closed as superseded; its exact head `0a7e47d3814b60640345a58d7f739ed6e19ac41d` is preserved via a dedicated archive allowlist entry and regression test.
+- PR #171 adds no new cleanup executor. It only adds the archive policy/test and exact cleanup for its own branch.
