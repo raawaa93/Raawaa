@@ -13,13 +13,14 @@
 ## Design and implementation skills
 Use these upstream skills as specialist references when a Codex environment has them installed:
 - Emil Kowalski design engineering: https://github.com/emilkowalski/skills (MIT). Install the upstream collection with `npx skills@latest add emilkowalski/skills -a codex`.
+- Google Chrome Modern Web Guidance: project-local upstream skill at `.agents/skills/modern-web-guidance/` (Apache-2.0, source commit `64a6d708f5a43f2cd3fde5d4d7db3905ba1bdf65`, CLI pinned to `modern-web-guidance@1.0.1`). Use it first for HTML/CSS/client-side JS, image loading, accessibility, and Core Web Vitals changes; set `DISABLE_TELEMETRY=1` and follow the local README commands. It is development-time only; do not add it to production dependencies.
 - Taste Skill: https://github.com/Leonxlnx/taste-skill (MIT). The upstream README documents the Codex plugin installation:
   `codex plugin marketplace add Leonxlnx/taste-skill`
   `codex plugin add taste-skill@taste-skill`
   Start a new Codex session after installation. The skill is named `design-taste-frontend`; do not refer to the older/unverified `gpt-tasteskill` name.
 - Figma MCP is connected through the user's Figma integration. Inspect the actual file and available edit permissions before making changes.
 
-These upstream skills are not vendored into this repository. Install them in the Codex workspace using the commands above; do not claim they are active merely because this file references them. Taste Skill's full checks expect its accompanying assets/scripts, Node 22+, and Chrome/Chromium. Do not copy only its SKILL.md and pretend the bundle is complete.
+Except for the project-local Google Chrome Modern Web Guidance skill, the other upstream skill collections above are references only and are not vendored. Install those separately in the Codex workspace using the commands above; do not claim they are active merely because this file references them. Taste Skill's full checks expect its accompanying assets/scripts, Node 22+, and Chrome/Chromium. Do not copy only its SKILL.md and pretend the bundle is complete.
 
 ## Browser testing
 - Install exactly the committed dependency tree with `npm ci --ignore-scripts --no-audit --no-fund`; do not use mutable `npm install` in CI.
