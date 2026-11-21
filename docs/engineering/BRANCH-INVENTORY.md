@@ -384,3 +384,10 @@ Required administrative follow-up: configure a `main` branch ruleset requiring p
 - The 17 durable refs are: main; four backups; two deploy refs; four preview-deploy refs; one production-deploy ref; three recovery refs; one release ref; and one restore ref. All were preserved.
 - PR #152 is the only open PR at this snapshot. Its exact branch is allowlisted for cleanup after merge and tested by the branch-cleanup policy suite.
 - Branch protection remains absent: no rulesets and every current branch is reported `protected=false`. This remains the highest-priority GitHub settings action.
+
+
+## No-PR ref archive candidate — 2026-11-21
+
+- `docs/posthog-integration-audit-2026-11-21` has no open or closed PR, no commits ahead of main, and its branch head exactly equals main at `8bd438fb80c6ce5855411c6f3f3f37e8e127dcd2`.
+- It contains no unique work and is not a backup, recovery, deploy, preview, release, production-deploy, or restore ref. It is individually reviewed for archival at this exact SHA only.
+- The archival workflow now creates a date-stamped tag `archive/branches/YYYY-MM-DD/docs/posthog-integration-audit-2026-11-21`, verifies that it points to the exact captured SHA, rechecks the branch head, then deletes only the original branch ref. If any condition changes, it retains the branch.
