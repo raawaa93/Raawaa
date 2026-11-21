@@ -12,6 +12,8 @@ const ARCHIVE_BRANCHES = Object.freeze({
   "maintenance/branch-maintenance-runner-2026-11-21": "881720de49a7a3a3a28fde6102987de9f06ded31",
   // Closed-unmerged PR #164 was superseded after its unique audit notes were transferred to main.
   "maintenance/final-branch-state-2026-11-21": "71e11b7b3d861787e9e72d574879298f69251b6c",
+  // Closed PR #166: preserve its exact superseded cleanup branch before deleting the ref.
+  "maintenance/archive-final-refs-2026-11-21": "31ff93d7ede35deaafff0373a92e5caa8cfc7822",
   "fix/exclude-dev-files-from-pages-payload-2026-11-15": "a4c976966be6d2193ccc76d216b3f0be3b76f27a",
 });
 const PROTECTED_PREFIXES = Object.freeze([
