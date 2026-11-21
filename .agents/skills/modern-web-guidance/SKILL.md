@@ -4,6 +4,8 @@ description: |
   Search tool for current browser-platform best practices. Use for non-trivial HTML/CSS/client-side JS work where modern APIs, browser compatibility, accessibility, performance, forms, or security materially affect correctness. Skip trivial copy/content/markup edits and unrelated backend, infrastructure, test-only, or tooling tasks.
 ---
 
+> **RAWAA local adaptation from GoogleChrome/modern-web-guidance** (source commit `64a6d708f5a43f2cd3fde5d4d7db3905ba1bdf65`). The trigger scope, CLI version pin, telemetry opt-out, and privacy boundaries were adapted for this repository. Licensed under Apache-2.0; see `LICENSE`.
+
 # Modern Web Guidance
 
 Search and retrieve standardized modern web best practices when implementing or changing a browser-facing feature where current platform behavior or compatibility materially affects correctness, accessibility, performance, or security. Skip simple copy/text/markup edits and routine changes where external guidance would not change the implementation.
