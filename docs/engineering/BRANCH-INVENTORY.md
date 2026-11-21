@@ -434,3 +434,13 @@ Required administrative follow-up: configure a `main` branch ruleset requiring p
 
 - The closed-unmerged branch `docs/final-access-and-branch-audit-2026-11-21` was verified to point exactly to main at `8fe861b2496db12242aee3b8d3362d656de3e47c` with `ahead_by=0` and `behind_by=0`.
 - Its unique documentation changes were carried into PR #157. It is allowlisted only for exact closed-branch cleanup; it will be deleted after PR #157 merges and the cleanup workflow rechecks ancestry.
+
+
+## Final post-cleanup verification — 2026-11-21
+
+- Canonical main: `6082331bca9f196d3409fa11bdbedeffd8f649d0`.
+- Current live branch refs: **17**, all durable operational/recovery refs; **zero open PRs**.
+- Branch-hygiene workflow [#44846798612](https://github.com/raawaa93/Raawaa/actions/runs/44846798612) succeeded. It inspected 19 refs and 157 PRs, deleted only two policy-approved temporary documentation refs: the closed PR #156 branch after GitHub proved it exactly matched main (`ahead_by=0`), and the exact merged PR #157 head. It preserved every operational and recovery branch.
+- Archive phase succeeded with **zero remaining archive candidates**; no additional tags were needed.
+- Retained set: main; four backups; two deploy refs; four preview-deploy refs; one production-deploy ref; three recovery refs; one release ref; one restore ref.
+- GitHub still reports zero rulesets and all retained branches `protected=false`. The main branch ruleset remains an owner-side security action.
