@@ -619,3 +619,14 @@ This section supersedes earlier assumptions in this file about the Store's Supab
 - القرار التفصيلي وبوابات التنفيذ في `docs/marketing/SYRIA-COMPATIBLE-EMAIL-STACK-2026-11-21.md`. لم يتم إنشاء حسابات خارجية أو تغيير الإنتاج أو Supabase.
 
 - Clarification: the lowest incremental-cost architecture to evaluate first is the existing Supabase project plus a minimal server-side event/automation layer and a Syria-eligible SMTP relay. The Supabase billing tier/quota is not verified, and existing Edge Function source retrieval currently fails; this is a design candidate, not an active implementation. Mautic remains the closest full-featured self-hosted Klaviyo alternative but requires a persistent VPS and database.
+
+## Store operations backend audit — 2026-11-21
+
+- The canonical owner client points to Supabase project `Ghaioooth-core` (`oyoyozdugicmnkfhjovo`). The fallback project is inactive and is not the Store backend.
+- The current owner client supports login, paginated order listing, Telegram pairing, and a Telegram test notification. It has no order-status mutation or inventory API. The live owner settings do not configure the optional marketing-preference withdrawal endpoint.
+- `rawaa_store.orders`, `rawaa_store.notification_outbox`, and `rawaa_store.marketing_preference_events` are empty. A Telegram pairing challenge and recipient record exist; do not read or expose their values.
+- `commerce` is also empty, defaults currency to USD and cost fields to unapproved values, and has no schema/table privileges for the inspected API roles. Do not use it for RAWAA orders in its current state.
+- `rawaa_store` has RLS enabled and grants access to `service_role` only; `anon` and `authenticated` have no schema usage/table privileges. No RLS policies were present; this is not evidence of public exposure without grants.
+- Six Edge Functions are deployed. Gateway JWT is enabled for the owner and Telegram functions, disabled for outbox, retention, and `commerce-api`. The deployed source could not be retrieved during the 2026-11-21 audit; internal auth, scheduler secrets, idempotency, and rate limits remain unverified. Do not expose or change these functions until exact source is reviewed.
+- Keep WhatsApp handoff as the customer order path. Do not add parallel order stores, direct intake, stock quantities, or order mutation UI until one authoritative order model and verified function contracts are selected.
+- Full read-only findings and implementation gates: `docs/engineering/BACKEND-CONTRACT-AUDIT-2026-11-21.md`.
