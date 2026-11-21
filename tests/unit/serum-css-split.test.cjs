@@ -10,6 +10,7 @@ const root = path.resolve(__dirname, '../..');
 test('serum uses its pruned shell stylesheet while other routes keep shared CSS', () => {
   const serumHtml = fs.readFileSync(path.join(root, 'serum.html'), 'utf8');
   const homeHtml = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+  const homeHtml = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
   const campaignHtml = fs.readFileSync(path.join(root, 'campaign.html'), 'utf8');
   const privacyHtml = fs.readFileSync(path.join(root, 'privacy.html'), 'utf8');
   const shellCssPath = path.join(root, 'css', 'serum-shell.css');
@@ -23,6 +24,8 @@ test('serum uses its pruned shell stylesheet while other routes keep shared CSS'
   assert.match(homeHtml, /href="css\/utilities\.css"/);
   assert.match(homeHtml, /href="css\/three-formulas\.css"/);
   assert.doesNotMatch(homeHtml, /href="css\/serum-shell\.css"/);
+  assert.match(campaignHtml, /href="css\/styles\.css"/);
+  assert.match(privacyHtml, /href="css\/styles\.css"/);
   assert.ok(shellCss.length > 0);
   assert.ok(shellCss.length < sharedCss.length * 0.7);
 
