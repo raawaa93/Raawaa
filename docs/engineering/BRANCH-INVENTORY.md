@@ -407,3 +407,12 @@ Required administrative follow-up: configure a `main` branch ruleset requiring p
 - PR #154 is a tooling/maintenance-only change. It updates archive tag dates to the actual execution date, removes duplicate skill attribution, and corrects the public registry; it does not change storefront payload.
 - The old no-PR audit branch is no longer a candidate for archival; it was merged as PR #153 and deleted through the merged-PR cleanup policy.
 - Branch protection/rulesets remain absent; all enumerated refs are `protected=false`. Repository-admin settings action remains required.
+
+
+## Current verified branch snapshot — 2026-11-21 00:43 UTC
+
+- Canonical `main`: `cdb08a49b638d80a794d64bb8afc6c5def0c9e05`.
+- Branch count: **17**, with **0 open PRs**. The 17 refs are main; four backup refs; two deploy refs; four preview-deploy refs; one production-deploy ref; three recovery refs; one release ref; and one restore ref.
+- PR #154 and its exact head branch have been merged and removed by branch hygiene. No extra no-PR audit branches remain.
+- All 17 refs are operational checkpoints; do not delete or rewrite them without a separately reviewed exact-SHA archival record.
+- No branch protection/rulesets are configured; the live branch API reports `protected=false` for each ref. Add a main ruleset through GitHub Settings.
