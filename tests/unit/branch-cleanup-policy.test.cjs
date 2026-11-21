@@ -517,3 +517,21 @@ test('retires this exact cleanup-policy PR branch only after its own head is mer
     [],
   );
 });
+
+
+test('retires the exact branch-maintenance runner PR head after merge', () => {
+  const name = 'maintenance/branch-maintenance-runner-2026-11-21';
+  const head = 'branch-maintenance-runner-pr-head';
+  assert.ok(MERGED_PR_BRANCHES.includes(name));
+  assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
+  assert.deepEqual(
+    classifyBranches([branchRef(name, { sha: head })], [pr(name, { merged: true, sha: head })], repository).map(x => x.name),
+    [name],
+  );
+  assert.deepEqual(
+    classifyBranches([branchRef(name, { sha: 'moved-head' })], [pr(name, { merged: true, sha: head })], repository, {
+      [name]: { ahead_by: 1, behind_by: 0 },
+    }),
+    [],
+  );
+});
