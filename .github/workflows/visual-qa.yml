@@ -16,6 +16,9 @@ on:
     paths:
       - 'scripts/visual-audit.mjs'
       - '.github/workflows/visual-qa.yml'
+  # zizmor: ignore[dangerous-triggers]
+  # Safe exception: this workflow checks out the default branch, has read-only contents permission,
+  # receives no secrets, and audits only fixed public Pages URLs after successful deploy workflows.
   workflow_run:
     workflows:
       - Cloudflare Pages preview
