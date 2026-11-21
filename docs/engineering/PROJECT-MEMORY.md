@@ -559,7 +559,7 @@ This section supersedes earlier assumptions in this file about the Store's Supab
 - Supabase `Ghaiooth-core` contains RAWAA staging/commerce schemas and six active Edge Functions; its security advisor reports 17 RLS-enabled tables without policies and leaked-password protection disabled. A read-only privilege audit confirms no `anon` or `authenticated` SELECT/INSERT grants on those affected application tables. The project also has one duplicate-index and ten unused-index notices. Treat these as review items, not permission to alter production schema or indexes.
 - `raawaa-engine-fallback` is a separate healthy project with seven RLS-enabled/no-policy tables and no `anon`/`authenticated` SELECT grants. No row data was read or changed in either project.
 - PostHog's Default project has not completed onboarding and has ingested no events; no tracking is active. Figma is connected with View-only seat. Plugin search confirms the core GitHub, OpenSEO, Lovable, Ahrefs, PostHog, and Figma integrations are already installed; no redundant app was added. TinyFish remains excluded.
-- Added the project-local GitHub Actions Security skill and a pinned zizmor workflow to audit workflow supply-chain risks. Initial scan is advisory pending triage; no production deployment, billing, credential, DNS, or database mutation was performed.
+- Added the project-local GitHub Actions Security skill and a pinned zizmor workflow to audit workflow supply-chain risks. The final workflow scan on `2a2cfd77c395013480d0c8c815f6aea1bfd1a182` passed with no findings; the workflow is blocking on future findings. GitHub rulesets remain unavailable through the connector.
 
 
 ## Security audit follow-up — 2026-11-21
@@ -569,3 +569,9 @@ This section supersedes earlier assumptions in this file about the Store's Supab
 - The zizmor workflow now fails on findings. Its previous run still showed two default-permission warnings in the branch-hygiene workflow; the workflow-level `contents: read` fix is now committed, and the exact-head rescan is pending.
 - The PR Lighthouse config was changed from one run to three to reduce false failures from a single noisy mobile performance sample. The first one-run sample scored homepage Performance 0.76 against the 0.80 threshold; this is not evidence of a production regression. The exact-head three-run median must pass before merge.
 - PR #179 remains open and documentation/CI-only. Do not merge until the final exact-head Store checks, Playwright, Visual QA, Lighthouse, OSV, repository-policy, Graphify, and blocking zizmor results are reviewed. No production deployment or website source change is included.
+
+
+## Current-session reconciliation — 2026-11-21
+
+- PostHog tools are now exposed in this session (two read/analysis actions). A read-only project listing confirms one `Default project`, onboarding incomplete, and no ingested events. Earlier notes saying PostHog tools were unavailable refer to a prior session; they are no longer current. No SDK, token, event capture, or session replay is active.
+- The latest clean zizmor run reviewed all 14 workflow/config files on commit `2a2cfd77c395013480d0c8c815f6aea1bfd1a182`. The only subsequent changes are documentation/registry updates, not workflow changes. The PR's full validation on the latest docs head is still being rerun.
