@@ -223,3 +223,54 @@ test('GitHub API client creates and verifies an annotated archive tag before ret
   assert.equal(result, tagObjectSha);
   assert.deepEqual(calls.map((call) => call.method), ['GET', 'POST', 'POST', 'GET', 'GET']);
 });
+
+
+test('archive is not deleted if an open PR appears after tag creation', async () => {
+  const branch = branchRef(ARCHIVE_BRANCH, ARCHIVE_SHA);
+  const calls = [];
+  let pullRead = 0;
+  const api = {
+    getBranch: async () => branch,
+    listPullRequests: async () => {
+      pullRead += 1;
+      return pullRead === 1
+        ? [pull(ARCHIVE_BRANCH, { sha: ARCHIVE_SHA, merged: false })]
+        : [pull(ARCHIVE_BRANCH, { sha: ARCHIVE_SHA, merged: false, state: 'open' })];
+    },
+    ensureAnnotatedTag: async () => calls.push('tag'),
+    deleteBranch: async () => calls.push('delete'),
+  };
+
+  const result = await runMaintenance({
+    branches: [branch],
+    pullRequests: [pull(ARCHIVE_BRANCH, { sha: ARCHIVE_SHA, merged: false })],
+    repository: REPOSITORY,
+    api,
+    dryRun: false,
+  });
+
+  assert.equal(result.actions[0].status, 'skipped');
+  assert.equal(result.actions[0].reason, 'archive-no-longer-eligible');
+  assert.deepEqual(calls, ['tag']);
+});
+
+test('GitHub API client verifies a branch ref is absent after deletion', async () => {
+  let exists = true;
+  const fetchImpl = async (url, options = {}) => {
+    const method = options.method || 'GET';
+    if (method === 'DELETE' && url.includes('/git/refs/heads/')) {
+      exists = false;
+      return response(204, null);
+    }
+    if (method === 'GET' && url.includes('/branches/')) {
+      return exists
+        ? response(200, branchRef(MERGED_BRANCH, MERGED_SHA))
+        : response(404, { message: 'Not Found' });
+    }
+    throw new Error(`Unexpected request: ${method} ${url}`);
+  };
+
+  const api = createGitHubApi({ token: 'test-token', repository: REPOSITORY, fetchImpl });
+  await api.deleteBranch(MERGED_BRANCH);
+  assert.equal(exists, false);
+});
