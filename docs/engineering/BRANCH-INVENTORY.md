@@ -418,3 +418,13 @@ Required administrative follow-up: configure a `main` branch ruleset requiring p
 - The archive phase succeeded with zero remaining archive candidates; no new archive tags were required in this run.
 - The branch cleanup workflow and tests now treat the PR #153 branch as merged-PR work, not no-PR work. No stale no-PR candidate was added.
 - GitHub still reports no branch protection and no rulesets; every retained ref is `protected=false`. The repository is clean of temporary branches, but the missing main ruleset remains a material security gap requiring owner action.
+
+
+## Live refs after PR #155 merge and PR #156 closure — 2026-11-21 04:05 UTC
+
+- Canonical `main`: `8fe861b2496db12242aee3b8d3362d656de3e47c`.
+- Current live count at this snapshot: **19 refs** = 17 durable operational/recovery refs, one open PR #157 branch (`docs/final-live-state-2026-11-21`), and one closed-unmerged PR #156 branch (`docs/final-access-and-branch-audit-2026-11-21`).
+- PR #156 was closed as superseded; its branch was reset to the exact current main SHA `8fe861b2496db12242aee3b8d3362d656de3e47c`. Its useful tool-count/PostHog observations were transferred into PR #157. It is individually allowlisted for archival at this exact SHA only; the archive job must create and verify the exact tag before deleting the branch.
+- PR #157 remains open and must be retained until its checks pass and it is merged or explicitly closed.
+- The 17 durable refs remain main; four backups; two deploy; four preview-deploy; one production-deploy; three recovery; one release; and one restore. Preserve all.
+- Main branch protection and repository rulesets remain absent. No branch is reported protected; configure a main ruleset through GitHub settings.
