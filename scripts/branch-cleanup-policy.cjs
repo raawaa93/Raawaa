@@ -135,7 +135,9 @@ const MERGED_PR_BRANCHES = Object.freeze([
   // Latest free email provider shortlist comparison.
   "docs/email-provider-shortlist-current-2026-11-21",
   // Confirmed Syrian business entity and corrected provider/sanctions assessment.
-  "docs/syria-entity-confirmed-provider-review-2026-11-21"
+  "docs/syria-entity-confirmed-provider-review-2026-11-21",
+  // Verified support channels and inquiry template for Syrian provider eligibility.
+  "docs/provider-support-inquiry-template-2026-11-21"
 ]);
 const SUPERSEDED_CLOSED_PR_BRANCHES = Object.freeze([
   "maintenance/retire-superseded-finalize-ref-2026-11-15",
