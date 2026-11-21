@@ -66,7 +66,7 @@ test('keeps closed-unmerged work for the exact-SHA archive workflow', () => {
 
 test('no closed-unmerged or no-PR maintenance refs remain individually eligible', () => {
   assert.deepEqual(SUPERSEDED_CLOSED_PR_BRANCHES, ['maintenance/retire-superseded-finalize-ref-2026-11-15', 'docs/final-access-and-branch-audit-2026-11-21']);
-  assert.deepEqual(STALE_NO_PR_BRANCHES, []);
+  assert.deepEqual(STALE_NO_PR_BRANCHES, ['maintenance/reconcile-concurrent-docs-2026-11-21']);
   const retired = [
     'maintenance/close-archive-closure-2026-11-15',
     'maintenance/archive-final-closure-ref-2026-11-15',
@@ -532,6 +532,35 @@ test('retires the exact archive-policy PR branch after its own head merges', () 
     classifyBranches([branchRef(name, { sha: 'moved-head' })], [pr(name, { merged: true, sha: head })], repository, {
       [name]: { ahead_by: 1, behind_by: 0 },
     }),
+    [],
+  );
+});
+
+
+test('retires the exact merged PR163 documentation head and this PR branch', () => {
+  const cases = [
+    ['docs/final-branch-cleanup-verification-2026-11-21', 'pr163-final-docs-head'],
+    ['maintenance/archive-final-refs-2026-11-21', 'pr165-archive-head'],
+  ];
+  for (const [name, head] of cases) {
+    assert.ok(MERGED_PR_BRANCHES.includes(name));
+    assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
+    assert.deepEqual(
+      classifyBranches([branchRef(name, { sha: head })], [pr(name, { merged: true, sha: head })], repository).map(x => x.name),
+      [name],
+    );
+  }
+});
+
+test('retires a reviewed no-PR branch only when it is exactly even with main', () => {
+  const name = 'maintenance/reconcile-concurrent-docs-2026-11-21';
+  assert.ok(STALE_NO_PR_BRANCHES.includes(name));
+  assert.deepEqual(
+    classifyBranches([branchRef(name)], [], repository, { [name]: { ahead_by: 0, behind_by: 0 } }).map(x => x.name),
+    [name],
+  );
+  assert.deepEqual(
+    classifyBranches([branchRef(name)], [], repository, { [name]: { ahead_by: 1, behind_by: 0 } }),
     [],
   );
 });
