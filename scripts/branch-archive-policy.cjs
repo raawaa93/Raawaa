@@ -14,6 +14,8 @@ const ARCHIVE_BRANCHES = Object.freeze({
   "maintenance/final-branch-state-2026-11-21": "71e11b7b3d861787e9e72d574879298f69251b6c",
   // Closed-unmerged PR #166 was superseded by PR #167 after its policy was reconciled.
   "maintenance/archive-final-refs-2026-11-21": "31ff93d7ede35deaafff0373a92e5caa8cfc7822",
+  // Closed PR #168: archive the superseded reconciliation branch at its exact head.
+  "maintenance/archive-closed-stale-refs-2026-11-21": "9ee3d444021971c3ee3882de844c0c6952dd6258",
   "fix/exclude-dev-files-from-pages-payload-2026-11-15": "a4c976966be6d2193ccc76d216b3f0be3b76f27a",
 });
 const PROTECTED_PREFIXES = Object.freeze([
