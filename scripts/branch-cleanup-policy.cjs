@@ -81,6 +81,8 @@ const MERGED_PR_BRANCHES = Object.freeze([
   "docs/final-tooling-state-2026-11-15",
   "maintenance/final-archive-closure-2026-11-15",
   "docs/record-final-archive-run-2026-11-15",
+  "docs/integration-audit-2026-11-21",
+  "perf/serum-css-pruning-2026-11-21",
   "feature/competitor-crawl4ai-weekly",
   "fix/competitor-crawl-runner",
   "fix/production-release-ancestry-fetch",
@@ -98,8 +100,7 @@ const MERGED_PR_BRANCHES = Object.freeze([
   "maintenance/close-merged-branches-refresh-inventory-2026-11-15",
   "fix/remove-retired-route-build-guard-2026-11-21",
   "maintenance/retire-pr146-branches-2026-11-21",
-  "perf/responsive-product-images-2026-11-21",
-  "perf/serum-css-pruning-2026-11-21"
+  "perf/responsive-product-images-2026-11-21"
 ]);
 const SUPERSEDED_CLOSED_PR_BRANCHES = Object.freeze([
   "maintenance/retire-superseded-finalize-ref-2026-11-15",
