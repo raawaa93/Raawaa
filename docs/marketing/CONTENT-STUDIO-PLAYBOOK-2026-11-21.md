@@ -223,9 +223,35 @@ Use a 20–30 second non-sensitive Arabic voice sample with a deliberately varie
 - OpenCut Android README and releases: https://github.com/zaitxcode/opencut
 - Caption Studio install/security guidance: https://github.com/Hatsunama/Caption-Studio
 - Tahbeer README and releases: https://github.com/mohammadmansour200/tahbeer
+- Tahbeer official v2.2.0 release (GitHub only; no verified Google Play listing): https://github.com/mohammadmansour200/tahbeer/releases/tag/v2.2.0
 - arsub Arabic RTL implementation: https://github.com/Ifazawezk/arabic-subtitles
 - cutpoeta local captioning notes: https://cutpoeta.com/en/auto-captions/
 - VN official Google Play listing: https://play.google.com/store/apps/details?id=com.frontrow.vlog
+## 8C. Release-level verification and next device test (21 Nov 2026)
+
+This is a release-metadata audit, not an installation or runtime test. Release dates, asset sizes and SHA-256 digests below were read from the official GitHub Releases API. A digest confirms that a downloaded file matches the published asset only when the downloaded file is hashed locally; it does not independently prove the publisher's identity.
+
+### Corrected official download sources
+
+- **Tahbeer v2.2.0** — stable GitHub release dated 28 Nov 2025. The project has no verified Google Play listing in the sources checked; do not use a guessed Play Store URL. For an ARM64 Android device, the official asset is [tahbeer-arm64-v8a_v2.2.0.apk](https://github.com/mohammadmansour200/tahbeer/releases/download/v2.2.0/tahbeer-arm64-v8a_v2.2.0.apk), 85,354,378 bytes, SHA-256 `92b7d873de8112925e367d19ebf8193576cb0a709a8e295d914dcc6b637f8d9d`. [Official release page](https://github.com/mohammadmansour200/tahbeer/releases/tag/v2.2.0). This is an old release (2025), so keep it a test candidate rather than an assumed maintained production dependency.
+- **OpenCut Android v1.0.3** — stable release dated 22 Oct 2026. [Official APK](https://github.com/zaitxcode/opencut/releases/download/v1.0.3/opencut-1.0.3.apk), 1,658,412 bytes, SHA-256 `8360db497afb9c8b98ea1769cc968a82ddd461d692dc2d1afcb0a93b2812444c`. [Official release page](https://github.com/zaitxcode/opencut/releases/tag/v1.0.3). Arabic UI and RTL are claimed in the release notes; exported Arabic caption rendering still needs device validation.
+- **Caption Studio v1.4.145** — immutable but explicitly prerelease, dated 17 Nov 2026. APK size 172,109,258 bytes; release asset digest SHA-256 `97097160e13adeeb58b59e4e49f8a36ec9ae63974c9083035e8fe9abc2fdbc92`. [Official prerelease page](https://github.com/Hatsunama/Caption-Studio/releases/tag/v1.4.145). Despite attached checksum and verification artifacts, this is not the first install candidate: it is large, prerelease, and Arabic RTL output has not been proven.
+
+### Tahbeer privacy and permissions review
+
+The current repository privacy policy (last updated 17 Oct 2025) says transcription and subtitle processing use local Whisper and remain on-device; optional ML Kit translation may involve Google services. The checked Android manifest includes `INTERNET`, legacy storage write permission (max SDK 28), and `allowBackup=true`. Therefore, do not interpret “offline transcription” as “the app has no network capability.” For Raawaa's first test, use only a newly recorded, non-sensitive voice sample; do not feed customer recordings or confidential brand material. Keep translation features off for the initial test.
+
+### Copy-ready Arabic test passage
+
+Read this naturally, then once more at a slower pace. Do not mention product benefits or claims; this is only a speech-recognition test:
+
+> في رواء، نختبر دقة الترجمة العربية قبل اعتمادها. أريد أن تظهر الهمزة في كلمة «إضاءة»، والتاء المربوطة في كلمة «العناية»، وأن تبقى الحروف متصلة من اليمين إلى اليسار. انتبه إلى الفاصلة، وعلامة الاستفهام؟ وإلى الأرقام ١٢٣ و123، وكلمة VN باللغة الإنجليزية. بعد ذلك أقرأ الجملة نفسها ببطء، حتى نقارن توقيت الكلمات مع الصوت.
+
+### Execution boundary and next action
+
+No APK has been downloaded, installed, or executed in this session. The available integrations can inspect repositories and release metadata but do not expose control of the user's Android device, so a device-side installation cannot truthfully be reported as complete. The safe next test is: install Tahbeer only from its official release page (or OpenCut from its official release page), use the passage above, export SRT, then inspect the actual MP4 and subtitle file. Keep VN as the production editor until two separate test exports pass. Do not install Caption Studio prerelease yet.
+
+
 ## 9. Attribution and experiment design
 
 Assign each creative a unique ID, e.g. `IG-A-R26-02`, `FB-B-R26-03`. Use separate UTMs:
