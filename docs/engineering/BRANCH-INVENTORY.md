@@ -506,3 +506,10 @@ Required administrative follow-up: configure a `main` branch ruleset requiring p
 - PR #166's unique safe-cleanup intent is retained: PR #163 exact merged head, PR #164 exact closed-unmerged archive head, and exact no-PR ancestry checks. The relevant policies/tests already landed in PR #165.
 - PR #166 is closed as superseded; its exact latest head `31ff93d7ede35deaafff0373a92e5caa8cfc7822` is added to the archive allowlist so its ref is preserved before deletion.
 - The new PR #167 only reconciles this exact archive and its own branch cleanup. Do not remove any durable operational refs.
+
+
+## Superseding PR #168 — 2026-11-21
+
+- PR #168 duplicated the already-merged exact-SHA archive/cleanup policy from PR #167 and remained non-mergeable after its base was refreshed. Its changes do not justify a second executor or a second no-PR cleanup path.
+- PR #168 is closed as superseded. Preserve its exact head `9ee3d444021971c3ee3882de844c0c6952dd6258` with the existing archive workflow before deleting its ref.
+- PR #169 adds only this archive entry/test and its own exact merged-head retirement entry/test. The existing policy already covers the PR #163, #164, #165, and #166 cleanup refs.
