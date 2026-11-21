@@ -569,3 +569,12 @@ test('retires this stale-cleanup PR branch only after its exact head merges', ()
     [name]: { ahead_by: 1, behind_by: 0 },
   }), []);
 });
+
+
+test('retires the exact archive PR #169 branch after its head merges', () => {
+  const name = 'maintenance/archive-stale-pr168-2026-11-21';
+  const head = 'pr169-archive-head';
+  assert.ok(MERGED_PR_BRANCHES.includes(name));
+  assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
+  assert.deepEqual(classifyBranches([branchRef(name, { sha: head })], [pr(name, { merged: true, sha: head })], repository).map(x => x.name), [name]);
+});
