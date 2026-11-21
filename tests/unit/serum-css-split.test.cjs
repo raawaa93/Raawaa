@@ -18,7 +18,10 @@ test('serum uses its pruned shell stylesheet while other routes keep shared CSS'
 
   assert.match(serumHtml, /href="css\/serum-shell\.css"/);
   assert.doesNotMatch(serumHtml, /href="css\/styles\.css"/);
-  assert.match(homeHtml, /href="css\/styles\.css"/);
+  assert.match(homeHtml, /href="css\\/home-inline\\.css"/);
+  assert.match(homeHtml, /href="css\\/utilities\\.css"/);
+  assert.match(homeHtml, /href="css\\/three-formulas\\.css"/);
+  assert.doesNotMatch(homeHtml, /href="css\\/serum-shell\\.css"/);
   assert.ok(shellCss.length > 0);
   assert.ok(shellCss.length < sharedCss.length * 0.7);
 
