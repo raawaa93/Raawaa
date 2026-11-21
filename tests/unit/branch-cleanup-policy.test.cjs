@@ -361,3 +361,19 @@ test('retires the exact home price idle-enhancement PR branch after merge', () =
   assert.deepEqual(classifyBranches([branchRef(name, { sha: head })], [pr(name, { merged: true, sha: head })], repository).map(x => x.name), [name]);
   assert.deepEqual(classifyBranches([branchRef(name, { sha: 'moved-head' })], [pr(name, { merged: true, sha: head })], repository), []);
 });
+
+
+test('retires the exact PR #146 repair branch and its cleanup branch after merge', () => {
+  const names = [
+    'fix/remove-retired-route-build-guard-2026-11-21',
+    'maintenance/retire-pr146-branches-2026-11-21',
+  ];
+  for (const name of names) {
+    assert.ok(MERGED_PR_BRANCHES.includes(name));
+    assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
+    assert.deepEqual(
+      classifyBranches([branchRef(name)], [pr(name, { merged: true })], repository).map(x => x.name),
+      [name],
+    );
+  }
+});
