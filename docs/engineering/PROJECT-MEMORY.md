@@ -467,3 +467,9 @@ This section supersedes earlier assumptions in this file about the Store's Supab
 - After PR #160 merged, two temporary documentation refs remained beyond the 17 durable operational/recovery refs: merged PR #160 head `docs/tooling-refresh-2026-11-21` and closed-unmerged PR #159 head `docs/final-live-state-2026-11-21`.
 - PR #160's exact merged head is allowlisted for deletion only when the live branch head matches the merged PR head. PR #159's exact head is allowlisted for archive-first retirement; its 48-ahead/3-behind history must be preserved in an annotated archive tag before branch deletion.
 - Do not delete either ref directly. The branch-cleanup and archive workflows must prove the exact conditions and the final 17-ref state must be rechecked.
+
+
+## Active branch cleanup PR — 2026-11-21
+
+- PR #161 is the only open PR. It contains exact-SHA policy and regression tests to remove merged PR #160's temporary branch, archive then remove closed PR #159's stale branch, and remove its own branch after merge.
+- Current ref count is 20: 17 durable operational/recovery refs plus three temporary refs. Do not claim the final 17-ref state until the archive and branch-cleanup workflows verify it.
