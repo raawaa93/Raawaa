@@ -74,3 +74,10 @@ test('does not archive unknown refs, even when a same-name fork PR exists', () =
     [],
   );
 });
+
+
+test('keeps the closed PR156 branch out of archive candidates because exact-main cleanup owns it', () => {
+  const name = 'docs/final-access-and-branch-audit-2026-11-21';
+  assert.equal(Object.prototype.hasOwnProperty.call(ARCHIVE_BRANCHES, name), false);
+  assert.deepEqual(selectArchiveCandidates([branch(name, '8fe861b2496db12242aee3b8d3362d656de3e47c')], [], repository), []);
+});
