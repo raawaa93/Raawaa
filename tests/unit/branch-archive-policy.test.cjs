@@ -29,6 +29,7 @@ test('archives individually reviewed inactive refs only at their exact SHAs', ()
     'maintenance/archive-final-refs-2026-11-21': '31ff93d7ede35deaafff0373a92e5caa8cfc7822',
     'maintenance/archive-closed-stale-refs-2026-11-21': '9ee3d444021971c3ee3882de844c0c6952dd6258',
     'maintenance/archive-stale-pr168-2026-11-21': '0a7e47d3814b60640345a58d7f739ed6e19ac41d',
+    'maintenance/archive-duplicate-pr170-2026-11-21': '2558a850dce41d277ef186e7157b345beef7f5ad',
     'fix/exclude-dev-files-from-pages-payload-2026-11-15': 'a4c976966be6d2193ccc76d216b3f0be3b76f27a',
   };
   assert.deepEqual(ARCHIVE_BRANCHES, reviewed);
@@ -50,6 +51,7 @@ test('archives individually reviewed inactive refs only at their exact SHAs', ()
       'maintenance/archive-final-refs-2026-11-21',
       'maintenance/archive-closed-stale-refs-2026-11-21',
       'maintenance/archive-stale-pr168-2026-11-21',
+      'maintenance/archive-duplicate-pr170-2026-11-21',
       'fix/exclude-dev-files-from-pages-payload-2026-11-15',
     ],
   );
@@ -151,5 +153,15 @@ test('archives the exact closed PR170 duplicate and rejects moved or open refs',
   assert.equal(expectedArchiveShaMatches(branch(name, sha)), true);
   assert.equal(expectedArchiveShaMatches(branch(name, 'moved-head')), false);
   assert.deepEqual(selectArchiveCandidates([branch(name, sha)], [pull(name, 'closed')], repository).map(x => x.name), [name]);
+  assert.deepEqual(selectArchiveCandidates([branch(name, sha)], [pull(name, 'open')], repository), []);
+});
+
+
+test('archives the exact closed duplicate PR #174 branch at its reviewed SHA', () => {
+  const name = 'maintenance/archive-duplicate-pr170-2026-11-21';
+  const sha = '2558a850dce41d277ef186e7157b345beef7f5ad';
+  assert.equal(expectedArchiveShaMatches(branch(name, sha)), true);
+  assert.equal(expectedArchiveShaMatches(branch(name, 'moved-head')), false);
+  assert.deepEqual(selectArchiveCandidates([branch(name, sha)], [], repository).map(x => x.name), [name]);
   assert.deepEqual(selectArchiveCandidates([branch(name, sha)], [pull(name, 'open')], repository), []);
 });
