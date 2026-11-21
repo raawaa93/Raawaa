@@ -560,3 +560,12 @@ This section supersedes earlier assumptions in this file about the Store's Supab
 - `raawaa-engine-fallback` is a separate healthy project with seven RLS-enabled/no-policy tables and no `anon`/`authenticated` SELECT grants. No row data was read or changed in either project.
 - PostHog's Default project has not completed onboarding and has ingested no events; no tracking is active. Figma is connected with View-only seat. Plugin search confirms the core GitHub, OpenSEO, Lovable, Ahrefs, PostHog, and Figma integrations are already installed; no redundant app was added. TinyFish remains excluded.
 - Added the project-local GitHub Actions Security skill and a pinned zizmor workflow to audit workflow supply-chain risks. Initial scan is advisory pending triage; no production deployment, billing, credential, DNS, or database mutation was performed.
+
+
+## Security audit follow-up — 2026-11-21
+
+- Initial zizmor v1.32.0 scan identified unpinned GitHub Actions references and broad default permissions. All discovered action/reusable-workflow references were pinned to immutable commit SHAs; workflow-level permissions default to `contents: read`; write access is scoped to the branch-pruning job; Playwright is explicitly read-only; Dependabot updates now have a 7-day cooldown.
+- `visual-qa.yml` keeps a narrowly documented `workflow_run` exception: it checks out the default branch, has read-only contents permission, receives no secrets, and audits fixed public Pages URLs. The zizmor ignore is scoped to that single trigger.
+- The zizmor workflow now fails on findings. Its previous run still showed two default-permission warnings in the branch-hygiene workflow; the workflow-level `contents: read` fix is now committed, and the exact-head rescan is pending.
+- The PR Lighthouse config was changed from one run to three to reduce false failures from a single noisy mobile performance sample. The first one-run sample scored homepage Performance 0.76 against the 0.80 threshold; this is not evidence of a production regression. The exact-head three-run median must pass before merge.
+- PR #179 remains open and documentation/CI-only. Do not merge until the final exact-head Store checks, Playwright, Visual QA, Lighthouse, OSV, repository-policy, Graphify, and blocking zizmor results are reviewed. No production deployment or website source change is included.
