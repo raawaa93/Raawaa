@@ -416,3 +416,11 @@ Required administrative follow-up: configure a `main` branch ruleset requiring p
 - PR #154 and its exact head branch have been merged and removed by branch hygiene. No extra no-PR audit branches remain.
 - All 17 refs are operational checkpoints; do not delete or rewrite them without a separately reviewed exact-SHA archival record.
 - No branch protection/rulesets are configured; the live branch API reports `protected=false` for each ref. Add a main ruleset through GitHub Settings.
+
+
+## Live refs after PR #155 merge — 2026-11-21 03:58 UTC
+
+- Canonical main: `8fe861b2496db12242aee3b8d3362d656de3e47c`.
+- Live enumeration currently shows **20 refs**: the 17 durable operational/recovery refs plus `docs/final-access-and-branch-audit-2026-11-21` (open PR #156), `docs/final-branch-state-2026-11-21` (merged PR #155, awaiting exact-head cleanup), and `docs/final-live-state-2026-11-21` (no open PR; retained pending a content/ancestry review).
+- Do not classify `docs/final-live-state-2026-11-21` as disposable based on its name alone. Verify its exact tree/commit ancestry and any unique changes before archiving or deleting it.
+- The previous 17-ref/zero-open-PR snapshot at 00:43 UTC remains accurate for that timestamp; this section records the later live state.
