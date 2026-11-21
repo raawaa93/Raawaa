@@ -341,3 +341,18 @@ This is the current live enumeration and supersedes all earlier expected/current
   - `restore/integrated-store-2026-11-14`
 
 The repository is back to its 17 durable operational/recovery refs with no temporary working branch and no open PR. Do not delete or consolidate any of these refs without an individual review and a verified recovery point.
+
+
+## Superseding live state — 2026-11-21 after PR #148
+
+This section supersedes the 17-ref snapshot above. The live GitHub API enumeration returned 18 refs before the current documentation PR was opened; this documentation branch is expected to be removed by the exact merged-head allowlist after merge.
+
+- Canonical `main`: `51856e1f8329e9f30086a03e106d5b7abaaa126c`.
+- Live refs before this documentation branch: **18** (17 durable operational/recovery refs plus one redundant branch pointing exactly to the same SHA as main).
+- The redundant ref is `perf/serum-css-pruning-2026-11-21`; it has no open PR in the live open-PR query and its head equals main. It was retained rather than deleted without an archive tag; retire it only through the exact-SHA archive workflow.
+- The 17 durable refs remain the exact set listed in the preceding superseding snapshot: main; four backup refs; two deploy refs; four preview-deploy refs; one production-deploy ref; three recovery refs; one release ref; and one restore ref.
+- Current GitHub API reported `protected=false` for every branch and `GET /repos/{owner}/{repo}/rulesets` returned an empty array. Branch protection is not configured. Do not interpret CI success as protection against direct pushes or force-pushes.
+- No backup, recovery, deployment, preview, production-deploy, release, or restore refs were deleted or rewritten during this audit.
+- PR #148 merged successfully and the production deployment/Visual QA workflows succeeded. See the dated operational release record in `docs/engineering/TOOLING-REGISTRY.md`.
+
+Required administrative follow-up: configure a `main` branch ruleset requiring pull requests and verified PR checks, block force-push and deletion, and narrow the GitHub App installation to the repository set actually needed. The available GitHub connector can inspect but cannot mutate these settings.
