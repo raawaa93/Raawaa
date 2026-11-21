@@ -316,3 +316,17 @@ This is an account-level inventory. Only resources positively identified as belo
 - Full assessment, upstream file links, adoption workflow, and security/cost guardrails: [AGENCY-AGENTS-ADOPTION.md](AGENCY-AGENTS-ADOPTION.md).
 - **Release-policy correction:** the older registry text above that describes manual production dispatch/confirmation is superseded. Current canonical `main` uses automatic production deployment for qualifying website-source pushes only after full technical validation; workflow-only and documentation-only changes do not trigger storefront deployment. Manual dispatch/confirmation is disabled. See `AGENTS.md` and `docs/engineering/PROJECT-MEMORY.md` for the current release boundary.
 - Current canonical `main` at this review: `5fc284cffa589ad995728fae3210a64e4f603b5c`. Latest recorded visual QA run `43701376564` succeeded; branch-hygiene, disaster-recovery, and offline Graphify runs for the subsequent workflow/docs-only update also succeeded. This does not claim a new storefront deployment occurred.
+
+
+## Live runtime catalog snapshot — 2026-11-21
+
+This supersedes the earlier catalog count in the historical snapshot above; earlier figures are retained as historical records.
+
+- Current `ALL_TOOLS` enumeration: **817 tool definitions across 24 integration families**.
+- Current installed Skills catalog: **152 Skills**.
+- This count is a workspace capability inventory, not proof that every integration is authenticated, configured for RAWAA, or appropriate for every task.
+- Project-connected and used in the 2026-11-21 audit: GitHub, Cloudflare, Supabase, Notion, OpenSEO, and Ahrefs.
+- OpenSEO Search Console is connected; GA4 is not connected.
+- Ahrefs API key reports a Free monthly limit of 200,000 units with 0 used; workspace allowance is 0. Firecrawl remains at 0/1,000 for the current period and should stay paused until renewal/available credits are verified.
+- Prior audit notes still apply where not superseded: Figma View-only; Metricool has no social networks connected; HubSpot is not onboarded for RAWAA; Lovable has no RAWAA project. Recheck those connections before treating catalog tools as active project integrations.
+- TinyFish is prohibited; Arena is paused. No global plugin, Skill, or connector was removed.
