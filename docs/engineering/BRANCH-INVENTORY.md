@@ -356,3 +356,10 @@ This section supersedes the 17-ref snapshot above. The live GitHub API enumerati
 - PR #148 merged successfully and the production deployment/Visual QA workflows succeeded. See the dated operational release record in `docs/engineering/TOOLING-REGISTRY.md`.
 
 Required administrative follow-up: configure a `main` branch ruleset requiring pull requests and verified PR checks, block force-push and deletion, and narrow the GitHub App installation to the repository set actually needed. The available GitHub connector can inspect but cannot mutate these settings.
+
+
+## Concurrent work reconciliation — 2026-11-21 03:24 UTC
+
+- Subsequent live PR enumeration found PR #149, `perf/serum-css-pruning-2026-11-21`, on the ref previously identified as the same-as-main extra branch. Its head moved after the earlier snapshot and it is now an active open PR. Preserve the branch while PR #149 remains open.
+- PR #150 is the current integration/skills/branch-security inventory update. Its exact branch is allowlisted for pruning only after its exact head is merged.
+- The earlier 18-ref snapshot is retained as a time-stamped observation, not the current count. Do not delete either open-PR head.
