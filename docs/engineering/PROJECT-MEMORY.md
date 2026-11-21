@@ -460,3 +460,10 @@ This section supersedes earlier assumptions in this file about the Store's Supab
 - Agency Agents remains a selectively adopted MIT instruction catalog from PR #145, not an execution runtime. Do not bulk-import its roster.
 - AgenC Core was reviewed as a separate MIT-licensed agent-runtime candidate. Keep it outside the static Store runtime; any pilot requires a separate host, provider, hard model budget, least-privilege permissions, and measurable baseline. Its published benchmark is project-reported, and model inference is not free.
 - PR #157's original head ref was missing during the follow-up audit. The exact recorded head was preserved separately; all active PR heads must be checked before branch cleanup.
+
+
+## Branch hygiene follow-up — 2026-11-21
+
+- After PR #160 merged, two temporary documentation refs remained beyond the 17 durable operational/recovery refs: merged PR #160 head `docs/tooling-refresh-2026-11-21` and closed-unmerged PR #159 head `docs/final-live-state-2026-11-21`.
+- PR #160's exact merged head is allowlisted for deletion only when the live branch head matches the merged PR head. PR #159's exact head is allowlisted for archive-first retirement; its 48-ahead/3-behind history must be preserved in an annotated archive tag before branch deletion.
+- Do not delete either ref directly. The branch-cleanup and archive workflows must prove the exact conditions and the final 17-ref state must be rechecked.
