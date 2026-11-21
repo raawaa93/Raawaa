@@ -45,8 +45,17 @@
 - Automatic deployment job succeeded and published the exact validated main commit.
 - Cloudflare deployment: `7ea90c29-002b-403a-9b89-18d220544781`, URL `https://7ea90c29.raawaa-store.pages.dev`, source SHA `48fa6d2dba4edd3ae9350e61362de680aa288754`, stage `success`.
 - Post-deploy security-header verification passed.
-- Visual QA run `44840577452` was in progress at the time of this snapshot. Do not mark the new release's visual audit complete until that run and its artifact are inspected.
-- Direct HTTP access from this audit runtime failed at DNS resolution for both the production alias and immutable deployment URL. GitHub and Cloudflare deployment evidence proves deployment success; it does not substitute for a live visual observation from this runtime.
+- Live-production Visual QA run `44840577452` completed successfully against `https://raawaa-store.pages.dev`: 16 captures (home, serum, campaign, privacy × Chromium/WebKit × iPhone 13/desktop), all HTTP 200, zero automated issues, zero console/CSP/page errors, zero failed/bad requests, zero broken or incomplete visible images, zero horizontal overflow, and no viewport/document-width mismatch. The 58-file screenshot/report artifact was downloaded and inspected; mobile screenshots for all four routes and both browser engines were reviewed.
+- Direct HTTP access from this audit runtime itself failed at DNS resolution for Cloudflare Pages. The GitHub Action runner did reach the live production alias and captured the 16 successful cases; this is the source of the live QA evidence.
+
+### Mobile Lighthouse baseline
+
+- GitHub mobile performance run `44840290194` passed on the same production source commit.
+- Median mobile Performance scores: home 99 (one 75 outlier), serum 87, campaign 96, privacy 100.
+- Accessibility and Best Practices scored 100 across all four pages. Campaign SEO 69 is intentional because the page is `noindex,follow`.
+- Serum is the primary performance target: median LCP 3.8s, render-blocking CSS savings estimate 670–730ms, image delivery savings estimate 74 KiB, cache-lifetime savings estimate 405 KiB, unused JavaScript 42 KiB, and unused CSS 41 KiB.
+- The current serum hero loads the 86 KB `rawaa-olive.jpg`; responsive AVIF/WebP variants exist in the repository but the per-product image arrays are empty and the hero `picture` lacks its dynamic source elements. This is a concrete, low-risk optimization candidate; it has not yet been changed.
+- The homepage's single 75 outlier had 1,290ms TBT and 2.9s main-thread work; the other two samples scored 99. Investigate the outlier before making broad JS changes.
 
 ## 3. Storefront architecture and commercial behavior
 
@@ -163,7 +172,7 @@ OpenSEO audit `55f9dc3b-93e4-406d-b937-59f07aaa0dad` completed with 7 crawled UR
 
 ## 10. Prioritized next work
 
-1. Complete the visual QA run for the current production commit and inspect its screenshots/report.
+1. Optimize serum responsive image delivery, then re-run mobile Lighthouse and production visual QA.
 2. Finish exact-SHA retirement of the two merged PR working branches through the reviewed branch-cleanup policy.
 3. Obtain and review deployed Edge Function sources, prioritizing the three JWT-off functions.
 4. Establish a dedicated production order backend and an explicit, tested order intake path only if the owner chooses central order records.
