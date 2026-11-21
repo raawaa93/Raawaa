@@ -520,3 +520,13 @@ No customer/order data, product formulas, prices, discounts, shipping policy, ch
 - Disaster-recovery backup from main `7d67fe9` passed SHA-256, Git Bundle, and `git fsck` checks; 73 refs restored. Branch archival uses exact annotated tags and now has the required write permissions.
 - Visual QA: 16/16 on Chromium/WebKit × iPhone 13/Desktop, zero reported layout, image, console, network, or CSP issues. Lighthouse lab scores: Home 99, Serum 90–92, Campaign 97, Privacy 100 performance; Accessibility and Best Practices 100 across routes. Campaign noindex is intentional.
 - Supabase source-level audit remains blocked by the connector's Edge Function source retrieval error. Do not infer unauthenticated handlers from `verify_jwt=false`; inspect exact deployed source before changing the three JWT-disabled functions.
+
+
+## بريد وتسويق متوافق مع التشغيل من سوريا — 2026-11-21
+
+- Klaviyo مستبعد حسب إفادة المستخدم. Mailchimp مستبعد لأن شروطه المنشورة تستبعد سوريا صراحة.
+- Mautic (GPL-3.0) هو المرشح المفتوح المصدر الأقرب لرحلات Klaviyo: شرائح، Campaign Builder، شروط/قرارات/إجراءات. يحتاج استضافة PHP دائمة وقاعدة بيانات وCron؛ لا يعمل كتطبيق دائم على Cloudflare Pages.
+- listmonk (AGPL-3.0) بديل أخف للنشرات والقوائم والحملات وAPI؛ يحتاج PostgreSQL وSMTP ولا يقدّم بنفسه منشئ رحلات متفرعة.
+- SMTP2GO Free يعلن 1,000 رسالة/شهر و200/يوم و25/ساعة قبل توثيق نطاق المرسل. الشروط العامة التي تمت مراجعتها لا تثبت قبول سوريا ولا تنفيه؛ يلزم تأكيد كتابي قبل ربطه.
+- لا يوجد حالياً نموذج بريد أو جدول مشتركين بريد في المتجر. جدول `rawaa_store.marketing_preference_events` الحالي خاص بـHMAC رقم الهاتف وأحداث موافقة/سحب. سياسة الخصوصية تصف تدفق واتساب ولا تصف جمع البريد.
+- لا تُنقل بيانات العملاء أو تُفعّل الحملات قبل موافقة بريدية منفصلة، double opt-in، unsubscribe/suppression، تحديث الخصوصية، وفحص SPF/DKIM/DMARC. لا تضع مفاتيح SMTP في المتصفح. وثيقة القرار: `docs/marketing/SYRIA-COMPATIBLE-EMAIL-STACK-2026-11-21.md`.
