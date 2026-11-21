@@ -384,3 +384,26 @@ Required administrative follow-up: configure a `main` branch ruleset requiring p
 - The 17 durable refs are: main; four backups; two deploy refs; four preview-deploy refs; one production-deploy ref; three recovery refs; one release ref; and one restore ref. All were preserved.
 - PR #152 is the only open PR at this snapshot. Its exact branch is allowlisted for cleanup after merge and tested by the branch-cleanup policy suite.
 - Branch protection remains absent: no rulesets and every current branch is reported `protected=false`. This remains the highest-priority GitHub settings action.
+
+
+
+## Superseding live state — 2026-11-21 03:45 UTC
+
+- Canonical `main`: `23db34ebf7b0d8d06788e085188eef78da5c93b0` (PR #153 merged).
+- Live branch count: **19** = 17 durable operational/recovery refs, one merged PR #153 branch awaiting exact-head cleanup, and the active PR #154 branch.
+- `docs/posthog-integration-audit-2026-11-21` is the merged source branch for PR #153, head `c20f2b8f647bc5542715cba74574cbdc422dc4ce`, merge commit `23db34ebf7b0d8d06788e085188eef78da5c93b0`. It is **not** a no-PR ref and must not enter the stale-no-PR archive list. It is allowlisted only as an exact merged-PR branch for cleanup after PR #154 is merged.
+- `maintenance/archive-noop-audit-branch-2026-11-21` is active PR #154; preserve it until its checks pass and the PR is reviewed/merged.
+- PR #154 updates archive tag dates to execution date and removes duplicate skill attribution; it also corrects branch cleanup policy. It must not archive the PostHog branch as no-PR work.
+- All 17 durable backup, deploy, preview, production-deploy, recovery, release, restore, and main refs remain preserved.
+- GitHub still reports no rulesets and every branch `protected=false`; main branch protection remains the highest-priority administrative fix.
+
+
+## Final live branch snapshot — 2026-11-21 03:48 UTC
+
+- Canonical `main`: `23db34ebf7b0d8d06788e085188eef78da5c93b0`.
+- PR #153 merged and its exact head branch `docs/posthog-integration-audit-2026-11-21` was removed by branch hygiene run [#44845158276](https://github.com/raawaa93/Raawaa/actions/runs/44845158276).
+- Current count: **18 refs** = 17 durable operational/recovery refs plus the active PR #154 branch `maintenance/archive-noop-audit-branch-2026-11-21`.
+- The 17 durable refs remain: main; four backups; two deploy checkpoints; four preview checkpoints; one production-deploy checkpoint; three recovery refs; one release ref; one restore ref.
+- PR #154 is a tooling/maintenance-only change. It updates archive tag dates to the actual execution date, removes duplicate skill attribution, and corrects the public registry; it does not change storefront payload.
+- The old no-PR audit branch is no longer a candidate for archival; it was merged as PR #153 and deleted through the merged-PR cleanup policy.
+- Branch protection/rulesets remain absent; all enumerated refs are `protected=false`. Repository-admin settings action remains required.

@@ -174,7 +174,8 @@ jobs:
                 continue;
               }
 
-              const tagName = `archive/branches/2026-11-15/${name}`;
+              const archiveDate = new Date().toISOString().slice(0, 10);
+              const tagName = `archive/branches/${archiveDate}/${name}`;
               let targetSha;
 
               try {
@@ -186,7 +187,7 @@ jobs:
                     owner,
                     repo,
                     tag: tagName,
-                    message: `Archived inactive branch ${name} at ${sha} during repository hygiene on 2026-11-15.`,
+                    message: `Archived inactive branch ${name} at ${sha} during repository hygiene on ${archiveDate}.`,
                     object: sha,
                     type: 'commit',
                     tagger: {

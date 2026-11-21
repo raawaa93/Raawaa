@@ -368,7 +368,7 @@ This is the newest verified state and supersedes older connection, release, bran
 
 - Verified installed/available in this workspace for RAWAA work: GitHub, Cloudflare, Supabase, Notion, OpenSEO, Ahrefs, Context7, Figma, and Lovable. Their connection status and project suitability differ; a listed tool is not proof of a configured production integration.
 - OpenSEO is connected to Search Console. No GA4 property is visible in the connected Google account.
-- PostHog is **not installed/connected yet**; a connection suggestion has been issued. It is the most relevant additional plugin because it combines event analytics, session replay, feature flags, and error tracking. Its published free tier lists 1M analytics events, 5K session recordings, and 100K exceptions per month; configure usage limits before enabling paid usage. See [PostHog pricing](https://posthog.com/pricing).
+- PostHog is now connected. The only non-demo project in the Raawaa organization is `Default project` (ID `756281`), with zero ingested events and session replay disabled. The organization has a one-project free-plan limit; use this project only after the user confirms it is the intended RAWAA Store analytics destination. See [PostHog pricing](https://posthog.com/pricing) and [project settings](https://posthog.com/docs/settings/projects).
 - Linear was discovered but not recommended because Notion is already connected for project knowledge/tasks and another task tracker would duplicate workflow. Datadog is not recommended because the current static site can use GitHub/Cloudflare checks without a new observability bill. TinyFish remains prohibited.
 - No plugin was uninstalled, no billing enabled, and no paid API usage activated.
 
@@ -376,7 +376,7 @@ This is the newest verified state and supersedes older connection, release, bran
 
 1. Add GitHub `main` branch ruleset and restrict the GitHub App installation from all repositories to the smallest necessary repository set. Both require GitHub settings access unavailable through the current connector.
 2. Restore the second saved GitHub connection or remove it from future use after the user resolves the account-level 403. Do not route work through it while it is suspended.
-3. Connect PostHog only after the user completes the suggested connection, then set billing limits to zero and implement privacy/CSP-reviewed, minimal event capture. Do not add a tracking snippet before the privacy notice and consent requirements are settled.
+3. Confirm whether `Default project` (ID `756281`) is the intended RAWAA Store analytics destination. Then implement consent-first minimal event capture, with autocapture/session replay off by default and no personal/order/payment/WhatsApp data in event properties.
 4. Reconcile the 18 live branch refs against the stale historical branch inventory; retain all recovery and deployment checkpoints, and archive the single same-as-main redundant ref only through the exact-SHA tag workflow.
 5. Continue improving the measured Lighthouse opportunities without relaxing existing CI thresholds.
 
@@ -411,30 +411,37 @@ No customer/order data, product formulas, prices, discounts, shipping policy, ch
 - OpenSEO crawl [audit `be7a9242-66cd-49a7-bb8d-a6892dc4acfc`](https://app.openseo.so/p/8609bf87-b153-41f8-b10c-c716c36a5c4f/audit?auditId=be7a9242-66cd-49a7-bb8d-a6892dc4acfc) completed all 7 discovered URLs. All 200 pages had one H1 and zero images missing alt text; `/index.html` redirected 308; the three `?product=` variants were informational canonicalized URLs, not errors. Campaign is intentionally noindex and absent from the indexable sitemap.
 - PR #151 merged as `834d7705597f8e2d13ea6976bcc7640260deecf3`, adding the project-local Modern Web Guidance skill and Apache-2.0 license. The current follow-up PR #152 scopes its triggers, pins CLI 1.0.1, disables telemetry, and adds policy tests.
 - The live main branch is now `834d7705597f8e2d13ea6976bcc7640260deecf3`; the production payload SHA is `e554489b78de8b280b1281b2c706d6acc42b5ad5`. The later commit only changes agent instructions, skill/docs, and tests; it does not change the deployed storefront payload.
-- The plugin suggestion for PostHog remains pending user connection; no tracking code was added. No paid services or billing were enabled.
+- The PostHog connector is connected, but project use is pending the user's confirmation of `Default project` (ID `756281`). No tracking code, session replay, or paid services were enabled.
 
 
-## PostHog connector and project audit — 2026-11-21 03:40 UTC
+## Follow-up closure — 2026-11-21 00:36 UTC
 
-- The ChatGPT PostHog plugin is now connected and its instance-specific skills are available. The PostHog integration was verified through the connected MCP, not assumed from the plugin catalog.
-- Organization: `Raawaa`. It currently has exactly one visible non-demo project: `Default project` (ID `756281`), created on 2026-11-21. The project has not ingested any events (`ingested_event=false`); session replay is off. No RAWAA event instrumentation has been deployed.
-- Organization feature `organizations_projects` has a limit of **1** non-demo project. Creating a separate RAWAA project is not available under the current quota; the existing project must be reused or the plan changed.
-- The project token and API host were retrieved for configuration planning but are deliberately not recorded in this repository or in this audit. Do not commit tokens. The project uses the US ingestion host according to its own `api_host` setting; use the returned host only after the user confirms the project is the intended destination.
-- PostHog's own instrumentation skill requires explicit confirmation of the target project before writing the token into application configuration. The next step is to ask whether `Default project` (ID `756281`) is the intended RAWAA Store analytics destination. No project rename/settings changes, SDK dependency, CSP change, event capture, session recording, or user identification have been made.
-- Before enabling analytics, implement a consent-first plan appropriate for a static vanilla-JS storefront and UK/EU visitors: no analytics SDK initialization or event transmission before consent; no session replay or autocapture by default; only minimal aggregate business events after consent; no order contents, phone numbers, customer names, addresses, payment details, or WhatsApp message payloads in event properties. Align CSP `script-src` and `connect-src` with the actual chosen SDK/host only after the destination is confirmed.
-- The plugin connection itself is free of a new external runtime dependency. Keep the existing one-project quota; do not create a second project or upgrade the plan as part of this work.
+- PR #152 merged as `8bd438fb80c6ce5855411c6f3f3f37e8e127dcd2`. The local Modern Web Guidance skill is now scoped to material browser-platform work, pins CLI 1.0.1, disables telemetry, excludes private data from search queries, and includes a local adaptation/Apache-2.0 notice. Its policy suite passed 67 tests.
+- The local CLI invocation was attempted with telemetry disabled but the current execution container could not reach npm before timeout. No sandbox/network controls were bypassed; the skill is installed in the repo for environments with permitted outbound access.
+- PR #153 merged as `23db34ebf7b0d8d06788e085188eef78da5c93b0`, recording the connected PostHog project and quota audit. Its exact branch head `c20f2b8f647bc5542715cba74574cbdc422dc4ce` is now eligible only through the merged-PR branch cleanup allowlist, not the no-PR archive workflow.
+- PostHog is connected; the existing `Default project` still awaits user confirmation before its token is written into the storefront configuration. No analytics instrumentation or paid service was activated.
 
 
-### ChatGPT plugin permission audit — 2026-11-21 03:42 UTC
+## PostHog integration status — 2026-11-21
 
-- Global default permission: **Allow low-risk actions**.
-- Plugin-specific **Allow all actions** overrides are active for GitHub, Cloudflare, Notion, OpenSEO, and PostHog. These plugins can act without a separate ChatGPT confirmation prompt under their app-specific setting; this is elevated risk and is separate from each provider's OAuth/App installation scopes.
-- Supabase, Figma, Ahrefs, and Lovable inherit the global default permission.
-- These settings were inspected only. No permission level was changed.
-- The GitHub App installation's all-repositories scope is a separate provider-side authorization and remains broader than needed. Narrow that installation to the RAWAA repository set in GitHub settings; the current connector cannot change installation scope or create repository rulesets.
+- The PostHog plugin is visible in ChatGPT permission settings, but this session exposes no PostHog data tools; project-level connection, project ID, ingestion state, and usage details cannot be independently verified here.
+- Do not add the PostHog SDK, write a project token, change CSP, or enable event capture until the user confirms the intended destination project and the consent/privacy implementation is ready.
+- Published free-tier allowances include 1M analytics events, 5K session recordings, 1M feature-flag requests, 100K exceptions, 1,500 survey responses, and 1M data-warehouse rows per month. Usage is organization-wide; projects do not multiply the allowance.
+- No tracking script, session replay, user identification, billing, or paid upgrade has been activated.
+- Account-level plugin permission settings and project identifiers are kept in the private continuity record, not this public repository.
 
-### Free-tier allowance verification
 
-- The connected PostHog documentation confirms monthly free allowances: 1M analytics events, 5K session recordings, 1M feature-flag requests, 100K exceptions, 1,500 survey responses, and 1M data-warehouse rows. Allowances reset monthly.
-- Usage is organization-wide across projects; creating additional projects does not multiply the free allowance. The free plan includes one project, matching the organization's current `organizations_projects=1` limit.
-- References: [PostHog pricing](https://posthog.com/pricing), [project organization](https://posthog.com/docs/settings/projects), [billing FAQ](https://posthog.com/docs/billing/common-questions).
+## Final release and integration reconciliation — 2026-11-21 03:48 UTC
+
+- PR #153 merged as `23db34ebf7b0d8d06788e085188eef78da5c93b0`. Its exact branch was removed by the successful branch-hygiene run [#44845158276](https://github.com/raawaa93/Raawaa/actions/runs/44845158276).
+- Current main at this snapshot: `23db34ebf7b0d8d06788e085188eef78da5c93b0`. Production storefront payload remains the successful Cloudflare deployment `349bd1d4-1254-40e1-b4ec-5f19c74176b9` from source `e554489b78de8b280b1281b2c706d6acc42b5ad5`; later commits are documentation/tooling-only.
+- Current branch count after PR #153 cleanup: **18** = 17 durable operational/recovery refs plus the active PR #154 branch. No PostHog audit branch remains.
+- Public repository docs intentionally omit account-level ChatGPT permission overrides and connector project IDs. The private continuity page retains the read-only permission audit.
+- GitHub main branch protection/rulesets are still absent. The working GitHub connection has repository Admin, but its available tools cannot create rulesets or narrow the GitHub App installation scope.
+
+
+### Repository hygiene review — 2026-11-21 03:50 UTC
+
+- PR #154 is now based on current `main` commit `23db34ebf7b0d8d06788e085188eef78da5c93b0` through a two-parent merge commit, preserving its reviewed file tree while including PR #153's PostHog registry changes.
+- The PostHog audit branch is treated as a merged PR #153 head (`c20f2b8f647bc5542715cba74574cbdc422dc4ce`), not a no-PR ref. It is removed only by the merged-PR cleanup policy after exact head verification.
+- The PR's earlier failing checks exposed a stale archive-list assertion. The test and policy now move that branch to the merged-PR allowlist; fresh CI is required before merge.
