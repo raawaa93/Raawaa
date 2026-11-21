@@ -66,7 +66,7 @@ test('keeps closed-unmerged work for the exact-SHA archive workflow', () => {
 
 test('no closed-unmerged or no-PR maintenance refs remain individually eligible', () => {
   assert.deepEqual(SUPERSEDED_CLOSED_PR_BRANCHES, ['maintenance/retire-superseded-finalize-ref-2026-11-15', 'docs/final-access-and-branch-audit-2026-11-21']);
-  assert.deepEqual(STALE_NO_PR_BRANCHES, []);
+  assert.deepEqual(STALE_NO_PR_BRANCHES, ['maintenance/close-stale-cleanup-pr-2026-11-21']);
   const retired = [
     'maintenance/close-archive-closure-2026-11-15',
     'maintenance/archive-final-closure-ref-2026-11-15',
@@ -556,4 +556,29 @@ test('retires this reconciliation PR branch only after its exact head merges', (
   assert.deepEqual(classifyBranches([branchRef(name, { sha: 'moved-head' })], [pr(name, { merged: true, sha: head })], repository, {
     [name]: { ahead_by: 1, behind_by: 0 },
   }), []);
+});
+
+
+test('retires the exact archive-policy PR branch after its own head merges', () => {
+  const name = 'maintenance/archive-closed-stale-refs-2026-11-21';
+  const head = 'pr167-archive-head';
+  assert.ok(MERGED_PR_BRANCHES.includes(name));
+  assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
+  assert.deepEqual(
+    classifyBranches([branchRef(name, { sha: head })], [pr(name, { merged: true, sha: head })], repository).map(x => x.name),
+    [name],
+  );
+});
+
+test('retires a no-PR branch only when it remains exactly even with main', () => {
+  const name = 'maintenance/close-stale-cleanup-pr-2026-11-21';
+  assert.ok(STALE_NO_PR_BRANCHES.includes(name));
+  assert.deepEqual(
+    classifyBranches([branchRef(name)], [], repository, { [name]: { ahead_by: 0, behind_by: 0 } }).map(x => x.name),
+    [name],
+  );
+  assert.deepEqual(
+    classifyBranches([branchRef(name)], [], repository, { [name]: { ahead_by: 1, behind_by: 0 } }),
+    [],
+  );
 });
