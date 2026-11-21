@@ -424,19 +424,14 @@ test('retires the Modern Web Guidance policy-fix branch only after its exact hea
 });
 
 
-test('only the exact reviewed same-as-main PostHog audit ref is eligible for no-PR archival', () => {
-  const name = 'docs/posthog-integration-audit-2026-11-21';
-  assert.ok(STALE_NO_PR_BRANCHES.includes(name));
-  assert.deepEqual(
-    classifyBranches([branchRef(name, { sha: '8bd438fb80c6ce5855411c6f3f3f37e8e127dcd2' })], [], repository, { [name]: { ahead_by: 0, behind_by: 0 } }).map(x => x.name),
-    [name],
-  );
-  assert.deepEqual(
-    classifyBranches([branchRef(name, { sha: 'different-sha' })], [], repository, { [name]: { ahead_by: 1, behind_by: 0 } }),
-    [],
-  );
-});
 
+test('retires the merged PostHog integration audit PR branch only at its exact merged head', () => {
+  const name = 'docs/posthog-integration-audit-2026-11-21';
+  assert.ok(MERGED_PR_BRANCHES.includes(name));
+  const merged = pr(name, { merged: true });
+  assert.deepEqual(classifyBranches([branchRef(name, { sha: merged.head.sha })], [merged], repository).map(x => x.name), [name]);
+  assert.deepEqual(classifyBranches([branchRef(name, { sha: 'changed-head' })], [merged], repository, { [name]: { ahead_by: 1, behind_by: 0 } }), []);
+});
 
 test('retires the no-op branch archival policy PR only after its exact head is merged', () => {
   const name = 'maintenance/archive-noop-audit-branch-2026-11-21';
