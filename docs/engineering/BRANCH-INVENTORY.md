@@ -461,3 +461,13 @@ Required administrative follow-up: configure a `main` branch ruleset requiring p
 - Temporary refs: merged PR #160 branch `docs/tooling-refresh-2026-11-21` (exact merged head `2e4c679c5230aa873f432e187dffdad9ff7a936e`); closed-unmerged PR #159 branch `docs/final-live-state-2026-11-21` (exact archive head `b617c56799a3d913878df4915a1c2a94ea273617`); active cleanup PR #161 branch `maintenance/cleanup-docs-branches-2026-11-21`.
 - PR #161 adds only exact reviewed policy entries: delete the two merged PR heads only when their current SHA matches the merged PR head; archive the closed-unmerged PR #159 branch at its exact SHA before deleting it; and retire the cleanup PR branch after its own exact head merges.
 - Keep all 17 durable operational/recovery refs. Verify archive tag creation, exact ref deletion, and final branch count after the cleanup workflow completes.
+
+
+## Post-PR161 branch workflow verification — 2026-11-21
+
+- The existing executor is `.github/workflows/cleanup-merged-branches.yml`; it runs on pushes to `main` and weekly. It is the canonical execution path; no second cleanup workflow is needed.
+- After PR #161 merged, live enumeration showed **18 refs**: 17 durable operational/recovery refs plus one temporary experimental runner branch. There were no open PRs at this snapshot.
+- The existing workflow removed merged PR #160 branch `docs/tooling-refresh-2026-11-21` and merged PR #161 branch `maintenance/cleanup-docs-branches-2026-11-21`.
+- It also archived and removed closed PR #159 branch `docs/final-live-state-2026-11-21` at exact SHA `b617c56799a3d913878df4915a1c2a94ea273617`. Archive tag: `archive/branches/2026-11-21/docs/final-live-state-2026-11-21`. A file read from the tag has the same blob SHA as the file read from the exact archived commit; the workflow also verifies the tag target before deletion.
+- One unmerged experiment remains: `maintenance/branch-maintenance-runner-2026-11-21`, exact head `881720de49a7a3a3a28fde6102987de9f06ded31`. It was created while checking for an execution workflow; the existing workflow was then found. Do not merge it. This PR adds it to the exact-SHA archive list so the existing workflow archives it before deletion.
+- This archive-policy PR branch is itself added to the merged-head allowlist. After merge, expect the existing workflow to archive the experiment, delete this merged PR branch, and return to **17 durable refs**. Verify the final branch count and archive tag before closing the task.
