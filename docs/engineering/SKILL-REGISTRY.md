@@ -206,6 +206,6 @@ This is an inventory, not a claim that every Skill is active in every turn. Skil
 
 - Keep repository-backed `AGENTS.md`, `docs/engineering/PROJECT-MEMORY.md`, and Graphify as the project guidance/code-map stack.
 - Use relevant Skills on demand; do not copy all 152 into the repository.
-- The repository has no project-local `.agents/skills`, `skills/`, or `.claude/` packages.
+- The repository includes one reviewed project-local `.agents/skills/modern-web-guidance/` package (Apache-2.0, upstream GoogleChrome source). Other skill collections remain references only.
 - For UI work, select a small compatible design skill set rather than stacking overlapping design rule packs.
 - For browser QA, retain the existing Playwright Chromium/WebKit stack; do not add a second browser automation framework without a demonstrated gap.
