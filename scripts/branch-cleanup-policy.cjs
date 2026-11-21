@@ -99,6 +99,7 @@ const MERGED_PR_BRANCHES = Object.freeze([
   "marketing/launch-readiness-rebased-2026-11-21",
   "maintenance/archive-marketing-duplicates-2026-11-21",
   "maintenance/finalize-branch-hygiene-2026-11-21",
+  "maintenance/archive-closed-pr176-2026-11-21",
   "docs/final-post-cleanup-state-2026-11-21",
   "docs/posthog-integration-audit-2026-11-21",
   "feature/competitor-crawl4ai-weekly",
