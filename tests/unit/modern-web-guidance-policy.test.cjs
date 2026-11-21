@@ -30,3 +30,10 @@ test('Modern Web Guidance is scoped to material browser-platform work', () => {
   assert.match(agents, /Skip trivial copy\/text\/markup edits/);
   assert.match(skill, /do not bypass sandbox or account controls/i);
 });
+
+
+test('locally adapted upstream skill carries an in-file attribution notice', () => {
+  const skill = fs.readFileSync(path.join(root, '.agents/skills/modern-web-guidance/SKILL.md'), 'utf8');
+  assert.match(skill, /RAWAA local adaptation from GoogleChrome\/modern-web-guidance/);
+  assert.match(skill, /Apache-2\.0/);
+});
