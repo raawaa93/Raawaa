@@ -61,11 +61,11 @@ test('keeps closed-unmerged work for the exact-SHA archive workflow', () => {
     }),
     [],
   );
-  assert.deepEqual(SUPERSEDED_CLOSED_PR_BRANCHES, ['maintenance/retire-superseded-finalize-ref-2026-11-15']);
+  assert.deepEqual(SUPERSEDED_CLOSED_PR_BRANCHES, ['maintenance/retire-superseded-finalize-ref-2026-11-15', 'docs/final-access-and-branch-audit-2026-11-21']);
 });
 
 test('no closed-unmerged or no-PR maintenance refs remain individually eligible', () => {
-  assert.deepEqual(SUPERSEDED_CLOSED_PR_BRANCHES, ['maintenance/retire-superseded-finalize-ref-2026-11-15']);
+  assert.deepEqual(SUPERSEDED_CLOSED_PR_BRANCHES, ['maintenance/retire-superseded-finalize-ref-2026-11-15', 'docs/final-access-and-branch-audit-2026-11-21']);
   assert.deepEqual(STALE_NO_PR_BRANCHES, []);
   const retired = [
     'maintenance/close-archive-closure-2026-11-15',
@@ -243,9 +243,9 @@ test('does not delete retired no-PR refs after their allowlist is cleared', () =
   }
 });
 
-test('does not retain superseded closed-PR cleanup permissions after retirement', () => {
+test('retains only the exact reviewed superseded closed-PR cleanup permissions', () => {
   const names = ['maintenance/close-archive-closure-2026-11-15', 'maintenance/archive-final-closure-ref-2026-11-15'];
-  assert.deepEqual(SUPERSEDED_CLOSED_PR_BRANCHES, ['maintenance/retire-superseded-finalize-ref-2026-11-15']);
+  assert.deepEqual(SUPERSEDED_CLOSED_PR_BRANCHES, ['maintenance/retire-superseded-finalize-ref-2026-11-15', 'docs/final-access-and-branch-audit-2026-11-21']);
   for (const name of names) {
     assert.deepEqual(classifyBranches([branchRef(name)], [pr(name)], repository, { [name]: { ahead_by: 0, behind_by: 8 } }), []);
   }
