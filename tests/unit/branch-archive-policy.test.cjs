@@ -24,7 +24,6 @@ test('archives individually reviewed inactive refs only at their exact SHAs', ()
     'fix/mobile-header-buttons-colors-2026-11-15': '6d9887c48cbbbd5eb9c0bf84a97acb6db2bfaf95',
     'docs/agency-agents-adoption-2026-11-15': '0ae06ec6949034351d1a33d2de81180e99d11d83',
     'fix/exclude-dev-files-from-pages-payload-2026-11-15': 'a4c976966be6d2193ccc76d216b3f0be3b76f27a',
-    'docs/final-access-and-branch-audit-2026-11-21': '8fe861b2496db12242aee3b8d3362d656de3e47c',
   };
   assert.deepEqual(ARCHIVE_BRANCHES, reviewed);
   const branches = Object.entries(reviewed).map(([name, sha]) => branch(name, sha));
@@ -40,7 +39,6 @@ test('archives individually reviewed inactive refs only at their exact SHAs', ()
       'fix/mobile-header-buttons-colors-2026-11-15',
       'docs/agency-agents-adoption-2026-11-15',
       'fix/exclude-dev-files-from-pages-payload-2026-11-15',
-      'docs/final-access-and-branch-audit-2026-11-21',
     ],
   );
 });
