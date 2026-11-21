@@ -17,7 +17,7 @@
 
 ## Connected tool families available in this ChatGPT workspace
 
-The current workspace inventory exposes **801 tool definitions across 24 integration families**, plus **151 skills**. This is a workspace-wide count, not a claim that every tool is connected to the RAWAA production account.
+The current workspace inventory exposes **819 total tool definitions**, including **804 connector/MCP tools across 22 provider families**, plus **152 Skills**. This is a workspace-wide count, not a claim that every tool is connected to the RAWAA production account.
 
 | Integration | Available tools | Project use / status |
 |---|---:|---|
@@ -445,3 +445,11 @@ No customer/order data, product formulas, prices, discounts, shipping policy, ch
 - PR #154 is now based on current `main` commit `23db34ebf7b0d8d06788e085188eef78da5c93b0` through a two-parent merge commit, preserving its reviewed file tree while including PR #153's PostHog registry changes.
 - The PostHog audit branch is treated as a merged PR #153 head (`c20f2b8f647bc5542715cba74574cbdc422dc4ce`), not a no-PR ref. It is removed only by the merged-PR cleanup policy after exact head verification.
 - The PR's earlier failing checks exposed a stale archive-list assertion. The test and policy now move that branch to the merged-PR allowlist; fresh CI is required before merge.
+
+
+## Workspace and PostHog verification — 2026-11-21 04:00 UTC
+
+- Workspace catalog at this snapshot: 819 total tool definitions, including 804 connector/MCP tools across 22 provider families, and 152 Skills.
+- PostHog connector is connected and the `mcp__PostHog__exec` tool is available in this session. Organization discovery found one non-demo project named `Default project`; its event ingestion flag is false and session replay is disabled. Project ID and token are intentionally omitted from this public registry.
+- PostHog free tier (per current official docs): 1M analytics events, 5K session recordings, 1M feature-flag requests, 100K exceptions, 1,500 survey responses, and 1M data-warehouse rows per month; one project on the free plan. Usage allowances are organization-wide. See [pricing](https://posthog.com/pricing), [projects](https://posthog.com/docs/settings/projects), and [billing FAQ](https://posthog.com/docs/billing/common-questions).
+- No PostHog SDK, project token, CSP changes, autocapture, session replay, or paid billing has been enabled. The project destination must be confirmed before token configuration.
