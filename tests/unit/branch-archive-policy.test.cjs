@@ -62,6 +62,10 @@ test('archives individually reviewed inactive refs only at their exact SHAs', ()
       'maintenance/archive-closed-pr174-2026-11-21',
 
       'fix/exclude-dev-files-from-pages-payload-2026-11-15',
+      'security/zizmor-github-actions-2026-11-21',
+      'marketing/raawaa-video-scripts-2026-11-21',
+      'docs/supabase-edge-auth-audit-2026-11-21',
+      'dependabot/github_actions/actions/setup-python-7.1.0',
     ],
   );
 });
