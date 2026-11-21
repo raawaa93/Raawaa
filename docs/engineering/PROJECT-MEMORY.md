@@ -488,3 +488,19 @@ This section supersedes earlier assumptions in this file about the Store's Supab
 - PR #162 is the only open PR. Current branch count is 19: 17 durable refs plus the unmerged runner experiment and the active archive-policy PR branch.
 - The unmerged experiment is allowlisted at exact SHA `881720de49a7a3a3a28fde6102987de9f06ded31`; it must be archived before deletion by the existing branch-hygiene workflow.
 - The PR branch is allowlisted as an exact merged head so the same workflow can retire it after merge. Verify the tag target and final 17-ref inventory before marking branch cleanup complete.
+
+
+## Final branch cleanup completion — 2026-11-21
+
+- Verified the existing branch-hygiene workflow removed all temporary refs after PR #162. The repository now has 17 retained refs and no open PRs before this final documentation PR.
+- Three merged PR heads were pruned only after exact merged-head checks: PR #160 tooling refresh, PR #161 cleanup policy, and PR #162 archive policy.
+- Two non-merged refs were archived before deletion: PR #159's exact head `b617c56799a3d913878df4915a1c2a94ea273617`, and the unmerged runner experiment at `881720de49a7a3a3a28fde6102987de9f06ded31`. Their annotated archive tags were verified against the exact source file blobs and the workflow enforces exact tag-target equality.
+- The final-state documentation PR branch is allowlisted for cleanup after its own exact head merges; preserve all 17 durable refs.
+
+## Free-quota and SEO verification — 2026-11-21
+
+- Latest OpenSEO crawl completed 7/7 URLs on 2026-11-21. No critical issues were reported; the three query-string product variants were informational canonicalization cases, not errors. The latest crawl did not run Lighthouse.
+- The latest existing Lighthouse run is 2026-11-15: mobile scores were 100/100/100/100 on home, 99/100/100/100 on privacy, and 99/100/100/100 on serum (performance/accessibility/best-practices/SEO). Desktop scores were 100 across all four categories on all three pages. Mobile LCP was approximately 1.23s, 0.95s, and 2.08s respectively; INP was not measured.
+- OpenSEO's configured default market is United States/English while the storefront is Arabic. Do not change it until the intended target market is confirmed.
+- Firecrawl remains at 0/1,000 credits for the period ending 2026-11-29. Ahrefs Free reports 0 workspace API units, despite a 200,000-unit API-key ceiling; usage remains 0. Do not run paid/credit-consuming queries until a usable allowance is verified.
+- OpenSEO reads of existing project, crawl, and Lighthouse results used no additional audit credits. The last recorded OpenSEO balance was 251 credits on 2026-11-15; it was not re-queried in this audit.
