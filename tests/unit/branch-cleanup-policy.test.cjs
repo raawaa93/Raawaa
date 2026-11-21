@@ -697,3 +697,15 @@ test('retires the final state-documentation PR branch after its exact merge', ()
     [name],
   );
 });
+
+
+test('retires the Syria-compatible email stack decision branch after its exact merge', () => {
+  const name = 'docs/syria-compatible-email-stack-2026-11-21';
+  const head = 'pr189-email-stack-decision-head';
+  assert.ok(MERGED_PR_BRANCHES.includes(name));
+  assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
+  assert.deepEqual(
+    classifyBranches([branchRef(name, { sha: head })], [pr(name, { merged: true, sha: head })], repository).map(x => x.name),
+    [name],
+  );
+});
