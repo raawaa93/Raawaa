@@ -16,6 +16,8 @@ const ARCHIVE_BRANCHES = Object.freeze({
   "maintenance/archive-final-refs-2026-11-21": "31ff93d7ede35deaafff0373a92e5caa8cfc7822",
   // Closed PR #168: archive the superseded reconciliation branch at its exact head.
   "maintenance/archive-closed-stale-refs-2026-11-21": "9ee3d444021971c3ee3882de844c0c6952dd6258",
+  // Closed PR #170: preserve the duplicate superseded branch before deleting its ref.
+  "maintenance/archive-stale-pr168-2026-11-21": "0a7e47d3814b60640345a58d7f739ed6e19ac41d",
   "fix/exclude-dev-files-from-pages-payload-2026-11-15": "a4c976966be6d2193ccc76d216b3f0be3b76f27a",
 });
 const PROTECTED_PREFIXES = Object.freeze([
