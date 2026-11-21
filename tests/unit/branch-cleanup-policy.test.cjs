@@ -557,3 +557,15 @@ test('retires this reconciliation PR branch only after its exact head merges', (
     [name]: { ahead_by: 1, behind_by: 0 },
   }), []);
 });
+
+
+test('retires this stale-cleanup PR branch only after its exact head merges', () => {
+  const name = 'maintenance/close-stale-cleanup-pr-2026-11-21';
+  const head = 'stale-cleanup-pr-head';
+  assert.ok(MERGED_PR_BRANCHES.includes(name));
+  assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
+  assert.deepEqual(classifyBranches([branchRef(name, { sha: head })], [pr(name, { merged: true, sha: head })], repository).map(x => x.name), [name]);
+  assert.deepEqual(classifyBranches([branchRef(name, { sha: 'moved-head' })], [pr(name, { merged: true, sha: head })], repository, {
+    [name]: { ahead_by: 1, behind_by: 0 },
+  }), []);
+});

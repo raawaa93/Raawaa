@@ -510,3 +510,10 @@ This section supersedes earlier assumptions in this file about the Store's Supab
 - OpenSEO defaults remain United States/English while the storefront is Arabic. Do not alter target market until the intended commercial market is confirmed.
 - Firecrawl usage is 0/1,000 credits through 2026-11-29; Ahrefs Free workspace API allowance is 0 and recorded usage is 0. Existing OpenSEO reads did not consume crawl/audit credits; last recorded balance 251 on 2026-11-15, not re-queried on this date.
 - No additional paid or credit-consuming crawls are authorized by this audit. Use existing crawl data and GitHub Actions/browser tests until free quotas refresh or a verified allowance exists.
+
+
+## PR #166 superseded by PR #167 — 2026-11-21
+
+- PR #165 merged successfully and already contains exact-SHA cleanup for PR #163, exact-SHA archival for closed-unmerged PR #164, and retirement of its own merged branch.
+- Concurrent PR #166 was based on the same earlier main and duplicated that policy. It is closed as superseded; its exact head `31ff93d7ede35deaafff0373a92e5caa8cfc7822` is archived through the existing archive workflow, not deleted directly.
+- PR #167 adds only the exact archive entry/test for PR #166 and an exact merged-head allowlist/test for its own branch.
