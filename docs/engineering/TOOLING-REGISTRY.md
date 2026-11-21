@@ -17,7 +17,7 @@
 
 ## Connected tool families available in this ChatGPT workspace
 
-The current workspace inventory exposes **819 total tool definitions**, including **804 connector/MCP tools across 22 provider families**, plus **152 Skills**. This is a workspace-wide count, not a claim that every tool is connected to the RAWAA production account.
+The current workspace inventory exposes **817 tool definitions across 24 integration families**, plus **152 Skills**. This is a workspace-wide count, not a claim that every tool is connected to the RAWAA production account.
 
 | Integration | Available tools | Project use / status |
 |---|---:|---|
