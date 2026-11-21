@@ -390,3 +390,13 @@ No customer/order data, product formulas, prices, discounts, shipping policy, ch
 - A fresh open-PR enumeration after the initial audit found PR #149 (`perf/serum-css-pruning-2026-11-21`) and this documentation PR #150. PR #149 is a separate in-flight CSS optimization; its branch moved after the earlier 18-ref enumeration and is no longer a redundant same-as-main ref. Keep its branch while the PR is open.
 - PR #149 changes only the serum page's stylesheet reference and adds a generated page-specific CSS bundle. It must not merge until its own Store checks, Chromium/WebKit tests, Visual QA, and Lighthouse run complete and the stylesheet diff is checked for dynamic states. Current checks were still running at the time of this update.
 - Do not treat the earlier 18-ref snapshot as the current open-PR count; this is a time-stamped historical audit snapshot.
+
+
+## Project-local skill added — 2026-11-21
+
+- Added upstream [GoogleChrome/modern-web-guidance](https://github.com/GoogleChrome/modern-web-guidance) under `.agents/skills/modern-web-guidance/`.
+- Source commit: `64a6d708f5a43f2cd3fde5d4d7db3905ba1bdf65`; CLI package `modern-web-guidance@1.0.1`; Apache-2.0 license is included beside the skill.
+- This is the strongest new fit for RAWAA's static HTML/CSS/JavaScript, Safari/WebKit, responsive imagery, accessibility, and Core Web Vitals work. It supplies current browser-platform guidance and compatibility-aware fallbacks without adding a production runtime dependency.
+- Repository commands pin the CLI and set `DISABLE_TELEMETRY=1`; no analytics beacon, external model API, paid service, or package dependency was added.
+- The skill's local search index is used during development. Retrieve focused guides before relevant web UI changes, then validate through the existing Playwright and Lighthouse pipelines.
+- Other high-profile skill repositories were reviewed but not bulk-imported: `mattpocock/skills` and `addyosmani/agent-skills` overlap with the existing Superpowers/TDD/review stack; `cloudflare/security-audit-skill` requires isolated execution sandboxing and parallel subagents not available in the current hosted environment, so it remains a reviewed candidate rather than an active workflow.
