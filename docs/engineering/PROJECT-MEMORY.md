@@ -510,3 +510,10 @@ This section supersedes earlier assumptions in this file about the Store's Supab
 - OpenSEO defaults remain United States/English while the storefront is Arabic. Do not alter target market until the intended commercial market is confirmed.
 - Firecrawl usage is 0/1,000 credits through 2026-11-29; Ahrefs Free workspace API allowance is 0 and recorded usage is 0. Existing OpenSEO reads did not consume crawl/audit credits; last recorded balance 251 on 2026-11-15, not re-queried on this date.
 - No additional paid or credit-consuming crawls are authorized by this audit. Use existing crawl data and GitHub Actions/browser tests until free quotas refresh or a verified allowance exists.
+
+
+## Final stale-ref cleanup — 2026-11-21
+
+- PR #165 merged the PR #163/#164 reconciliation. The current inventory is 19 refs: 17 durable refs plus the closed PR #166 branch and a no-PR branch identical to main; no open PRs existed before PR #167.
+- PR #167 authorizes only exact safe cleanup: archive PR #166's branch at `31ff93d7ede35deaafff0373a92e5caa8cfc7822` before deletion; delete `maintenance/close-stale-cleanup-pr-2026-11-21` only if it remains `ahead_by=0`; delete PR #167's own exact merged head after merge.
+- Keep all 17 durable refs. Verify both branch removals and the archive tag after the existing workflow runs.
