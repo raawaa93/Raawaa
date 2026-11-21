@@ -442,3 +442,14 @@ test('retires the no-op branch archival policy PR only after its exact head is m
     [name],
   );
 });
+
+
+test('retires the final branch inventory documentation branch only after its exact head is merged', () => {
+  const name = 'docs/final-branch-state-2026-11-21';
+  assert.ok(MERGED_PR_BRANCHES.includes(name));
+  assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
+  assert.deepEqual(
+    classifyBranches([branchRef(name)], [pr(name, { merged: true })], repository).map(x => x.name),
+    [name],
+  );
+});
