@@ -510,3 +510,13 @@ No customer/order data, product formulas, prices, discounts, shipping policy, ch
 
 - Latest exact-head Lighthouse run `44852426190` passed. The previous three-run artifact reports serum mobile Performance 92 and median LCP 3.11s. The LCP image is already high priority, eager, and discoverable in the initial document; adding a fixed preload would risk fetching the wrong formula when the product query changes.
 - The clearest remaining lab opportunity is render-blocking CSS (estimated 370 ms) and about 19 KB unused from `serum-shell.css`. No blind async-CSS conversion was applied: first isolate above-the-fold selectors and validate no FOUC/layout shift in Chromium and WebKit, then remeasure the live Pages origin. Localhost Lighthouse values are not field Core Web Vitals.
+
+
+## Verified integration and release state — 2026-11-21
+
+- GitHub connection for `raawaa93/Raawaa` has repository administration/push capability for the code repository and the GitHub App installation is available across its selected repositories. Workflow archival requires job-scoped `contents: write` plus `pull-requests: read`; both are now explicit in `archive-inactive`.
+- The `main` branch has no active ruleset and reports `protected=false`. The managed GitHub App connection does not expose the administration permission required to configure branch protection; this remains an owner-side settings task.
+- Cloudflare Pages `raawaa-store` production deployment `34aa7138` succeeded from clean commit `1e35a8db`. Current main has no storefront-source changes relative to that deployment, so the deployment is still current for the site payload.
+- Disaster-recovery backup from main `7d67fe9` passed SHA-256, Git Bundle, and `git fsck` checks; 73 refs restored. Branch archival uses exact annotated tags and now has the required write permissions.
+- Visual QA: 16/16 on Chromium/WebKit × iPhone 13/Desktop, zero reported layout, image, console, network, or CSP issues. Lighthouse lab scores: Home 99, Serum 90–92, Campaign 97, Privacy 100 performance; Accessibility and Best Practices 100 across routes. Campaign noindex is intentional.
+- Supabase source-level audit remains blocked by the connector's Edge Function source retrieval error. Do not infer unauthenticated handlers from `verify_jwt=false`; inspect exact deployed source before changing the three JWT-disabled functions.

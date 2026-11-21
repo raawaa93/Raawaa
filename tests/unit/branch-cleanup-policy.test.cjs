@@ -685,3 +685,15 @@ test('retires the final branch-archive policy PR branch after its exact merge', 
     [name],
   );
 });
+
+
+test('retires the final state-documentation PR branch after its exact merge', () => {
+  const name = 'docs/record-final-state-2026-11-21';
+  const head = 'pr188-final-state-docs-head';
+  assert.ok(MERGED_PR_BRANCHES.includes(name));
+  assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
+  assert.deepEqual(
+    classifyBranches([branchRef(name, { sha: head })], [pr(name, { merged: true, sha: head })], repository).map(x => x.name),
+    [name],
+  );
+});
