@@ -593,3 +593,19 @@ test('retires the exact PR171 archive-policy branch after its own head merges', 
     [name],
   );
 });
+
+
+test('retires the exact merged marketing PR172 branch and this PR175 branch', () => {
+  const cases = [
+    ['marketing/launch-readiness-rebased-2026-11-21', '8ca64b2be284cf5609fdee97ab78518bd308255e'],
+    ['maintenance/archive-marketing-duplicates-2026-11-21', 'pr175-archive-head'],
+  ];
+  for (const [name, head] of cases) {
+    assert.ok(MERGED_PR_BRANCHES.includes(name));
+    assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
+    assert.deepEqual(
+      classifyBranches([branchRef(name, { sha: head })], [pr(name, { merged: true, sha: head })], repository).map(x => x.name),
+      [name],
+    );
+  }
+});

@@ -521,3 +521,12 @@ Required administrative follow-up: configure a `main` branch ruleset requiring p
 - Closed PR #170 left branch `maintenance/archive-stale-pr168-2026-11-21` at exact SHA `0a7e47d3814b60640345a58d7f739ed6e19ac41d`. It is redundant with PR #169 and is now allowlisted for archive-first retirement.
 - `marketing/launch-readiness-2026-11-21` is now the active head of PR #171 (`be51b520578e71059ae37c40aa236146352b9a4a`). Retain it as an active marketing workstream; it is not a cleanup candidate.
 - Before opening PR #172: 20 refs = 17 durable refs + the closed PR #170 branch, active marketing PR #171 branch, and this PR branch. PR #171 is an active launch-readiness workstream and must be retained. After PR #172 merges and the existing workflow runs, expect **18 refs**: 17 durable refs plus the active marketing branch.
+
+
+## Marketing and duplicate-branch final cleanup — 2026-11-21
+
+- PR #172 merged the rebased marketing launch-readiness work. Its exact merged branch `marketing/launch-readiness-rebased-2026-11-21` is allowlisted for merged-head pruning.
+- The pre-rebase PR #171 branch `marketing/launch-readiness-2026-11-21` is closed unmerged at exact SHA `be51b520578e71059ae37c40aa236146352b9a4a`; it is archived before deletion.
+- Closed duplicate PR #174 branch `maintenance/archive-duplicate-pr170-2026-11-21` is archived at exact SHA `2558a850dce41d277ef186e7157b345beef7f5ad`.
+- The merged PR #173 branch `maintenance/archive-closed-pr170-2026-11-21` is also in the exact merged-head cleanup allowlist.
+- Before opening PR #175: 22 refs = 17 durable refs + four audited temporary refs + this PR branch. After merge and the existing workflow, expect 17 refs and zero open PRs.

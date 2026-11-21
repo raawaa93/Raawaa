@@ -531,3 +531,10 @@ This section supersedes earlier assumptions in this file about the Store's Supab
 - PR #170 is closed and unmerged; its duplicate branch is archived at exact SHA `0a7e47d3814b60640345a58d7f739ed6e19ac41d` before deletion through the existing workflow.
 - The separate `marketing/launch-readiness-2026-11-21` ref is now the active head of PR #171 at `be51b520578e71059ae37c40aa236146352b9a4a`; retain it as an active marketing workstream and do not delete it.
 - PR #172 adds the exact archive entry and a self-cleanup entry for its own merged head. Expected post-workflow inventory: 18 refs (17 durable + marketing workstream), zero open PRs.
+
+
+## Marketing and duplicate branch disposition — 2026-11-21
+
+- PR #172's rebased marketing launch-readiness branch is merged and will be pruned by exact merged-head SHA. The earlier PR #171 branch is closed unmerged and will be archived at its exact head before deletion.
+- Closed duplicate PR #174's branch is also archived at its exact head. PR #173's merged branch and PR #175's own branch are allowlisted for exact merged-head cleanup.
+- Keep the 17 durable operational/recovery refs. The existing branch workflow should leave 17 refs and zero open PRs after PR #175 merges.
