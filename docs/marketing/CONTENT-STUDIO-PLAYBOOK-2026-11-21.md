@@ -180,90 +180,6 @@ Use phone camera → VN → manual Arabic captions → clean MP4 → native Inst
 
 **Not verified:** exact free-tier quotas for VN/Canva/Edits; Arabic auto-caption support in VN/Edits; Arabic RTL rendering in VN/LibreCuts; Syria-specific access to each Meta scheduling/insight control; YouTube Audio Library download usability in a mobile browser; CapCut's commercial music terms for RAWAA. Test the actual device/account before committing to a production workflow.
 
-## 9. Attribution and experiment design
-
-Assign each creative a unique ID, e.g. `IG-A-R26-02`, `FB-B-R26-03`. Use separate UTMs:
-`utm_source=instagram|facebook|youtube`
-`utm_medium=organic_social`
-`utm_campaign=rawaa_blend_launch_2026`
-`utm_content=R26-02`
-
-Use unique creator codes; never share one code across creators. The order log should record creative ID, first-touch, qualified inquiry, blend, city, order, dispatch, delivery/refusal, collected amount, delivery cost, discounts, creator fee and contribution margin. If UTM is lost in WhatsApp, ask one fixed attribution question and reconcile with code/time. Do not put customer names, phone numbers or addresses in GitHub.
-
-Funnel:
-- Attention: 3-second hold, average watch time, completion, rewatches.
-- Intent: saves/shares, profile visits, destination clicks, DMs.
-- Qualified lead: genuine product/size/order question, not an emoji or passive view.
-- Outcome: confirmed → dispatched → delivered and paid → contribution margin.
-
-Core formulas:
-- Inquiry-to-order = confirmed orders / qualified inquiries.
-- Delivery rate = delivered orders / dispatched orders.
-- Delivered conversion = delivered orders / attributable unique sessions.
-- Cost per delivered order = attributable production + creator + media cost / delivered orders.
-- Contribution per creative = collected revenue − product + packaging + delivery + discount + returns + creator + production + media costs.
-
-Testing sequence: Week 1 hook variants; Week 2 proof style; Week 3 CTA/destination; Week 4 repeat the best combination. Change one major variable at a time. With low volume, report directional evidence, not statistical certainty. Select winners by delivered orders and contribution, not views alone.
-
-## 10. Approval checklist before a post can become publishable
-
-- [ ] Correct blend, final pack, label, size and stock confirmed.
-- [ ] Directions, claims and warnings approved for that blend.
-- [ ] No unsubstantiated therapeutic or performance claims.
-- [ ] No fabricated testimonials, results or product photography.
-- [ ] Consent and rights for every person, voice, clip and sound.
-- [ ] AI disclosure completed where required.
-- [ ] Arabic spelling, spacing, RTL text, captions and mobile legibility checked.
-- [ ] CTA, destination, current price and delivery/payment terms tested.
-- [ ] Unique UTM/creator code assigned and order attribution ready.
-- [ ] Brand owner approval recorded for the specific final export.
-
-## 11. Research source notes
-
-Platform recommendations above are official platform guidance where linked, but many examples are ad-creative guidance, not guarantees for organic ranking. EU/UK/US regulatory references apply in their respective jurisdictions; they are used as conservative claim-substantiation benchmarks and do not replace Syrian legal review. Syria-specific feature access and analytics remain unverified unless tested on the actual account.
-
-## 9. Attribution and experiment design
-
-Assign each creative a unique ID, e.g. `IG-A-R26-02`, `FB-B-R26-03`. Use separate UTMs:
-`utm_source=instagram|facebook|youtube`
-`utm_medium=organic_social`
-`utm_campaign=rawaa_blend_launch_2026`
-`utm_content=R26-02`
-
-Use unique creator codes; never share one code across creators. The order log should record creative ID, first-touch, qualified inquiry, blend, city, order, dispatch, delivery/refusal, collected amount, delivery cost, discounts, creator fee and contribution margin. If UTM is lost in WhatsApp, ask one fixed attribution question and reconcile with code/time. Do not put customer names, phone numbers or addresses in GitHub.
-
-Funnel:
-- Attention: 3-second hold, average watch time, completion, rewatches.
-- Intent: saves/shares, profile visits, destination clicks, DMs.
-- Qualified lead: genuine product/size/order question, not an emoji or passive view.
-- Outcome: confirmed → dispatched → delivered and paid → contribution margin.
-
-Core formulas:
-- Inquiry-to-order = confirmed orders / qualified inquiries.
-- Delivery rate = delivered orders / dispatched orders.
-- Delivered conversion = delivered orders / attributable unique sessions.
-- Cost per delivered order = attributable production + creator + media cost / delivered orders.
-- Contribution per creative = collected revenue − product + packaging + delivery + discount + returns + creator + production + media costs.
-
-Testing sequence: Week 1 hook variants; Week 2 proof style; Week 3 CTA/destination; Week 4 repeat the best combination. Change one major variable at a time. With low volume, report directional evidence, not statistical certainty. Select winners by delivered orders and contribution, not views alone.
-
-## 10. Approval checklist before a post can become publishable
-
-- [ ] Correct blend, final pack, label, size and stock confirmed.
-- [ ] Directions, claims and warnings approved for that blend.
-- [ ] No unsubstantiated therapeutic or performance claims.
-- [ ] No fabricated testimonials, results or product photography.
-- [ ] Consent and rights for every person, voice, clip and sound.
-- [ ] AI disclosure completed where required.
-- [ ] Arabic spelling, spacing, RTL text, captions and mobile legibility checked.
-- [ ] CTA, destination, current price and delivery/payment terms tested.
-- [ ] Unique UTM/creator code assigned and order attribution ready.
-- [ ] Brand owner approval recorded for the specific final export.
-
-## 11. Research source notes
-
-Platform recommendations above are official platform guidance where linked, but many examples are ad-creative guidance, not guarantees for organic ranking. EU/UK/US regulatory references apply in their respective jurisdictions; they are used as conservative claim-substantiation benchmarks and do not replace Syrian legal review. Syria-specific feature access and analytics remain unverified unless tested on the actual account.
-
 ## 8B. Arabic-first local editor audit (21 Nov 2026)
 
 This follow-up checked the current repository READMEs and published app information. Repository descriptions are maintainer claims, not independent device tests. No APK was installed and no production video was rendered during this audit.
@@ -310,3 +226,44 @@ Use a 20–30 second non-sensitive Arabic voice sample with a deliberately varie
 - arsub Arabic RTL implementation: https://github.com/Ifazawezk/arabic-subtitles
 - cutpoeta local captioning notes: https://cutpoeta.com/en/auto-captions/
 - VN official Google Play listing: https://play.google.com/store/apps/details?id=com.frontrow.vlog
+## 9. Attribution and experiment design
+
+Assign each creative a unique ID, e.g. `IG-A-R26-02`, `FB-B-R26-03`. Use separate UTMs:
+`utm_source=instagram|facebook|youtube`
+`utm_medium=organic_social`
+`utm_campaign=rawaa_blend_launch_2026`
+`utm_content=R26-02`
+
+Use unique creator codes; never share one code across creators. The order log should record creative ID, first-touch, qualified inquiry, blend, city, order, dispatch, delivery/refusal, collected amount, delivery cost, discounts, creator fee and contribution margin. If UTM is lost in WhatsApp, ask one fixed attribution question and reconcile with code/time. Do not put customer names, phone numbers or addresses in GitHub.
+
+Funnel:
+- Attention: 3-second hold, average watch time, completion, rewatches.
+- Intent: saves/shares, profile visits, destination clicks, DMs.
+- Qualified lead: genuine product/size/order question, not an emoji or passive view.
+- Outcome: confirmed → dispatched → delivered and paid → contribution margin.
+
+Core formulas:
+- Inquiry-to-order = confirmed orders / qualified inquiries.
+- Delivery rate = delivered orders / dispatched orders.
+- Delivered conversion = delivered orders / attributable unique sessions.
+- Cost per delivered order = attributable production + creator + media cost / delivered orders.
+- Contribution per creative = collected revenue − product + packaging + delivery + discount + returns + creator + production + media costs.
+
+Testing sequence: Week 1 hook variants; Week 2 proof style; Week 3 CTA/destination; Week 4 repeat the best combination. Change one major variable at a time. With low volume, report directional evidence, not statistical certainty. Select winners by delivered orders and contribution, not views alone.
+
+## 10. Approval checklist before a post can become publishable
+
+- [ ] Correct blend, final pack, label, size and stock confirmed.
+- [ ] Directions, claims and warnings approved for that blend.
+- [ ] No unsubstantiated therapeutic or performance claims.
+- [ ] No fabricated testimonials, results or product photography.
+- [ ] Consent and rights for every person, voice, clip and sound.
+- [ ] AI disclosure completed where required.
+- [ ] Arabic spelling, spacing, RTL text, captions and mobile legibility checked.
+- [ ] CTA, destination, current price and delivery/payment terms tested.
+- [ ] Unique UTM/creator code assigned and order attribution ready.
+- [ ] Brand owner approval recorded for the specific final export.
+
+## 11. Research source notes
+
+Platform recommendations above are official platform guidance where linked, but many examples are ad-creative guidance, not guarantees for organic ranking. EU/UK/US regulatory references apply in their respective jurisdictions; they are used as conservative claim-substantiation benchmarks and do not replace Syrian legal review. Syria-specific feature access and analytics remain unverified unless tested on the actual account.
