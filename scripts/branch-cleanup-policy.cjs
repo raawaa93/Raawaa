@@ -129,7 +129,9 @@ const MERGED_PR_BRANCHES = Object.freeze([
   // This email-provider eligibility documentation PR is eligible for pruning after a verified merge.
   "docs/email-provider-eligibility-current-2026-11-21",
   // Provider eligibility evidence appendix follow-up.
-  "docs/email-provider-eligibility-evidence-appendix-2026-11-21"
+  "docs/email-provider-eligibility-evidence-appendix-2026-11-21",
+  // Provider-policy and existing-consent-ledger clarification documentation.
+  "docs/email-provider-eligibility-clarifications-2026-11-21"
 ]);
 const SUPERSEDED_CLOSED_PR_BRANCHES = Object.freeze([
   "maintenance/retire-superseded-finalize-ref-2026-11-15",
