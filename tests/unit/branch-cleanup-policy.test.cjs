@@ -648,3 +648,15 @@ test('retires the final branch-hygiene PR branch after its exact head merges', (
     [name],
   );
 });
+
+
+test('retires the exact PR178 archive branch after its own head merges', () => {
+  const name = 'maintenance/archive-closed-pr176-2026-11-21';
+  const head = 'pr178-archive-head';
+  assert.ok(MERGED_PR_BRANCHES.includes(name));
+  assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
+  assert.deepEqual(
+    classifyBranches([branchRef(name, { sha: head })], [pr(name, { merged: true, sha: head })], repository).map(x => x.name),
+    [name],
+  );
+});
