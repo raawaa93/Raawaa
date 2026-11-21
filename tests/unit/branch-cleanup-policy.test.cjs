@@ -61,7 +61,7 @@ test('keeps closed-unmerged work for the exact-SHA archive workflow', () => {
     }),
     [],
   );
-  assert.deepEqual(SUPERSEDED_CLOSED_PR_BRANCHES, ['maintenance/retire-superseded-finalize-ref-2026-11-15']);
+  assert.deepEqual(SUPERSEDED_CLOSED_PR_BRANCHES, ['maintenance/retire-superseded-finalize-ref-2026-11-15', 'docs/final-access-and-branch-audit-2026-11-21']);
 });
 
 test('no closed-unmerged or no-PR maintenance refs remain individually eligible', () => {
@@ -468,3 +468,17 @@ test('retires the final live-state documentation branch only after its exact hea
 
 
 
+
+
+test('removes the superseded PR156 branch only after it is closed and exactly reset to main', () => {
+  const name = 'docs/final-access-and-branch-audit-2026-11-21';
+  assert.ok(SUPERSEDED_CLOSED_PR_BRANCHES.includes(name));
+  assert.deepEqual(
+    classifyBranches([branchRef(name, { sha: repository.defaultBranchSha })], [pr(name, { merged: false, closed: true })], repository, { [name]: { ahead_by: 0, behind_by: 0 } }).map(x => x.name),
+    [name],
+  );
+  assert.deepEqual(
+    classifyBranches([branchRef(name, { sha: 'different-sha' })], [pr(name, { merged: false, closed: true })], repository, { [name]: { ahead_by: 1, behind_by: 0 } }),
+    [],
+  );
+});
