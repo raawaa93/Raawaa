@@ -499,3 +499,10 @@ This section supersedes earlier assumptions in this file about the Store's Supab
 - Verified archive tag `archive/branches/2026-11-21/maintenance/branch-maintenance-runner-2026-11-21`: fetching `scripts/branch-archive-policy.cjs` through the tag and through the archived commit returned identical blob SHA `5e3a6447577a46a1dc63397209149941ff9bdcf2`. This verifies the archived source content is retained at the exact reviewed commit.
 - Temporary PR #162 branch is also absent from the live ref list. No operational, backup, recovery, deployment, preview, release, or restore refs were removed.
 - Branch cleanup is complete for this cycle. Do not run another cleanup pass against the 17 retained refs without a fresh inventory and exact-SHA review.
+
+
+## Final-ref reconciliation — 2026-11-21
+
+- The 17 durable refs were verified after PR #162. A later inventory found three temporary refs: merged PR #163's documentation branch; closed PR #164's superseded documentation branch at exact SHA `71e11b7b3d861787e9e72d574879298f69251b6c`; and a no-PR branch identical to main.
+- PR #165 authorizes only exact, safe retirement: delete PR #163's merged head only if the current SHA matches; archive PR #164's closed-unmerged head before deletion; delete the no-PR branch only if GitHub comparison remains `ahead_by=0, behind_by=0`; and retire PR #165's own branch after merge.
+- Keep all 17 durable operational/recovery refs. Re-verify the archive tag, final 17-ref count, and zero-open-PR state after the existing workflow runs.
