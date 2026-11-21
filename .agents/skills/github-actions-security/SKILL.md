@@ -30,4 +30,4 @@ Use this skill whenever changing .github/workflows/**, repository actions, relea
 
 ## Scope
 
-This skill is project guidance, not a substitute for source review or GitHub branch rulesets. The initial zizmor baseline is advisory until existing findings are triaged and branch protection is configured.
+This skill is project guidance, not a substitute for source review or GitHub branch rulesets. The pinned zizmor v1.32.0 audit is a blocking workflow step and fails on findings. GitHub branch rulesets are still absent, so the check is not yet required by repository protection.
