@@ -673,3 +673,15 @@ test('archive job has write permissions required for verified tag creation', () 
   assert.ok(archiveJob, 'archive-inactive job exists');
   assert.match(archiveJob, /\n    permissions:\n      contents: write\n      pull-requests: read\n/);
 });
+
+
+test('retires the final branch-archive policy PR branch after its exact merge', () => {
+  const name = 'maintenance/finalize-branch-archive-2026-11-21';
+  const head = 'pr187-archive-finalizer-head';
+  assert.ok(MERGED_PR_BRANCHES.includes(name));
+  assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
+  assert.deepEqual(
+    classifyBranches([branchRef(name, { sha: head })], [pr(name, { merged: true, sha: head })], repository).map(x => x.name),
+    [name],
+  );
+});

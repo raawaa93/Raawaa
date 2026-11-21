@@ -37,6 +37,8 @@ test('archives individually reviewed inactive refs only at their exact SHAs', ()
     'marketing/raawaa-video-scripts-2026-11-21': '09dbebab50f21292ce516cfe6cd9365a5f546023',
     'docs/supabase-edge-auth-audit-2026-11-21': '6e73b8a315dbe6975c8ce1948c51eafc74a20242',
     'dependabot/github_actions/actions/setup-python-7.1.0': 'f583302ca899a4ee6db406957b8a522893b737c1',
+    'maintenance/archive-merged-heads-2026-11-21': 'e01423a3130b6263f9e86040ffd00056e70e4850',
+    'fix/branch-archive-write-permission-2026-11-21': '373aee7fb9120c5749281c0f4ef993a117486c3a',
   };
   assert.deepEqual(ARCHIVE_BRANCHES, reviewed);
   const branches = Object.entries(reviewed).map(([name, sha]) => branch(name, sha));
@@ -65,6 +67,8 @@ test('archives individually reviewed inactive refs only at their exact SHAs', ()
       'marketing/raawaa-video-scripts-2026-11-21',
       'docs/supabase-edge-auth-audit-2026-11-21',
       'dependabot/github_actions/actions/setup-python-7.1.0',
+      'maintenance/archive-merged-heads-2026-11-21',
+      'fix/branch-archive-write-permission-2026-11-21',
     ],
   );
 });
@@ -195,6 +199,8 @@ test('archives only the exact merged heads from the 2026-11-21 integration batch
     ['marketing/raawaa-video-scripts-2026-11-21', '09dbebab50f21292ce516cfe6cd9365a5f546023'],
     ['docs/supabase-edge-auth-audit-2026-11-21', '6e73b8a315dbe6975c8ce1948c51eafc74a20242'],
     ['dependabot/github_actions/actions/setup-python-7.1.0', 'f583302ca899a4ee6db406957b8a522893b737c1'],
+    ['maintenance/archive-merged-heads-2026-11-21', 'e01423a3130b6263f9e86040ffd00056e70e4850'],
+    ['fix/branch-archive-write-permission-2026-11-21', '373aee7fb9120c5749281c0f4ef993a117486c3a'],
   ];
   for (const [name, sha] of reviewed) {
     assert.equal(expectedArchiveShaMatches(branch(name, sha)), true);
