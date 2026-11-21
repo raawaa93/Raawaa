@@ -423,3 +423,18 @@ No customer/order data, product formulas, prices, discounts, shipping policy, ch
 - PostHog's own instrumentation skill requires explicit confirmation of the target project before writing the token into application configuration. The next step is to ask whether `Default project` (ID `756281`) is the intended RAWAA Store analytics destination. No project rename/settings changes, SDK dependency, CSP change, event capture, session recording, or user identification have been made.
 - Before enabling analytics, implement a consent-first plan appropriate for a static vanilla-JS storefront and UK/EU visitors: no analytics SDK initialization or event transmission before consent; no session replay or autocapture by default; only minimal aggregate business events after consent; no order contents, phone numbers, customer names, addresses, payment details, or WhatsApp message payloads in event properties. Align CSP `script-src` and `connect-src` with the actual chosen SDK/host only after the destination is confirmed.
 - The plugin connection itself is free of a new external runtime dependency. Keep the existing one-project quota; do not create a second project or upgrade the plan as part of this work.
+
+
+### ChatGPT plugin permission audit — 2026-11-21 03:42 UTC
+
+- Global default permission: **Allow low-risk actions**.
+- Plugin-specific **Allow all actions** overrides are active for GitHub, Cloudflare, Notion, OpenSEO, and PostHog. These plugins can act without a separate ChatGPT confirmation prompt under their app-specific setting; this is elevated risk and is separate from each provider's OAuth/App installation scopes.
+- Supabase, Figma, Ahrefs, and Lovable inherit the global default permission.
+- These settings were inspected only. No permission level was changed.
+- The GitHub App installation's all-repositories scope is a separate provider-side authorization and remains broader than needed. Narrow that installation to the RAWAA repository set in GitHub settings; the current connector cannot change installation scope or create repository rulesets.
+
+### Free-tier allowance verification
+
+- The connected PostHog documentation confirms monthly free allowances: 1M analytics events, 5K session recordings, 1M feature-flag requests, 100K exceptions, 1,500 survey responses, and 1M data-warehouse rows. Allowances reset monthly.
+- Usage is organization-wide across projects; creating additional projects does not multiply the free allowance. The free plan includes one project, matching the organization's current `organizations_projects=1` limit.
+- References: [PostHog pricing](https://posthog.com/pricing), [project organization](https://posthog.com/docs/settings/projects), [billing FAQ](https://posthog.com/docs/billing/common-questions).
