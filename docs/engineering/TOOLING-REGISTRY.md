@@ -530,3 +530,5 @@ No customer/order data, product formulas, prices, discounts, shipping policy, ch
 - SMTP2GO Free يعلن 1,000 رسالة/شهر و200/يوم و25/ساعة قبل توثيق نطاق المرسل. الشروط العامة التي تمت مراجعتها لا تثبت قبول سوريا ولا تنفيه؛ يلزم تأكيد كتابي قبل ربطه.
 - لا يوجد حالياً نموذج بريد أو جدول مشتركين بريد في المتجر. جدول `rawaa_store.marketing_preference_events` الحالي خاص بـHMAC رقم الهاتف وأحداث موافقة/سحب. سياسة الخصوصية تصف تدفق واتساب ولا تصف جمع البريد.
 - لا تُنقل بيانات العملاء أو تُفعّل الحملات قبل موافقة بريدية منفصلة، double opt-in، unsubscribe/suppression، تحديث الخصوصية، وفحص SPF/DKIM/DMARC. لا تضع مفاتيح SMTP في المتصفح. وثيقة القرار: `docs/marketing/SYRIA-COMPATIBLE-EMAIL-STACK-2026-11-21.md`.
+
+- Architecture refinement: evaluate a minimal Supabase-based server-side email automation layer first to avoid introducing a new VPS, but only after the current Edge Function sources are restored/reviewed and existing plan quotas are checked. Mautic is the full-featured self-hosted alternative if a persistent host is available; SMTP2GO eligibility from Syria remains unconfirmed.
