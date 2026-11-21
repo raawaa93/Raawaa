@@ -25,6 +25,7 @@ test('archives individually reviewed inactive refs only at their exact SHAs', ()
     'docs/agency-agents-adoption-2026-11-15': '0ae06ec6949034351d1a33d2de81180e99d11d83',
     'docs/final-live-state-2026-11-21': 'b617c56799a3d913878df4915a1c2a94ea273617',
     'maintenance/branch-maintenance-runner-2026-11-21': '881720de49a7a3a3a28fde6102987de9f06ded31',
+    'maintenance/final-branch-state-2026-11-21': '71e11b7b3d861787e9e72d574879298f69251b6c',
     'fix/exclude-dev-files-from-pages-payload-2026-11-15': 'a4c976966be6d2193ccc76d216b3f0be3b76f27a',
   };
   assert.deepEqual(ARCHIVE_BRANCHES, reviewed);
@@ -42,6 +43,7 @@ test('archives individually reviewed inactive refs only at their exact SHAs', ()
       'docs/agency-agents-adoption-2026-11-15',
       'docs/final-live-state-2026-11-21',
       'maintenance/branch-maintenance-runner-2026-11-21',
+      'maintenance/final-branch-state-2026-11-21',
       'fix/exclude-dev-files-from-pages-payload-2026-11-15',
     ],
   );
@@ -103,5 +105,15 @@ test('archives the exact unmerged runner experiment only when its reviewed SHA m
   assert.equal(expectedArchiveShaMatches(branch(name, sha)), true);
   assert.equal(expectedArchiveShaMatches(branch(name, 'moved-head')), false);
   assert.deepEqual(selectArchiveCandidates([branch(name, sha)], [], repository).map(x => x.name), [name]);
+  assert.deepEqual(selectArchiveCandidates([branch(name, sha)], [pull(name, 'open')], repository), []);
+});
+
+
+test('archives the exact closed PR164 branch and rejects a moved or open ref', () => {
+  const name = 'maintenance/final-branch-state-2026-11-21';
+  const sha = '71e11b7b3d861787e9e72d574879298f69251b6c';
+  assert.equal(expectedArchiveShaMatches(branch(name, sha)), true);
+  assert.equal(expectedArchiveShaMatches(branch(name, 'moved-head')), false);
+  assert.deepEqual(selectArchiveCandidates([branch(name, sha)], [pull(name, 'closed')], repository).map(x => x.name), [name]);
   assert.deepEqual(selectArchiveCandidates([branch(name, sha)], [pull(name, 'open')], repository), []);
 });
