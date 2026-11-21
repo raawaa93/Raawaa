@@ -561,7 +561,7 @@ test('retires this reconciliation PR branch only after its exact head merges', (
 
 test('retires the exact archive-policy PR branch after its own head merges', () => {
   const name = 'maintenance/archive-closed-stale-refs-2026-11-21';
-  const head = 'pr167-archive-head';
+  const head = 'pr168-archive-head';
   assert.ok(MERGED_PR_BRANCHES.includes(name));
   assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
   assert.deepEqual(
