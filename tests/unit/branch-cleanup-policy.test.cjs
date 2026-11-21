@@ -2,6 +2,8 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
 const {
   classifyBranches,
   MERGED_PR_BRANCHES,
@@ -659,4 +661,15 @@ test('retires the exact PR178 archive branch after its own head merges', () => {
     classifyBranches([branchRef(name, { sha: head })], [pr(name, { merged: true, sha: head })], repository).map(x => x.name),
     [name],
   );
+});
+
+
+test('archive job has write permissions required for verified tag creation', () => {
+  const workflow = fs.readFileSync(
+    path.join(__dirname, '../../.github/workflows/cleanup-merged-branches.yml'),
+    'utf8',
+  );
+  const archiveJob = workflow.split('\n  archive-inactive:\n')[1];
+  assert.ok(archiveJob, 'archive-inactive job exists');
+  assert.match(archiveJob, /\n    permissions:\n      contents: write\n      pull-requests: read\n/);
 });
