@@ -86,6 +86,7 @@ const MERGED_PR_BRANCHES = Object.freeze([
   "tooling/modern-web-guidance-2026-11-21",
   "fix/modern-web-guidance-policy-2026-11-21",
   "maintenance/archive-noop-audit-branch-2026-11-21",
+  "docs/posthog-integration-audit-2026-11-21",
   "feature/competitor-crawl4ai-weekly",
   "fix/competitor-crawl-runner",
   "fix/production-release-ancestry-fetch",
@@ -108,9 +109,7 @@ const MERGED_PR_BRANCHES = Object.freeze([
 const SUPERSEDED_CLOSED_PR_BRANCHES = Object.freeze([
   "maintenance/retire-superseded-finalize-ref-2026-11-15",
 ]);
-const STALE_NO_PR_BRANCHES = Object.freeze([
-  "docs/posthog-integration-audit-2026-11-21",
-]);
+const STALE_NO_PR_BRANCHES = Object.freeze([]);
 
 function classifyBranches(branches, pullRequests, repositoryFullName, comparisons = {}) {
   const relatedByHead = new Map();
