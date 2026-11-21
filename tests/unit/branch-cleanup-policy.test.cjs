@@ -474,11 +474,11 @@ test('removes the superseded PR156 branch only after it is closed and exactly re
   const name = 'docs/final-access-and-branch-audit-2026-11-21';
   assert.ok(SUPERSEDED_CLOSED_PR_BRANCHES.includes(name));
   assert.deepEqual(
-    classifyBranches([branchRef(name, { sha: repository.defaultBranchSha })], [pr(name, { merged: false, closed: true })], repository, { [name]: { ahead_by: 0, behind_by: 0 } }).map(x => x.name),
+    classifyBranches([branchRef(name, { sha: '8fe861b2496db12242aee3b8d3362d656de3e47c' })], [pr(name, { state: 'closed', merged: false, sha: '8fe861b2496db12242aee3b8d3362d656de3e47c' })], repository, { [name]: { ahead_by: 0, behind_by: 0 } }).map(x => x.name),
     [name],
   );
   assert.deepEqual(
-    classifyBranches([branchRef(name, { sha: 'different-sha' })], [pr(name, { merged: false, closed: true })], repository, { [name]: { ahead_by: 1, behind_by: 0 } }),
+    classifyBranches([branchRef(name, { sha: 'different-sha' })], [pr(name, { state: 'closed', merged: false, sha: '8fe861b2496db12242aee3b8d3362d656de3e47c' })], repository, { [name]: { ahead_by: 1, behind_by: 0 } }),
     [],
   );
 });
