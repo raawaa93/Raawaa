@@ -433,7 +433,7 @@ Required administrative follow-up: configure a `main` branch ruleset requiring p
 ## Closed PR #156 branch cleanup — 2026-11-21
 
 - The closed-unmerged branch `docs/final-access-and-branch-audit-2026-11-21` was verified to point exactly to main at `8fe861b2496db12242aee3b8d3362d656de3e47c` with `ahead_by=0` and `behind_by=0`.
-- Its unique documentation changes were carried into PR #157. It is allowlisted only for exact closed-branch cleanup; it will be deleted after PR #157 merges and the cleanup workflow rechecks ancestry.
+- Its unique documentation changes were carried into PR #157. It was removed by branch-hygiene run #44846798612 after GitHub proved the branch exactly matched main; no unique commits were lost.
 
 
 ## Final post-cleanup verification — 2026-11-21
