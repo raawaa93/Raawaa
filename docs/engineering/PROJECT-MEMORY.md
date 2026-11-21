@@ -421,3 +421,19 @@ This section supersedes earlier assumptions in this file about the Store's Supab
 - The canonical production workflow is automatic after successful validation on qualifying main pushes. It has no manual approval/dispatch gate. Do not reintroduce an owner-confirmation gate.
 - Repository metadata confirms the connected identity has admin/maintain/push permissions, but this audit did not verify branch protection. Do not claim required checks or branch protection are enabled without reading protection/ruleset settings.
 - No DNS, Pages domain binding, production source, Supabase schema/data, secrets, prices, discounts, delivery rules, customer/order data, or billing settings were changed during this checkpoint.
+
+
+## Comprehensive technical audit — 2026-11-21
+
+- Full evidence-backed audit recorded in [TECHNICAL-AUDIT-2026-11-21.md](TECHNICAL-AUDIT-2026-11-21.md). It covers repository, release, Cloudflare, storefront behavior, Supabase schemas/functions/security, SEO/Search Console, analytics, tool inventory, blockers, and next actions.
+- PR #146 removed the obsolete deployment-builder assertions and corrected README inventory. It merged as `48fa6d2dba4edd3ae9350e61362de680aa288754`.
+- Production run [#44840290249](https://github.com/raawaa93/Raawaa/actions/runs/44840290249) passed validation and deployment. Cloudflare deployment `7ea90c29-002b-403a-9b89-18d220544781` / [immutable URL](https://7ea90c29.raawaa-store.pages.dev) is successful and sourced from that exact commit. Visual QA [#44840577452](https://github.com/raawaa93/Raawaa/actions/runs/44840577452) was still in progress at the audit cutoff.
+- The direct HTTP client in the audit runtime could not resolve Cloudflare Pages DNS. Do not claim a live browser inspection from this runtime; rely on Cloudflare/GitHub deployment evidence until the Visual QA artifact and a working live check are available.
+- Search Console: URL-prefix property is verified as siteOwner; only the homepage is indexed. The last 28-day report contains one impression, zero clicks, and average position 73 for `rowaa`. Serum/privacy/campaign URLs were not yet recognized by Google. GA4 is not connected.
+- OpenSEO crawl completed 7 URLs with no critical/warning issues; three query variants are canonicalized as expected. Lighthouse was not part of that crawl.
+- Supabase remains shared staging/test infrastructure. The storefront still hands off to WhatsApp and does not directly insert orders. The two Store/commerce order tables each had zero rows. Six deployed functions exist; source export is blocked by a Supabase connector protocol error. JWT-off functions require source-level review before any change or production certification.
+- GitHub main remains unprotected and the rulesets list is empty; branch-protection API access returns 403. This is an account-administration blocker.
+- Cloudflare custom domain `rawaa.eu.org` is pending with `CNAME record not set`. No DNS or nameserver changes were made.
+- Runtime inventory: 817 tool definitions across 24 integration families and 152 Skills. Catalog presence is not equivalent to a project connection. Firecrawl remains quota-exhausted until its recorded renewal; Ahrefs workspace units are zero. TinyFish remains prohibited; Arena remains paused.
+- Branch inventory immediately after PR #146 had 18 refs because the merged PR branch had not yet been added to the exact cleanup allowlist. A reviewed follow-up adds both the PR #146 head and its own cleanup branch to the allowlist with unit coverage; branch retirement must be confirmed by the resulting workflow before reporting 17 refs again.
+- No prices, discount/delivery rules, DNS, Supabase schema/data, secrets, customer/order data, billing, or paid service activation were changed.
