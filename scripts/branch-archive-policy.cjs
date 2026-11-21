@@ -18,6 +18,10 @@ const ARCHIVE_BRANCHES = Object.freeze({
   "maintenance/archive-closed-stale-refs-2026-11-21": "9ee3d444021971c3ee3882de844c0c6952dd6258",
   // Closed PR #170: preserve the duplicate superseded branch before deleting its ref.
   "maintenance/archive-stale-pr168-2026-11-21": "0a7e47d3814b60640345a58d7f739ed6e19ac41d",
+  // Closed duplicate PR #174: preserve its exact branch head before deletion.
+  "maintenance/archive-duplicate-pr170-2026-11-21": "2558a850dce41d277ef186e7157b345beef7f5ad",
+  // Closed unmerged PR #171: preserve the pre-rebase marketing branch before deletion.
+  "marketing/launch-readiness-2026-11-21": "be51b520578e71059ae37c40aa236146352b9a4a",
   "fix/exclude-dev-files-from-pages-payload-2026-11-15": "a4c976966be6d2193ccc76d216b3f0be3b76f27a",
 });
 const PROTECTED_PREFIXES = Object.freeze([
