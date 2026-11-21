@@ -363,3 +363,13 @@ Required administrative follow-up: configure a `main` branch ruleset requiring p
 - Subsequent live PR enumeration found PR #149, `perf/serum-css-pruning-2026-11-21`, on the ref previously identified as the same-as-main extra branch. Its head moved after the earlier snapshot and it is now an active open PR. Preserve the branch while PR #149 remains open.
 - PR #150 is the current integration/skills/branch-security inventory update. Its exact branch is allowlisted for pruning only after its exact head is merged.
 - The earlier 18-ref snapshot is retained as a time-stamped observation, not the current count. Do not delete either open-PR head.
+
+
+## Superseding live state — 2026-11-21 after PR #149 merge
+
+- Canonical `main`: `e554489b78de8b280b1281b2c706d6acc42b5ad5`.
+- PR #149 (serum stylesheet pruning) merged as `e554489b78de8b280b1281b2c706d6acc42b5ad5`. Store checks, Playwright browser tests, Visual QA (`issues: []`), Lighthouse mobile audit, and offline Graphify succeeded on its reviewed head.
+- Branch hygiene has removed the exact merged PR #149 branch. Current enumeration: **18 refs** = 17 durable operational/recovery refs plus the open PR #151 tooling branch.
+- The current 17 durable refs are the same backup, deploy, preview, production-deploy, recovery, release, restore, and main refs enumerated in the preceding superseding inventory; none was deleted or rewritten.
+- PR #151 adds the pinned Google Chrome Modern Web Guidance skill and is allowlisted for exact-head cleanup after merge.
+- GitHub still reports no branch protection/rulesets; all refs remain `protected=false`. Administrative settings remain a required follow-up.
