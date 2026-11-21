@@ -538,3 +538,10 @@ Required administrative follow-up: configure a `main` branch ruleset requiring p
 - GitHub comparison shows both have `ahead_by=0`; the marketing branch is behind main by one commit after the rebased PR #172 merge, and the maintenance branch is also behind by one commit. Neither contains unique commits.
 - PR #176 adds them to the correct ancestry-safe cleanup sets: closed-unmerged superseded branch and reviewed no-PR branch. It also allowlists its own merged head.
 - Before PR #176 merge: 20 refs = 17 durable refs + these two reviewed stale refs + this PR branch. After merge and workflow, expect **17 refs** and zero open PRs.
+
+
+## Final superseded PR176 branch archive — 2026-11-21
+
+- PR #177 merged the ancestry-safe cleanup for the marketing and no-PR refs. The only remaining temporary ref is the closed, superseded PR #176 branch `maintenance/archive-closed-pr174-2026-11-21` at exact SHA `8aa2cca363008add9770833cbeff3b7aed81b74c`.
+- PR #178 adds the exact archive entry for that branch and a self-cleanup entry for its own merged head.
+- Before PR #178 merge: 19 refs = 17 durable refs + the closed PR #176 branch + this PR branch. After the existing workflow completes, expect **17 refs** and zero open PRs.
