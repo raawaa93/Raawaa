@@ -307,3 +307,37 @@ This live read-back supersedes the 2026-11-21 snapshot above for the two archive
 - Final check suite for the latest main SHA: exact-SHA archive policy validation **success**, branch prune **success**, branch archive **success**, disaster-recovery backup **success**. The latest archive run found no additional candidates and made no further deletions.
 - No production workflow or Cloudflare Pages deployment was triggered by these maintenance-only commits. No storefront source, customer data, prices, DNS, Supabase data, secrets, or billing configuration changed.
 - Branch protection remains unresolved: GitHub reports `main.protected=false` and zero repository rulesets. The connected GitHub integration is read-only for this administrative setting; configure a ruleset/branch protection through repository Settings before relying on mandatory checks.
+
+
+## Superseding live state — 2026-11-21 after PR #147 cleanup
+
+This is the current live enumeration and supersedes all earlier expected/current counts above.
+
+- Canonical `main`: `f8d4e945afbf693177444fc62f518a05bfefb322`.
+- Live branch refs: **17**.
+- Open pull requests: **0** (147 total PR records inspected by the cleanup workflow).
+- Archive tag refs: **40**. Preserve all.
+- [Branch hygiene run #44841319041](https://github.com/raawaa93/Raawaa/actions/runs/44841319041) succeeded. It inspected 19 refs and 147 PRs, approved exactly two merged refs, and deleted:
+  - `fix/remove-retired-route-build-guard-2026-11-21`
+  - `maintenance/retire-pr146-branches-2026-11-21`
+- The deletion was limited to the exact merged-head allowlist. No backup, recovery, deployment, preview, production-deploy, release, or restore ref was deleted.
+- Current retained refs:
+  - `main`
+  - `backup/continuity-hardening-2026-11-15`
+  - `backup/site-2026-11-14-post-mobile-audit`
+  - `backup/site-2026-11-14-restored-main`
+  - `backup/site-2026-11-15-preproduction`
+  - `deploy/10-percent-2026-11-14`
+  - `deploy/10-percent-site-only`
+  - `preview-deploy/visual-qa-after-csp-fix-2026-11-15`
+  - `preview-deploy/visual-qa-current-2026-11-15`
+  - `preview-deploy/2026-11-14`
+  - `preview-deploy/2026-11-15-main-78ece71`
+  - `production-deploy/release-2026-11-15`
+  - `recovery/archive-store-supabase-migrations-2026-11-15`
+  - `recovery/cloudflare-manifest-2026-11-14`
+  - `recovery/inspect-edge-functions-2026-11-15`
+  - `release/clean-pages-payload-2026-11-14`
+  - `restore/integrated-store-2026-11-14`
+
+The repository is back to its 17 durable operational/recovery refs with no temporary working branch and no open PR. Do not delete or consolidate any of these refs without an individual review and a verified recovery point.
