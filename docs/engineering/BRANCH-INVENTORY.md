@@ -373,3 +373,14 @@ Required administrative follow-up: configure a `main` branch ruleset requiring p
 - The current 17 durable refs are the same backup, deploy, preview, production-deploy, recovery, release, restore, and main refs enumerated in the preceding superseding inventory; none was deleted or rewritten.
 - PR #151 adds the pinned Google Chrome Modern Web Guidance skill and is allowlisted for exact-head cleanup after merge.
 - GitHub still reports no branch protection/rulesets; all refs remain `protected=false`. Administrative settings remain a required follow-up.
+
+
+## Final live branch snapshot — 2026-11-21 00:35 UTC
+
+- Canonical `main`: `834d7705597f8e2d13ea6976bcc7640260deecf3`.
+- PR #149 is merged and its exact source branch was removed by the branch-hygiene workflow after merge.
+- PR #151 is merged and its exact tooling branch was removed by the branch-hygiene workflow after merge.
+- Current branch count: **18** = 17 durable operational/recovery refs plus the active PR #152 branch `fix/modern-web-guidance-policy-2026-11-21`.
+- The 17 durable refs are: main; four backups; two deploy refs; four preview-deploy refs; one production-deploy ref; three recovery refs; one release ref; and one restore ref. All were preserved.
+- PR #152 is the only open PR at this snapshot. Its exact branch is allowlisted for cleanup after merge and tested by the branch-cleanup policy suite.
+- Branch protection remains absent: no rulesets and every current branch is reported `protected=false`. This remains the highest-priority GitHub settings action.
