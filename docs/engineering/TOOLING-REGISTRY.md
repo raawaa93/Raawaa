@@ -383,3 +383,10 @@ This is the newest verified state and supersedes older connection, release, bran
 ### No-change confirmation
 
 No customer/order data, product formulas, prices, discounts, shipping policy, checkout/WhatsApp behavior, Supabase schema/data, DNS, Pages domain binding, account billing, or secrets were changed during this audit.
+
+
+### Concurrent PR reconciliation — 2026-11-21 03:24 UTC
+
+- A fresh open-PR enumeration after the initial audit found PR #149 (`perf/serum-css-pruning-2026-11-21`) and this documentation PR #150. PR #149 is a separate in-flight CSS optimization; its branch moved after the earlier 18-ref enumeration and is no longer a redundant same-as-main ref. Keep its branch while the PR is open.
+- PR #149 changes only the serum page's stylesheet reference and adds a generated page-specific CSS bundle. It must not merge until its own Store checks, Chromium/WebKit tests, Visual QA, and Lighthouse run complete and the stylesheet diff is checked for dynamic states. Current checks were still running at the time of this update.
+- Do not treat the earlier 18-ref snapshot as the current open-PR count; this is a time-stamped historical audit snapshot.
