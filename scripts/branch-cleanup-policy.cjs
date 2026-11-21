@@ -87,6 +87,7 @@ const MERGED_PR_BRANCHES = Object.freeze([
   "fix/modern-web-guidance-policy-2026-11-21",
   "maintenance/archive-noop-audit-branch-2026-11-21",
   "docs/final-branch-state-2026-11-21",
+  "docs/final-live-state-2026-11-21",
   "docs/posthog-integration-audit-2026-11-21",
   "feature/competitor-crawl4ai-weekly",
   "fix/competitor-crawl-runner",
@@ -109,6 +110,7 @@ const MERGED_PR_BRANCHES = Object.freeze([
 ]);
 const SUPERSEDED_CLOSED_PR_BRANCHES = Object.freeze([
   "maintenance/retire-superseded-finalize-ref-2026-11-15",
+  "docs/final-access-and-branch-audit-2026-11-21",
 ]);
 const STALE_NO_PR_BRANCHES = Object.freeze([]);
 
