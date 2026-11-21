@@ -514,6 +514,6 @@ This section supersedes earlier assumptions in this file about the Store's Supab
 
 ## Final stale-ref cleanup — 2026-11-21
 
-- PR #165 merged the PR #163/#164 reconciliation. The current inventory is 19 refs: 17 durable refs plus the closed PR #166 branch and a no-PR branch identical to main; no open PRs existed before PR #167.
-- PR #167 authorizes only exact safe cleanup: archive PR #166's branch at `31ff93d7ede35deaafff0373a92e5caa8cfc7822` before deletion; delete `maintenance/close-stale-cleanup-pr-2026-11-21` only if it remains `ahead_by=0`; delete PR #167's own exact merged head after merge.
+- PR #165 merged the PR #163/#164 reconciliation. The current inventory is 19 refs: 17 durable refs plus the closed PR #166 branch and a no-PR branch identical to main; no open PRs existed before PR #168.
+- PR #168 authorizes only exact safe cleanup: archive PR #166's branch at `31ff93d7ede35deaafff0373a92e5caa8cfc7822` before deletion; delete `maintenance/close-stale-cleanup-pr-2026-11-21` only if it remains `ahead_by=0`; delete PR #168's own exact merged head after merge.
 - Keep all 17 durable refs. Verify both branch removals and the archive tag after the existing workflow runs.
