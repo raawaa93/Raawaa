@@ -129,18 +129,28 @@ test('serum page skips homepage-only CSS and keeps narrow mobile refinements', a
 });
 
 
-test('serum hero does not preload an unrelated image or keep empty picture sources', async ({ page }) => {
+test('serum hero selects responsive AVIF/WebP variants and follows the chosen formula', async ({ page }) => {
   await page.goto('/serum.html', { waitUntil: 'domcontentloaded' });
 
   const hero = page.locator('[data-size-img]');
+  const avif = page.locator('[data-size-avif]');
+  const webp = page.locator('[data-size-webp]');
   await expect(hero).toBeVisible();
   await expect(hero).toHaveAttribute('fetchpriority', 'high');
-  await expect(hero).toHaveAttribute('src', /rawaa-olive\.jpg$/);
+  await expect(hero).toHaveAttribute('src', /rawaa-olive-480\.jpg$/);
   await expect(page.locator('link[rel="preload"][as="image"]')).toHaveCount(0);
-  await expect(page.locator('[data-size-picture] source')).toHaveCount(0);
+  await expect(page.locator('[data-size-picture] source')).toHaveCount(2);
+  await expect(avif).toHaveAttribute('srcset', /rawaa-olive-480\.avif/);
+  await expect(webp).toHaveAttribute('srcset', /rawaa-olive-480\.webp/);
+  await expect.poll(() => hero.evaluate(img => img.currentSrc)).toMatch(/rawaa-olive-(480|720|900)\.(avif|webp)$/);
 
   await page.locator('[data-formula-select="rosemary-caffeine"]').click();
-  await expect(hero).toHaveAttribute('src', /rawaa-rosemary\.jpg$/);
+  await expect(hero).toHaveAttribute('src', /rawaa-rosemary-480\.jpg$/);
+  await expect(avif).toHaveAttribute('srcset', /rawaa-rosemary-480\.avif/);
+  await expect.poll(() => hero.evaluate(img => img.currentSrc)).toMatch(/rawaa-rosemary-(480|720|900)\.(avif|webp)$/);
+
   await page.locator('[data-formula-select="castor-blend"]').click();
-  await expect(hero).toHaveAttribute('src', /rawaa-castor\.jpg$/);
+  await expect(hero).toHaveAttribute('src', /rawaa-castor-480\.jpg$/);
+  await expect(avif).toHaveAttribute('srcset', /rawaa-castor-480\.avif/);
+  await expect.poll(() => hero.evaluate(img => img.currentSrc)).toMatch(/rawaa-castor-(480|720|900)\.(avif|webp)$/);
 });
