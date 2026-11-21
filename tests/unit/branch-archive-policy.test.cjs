@@ -39,6 +39,7 @@ test('archives individually reviewed inactive refs only at their exact SHAs', ()
       'performance/trim-serum-css-2026-11-15',
       'fix/mobile-header-buttons-colors-2026-11-15',
       'docs/agency-agents-adoption-2026-11-15',
+      'docs/final-live-state-2026-11-21',
       'fix/exclude-dev-files-from-pages-payload-2026-11-15',
     ],
   );
