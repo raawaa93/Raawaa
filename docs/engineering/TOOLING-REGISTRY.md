@@ -424,7 +424,7 @@ No customer/order data, product formulas, prices, discounts, shipping policy, ch
 
 ## PostHog integration status — 2026-11-21
 
-- The PostHog connector is connected and `mcp__PostHog__exec` is available in this session. Read-only organization/project discovery confirmed one non-demo project named `Default project`, with no ingested events and session replay disabled. The project ID and token are intentionally omitted from this public registry.
+- The PostHog plugin is visible in ChatGPT permission settings, but PostHog data tools are not exposed in this session. A separate connector audit reported one non-demo project named `Default project`, no ingested events, and session replay disabled; this session cannot independently verify those details. Project ID and token are intentionally omitted.
 - Do not add the PostHog SDK, write a project token, change CSP, or enable event capture until the user confirms the intended destination project and the consent/privacy implementation is ready.
 - Published free-tier allowances include 1M analytics events, 5K session recordings, 1M feature-flag requests, 100K exceptions, 1,500 survey responses, and 1M data-warehouse rows per month. Usage is organization-wide; projects do not multiply the allowance.
 - No tracking script, session replay, user identification, billing, or paid upgrade has been activated.
@@ -449,7 +449,7 @@ No customer/order data, product formulas, prices, discounts, shipping policy, ch
 
 ## Workspace and PostHog verification — 2026-11-21 04:00 UTC
 
-- Workspace catalog at this snapshot: 819 total tool definitions, including 804 connector/MCP tools across 22 provider families, and 152 Skills.
-- PostHog connector is connected and the `mcp__PostHog__exec` tool is available in this session. Organization discovery found one non-demo project named `Default project`; its event ingestion flag is false and session replay is disabled. Project ID and token are intentionally omitted from this public registry.
+- Workspace catalog at this snapshot: 817 tool definitions across 24 integration families and 152 Skills.
+- PostHog plugin visibility is confirmed, but its data tools are not exposed in this session. A separate connector audit reported a `Default project`; current project state is not independently verifiable here. Do not publish project IDs or tokens.
 - PostHog free tier (per current official docs): 1M analytics events, 5K session recordings, 1M feature-flag requests, 100K exceptions, 1,500 survey responses, and 1M data-warehouse rows per month; one project on the free plan. Usage allowances are organization-wide. See [pricing](https://posthog.com/pricing), [projects](https://posthog.com/docs/settings/projects), and [billing FAQ](https://posthog.com/docs/billing/common-questions).
 - No PostHog SDK, project token, CSP changes, autocapture, session replay, or paid billing has been enabled. The project destination must be confirmed before token configuration.
