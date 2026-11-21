@@ -175,7 +175,7 @@ jobs:
               }
 
               const archiveDate = new Date().toISOString().slice(0, 10);
-            const tagName = `archive/branches/${archiveDate}/${name}`;
+              const tagName = `archive/branches/${archiveDate}/${name}`;
               let targetSha;
 
               try {
