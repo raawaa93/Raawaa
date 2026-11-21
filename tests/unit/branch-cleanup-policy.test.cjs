@@ -540,7 +540,7 @@ test('retires the exact archive-policy PR branch after its own head merges', () 
 test('retires the exact merged PR163 documentation head and this PR branch', () => {
   const cases = [
     ['docs/final-branch-cleanup-verification-2026-11-21', 'pr163-final-docs-head'],
-    ['maintenance/archive-final-refs-2026-11-21', 'pr165-archive-head'],
+    ['maintenance/archive-final-refs-2026-11-21', 'pr166-archive-head'],
   ];
   for (const [name, head] of cases) {
     assert.ok(MERGED_PR_BRANCHES.includes(name));
