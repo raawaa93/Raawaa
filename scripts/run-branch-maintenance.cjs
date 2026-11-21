@@ -248,7 +248,10 @@ function createGitHubApi({ token, repository, fetchImpl = globalThis.fetch }) {
     getBranch: (name) => request('GET', `/branches/${encodeRef(name)}`),
     ensureAnnotatedTag,
     deleteBranch: async (name) => {
-      await request('DELETE', `/git/refs/heads/${encodeRef(name)}`);
+      const ref = encodeRef(name);
+      await request('DELETE', `/git/refs/heads/${ref}`);
+      const remaining = await request('GET', `/branches/${ref}`);
+      if (remaining) throw new Error(`Branch ${name} still exists after deletion request.`);
       return true;
     },
   };
