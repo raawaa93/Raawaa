@@ -26,8 +26,8 @@ The existing `docs/marketing/VIDEO-SCRIPTS-12.md` is a safe first draft, but not
 - Script 12 (order CTA) must not promise stock, delivery timing, or payment terms without checking the live store/order process.
 - The original scripts are not scheduled, shot, approved or published. Do not label them "ready to publish".
 
-### New audit issue: existing Canva educational design
-The Canva design in the marketing folder was read back through the design text extractor. It returned merged Arabic words, including «مو كل مزيجيُستخدم بالطريقةنفسها» and merged footer text. This is a material readability/RTL quality defect. The previous 4:5 version must remain **not ready to publish** until manually opened on a phone and corrected. A new corrected design has been requested as a separate editable asset; it is not a replacement until its Arabic text is verified.
+### New audit issue: Canva educational design
+The plain-text extractor flattens line breaks between Canva text regions; its concatenated output alone does not prove that spaces are missing. A structured read of the new editable 1080×1350 portrait draft shows the headline on three separate lines and the three supporting labels on separate lines. However, the generated design omits the RAWAA brand footer. The new draft (Canva design ID `DAHbgrX5nwQ`) is filed in the marketing folder but remains **not ready to publish** until the footer is added and the rendered design is visually checked on a phone. Earlier square/portrait variants are also not approved for publication.
 
 ## 2. Creative system: one video, one point, one action
 
