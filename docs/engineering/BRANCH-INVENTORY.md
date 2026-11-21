@@ -498,3 +498,11 @@ Required administrative follow-up: configure a `main` branch ruleset requiring p
 - PR #164 (`maintenance/final-branch-state-2026-11-21`) was opened concurrently from the pre-PR #163 base and is not mergeable against the updated main. Its useful free-quota and SEO findings are being carried forward into this reconciliation. Close it as superseded after transferring the unique material; preserve its exact head in the archive allowlist before ref deletion.
 - The current branch count of 19 includes the 17 durable refs plus the merged PR #163 ref and PR #164's active ref. Do not claim the 17-ref state while either temporary ref remains.
 - This reconciliation PR branch is included in the exact merged-head allowlist so it can be retired after its own merge.
+
+
+## Superseding temporary-ref reconciliation — 2026-11-21
+
+- After PR #165 merged, a concurrent PR #166 appeared from the same earlier base. It duplicates the already-merged PR #165 reconciliation and is not mergeable against current main.
+- PR #166's unique safe-cleanup intent is retained: PR #163 exact merged head, PR #164 exact closed-unmerged archive head, and exact no-PR ancestry checks. The relevant policies/tests already landed in PR #165.
+- PR #166 is closed as superseded; its exact latest head `31ff93d7ede35deaafff0373a92e5caa8cfc7822` is added to the archive allowlist so its ref is preserved before deletion.
+- The new PR #167 only reconciles this exact archive and its own branch cleanup. Do not remove any durable operational refs.
