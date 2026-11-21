@@ -471,3 +471,11 @@ Required administrative follow-up: configure a `main` branch ruleset requiring p
 - It also archived and removed closed PR #159 branch `docs/final-live-state-2026-11-21` at exact SHA `b617c56799a3d913878df4915a1c2a94ea273617`. Archive tag: `archive/branches/2026-11-21/docs/final-live-state-2026-11-21`. A file read from the tag has the same blob SHA as the file read from the exact archived commit; the workflow also verifies the tag target before deletion.
 - One unmerged experiment remains: `maintenance/branch-maintenance-runner-2026-11-21`, exact head `881720de49a7a3a3a28fde6102987de9f06ded31`. It was created while checking for an execution workflow; the existing workflow was then found. Do not merge it. This PR adds it to the exact-SHA archive list so the existing workflow archives it before deletion.
 - This archive-policy PR branch is itself added to the merged-head allowlist. After merge, expect the existing workflow to archive the experiment, delete this merged PR branch, and return to **17 durable refs**. Verify the final branch count and archive tag before closing the task.
+
+
+## Archive policy PR #162 active state — 2026-11-21
+
+- Current refs after opening PR #162: **19** = 17 durable operational/recovery refs plus the unmerged experiment branch and this active archive-policy PR branch. PR #162 is the only open PR.
+- Exact archive candidate: `maintenance/branch-maintenance-runner-2026-11-21` at `881720de49a7a3a3a28fde6102987de9f06ded31`.
+- PR #162 branch `maintenance/archive-experimental-runner-2026-11-21` is included in the exact merged-head cleanup allowlist and must be removed only after GitHub confirms its exact PR head is merged.
+- The existing `.github/workflows/cleanup-merged-branches.yml` runs after the main push, prunes exact merged heads, then creates and verifies the archive tag before deleting the reviewed experiment branch. Verify the archive tag and final **17-ref** count after the workflow completes.
