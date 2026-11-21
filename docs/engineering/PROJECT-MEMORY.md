@@ -517,3 +517,10 @@ This section supersedes earlier assumptions in this file about the Store's Supab
 - PR #165 merged successfully and already contains exact-SHA cleanup for PR #163, exact-SHA archival for closed-unmerged PR #164, and retirement of its own merged branch.
 - Concurrent PR #166 was based on the same earlier main and duplicated that policy. It is closed as superseded; its exact head `31ff93d7ede35deaafff0373a92e5caa8cfc7822` is archived through the existing archive workflow, not deleted directly.
 - PR #167 adds only the exact archive entry/test for PR #166 and an exact merged-head allowlist/test for its own branch.
+
+
+## PR #168 superseded — 2026-11-21
+
+- PR #167 already merged exact-SHA archival for PR #166 and merged-head cleanup for its own branch. PR #168 duplicated that policy and its base conflict remained after refreshing against main.
+- PR #168 is closed as superseded; its exact head `9ee3d444021971c3ee3882de844c0c6952dd6258` is preserved in the archive allowlist and verified by tests before deletion.
+- PR #169 adds the archive entry and exact cleanup for its own branch. No duplicate cleanup workflow was created.
