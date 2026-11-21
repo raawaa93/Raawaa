@@ -412,3 +412,14 @@ No customer/order data, product formulas, prices, discounts, shipping policy, ch
 - PR #151 merged as `834d7705597f8e2d13ea6976bcc7640260deecf3`, adding the project-local Modern Web Guidance skill and Apache-2.0 license. The current follow-up PR #152 scopes its triggers, pins CLI 1.0.1, disables telemetry, and adds policy tests.
 - The live main branch is now `834d7705597f8e2d13ea6976bcc7640260deecf3`; the production payload SHA is `e554489b78de8b280b1281b2c706d6acc42b5ad5`. The later commit only changes agent instructions, skill/docs, and tests; it does not change the deployed storefront payload.
 - The plugin suggestion for PostHog remains pending user connection; no tracking code was added. No paid services or billing were enabled.
+
+
+## PostHog connector and project audit — 2026-11-21 03:40 UTC
+
+- The ChatGPT PostHog plugin is now connected and its instance-specific skills are available. The PostHog integration was verified through the connected MCP, not assumed from the plugin catalog.
+- Organization: `Raawaa`. It currently has exactly one visible non-demo project: `Default project` (ID `756281`), created on 2026-11-21. The project has not ingested any events (`ingested_event=false`); session replay is off. No RAWAA event instrumentation has been deployed.
+- Organization feature `organizations_projects` has a limit of **1** non-demo project. Creating a separate RAWAA project is not available under the current quota; the existing project must be reused or the plan changed.
+- The project token and API host were retrieved for configuration planning but are deliberately not recorded in this repository or in this audit. Do not commit tokens. The project uses the US ingestion host according to its own `api_host` setting; use the returned host only after the user confirms the project is the intended destination.
+- PostHog's own instrumentation skill requires explicit confirmation of the target project before writing the token into application configuration. The next step is to ask whether `Default project` (ID `756281`) is the intended RAWAA Store analytics destination. No project rename/settings changes, SDK dependency, CSP change, event capture, session recording, or user identification have been made.
+- Before enabling analytics, implement a consent-first plan appropriate for a static vanilla-JS storefront and UK/EU visitors: no analytics SDK initialization or event transmission before consent; no session replay or autocapture by default; only minimal aggregate business events after consent; no order contents, phone numbers, customer names, addresses, payment details, or WhatsApp message payloads in event properties. Align CSP `script-src` and `connect-src` with the actual chosen SDK/host only after the destination is confirmed.
+- The plugin connection itself is free of a new external runtime dependency. Keep the existing one-project quota; do not create a second project or upgrade the plan as part of this work.
