@@ -107,7 +107,9 @@ const MERGED_PR_BRANCHES = Object.freeze([
 const SUPERSEDED_CLOSED_PR_BRANCHES = Object.freeze([
   "maintenance/retire-superseded-finalize-ref-2026-11-15",
 ]);
-const STALE_NO_PR_BRANCHES = Object.freeze([]);
+const STALE_NO_PR_BRANCHES = Object.freeze([
+  "docs/posthog-integration-audit-2026-11-21",
+]);
 
 function classifyBranches(branches, pullRequests, repositoryFullName, comparisons = {}) {
   const relatedByHead = new Map();
