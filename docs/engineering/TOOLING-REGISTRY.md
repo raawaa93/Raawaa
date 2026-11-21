@@ -370,7 +370,7 @@ This is the newest verified state and supersedes older connection, release, bran
 
 - Verified installed/available in this workspace for RAWAA work: GitHub, Cloudflare, Supabase, Notion, OpenSEO, Ahrefs, Context7, Figma, and Lovable. Their connection status and project suitability differ; a listed tool is not proof of a configured production integration.
 - OpenSEO is connected to Search Console. No GA4 property is visible in the connected Google account.
-- PostHog is now connected. The only non-demo project in the Raawaa organization is `Default project` (ID `756281`), with zero ingested events and session replay disabled. The organization has a one-project free-plan limit; use this project only after the user confirms it is the intended RAWAA Store analytics destination. See [PostHog pricing](https://posthog.com/pricing) and [project settings](https://posthog.com/docs/settings/projects).
+- PostHog is now connected. The only non-demo project in the Raawaa organization is `Default project`, with zero ingested events and session replay disabled. The organization has a one-project free-plan limit; use this project only after the user confirms it is the intended RAWAA Store analytics destination. See [PostHog pricing](https://posthog.com/pricing) and [project settings](https://posthog.com/docs/settings/projects).
 - Linear was discovered but not recommended because Notion is already connected for project knowledge/tasks and another task tracker would duplicate workflow. Datadog is not recommended because the current static site can use GitHub/Cloudflare checks without a new observability bill. TinyFish remains prohibited.
 - No plugin was uninstalled, no billing enabled, and no paid API usage activated.
 
@@ -378,7 +378,7 @@ This is the newest verified state and supersedes older connection, release, bran
 
 1. Add GitHub `main` branch ruleset and restrict the GitHub App installation from all repositories to the smallest necessary repository set. Both require GitHub settings access unavailable through the current connector.
 2. Restore the second saved GitHub connection or remove it from future use after the user resolves the account-level 403. Do not route work through it while it is suspended.
-3. Confirm whether `Default project` (ID `756281`) is the intended RAWAA Store analytics destination. Then implement consent-first minimal event capture, with autocapture/session replay off by default and no personal/order/payment/WhatsApp data in event properties.
+3. Confirm whether `Default project` () is the intended RAWAA Store analytics destination. Then implement consent-first minimal event capture, with autocapture/session replay off by default and no personal/order/payment/WhatsApp data in event properties.
 4. Reconcile the 18 live branch refs against the stale historical branch inventory; retain all recovery and deployment checkpoints, and archive the single same-as-main redundant ref only through the exact-SHA tag workflow.
 5. Continue improving the measured Lighthouse opportunities without relaxing existing CI thresholds.
 
@@ -447,3 +447,10 @@ No customer/order data, product formulas, prices, discounts, shipping policy, ch
 - PR #154 is now based on current `main` commit `23db34ebf7b0d8d06788e085188eef78da5c93b0` through a two-parent merge commit, preserving its reviewed file tree while including PR #153's PostHog registry changes.
 - The PostHog audit branch is treated as a merged PR #153 head (`c20f2b8f647bc5542715cba74574cbdc422dc4ce`), not a no-PR ref. It is removed only by the merged-PR cleanup policy after exact head verification.
 - The PR's earlier failing checks exposed a stale archive-list assertion. The test and policy now move that branch to the merged-PR allowlist; fresh CI is required before merge.
+
+
+## Current-session capability correction — 2026-11-21 00:51 UTC
+
+- Exact live enumeration: **817 total tools = 802 MCP/connector tools across 21 provider families + 15 native tools**; **152 workspace Skills**.
+- The PostHog connector was inspected in a separate enabled session (PR #153), but no PostHog MCP tools are exposed to this current session. The prior project observations are retained only as historical notes; they do not authorize writing tokens or adding instrumentation.
+- The intended PostHog destination still requires user confirmation. No SDK, event capture, session replay, or CSP changes have been made.
