@@ -535,3 +535,25 @@ test('retires the exact archive-policy PR branch after its own head merges', () 
     [],
   );
 });
+
+
+test('retires the merged final-inventory PR #163 branch by its exact head', () => {
+  const name = 'docs/final-branch-cleanup-verification-2026-11-21';
+  const head = 'final-inventory-pr-head';
+  assert.ok(MERGED_PR_BRANCHES.includes(name));
+  assert.deepEqual(classifyBranches([branchRef(name, { sha: head })], [pr(name, { merged: true, sha: head })], repository).map(x => x.name), [name]);
+  assert.deepEqual(classifyBranches([branchRef(name, { sha: 'moved-head' })], [pr(name, { merged: true, sha: head })], repository, {
+    [name]: { ahead_by: 1, behind_by: 0 },
+  }), []);
+});
+
+test('retires this reconciliation PR branch only after its exact head merges', () => {
+  const name = 'maintenance/reconcile-concurrent-docs-2026-11-21';
+  const head = 'reconciliation-pr-head';
+  assert.ok(MERGED_PR_BRANCHES.includes(name));
+  assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
+  assert.deepEqual(classifyBranches([branchRef(name, { sha: head })], [pr(name, { merged: true, sha: head })], repository).map(x => x.name), [name]);
+  assert.deepEqual(classifyBranches([branchRef(name, { sha: 'moved-head' })], [pr(name, { merged: true, sha: head })], repository, {
+    [name]: { ahead_by: 1, behind_by: 0 },
+  }), []);
+});
