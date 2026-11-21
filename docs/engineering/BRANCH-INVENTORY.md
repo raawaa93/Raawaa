@@ -490,3 +490,11 @@ Required administrative follow-up: configure a `main` branch ruleset requiring p
 - Verified archive tag `archive/branches/2026-11-21/maintenance/branch-maintenance-runner-2026-11-21`: fetching `scripts/branch-archive-policy.cjs` through the tag and through the archived commit returned identical blob SHA `5e3a6447577a46a1dc63397209149941ff9bdcf2`. This verifies the archived source content is retained at the exact reviewed commit.
 - Temporary PR #162 branch is also absent from the live ref list. No operational, backup, recovery, deployment, preview, release, or restore refs were removed.
 - Branch cleanup is complete for this cycle. Do not run another cleanup pass against the 17 retained refs without a fresh inventory and exact-SHA review.
+
+
+## Concurrent documentation PR reconciliation — 2026-11-21
+
+- PR #163 merged successfully and its final-inventory documentation is now on main. Its source ref `docs/final-branch-cleanup-verification-2026-11-21` must be retired only through the exact merged-head allowlist; this ref was not included in the earlier PR #162 cleanup snapshot.
+- PR #164 (`maintenance/final-branch-state-2026-11-21`) was opened concurrently from the pre-PR #163 base and is not mergeable against the updated main. Its useful free-quota and SEO findings are being carried forward into this reconciliation. Close it as superseded after transferring the unique material; preserve its exact head in the archive allowlist before ref deletion.
+- The current branch count of 19 includes the 17 durable refs plus the merged PR #163 ref and PR #164's active ref. Do not claim the 17-ref state while either temporary ref remains.
+- This reconciliation PR branch is included in the exact merged-head allowlist so it can be retired after its own merge.
