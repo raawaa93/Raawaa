@@ -1,0 +1,53 @@
+name: Exact-SHA branch maintenance
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'scripts/branch-cleanup-policy.cjs'
+      - 'scripts/branch-archive-policy.cjs'
+      - 'scripts/run-branch-maintenance.cjs'
+      - '.github/workflows/branch-maintenance.yml'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Preview only by default; set false only after reviewing the exact-SHA plan.'
+        required: true
+        type: choice
+        default: 'true'
+        options:
+          - 'true'
+          - 'false'
+
+permissions:
+  contents: write
+  pull-requests: read
+
+concurrency:
+  group: rawaa-exact-sha-branch-maintenance
+  cancel-in-progress: false
+
+jobs:
+  maintain:
+    if: github.repository == 'raawaa93/Raawaa' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v7
+        with:
+          ref: main
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+
+      - name: Execute exact-SHA branch policy
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || 'false' }}
+        run: node scripts/run-branch-maintenance.cjs
