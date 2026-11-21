@@ -479,3 +479,14 @@ Required administrative follow-up: configure a `main` branch ruleset requiring p
 - Exact archive candidate: `maintenance/branch-maintenance-runner-2026-11-21` at `881720de49a7a3a3a28fde6102987de9f06ded31`.
 - PR #162 branch `maintenance/archive-experimental-runner-2026-11-21` is included in the exact merged-head cleanup allowlist and must be removed only after GitHub confirms its exact PR head is merged.
 - The existing `.github/workflows/cleanup-merged-branches.yml` runs after the main push, prunes exact merged heads, then creates and verifies the archive tag before deleting the reviewed experiment branch. Verify the archive tag and final **17-ref** count after the workflow completes.
+
+
+## Final live verification after PR #162 — 2026-11-21
+
+- PR #162 merged successfully at `8a54490aef4966050792dcfe5013b37f5c34c247`; all three required checks passed: Store checks, repository policy validation, and offline Graphify.
+- Live GitHub branch enumeration after merge returned **17 refs**, exactly the durable operational/recovery set: `main`; four `backup/*`; two `deploy/*`; four `preview-deploy/*`; one `production-deploy/*`; three `recovery/*`; one `release/*`; and one `restore/*`.
+- Live open-PR enumeration returned **zero**.
+- Experimental branch `maintenance/branch-maintenance-runner-2026-11-21` is absent. Its exact commit SHA was `881720de49a7a3a3a28fde6102987de9f06ded31`.
+- Verified archive tag `archive/branches/2026-11-21/maintenance/branch-maintenance-runner-2026-11-21`: fetching `scripts/branch-archive-policy.cjs` through the tag and through the archived commit returned identical blob SHA `5e3a6447577a46a1dc63397209149941ff9bdcf2`. This verifies the archived source content is retained at the exact reviewed commit.
+- Temporary PR #162 branch is also absent from the live ref list. No operational, backup, recovery, deployment, preview, release, or restore refs were removed.
+- Branch cleanup is complete for this cycle. Do not run another cleanup pass against the 17 retained refs without a fresh inventory and exact-SHA review.
