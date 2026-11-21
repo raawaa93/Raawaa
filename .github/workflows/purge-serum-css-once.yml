@@ -1,0 +1,41 @@
+name: RAWAA one-time serum CSS pruning
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+permissions:
+  contents: write
+
+jobs:
+  prune:
+    if: github.event.action == 'opened'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout the isolated CSS optimization branch
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+
+      - name: Run pinned open-source PurgeCSS
+        run: |
+          set -euo pipefail
+          npx --yes purgecss@8.0.0 --config purgecss.serum.config.cjs
+          test -s /tmp/rawaa-serum-purge/styles.css
+          echo "Original CSS bytes: $(wc -c < css/styles.css)"
+          echo "Purged serum CSS bytes: $(wc -c < /tmp/rawaa-serum-purge/styles.css)"
+          cp /tmp/rawaa-serum-purge/styles.css css/serum-shell.css
+          test -s css/serum-shell.css
+
+      - name: Commit generated page-specific CSS and remove one-time tooling
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/purge-serum-css-once.yml purgecss.serum.config.cjs
+          git add css/serum-shell.css
+          git commit -m "Add pruned serum shell stylesheet"
+          git push origin "HEAD:${GITHUB_HEAD_REF}"
