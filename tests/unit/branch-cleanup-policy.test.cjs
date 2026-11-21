@@ -378,3 +378,14 @@ test('retires only exact reviewed merged working branches after merge', () => {
     );
   }
 });
+
+
+test('retires the integration audit documentation branch only after its exact head is merged', () => {
+  const name = 'docs/integration-audit-2026-11-21';
+  assert.ok(MERGED_PR_BRANCHES.includes(name));
+  assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
+  assert.deepEqual(
+    classifyBranches([branchRef(name)], [pr(name, { merged: true })], repository).map(x => x.name),
+    [name],
+  );
+});
