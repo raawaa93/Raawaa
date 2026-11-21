@@ -125,7 +125,8 @@ const MERGED_PR_BRANCHES = Object.freeze([
   // This documentation PR uses a merge commit so its exact head can be auto-pruned.
   "docs/record-final-state-2026-11-21",
   // This decision-record PR uses a merge commit so its exact head can be auto-pruned.
-  "docs/syria-compatible-email-stack-2026-11-21"
+  "docs/syria-compatible-email-stack-2026-11-21",
+  "docs/email-provider-eligibility-2026-11-21"
 ]);
 const SUPERSEDED_CLOSED_PR_BRANCHES = Object.freeze([
   "maintenance/retire-superseded-finalize-ref-2026-11-15",
