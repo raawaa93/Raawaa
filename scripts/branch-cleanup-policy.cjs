@@ -137,7 +137,11 @@ const MERGED_PR_BRANCHES = Object.freeze([
   // Confirmed Syrian business entity and corrected provider/sanctions assessment.
   "docs/syria-entity-confirmed-provider-review-2026-11-21",
   // Verified support channels and inquiry template for Syrian provider eligibility.
-  "docs/provider-support-inquiry-template-2026-11-21-v2"
+  "docs/provider-support-inquiry-template-2026-11-21-v2",
+  // Resend outreach and SMTP2GO signup constraints record.
+  "docs/email-provider-followup-resend-smtp2go-2026-11-21",
+  // Correction recording the Resend automatic acknowledgement separately from eligibility approval.
+  "docs/resend-auto-ack-status-correction-2026-11-21"
 ]);
 const SUPERSEDED_CLOSED_PR_BRANCHES = Object.freeze([
   "maintenance/retire-superseded-finalize-ref-2026-11-15",
