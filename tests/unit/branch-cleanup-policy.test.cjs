@@ -436,3 +436,14 @@ test('only the exact reviewed same-as-main PostHog audit ref is eligible for no-
     [],
   );
 });
+
+
+test('retires the no-op branch archival policy PR only after its exact head is merged', () => {
+  const name = 'maintenance/archive-noop-audit-branch-2026-11-21';
+  assert.ok(MERGED_PR_BRANCHES.includes(name));
+  assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
+  assert.deepEqual(
+    classifyBranches([branchRef(name)], [pr(name, { merged: true })], repository).map(x => x.name),
+    [name],
+  );
+});
