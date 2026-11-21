@@ -519,5 +519,5 @@ Required administrative follow-up: configure a `main` branch ruleset requiring p
 
 - The existing workflow removed the PR #168 and PR #169 temporary refs, returning the repository to 17 durable refs before a new duplicate was found.
 - Closed PR #170 left branch `maintenance/archive-stale-pr168-2026-11-21` at exact SHA `0a7e47d3814b60640345a58d7f739ed6e19ac41d`. It is redundant with PR #169 and is now allowlisted for archive-first retirement.
-- `marketing/launch-readiness-2026-11-21` remains as a separate no-PR work branch. It compares `ahead_by=0, behind_by=1`; it has no unique commits, but is intentionally retained as a potential active marketing workstream rather than deleted without confirmation.
-- Before opening PR #171: 20 refs = 17 durable refs + the PR #170 branch, the marketing work branch, and this PR branch. After merge and the existing workflow, expect **18 refs**: 17 durable refs plus the retained marketing work branch.
+- `marketing/launch-readiness-2026-11-21` is now the active head of PR #171 (`be51b520578e71059ae37c40aa236146352b9a4a`). Retain it as an active marketing workstream; it is not a cleanup candidate.
+- Before opening PR #172: 20 refs = 17 durable refs + the closed PR #170 branch, active marketing PR #171 branch, and this PR branch. PR #171 is an active launch-readiness workstream and must be retained. After PR #172 merges and the existing workflow runs, expect **18 refs**: 17 durable refs plus the active marketing branch.
