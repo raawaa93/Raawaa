@@ -386,8 +386,13 @@ Required administrative follow-up: configure a `main` branch ruleset requiring p
 - Branch protection remains absent: no rulesets and every current branch is reported `protected=false`. This remains the highest-priority GitHub settings action.
 
 
-## No-PR ref archive candidate — 2026-11-21
 
-- `docs/posthog-integration-audit-2026-11-21` has no open or closed PR, no commits ahead of main, and its branch head exactly equals main at `8bd438fb80c6ce5855411c6f3f3f37e8e127dcd2`.
-- It contains no unique work and is not a backup, recovery, deploy, preview, release, production-deploy, or restore ref. It is individually reviewed for archival at this exact SHA only.
-- The archival workflow now creates a date-stamped tag `archive/branches/YYYY-MM-DD/docs/posthog-integration-audit-2026-11-21`, verifies that it points to the exact captured SHA, rechecks the branch head, then deletes only the original branch ref. If any condition changes, it retains the branch.
+## Superseding live state — 2026-11-21 03:45 UTC
+
+- Canonical `main`: `23db34ebf7b0d8d06788e085188eef78da5c93b0` (PR #153 merged).
+- Live branch count: **19** = 17 durable operational/recovery refs, one merged PR #153 branch awaiting exact-head cleanup, and the active PR #154 branch.
+- `docs/posthog-integration-audit-2026-11-21` is the merged source branch for PR #153, head `c20f2b8f647bc5542715cba74574cbdc422dc4ce`, merge commit `23db34ebf7b0d8d06788e085188eef78da5c93b0`. It is **not** a no-PR ref and must not enter the stale-no-PR archive list. It is allowlisted only as an exact merged-PR branch for cleanup after PR #154 is merged.
+- `maintenance/archive-noop-audit-branch-2026-11-21` is active PR #154; preserve it until its checks pass and the PR is reviewed/merged.
+- PR #154 updates archive tag dates to execution date and removes duplicate skill attribution; it also corrects branch cleanup policy. It must not archive the PostHog branch as no-PR work.
+- All 17 durable backup, deploy, preview, production-deploy, recovery, release, restore, and main refs remain preserved.
+- GitHub still reports no rulesets and every branch `protected=false`; main branch protection remains the highest-priority administrative fix.
