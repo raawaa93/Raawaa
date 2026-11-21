@@ -530,3 +530,11 @@ Required administrative follow-up: configure a `main` branch ruleset requiring p
 - Closed duplicate PR #174 branch `maintenance/archive-duplicate-pr170-2026-11-21` is archived at exact SHA `2558a850dce41d277ef186e7157b345beef7f5ad`.
 - The merged PR #173 branch `maintenance/archive-closed-pr170-2026-11-21` is also in the exact merged-head cleanup allowlist.
 - Before opening PR #175: 22 refs = 17 durable refs + four audited temporary refs + this PR branch. After merge and the existing workflow, expect 17 refs and zero open PRs.
+
+
+## Final branch inventory reconciliation — 2026-11-21
+
+- The existing workflow has removed the merged PR #173 branch and the previously reviewed duplicate branches. Two non-durable refs remain beyond the 17 protected refs: the closed, superseded marketing branch `marketing/launch-readiness-2026-11-21` (PR #171), and the no-PR branch `maintenance/archive-closed-pr174-2026-11-21`.
+- GitHub comparison shows both have `ahead_by=0`; the marketing branch is behind main by one commit after the rebased PR #172 merge, and the maintenance branch is also behind by one commit. Neither contains unique commits.
+- PR #176 adds them to the correct ancestry-safe cleanup sets: closed-unmerged superseded branch and reviewed no-PR branch. It also allowlists its own merged head.
+- Before PR #176 merge: 20 refs = 17 durable refs + these two reviewed stale refs + this PR branch. After merge and workflow, expect **17 refs** and zero open PRs.
