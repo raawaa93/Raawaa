@@ -23,7 +23,7 @@ The current session exposes **819 total tool definitions**: **804 connector/MCP 
 |---|---:|---|
 | GitHub | 89 | Primary repository, PR, workflow, file, and release operations; main branch protection remains unconfigured |
 | Cloudflare | 4 | Pages project/deployment read verified; token verification endpoint returned 401, so full token scope/write access is unverified; DNS untouched |
-| Supabase | 36 | Two projects visible; Store backend source/schema not yet approved for changes |
+| Supabase | 36 | `Ghaioooth-core` is configured by the owner dashboard and is active/healthy; backend audit remains read-only pending deployed Edge Function source review. `raawaa-engine-fallback` is inactive. |
 | OpenSEO | 87 | Active RAWAA SEO project and Search Console reporting |
 | PostHog | 2 | Connected in the current session; Store analytics use remains pending destination and consent/privacy review; no tracking is active |
 | Ahrefs | 158 | Keyword/backlink research; current workspace allowance is exhausted |
@@ -69,7 +69,7 @@ The current session exposes **819 total tool definitions**: **804 connector/MCP 
 | Firecrawl | 0 remaining of 1,000 plan credits; current period 2026-10-29 to 2026-11-29 | Pause Firecrawl calls until renewal; verify balance before resuming |
 | Cloudflare Web Analytics | Site configuration created for raawaa-store.pages.dev; auto_install=false | No beacon installed; no data collection active until privacy/CSP review |
 | GitHub Actions | Free included usage subject to account limits | Existing workflows are pinned and used selectively |
-| Supabase | Two active healthy projects visible | Do not mutate either until the Store database is positively identified |
+| Supabase | One active healthy project (`Ghaioooth-core`) and one inactive fallback; `rawaa_store` and `commerce` were audited read-only | No schema/function changes until deployed Edge Function source and the single order source of truth are verified |
 
 ## Project-relevant repository automation already present
 
@@ -80,7 +80,7 @@ The current session exposes **819 total tool definitions**: **804 connector/MCP 
 - Daily disaster-recovery bundle and source archive.
 - Scheduled visual QA for mobile and desktop.
 - Search Console connected through OpenSEO; IndexNow successfully submitted home, serum, and privacy on 2026-11-15.
-- Production release is manual: qualifying source changes on `main` are validated first; a production deploy requires `workflow_dispatch` with `confirm_production=yes`. Documentation/workflow/test-only changes do not trigger production deployment.
+- Production release is automatic on qualifying pushes to canonical `main` after the full validation workflow succeeds. Documentation, workflow, test, and validation-helper-only changes are excluded from production release. The isolated preview workflow is separate; never bypass validation or deploy a feature/recovery branch.
 - Branch hygiene PR #70 and namespace-protection PR #74 are merged. Post-protection cleanup run #43677406307 inspected 35 refs, completed 12 ancestry comparisons, found zero candidates, and succeeded. PR #77 adds exact reviewed candidates for merged PR heads #71, #74, #75, #76, the no-PR docs ref, and its own head after merge.
 
 ## Skills available in the ChatGPT workspace
@@ -98,7 +98,7 @@ The catalog being available in ChatGPT is not the same as vendoring a skill into
 ### RAWAA project selection and cleanup policy
 
 - Active core: GitHub, Cloudflare Pages, Playwright, Graphify, Lighthouse CI, OpenSEO/Search Console, Ahrefs public Domain Rating endpoint, and repository-backed project memory.
-- Specialist-only: Figma (read-only), Notion (documentation), Supabase (blocked until the correct Store DB is identified), Metricool (only when publishing/analytics is required), Runway (only for requested creative assets), Ads Manager (only with explicit campaign/budget approval), and HubSpot (not configured for RAWAA).
+- Specialist-only: Figma (read-only), Notion (documentation), Supabase (`Ghaioooth-core`; read-only until deployed Edge Function source is reviewed and the single order source of truth is selected), Metricool (only when publishing/analytics is required), Runway (only for requested creative assets), Ads Manager (only for approved campaign/budget work), and HubSpot (not configured for RAWAA).
 - Paused: Firecrawl until credits renew. TinyFish is permanently excluded.
 - Not required now: overlapping memory services, duplicate browser automation stacks, extra SEO crawlers, or paid analytics aggregators. Do not connect Windsor.ai/Supermetrics merely to increase connector count.
 - Global ChatGPT apps and Skills are shared across projects. This audit curates RAWAA usage; it does not uninstall shared apps or delete global Skills. The repository has no vendored project-local skill bundles to prune.
@@ -117,7 +117,7 @@ The catalog being available in ChatGPT is not the same as vendoring a skill into
 - Windsor.ai and Supermetrics appeared in plugin discovery but are not installed; they are not required for current work and their free allowances were not verified.
 - Google Drive connector is disabled by the workspace administrator.
 - Figma MCP is read-only with the current View seat; the account is a Starter team member with Admin role metadata, but the seat itself is View and cannot edit files.
-- Supabase account exposes raawaa-engine-fallback and Ghaioooth-core only; neither is confirmed as the Store database.
+- Supabase exposes `Ghaioooth-core` (the owner dashboard's configured project) and `raawaa-engine-fallback` (inactive). Store schemas were inspected read-only; no writes are approved before Edge Function source review.
 - Notion search surfaced the recovery record, development history, Arabic/English operating models, and sales operating page. Keep separate recovery and operating records; two AAE pages belong to another project and are out of RAWAA scope. Page search/fetch are available; connector-wide search and advanced data-source queries require Business/Enterprise, so do not upgrade for this project.
 - TinyFish is explicitly prohibited; do not call, install, or reintroduce it.
 - No ChatGPT plugin/app was uninstalled: the available manager cannot safely infer which global integrations are unused by other projects from RAWAA activity alone. Unconfigured or specialist-only integrations remain documented as such.
@@ -224,7 +224,7 @@ This section supersedes earlier workspace snapshots where values conflict. It di
 
 - **Core:** GitHub Actions, Playwright (Chromium + WebKit), Graphify, Lighthouse CI, Cloudflare Pages, OpenSEO, Search Console, Ahrefs Free endpoints, repository-backed project memory.
 - **Specialist/read-only:** Figma (View seat), Notion search, Context7, Exa, Consensus. Use only when they add evidence or implementation value.
-- **Dormant until configured:** Lovable (no projects), Metricool (no connected social account), HubSpot (not onboarded), Supabase (Store DB identity unconfirmed).
+- **Dormant until configured:** Lovable (no projects), Metricool (no connected social account), HubSpot (not onboarded). Supabase is configured for the owner dashboard but remains read-only pending Edge Function source review.
 - **Quota-paused:** Firecrawl until 2026-11-29.
 - **Excluded:** TinyFish — explicitly prohibited; never call, install, or reintroduce.
 - Do not add a second browser automation stack or a second memory database. Existing Playwright and `PROJECT-MEMORY.md` + Graphify already cover those roles.
@@ -284,7 +284,7 @@ This is an account-level inventory. Only resources positively identified as belo
 - Mobile Lighthouse audit passed. Advisory scores: home 99 median (one 77 outlier), serum 86–87, campaign 96–97, privacy 100. Accessibility and best practices were 100 throughout. Campaign SEO 69 is intentional because the campaign page is noindex.
 - Search Console URL-prefix property `https://raawaa-store.pages.dev/` has `siteOwner`; the separate `sc-domain:raawaa-store.pages.dev` property remains unverified.
 - Workspace inventory: 801 tool definitions across 24 integration families and 151 Skills across 15 provider packages. Hostless is the only discovered private user-scope plugin and is dormant/not connected. TinyFish remains prohibited. No global plugin, connector, or Skill was uninstalled because they are shared workspace resources and no complete cross-project dependency map is available.
-- Free quota snapshot: OpenSEO 251 credits; Firecrawl 0/1,000 until 2026-11-29; Ahrefs API allowance 200,000 units with 0 used and workspace quota 0. Figma is View-only; Supabase Store DB remains unidentified; Lovable has no RAWAA project, workspace Skills, or custom connectors; Metricool has no social networks connected; HubSpot is not onboarded.
+- Free quota snapshot: OpenSEO 251 credits; Firecrawl 0/1,000 until 2026-11-29; Ahrefs API allowance 200,000 units with 0 used and workspace quota 0. Figma is View-only; `Ghaioooth-core` is configured for the Store owner dashboard and remains read-only pending function source review; Lovable has no RAWAA project, workspace Skills, or custom connectors; Metricool has no social networks connected; HubSpot is not onboarded.
 - **Security follow-up:** `main.protected=false` and no repository rulesets are configured. The connected GitHub app receives 403 when attempting to administer branch protection. Enable required status checks and branch protection in repository Settings or provide an authorized GitHub connection.
 - No DNS, custom-domain, Supabase schema/data, secrets, customer/order data, pricing, checkout rules, shipping policy, billing, or paid services were changed.
 
@@ -479,7 +479,7 @@ No customer/order data, product formulas, prices, discounts, shipping policy, ch
 - Live workspace inventory: **819 tool definitions** = **804 connector/MCP tools across 22 provider families + 15 native tools**; **152 workspace Skills**. These are workspace-wide capabilities, not a claim that every provider is connected to RAWAA production.
 - GitHub: authenticated read/write access to the canonical repository `raawaa93/Raawaa` is verified. Current `main` at audit start was `dfa64fe721dd9c803080b40ee51e46d20d62014e`; 17 durable refs and zero open PRs were present before this maintenance branch was created. GitHub rulesets endpoint returns an empty list; `main` is unprotected. The current repository connector does not expose a ruleset/branch-protection write operation, so that control must be configured through authorized repository settings.
 - Cloudflare: authenticated account identity and Pages read access are verified. Exactly one Pages project is listed: `raawaa-store`, Direct Upload, production branch `main`. Latest production deployment `349bd1d4-1254-40e1-b4ec-5f19c74176b9` succeeded from source `e554489b78de8b280b1281b2c706d6acc42b5ad5`. The configured custom domain `rawaa.eu.org` is pending because its CNAME is not set. Cloudflare Web Analytics fields are null; no analytics beacon is installed. Do not change DNS or analytics settings as part of routine tooling work.
-- Supabase: two projects are ACTIVE_HEALTHY. `Ghaioooth-core` contains the RAWAA staging/commerce schemas and six active Edge Functions; one development branch is present. The separate `raawaa-engine-fallback` project has no development branches. On the core project, advisor results include 17 RLS-enabled tables with no policies, one leaked-password-protection warning, one duplicate-index warning, and ten unused-index notices. A metadata-only privilege check confirmed the listed commerce, public, and rawaa_store tables grant neither SELECT nor INSERT to `anon` or `authenticated`; the RLS/no-policy notices are therefore not, by themselves, proof of public table exposure. Do not add blanket policies or drop indexes without reviewing the actual service-role/function access model and workload.
+- Supabase: `Ghaioooth-core` is ACTIVE_HEALTHY and configured by `owner/settings.mjs`; `raawaa-engine-fallback` is INACTIVE. The core project contains `rawaa_store` and `commerce` schemas and six active Edge Functions. The owner client reads only the `rawaa_store`-backed owner endpoint; no source-of-truth decision or schema mutation was made. On the core project, advisor results include 17 RLS-enabled tables with no policies, one leaked-password-protection warning, one duplicate-index warning, and ten unused-index notices. A metadata-only privilege check confirmed the listed commerce, public, and rawaa_store tables grant neither SELECT nor INSERT to `anon` or `authenticated`; the RLS/no-policy notices are therefore not, by themselves, proof of public table exposure. Do not add blanket policies or drop indexes without reviewing the actual service-role/function access model and workload.
 - The engine-fallback project has seven RLS-enabled tables with no policies; the same metadata-only privilege check found no `anon` or `authenticated` SELECT grants. No database rows were read or modified.
 - PostHog: the connected account exposes a `Default project`, but its onboarding is incomplete and it has ingested no events. No RAWAA SDK, token, event capture, or session replay is installed. Keep analytics disabled until the intended project and consent design are approved.
 - Figma: connection is live but the team seat is View-only on the Starter tier. Use it for inspection/context, not file editing or publishing.
