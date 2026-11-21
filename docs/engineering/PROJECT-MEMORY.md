@@ -499,3 +499,14 @@ This section supersedes earlier assumptions in this file about the Store's Supab
 - Verified archive tag `archive/branches/2026-11-21/maintenance/branch-maintenance-runner-2026-11-21`: fetching `scripts/branch-archive-policy.cjs` through the tag and through the archived commit returned identical blob SHA `5e3a6447577a46a1dc63397209149941ff9bdcf2`. This verifies the archived source content is retained at the exact reviewed commit.
 - Temporary PR #162 branch is also absent from the live ref list. No operational, backup, recovery, deployment, preview, release, or restore refs were removed.
 - Branch cleanup is complete for this cycle. Do not run another cleanup pass against the 17 retained refs without a fresh inventory and exact-SHA review.
+
+
+## Concurrent PR and free-quota reconciliation — 2026-11-21
+
+- PR #163 merged as `079b1978d321d2f766362990646f6d118197be93`. Its source branch `docs/final-branch-cleanup-verification-2026-11-21` remained in the live branch enumeration and is explicitly added to exact merged-head cleanup; never confuse its presence with a production/recovery ref.
+- PR #164 was opened from the prior main base before PR #163 merged and GitHub reported it non-mergeable. Its unique useful findings are preserved here; the stale PR is closed as superseded and its exact head `71e11b7b3d861787e9e72d574879298f69251b6c` is retained through the exact-SHA archive policy.
+- OpenSEO crawl on 2026-11-21 covered 7/7 URLs and reported no critical issues. Three query-string product variants were informational canonicalization cases. The crawl did not include Lighthouse.
+- Latest recorded Lighthouse run (2026-11-15): mobile performance/accessibility/best-practices/SEO: home 100/100/100/100, privacy 99/100/100/100, serum 99/100/100/100; desktop all 100s. Mobile LCP approximately 1.23s, 0.95s, and 2.08s respectively; INP was not measured.
+- OpenSEO defaults remain United States/English while the storefront is Arabic. Do not alter target market until the intended commercial market is confirmed.
+- Firecrawl usage is 0/1,000 credits through 2026-11-29; Ahrefs Free workspace API allowance is 0 and recorded usage is 0. Existing OpenSEO reads did not consume crawl/audit credits; last recorded balance 251 on 2026-11-15, not re-queried on this date.
+- No additional paid or credit-consuming crawls are authorized by this audit. Use existing crawl data and GitHub Actions/browser tests until free quotas refresh or a verified allowance exists.
