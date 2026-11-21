@@ -412,3 +412,11 @@ No customer/order data, product formulas, prices, discounts, shipping policy, ch
 - PR #151 merged as `834d7705597f8e2d13ea6976bcc7640260deecf3`, adding the project-local Modern Web Guidance skill and Apache-2.0 license. The current follow-up PR #152 scopes its triggers, pins CLI 1.0.1, disables telemetry, and adds policy tests.
 - The live main branch is now `834d7705597f8e2d13ea6976bcc7640260deecf3`; the production payload SHA is `e554489b78de8b280b1281b2c706d6acc42b5ad5`. The later commit only changes agent instructions, skill/docs, and tests; it does not change the deployed storefront payload.
 - The plugin suggestion for PostHog remains pending user connection; no tracking code was added. No paid services or billing were enabled.
+
+
+## Follow-up closure — 2026-11-21 00:36 UTC
+
+- PR #152 merged as `8bd438fb80c6ce5855411c6f3f3f37e8e127dcd2`. The local Modern Web Guidance skill is now scoped to material browser-platform work, pins CLI 1.0.1, disables telemetry, excludes private data from search queries, and includes a local adaptation/Apache-2.0 notice. Its policy suite passed 67 tests.
+- The local CLI invocation was attempted with telemetry disabled but the current execution container could not reach npm before timeout. No sandbox/network controls were bypassed; the skill is installed in the repo for environments with permitted outbound access.
+- A no-PR documentation branch `docs/posthog-integration-audit-2026-11-21` was verified to point exactly at main with zero unique commits. It is individually allowlisted for archival at SHA `8bd438fb80c6ce5855411c6f3f3f37e8e127dcd2` only; the workflow now dates archive tags at execution time and will verify the tag before deleting the branch.
+- PostHog remains a suggested, not connected, plugin. No analytics instrumentation or paid service was activated.
