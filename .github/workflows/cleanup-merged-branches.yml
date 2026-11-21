@@ -1,5 +1,8 @@
 name: RAWAA repository branch hygiene
 
+permissions:
+  contents: read
+
 on:
   push:
     branches: [main]
