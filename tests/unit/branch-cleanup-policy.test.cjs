@@ -481,3 +481,21 @@ test('retires the final post-cleanup inventory branch only after its exact head 
     [name],
   );
 });
+
+
+test('retires the tooling-refresh branch only when its exact PR160 head is merged', () => {
+  const name = 'docs/tooling-refresh-2026-11-21';
+  const head = '2e4c679c5230aa873f432e187dffdad9ff7a936e';
+  assert.ok(MERGED_PR_BRANCHES.includes(name));
+  assert.deepEqual(classifyBranches([branchRef(name)], [], repository), []);
+  assert.deepEqual(
+    classifyBranches([branchRef(name, { sha: head })], [pr(name, { merged: true, sha: head })], repository).map(x => x.name),
+    [name],
+  );
+  assert.deepEqual(
+    classifyBranches([branchRef(name, { sha: 'moved-head' })], [pr(name, { merged: true, sha: head })], repository, {
+      [name]: { ahead_by: 1, behind_by: 0 },
+    }),
+    [],
+  );
+});
