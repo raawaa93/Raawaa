@@ -66,7 +66,7 @@ test('keeps closed-unmerged work for the exact-SHA archive workflow', () => {
 
 test('no closed-unmerged or no-PR maintenance refs remain individually eligible', () => {
   assert.deepEqual(SUPERSEDED_CLOSED_PR_BRANCHES, ['maintenance/retire-superseded-finalize-ref-2026-11-15']);
-  assert.deepEqual(STALE_NO_PR_BRANCHES, []);
+  assert.deepEqual(STALE_NO_PR_BRANCHES, ['docs/posthog-integration-audit-2026-11-21']);
   const retired = [
     'maintenance/close-archive-closure-2026-11-15',
     'maintenance/archive-final-closure-ref-2026-11-15',
@@ -420,5 +420,19 @@ test('retires the Modern Web Guidance policy-fix branch only after its exact hea
   assert.deepEqual(
     classifyBranches([branchRef(name)], [pr(name, { merged: true })], repository).map(x => x.name),
     [name],
+  );
+});
+
+
+test('only the exact reviewed same-as-main PostHog audit ref is eligible for no-PR archival', () => {
+  const name = 'docs/posthog-integration-audit-2026-11-21';
+  assert.ok(STALE_NO_PR_BRANCHES.includes(name));
+  assert.deepEqual(
+    classifyBranches([branchRef(name, { sha: '8bd438fb80c6ce5855411c6f3f3f37e8e127dcd2' })], [], repository, { [name]: { ahead_by: 0, behind_by: 0 } }).map(x => x.name),
+    [name],
+  );
+  assert.deepEqual(
+    classifyBranches([branchRef(name, { sha: 'different-sha' })], [], repository, { [name]: { ahead_by: 1, behind_by: 0 } }),
+    [],
   );
 });
