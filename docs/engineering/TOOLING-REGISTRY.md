@@ -497,3 +497,16 @@ No customer/order data, product formulas, prices, discounts, shipping policy, ch
 
 - Visual QA run `44851816008` passed on 4 routes × 2 engines (Chromium/WebKit) × 2 viewports (iPhone 13/desktop): 16 cases, zero reported issues, overflow, broken images, console/page errors, failed requests, bad responses, or real CSP violations. Artifact: `rawaa-visual-qa-44851816008`.
 - Lighthouse run `44851816135` passed with 3 runs per route. Median Performance: home 99, serum 92, campaign 97, privacy 100; Accessibility and Best Practices 100 on all routes; SEO 100 except campaign 69 due to its intentional noindex. Serum mobile LCP median 3.11s (3.03–3.30s range), FCP median 1.99s, TBT 0–10ms, CLS 0. These are lab results from a localhost static server, not field metrics. Validate caching/TTFB on Cloudflare Pages; optimize serum hero/LCP delivery next. Campaign noindex must remain unchanged.
+
+
+## Supabase Edge Function source audit — 2026-11-21
+
+- Read-only listing confirms six active functions on project `oyoyozdugicmnkfhjovo`: `commerce-api`, `rawaa-outbox`, `rawaa-retention`, `rawaa-telegram-pair`, `rawaa-telegram-test`, and `rawaa-owner-orders`.
+- Gateway JWT verification is enabled for the three Telegram/owner functions and disabled for `commerce-api`, `rawaa-outbox`, and `rawaa-retention`. The Supabase connector's `get_edge_function` failed with an internal protocol error, including a single-function retry; source-level handler checks could not be completed. Do not infer that the JWT-disabled handlers lack application authentication; their internal authorization and scheduler-secret checks are unknown until source is available.
+- Security advisor refresh: 17 RLS-enabled/no-policy findings and one leaked-password-protection-disabled warning. A prior metadata-only privilege audit found no `anon` or `authenticated` SELECT/INSERT grants on the affected application tables. No schema, grants, Auth configuration, or deployed functions were changed.
+- Log source discovery returned `edge_logs`, `postgres_logs`, and `pgbouncer_logs`, but no separate function runtime log source. The read-only function-path query returned no rows for its queried window. Source retrieval remains the blocker; request the deployed source through the supported Supabase dashboard/CLI or restore the exact source to version control before approving changes.
+
+## Serum performance review — 2026-11-21
+
+- Latest exact-head Lighthouse run `44852426190` passed. The previous three-run artifact reports serum mobile Performance 92 and median LCP 3.11s. The LCP image is already high priority, eager, and discoverable in the initial document; adding a fixed preload would risk fetching the wrong formula when the product query changes.
+- The clearest remaining lab opportunity is render-blocking CSS (estimated 370 ms) and about 19 KB unused from `serum-shell.css`. No blind async-CSS conversion was applied: first isolate above-the-fold selectors and validate no FOUC/layout shift in Chromium and WebKit, then remeasure the live Pages origin. Localhost Lighthouse values are not field Core Web Vitals.
