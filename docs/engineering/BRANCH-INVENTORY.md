@@ -444,3 +444,20 @@ Required administrative follow-up: configure a `main` branch ruleset requiring p
 - Archive phase succeeded with **zero remaining archive candidates**; no additional tags were needed.
 - Retained set: main; four backups; two deploy refs; four preview-deploy refs; one production-deploy ref; three recovery refs; one release ref; one restore ref.
 - GitHub still reports zero rulesets and all retained branches `protected=false`. The main branch ruleset remains an owner-side security action.
+
+
+## Documentation branch cleanup — 2026-11-21
+
+- Canonical main after PR #160: `fba777accc8ba111017be5725303f64915789e18`.
+- Live branch count at this audit: **19** = 17 durable operational/recovery refs plus two temporary documentation refs. There are no open PRs.
+- Merged PR #160 branch `docs/tooling-refresh-2026-11-21` is retained in the exact merged-head cleanup allowlist at head `2e4c679c5230aa873f432e187dffdad9ff7a936e`; delete only if GitHub confirms the current ref still matches that merged head.
+- Closed-unmerged PR #159 branch `docs/final-live-state-2026-11-21` is at exact head `b617c56799a3d913878df4915a1c2a94ea273617`. GitHub comparison reports 48 commits ahead and 3 behind main, so it is not eligible for direct deletion or an `ahead_by=0` cleanup. Its relevant updates are superseded by merged PRs #157 and #160; preserve its history through the exact-SHA archive policy before deleting the ref.
+- The 17 durable refs remain unchanged. Verify the archive tag, branch deletion, and final branch count after the policy PR merges; do not report cleanup complete before that verification.
+
+
+## Active cleanup PR — 2026-11-21
+
+- Current refs after opening PR #161: **20** = 17 durable operational/recovery refs plus three temporary documentation/maintenance refs. PR #161 is the only open PR.
+- Temporary refs: merged PR #160 branch `docs/tooling-refresh-2026-11-21` (exact merged head `2e4c679c5230aa873f432e187dffdad9ff7a936e`); closed-unmerged PR #159 branch `docs/final-live-state-2026-11-21` (exact archive head `b617c56799a3d913878df4915a1c2a94ea273617`); active cleanup PR #161 branch `maintenance/cleanup-docs-branches-2026-11-21`.
+- PR #161 adds only exact reviewed policy entries: delete the two merged PR heads only when their current SHA matches the merged PR head; archive the closed-unmerged PR #159 branch at its exact SHA before deleting it; and retire the cleanup PR branch after its own exact head merges.
+- Keep all 17 durable operational/recovery refs. Verify archive tag creation, exact ref deletion, and final branch count after the cleanup workflow completes.

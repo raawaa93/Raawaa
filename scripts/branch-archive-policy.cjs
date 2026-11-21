@@ -5,6 +5,8 @@ const ARCHIVE_BRANCHES = Object.freeze({
   "performance/fix-serum-image-preload-2026-11-15": "9368c47535062ad147bafba2632a899adac2c2fe",
   "performance/trim-serum-css-2026-11-15": "1449c8579d43b5535ef90d956daa8917c4e860a3",
   "docs/agency-agents-adoption-2026-11-15": "0ae06ec6949034351d1a33d2de81180e99d11d83",
+  // Closed PR #159: preserve this exact historical head in an archive tag before ref deletion.
+  "docs/final-live-state-2026-11-21": "b617c56799a3d913878df4915a1c2a94ea273617",
   "fix/exclude-dev-files-from-pages-payload-2026-11-15": "a4c976966be6d2193ccc76d216b3f0be3b76f27a",
 });
 const PROTECTED_PREFIXES = Object.freeze([
