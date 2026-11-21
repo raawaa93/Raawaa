@@ -252,6 +252,35 @@ Read this naturally, then once more at a slower pace. Do not mention product ben
 No APK has been downloaded, installed, or executed in this session. The available integrations can inspect repositories and release metadata but do not expose control of the user's Android device, so a device-side installation cannot truthfully be reported as complete. The safe next test is: install Tahbeer only from its official release page (or OpenCut from its official release page), use the passage above, export SRT, then inspect the actual MP4 and subtitle file. Keep VN as the production editor until two separate test exports pass. Do not install Caption Studio prerelease yet.
 
 
+## 8B. Additional Android Arabic-caption candidates — source and release audit (21 Nov 2026)
+
+The following candidates were found after the initial phone-editor audit. They are **research candidates only**; none has passed a real Arabic/RTL export test on the Raawaa device.
+
+### Auto Subtitle Generator — candidate for a second-stage test, not yet approved
+- Repository: https://github.com/Serkali-sudo/auto-subtitle-generator
+- Latest stable release found: v1.5 (10 Jul 2026); ARM64 APK: https://github.com/Serkali-sudo/auto-subtitle-generator/releases/download/v1.5/app-arm64-v8a-release.apk
+- GitHub release asset digest: SHA-256 `0f11afd26d2eeb60520e2a0a846abf2d8ad8b716bac6e0cd322080234aec79e6`; APK size 172,527,909 bytes (about 172.5 MB decimal).
+- Features claimed by the project: local Whisper.cpp and Vosk recognition, word timestamps, SRT/VTT, cue editing, soft/hard subtitle export, queue/background processing and optional on-device translation. Arabic transcription may work through multilingual Whisper, but explicit Arabic RTL rendering and final MP4 correctness were not demonstrated in the reviewed source.
+- Static manifest review: requests INTERNET and ACCESS_NETWORK_STATE, notifications, WAKE_LOCK and foreground-service permissions; `allowBackup=true`; main activity declares `sensorPortrait`. Thus “local transcription” does not mean the app has no network capability; model downloads and optional translation can use network access. Portrait orientation may constrain tablet landscape use.
+- Supply-chain/legal caveats: repository API reports no declared license, the v1.5 release is not marked immutable, and the latest release commit is unsigned. Publicly viewable source is not automatically licensed for modification, redistribution or commercial reuse. Do not fork, bundle or redistribute it without a clear license. The published SHA-256 is useful for integrity comparison but does not authenticate the publisher or signing key.
+- Decision: retain as a possible personal-device test only if a separate test is needed; do not replace Tahbeer or VN, and do not use it for customer recordings. Verify APK signer independently before installation.
+
+### VideoSubtitle — not recommended for production adoption
+- Repository: https://github.com/FrankdeBoers/VideoSubtitle
+- Latest release found: v0.0.2 (10 Jun 2026); APK: https://github.com/FrankdeBoers/VideoSubtitle/releases/download/v0.0.2/VideoSubtitles.apk
+- Release asset SHA-256: `c32eb467d515f297a09508ebe2ffcb601eeae43e67045a318ec4dc281094fe1c`; size 135,136,324 bytes.
+- The README describes an offline Whisper → subtitle edit → burn-in workflow and reports timings on a Galaxy S24 Ultra only (one-minute 720p source: tiny 1:55, base 3:52, small 10:31). Those timings cannot be projected onto other chipsets and do not prove Arabic RTL quality.
+- Repository metadata shows 7 stars, 4 forks, no declared license, and the latest source push on 10 Jun 2026 despite a later repository metadata update. Release v0.0.2 is not marked immutable.
+- Decision: do not install for the current workflow. Keep as a reference implementation only; no Arabic RTL benchmark or commercial-use license was established.
+
+### Updated selection and test order
+1. Keep VN as the actual editing/export tool for now; use manually proofread Arabic captions.
+2. Test Tahbeer first for transcription and RTL subtitle export because its project explicitly documents Arabic localization/RTL and has a GPL-3.0 license; its device behavior remains untested.
+3. If Tahbeer fails a defined criterion, consider Auto Subtitle Generator as a separate candidate only after signer verification and an explicit decision to test it. Do not infer Arabic RTL support from Whisper multilingual recognition.
+4. Use OpenCut Android only as a separate editing candidate; it does not replace the transcription test.
+5. Do not install VideoSubtitle or the Caption Studio prerelease as part of the first test round.
+6. Adoption still requires two independent sample projects, manual word-error review, correct RTL/BiDi and punctuation in the exported MP4, aligned SRT/VTT, complete audio/video playback, and no watermark or crash. No candidate has passed these checks yet.
+
 ## 9. Attribution and experiment design
 
 Assign each creative a unique ID, e.g. `IG-A-R26-02`, `FB-B-R26-03`. Use separate UTMs:
